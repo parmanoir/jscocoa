@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <struct name='CGPoint' type='{CGPoint=&quot;x&quot;f&quot;y&quot;f}' type64='{CGPoint=&quot;x&quot;d&quot;y&quot;d}'/>
+  <struct name='CGRect' type='{CGRect=&quot;origin&quot;{CGPoint=&quot;x&quot;f&quot;y&quot;f}&quot;size&quot;{CGSize=&quot;width&quot;f&quot;height&quot;f}}' type64='{CGRect=&quot;origin&quot;{CGPoint=&quot;x&quot;d&quot;y&quot;d}&quot;size&quot;{CGSize=&quot;width&quot;d&quot;height&quot;d}}'/>
+  <struct name='CGSize' type='{CGSize=&quot;width&quot;f&quot;height&quot;f}' type64='{CGSize=&quot;width&quot;d&quot;height&quot;d}'/>
+
+  <function name='UIGraphicsGetCurrentContext'>
+    <retval type='^' />
+  </function>
+
+  <function name='CGContextMoveToPoint'>
+    <arg type='^' />
+    <arg type='f' />
+    <arg type='f' />
+    <retval type='^' />
+  </function>
+  <function name='CGContextAddLineToPoint'>
+    <arg type='^' />
+    <arg type='f' />
+    <arg type='f' />
+    <retval type='^' />
+  </function>
+  <function name='CGContextStrokePath'>
+    <arg type='^' />
+    <retval type='v' />
+  </function>
+  <function name='CGContextFillPath'>
+    <arg type='^' />
+    <retval type='v' />
+  </function>
+  <function name='CGContextSetShadow'>
+    <arg type='^' />
+    <arg type='{CGSize=ff}' />
+    <arg type='f' />
+    <retval type='v' />
+  </function>
+  
+  <constant name='kCGColorWhite' declared_type='CFStringRef' type='^{__CFString=}' const='true'/>
+  <function name='CGContextSetFillColorWithColor'>
+    <arg name='c' declared_type='CGContextRef' type='^{CGContext=}'/>
+    <arg name='color' declared_type='CGColorRef' type='^{CGColor=}'/>
+  </function>
+  <function name='CGContextSetStrokeColorWithColor'>
+    <arg name='c' declared_type='CGContextRef' type='^{CGContext=}'/>
+    <arg name='color' declared_type='CGColorRef' type='^{CGColor=}'/>
+  </function>
+  <function name='CGColorGetConstantColor'>
+    <arg name='colorName' declared_type='CFStringRef' type='^{__CFString=}'/>
+    <retval declared_type='CGColorRef' type='^{CGColor=}'/>
+  </function>
+
+</signatures>

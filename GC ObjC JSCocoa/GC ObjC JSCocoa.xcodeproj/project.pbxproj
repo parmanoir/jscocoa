@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		3D788F900F01F96300175ADD /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F790F01F96300175ADD /* BridgeSupportController.m */; };
+		3D788F910F01F96300175ADD /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D788F7A0F01F96300175ADD /* class.js */; };
+		3D788F940F01F96300175ADD /* JSCocoaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F870F01F96300175ADD /* JSCocoaController.m */; };
+		3D788F950F01F96300175ADD /* JSCocoaFFIArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F890F01F96300175ADD /* JSCocoaFFIArgument.m */; };
+		3D788F960F01F96300175ADD /* JSCocoaFFIClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F8B0F01F96300175ADD /* JSCocoaFFIClosure.m */; };
+		3D788F970F01F96300175ADD /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F8D0F01F96300175ADD /* JSCocoaLib.m */; };
+		3D788F980F01F96300175ADD /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D788F8F0F01F96300175ADD /* JSCocoaPrivateObject.m */; };
+		3D788FD30F01F97D00175ADD /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 3D788FA90F01F97D00175ADD /* Tests */; };
+		3DD0642C0EFF74D2007655AD /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */; };
+		3DD064370EFF7532007655AD /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DD064360EFF7532007655AD /* JavaScriptCore.framework */; };
+		3DD0644C0EFF75C7007655AD /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DD0644B0EFF75C7007655AD /* main.js */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* GC ObjC JSCocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GC ObjC JSCocoa_Prefix.pch"; sourceTree = "<group>"; };
+		3D788F780F01F96300175ADD /* BridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupportController.h; sourceTree = "<group>"; };
+		3D788F790F01F96300175ADD /* BridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupportController.m; sourceTree = "<group>"; };
+		3D788F7A0F01F96300175ADD /* class.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = class.js; sourceTree = "<group>"; };
+		3D788F810F01F96300175ADD /* JSCocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoa.h; sourceTree = "<group>"; };
+		3D788F850F01F96300175ADD /* JSCocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoa_Prefix.pch; sourceTree = "<group>"; };
+		3D788F860F01F96300175ADD /* JSCocoaController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaController.h; sourceTree = "<group>"; };
+		3D788F870F01F96300175ADD /* JSCocoaController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaController.m; sourceTree = "<group>"; };
+		3D788F880F01F96300175ADD /* JSCocoaFFIArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaFFIArgument.h; sourceTree = "<group>"; };
+		3D788F890F01F96300175ADD /* JSCocoaFFIArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaFFIArgument.m; sourceTree = "<group>"; };
+		3D788F8A0F01F96300175ADD /* JSCocoaFFIClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaFFIClosure.h; sourceTree = "<group>"; };
+		3D788F8B0F01F96300175ADD /* JSCocoaFFIClosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaFFIClosure.m; sourceTree = "<group>"; };
+		3D788F8C0F01F96300175ADD /* JSCocoaLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaLib.h; sourceTree = "<group>"; };
+		3D788F8D0F01F96300175ADD /* JSCocoaLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaLib.m; sourceTree = "<group>"; };
+		3D788F8E0F01F96300175ADD /* JSCocoaPrivateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaPrivateObject.h; sourceTree = "<group>"; };
+		3D788F8F0F01F96300175ADD /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaPrivateObject.m; sourceTree = "<group>"; };
+		3D788FA90F01F97D00175ADD /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tests; path = ../Tests; sourceTree = SOURCE_ROOT; };
+		3DD0642A0EFF74D2007655AD /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		3DD0642B0EFF74D2007655AD /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
+		3DD064360EFF7532007655AD /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
+		3DD0644B0EFF75C7007655AD /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* GC ObjC JSCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GC ObjC JSCocoa.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				3DD064370EFF7532007655AD /* JavaScriptCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				3DD0644B0EFF75C7007655AD /* main.js */,
+				3DD0642B0EFF74D2007655AD /* ApplicationController.m */,
+				3DD0642A0EFF74D2007655AD /* ApplicationController.h */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* GC ObjC JSCocoa.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* GC ObjC JSCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				3D788F770F01F96300175ADD /* JSCocoa */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = "GC ObjC JSCocoa";
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* GC ObjC JSCocoa_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3D788FA90F01F97D00175ADD /* Tests */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3DD064360EFF7532007655AD /* JavaScriptCore.framework */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D788F770F01F96300175ADD /* JSCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				3D788F780F01F96300175ADD /* BridgeSupportController.h */,
+				3D788F790F01F96300175ADD /* BridgeSupportController.m */,
+				3D788F7A0F01F96300175ADD /* class.js */,
+				3D788F810F01F96300175ADD /* JSCocoa.h */,
+				3D788F850F01F96300175ADD /* JSCocoa_Prefix.pch */,
+				3D788F860F01F96300175ADD /* JSCocoaController.h */,
+				3D788F870F01F96300175ADD /* JSCocoaController.m */,
+				3D788F880F01F96300175ADD /* JSCocoaFFIArgument.h */,
+				3D788F890F01F96300175ADD /* JSCocoaFFIArgument.m */,
+				3D788F8A0F01F96300175ADD /* JSCocoaFFIClosure.h */,
+				3D788F8B0F01F96300175ADD /* JSCocoaFFIClosure.m */,
+				3D788F8C0F01F96300175ADD /* JSCocoaLib.h */,
+				3D788F8D0F01F96300175ADD /* JSCocoaLib.m */,
+				3D788F8E0F01F96300175ADD /* JSCocoaPrivateObject.h */,
+				3D788F8F0F01F96300175ADD /* JSCocoaPrivateObject.m */,
+			);
+			name = JSCocoa;
+			path = ../JSCocoa;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* GC ObjC JSCocoa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "GC ObjC JSCocoa" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GC ObjC JSCocoa";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "GC ObjC JSCocoa";
+			productReference = 8D1107320486CEB800E47090 /* GC ObjC JSCocoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "GC ObjC JSCocoa" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* GC ObjC JSCocoa */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* GC ObjC JSCocoa */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D788F910F01F96300175ADD /* class.js in Resources */,
+				3DD0644C0EFF75C7007655AD /* main.js in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				3D788FD30F01F97D00175ADD /* Tests in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				3DD0642C0EFF74D2007655AD /* ApplicationController.m in Sources */,
+				3D788F900F01F96300175ADD /* BridgeSupportController.m in Sources */,
+				3D788F940F01F96300175ADD /* JSCocoaController.m in Sources */,
+				3D788F950F01F96300175ADD /* JSCocoaFFIArgument.m in Sources */,
+				3D788F960F01F96300175ADD /* JSCocoaFFIClosure.m in Sources */,
+				3D788F970F01F96300175ADD /* JSCocoaLib.m in Sources */,
+				3D788F980F01F96300175ADD /* JSCocoaPrivateObject.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GC ObjC JSCocoa_Prefix.pch";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "GC ObjC JSCocoa";
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GC ObjC JSCocoa_Prefix.pch";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "GC ObjC JSCocoa";
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-lffi";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-lffi";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "GC ObjC JSCocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "GC ObjC JSCocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

@@ -1,0 +1,178 @@
+// !$*UTF8*$!
+{
+	1D6058900D05DD3D006BFB54 /* iPhoneTest2 */ = {
+		activeExec = 0;
+		executables = (
+			3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */,
+		);
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */;
+		activeSDKPreference = iphoneos2.1;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* iPhoneTest2 */;
+		addToTargets = (
+			1D6058900D05DD3D006BFB54 /* iPhoneTest2 */,
+		);
+		codeSenseManager = 3DB581EA0EA17C1600EB80D9 /* Code sense */;
+		executables = (
+			3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 251596196;
+			PBXWorkspaceStateSaveDate = 251596196;
+		};
+		sourceControlManager = 3DB581E90EA17C1600EB80D9 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1414, 750}}";
+			sepNavSelRange = "{714, 0}";
+			sepNavVisRange = "{0, 992}";
+			sepNavWindowFrame = "{{225, 163}, {1473, 863}}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* iPhoneTest2_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1414, 750}}";
+			sepNavSelRange = "{242, 0}";
+			sepNavVisRange = "{0, 242}";
+			sepNavWindowFrame = "{{176, 163}, {1473, 863}}";
+		};
+	};
+	3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1002, 841}}";
+			sepNavSelRange = "{134, 0}";
+			sepNavVisRange = "{0, 2134}";
+			sepNavWindowFrame = "{{333, 128}, {1061, 954}}";
+		};
+	};
+	3D9BA7DA0EB10DC9005F9A76 /* class.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1112, 4730}}";
+			sepNavSelRange = "{4947, 2}";
+			sepNavVisRange = "{3287, 1994}";
+			sepNavWindowFrame = "{{561, 133}, {1171, 851}}";
+		};
+	};
+	3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 28149}}";
+			sepNavSelRange = "{29804, 15}";
+			sepNavVisRange = "{28456, 2291}";
+			sepNavWindowFrame = "{{570, 188}, {1124, 804}}";
+		};
+	};
+	3DA3900D0EA7523300CB6F74 /* JSCocoaPrivateObject.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 1232}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1175}";
+			sepNavWindowFrame = "{{38, 348}, {1124, 804}}";
+		};
+	};
+	3DA3900E0EA7523300CB6F74 /* JSCocoaPrivateObject.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{320, 50}";
+			sepNavVisRange = "{0, 1216}";
+			sepNavWindowFrame = "{{545, 247}, {1156, 851}}";
+		};
+	};
+	3DA3900F0EA7523300CB6F74 /* JSCocoaFFIArgument.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 11880}}";
+			sepNavSelRange = "{24226, 93}";
+			sepNavVisRange = "{24319, 1273}";
+			sepNavWindowFrame = "{{61, 327}, {1124, 804}}";
+		};
+	};
+	3DA390110EA7523300CB6F74 /* JSCocoaFFIClosure.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 2090}}";
+			sepNavSelRange = "{2469, 10}";
+			sepNavVisRange = "{1351, 1760}";
+			sepNavWindowFrame = "{{84, 306}, {1124, 804}}";
+		};
+	};
+	3DA390120EA7523300CB6F74 /* JSCocoaFFIClosure.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {839, 451}}";
+			sepNavSelRange = "{402, 7}";
+			sepNavVisRange = "{0, 543}";
+		};
+	};
+	3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = iPhoneTest2;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	3DB581E90EA17C1600EB80D9 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	3DB581EA0EA17C1600EB80D9 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	3DB5820C0EA17CAC00EB80D9 /* JavascriptCore-dlsym.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1414, 5918}}";
+			sepNavSelRange = "{15670, 8}";
+			sepNavVisRange = "{14309, 3487}";
+			sepNavWindowFrame = "{{26, 201}, {1473, 863}}";
+		};
+	};
+	3DB582100EA17CAC00EB80D9 /* JSContextRef.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1056, 858}}";
+			sepNavSelRange = "{2664, 24}";
+			sepNavVisRange = "{1399, 1364}";
+		};
+	};
+	3DB582140EA17CAC00EB80D9 /* JSValueRef.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {839, 3069}}";
+			sepNavSelRange = "{2145, 3}";
+			sepNavVisRange = "{2118, 895}";
+			sepNavWindowFrame = "{{245, 62}, {1054, 901}}";
+		};
+	};
+	3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {933, 2244}}";
+			sepNavSelRange = "{2860, 0}";
+			sepNavVisRange = "{3811, 2452}";
+			sepNavWindowFrame = "{{664, 219}, {992, 888}}";
+		};
+	};
+}

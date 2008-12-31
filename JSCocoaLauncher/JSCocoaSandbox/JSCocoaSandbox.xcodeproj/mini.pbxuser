@@ -1,0 +1,125 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 3DEEE7C10EBD348F00F54419 /* JSCocoaSandbox */;
+		activeTarget = 8D1107260486CEB800E47090 /* JSCocoaSandbox */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* JSCocoaSandbox */,
+		);
+		breakpoints = (
+		);
+		codeSenseManager = 3DEEE7CA0EBD349500F54419 /* Code sense */;
+		executables = (
+			3DEEE7C10EBD348F00F54419 /* JSCocoaSandbox */,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 249582624;
+			PBXWorkspaceStateSaveDate = 249582624;
+		};
+		sourceControlManager = 3DEEE7C90EBD349500F54419 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 691}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 264}";
+			sepNavWindowFrame = "{{61, 327}, {1124, 804}}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* JSCocoaSandbox_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{163, 0}";
+			sepNavVisRange = "{0, 257}";
+			sepNavWindowFrame = "{{621, 327}, {1156, 851}}";
+		};
+	};
+	3DBAA11E0EC15AF400A573F4 /* NSLogConsole.html */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 3663}}";
+			sepNavSelRange = "{0, 6643}";
+			sepNavVisRange = "{1424, 1792}";
+			sepNavWindowFrame = "{{192, 175}, {1156, 851}}";
+		};
+	};
+	3DBAA11F0EC15AF400A573F4 /* NSLogConsole.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 836}}";
+			sepNavSelRange = "{0, 1443}";
+			sepNavVisRange = "{145, 1297}";
+			sepNavWindowFrame = "{{419, 68}, {1156, 851}}";
+		};
+	};
+	3DBAA1200EC15AF400A573F4 /* NSLogConsole.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 3718}}";
+			sepNavSelRange = "{2301, 0}";
+			sepNavVisRange = "{739, 2012}";
+			sepNavWindowFrame = "{{199, 161}, {1156, 851}}";
+		};
+	};
+	3DEEE7C10EBD348F00F54419 /* JSCocoaSandbox */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = JSCocoaSandbox;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	3DEEE7C90EBD349500F54419 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	3DEEE7CA0EBD349500F54419 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	3DF5756E0EAD5613001018F7 /* ApplicationController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 294}";
+			sepNavWindowFrame = "{{153, 196}, {1156, 851}}";
+		};
+	};
+	3DF5756F0EAD5613001018F7 /* ApplicationController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 865}}";
+			sepNavSelRange = "{408, 0}";
+			sepNavVisRange = "{0, 1831}";
+			sepNavWindowFrame = "{{91, 195}, {1156, 851}}";
+		};
+	};
+	8D1107260486CEB800E47090 /* JSCocoaSandbox */ = {
+		activeExec = 0;
+		executables = (
+			3DEEE7C10EBD348F00F54419 /* JSCocoaSandbox */,
+		);
+	};
+}

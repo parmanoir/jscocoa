@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'GC ObjC JSCocoa' target in the 'GC ObjC JSCocoa' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

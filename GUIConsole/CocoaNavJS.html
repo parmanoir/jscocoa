@@ -1,0 +1,2670 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>CocoaNav JS - A Javascript Cocoa Class Browser </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style>
+		html, body
+		{
+			margin: 0;
+			font-family: Helvetica Neue;
+
+			background-color: white;
+			color: black;
+			font-size: 80%;
+		}
+
+		/*
+			Links
+		*/
+		a
+		{
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			padding: 1px 6px;
+			margin-left: -6px;
+			margin-right: -6px;
+
+			text-decoration: none;
+
+			color: black;
+			
+			position: relative;
+			z-index: 2;
+			left : 0.5em;
+			top: 0.6em;
+		}
+		.acontainer
+		{
+			position: relative;			
+		}
+		a:hover
+		{
+			color: white;
+			background-color: #666 !important;
+			z-index: 4;
+		}
+		a
+		{
+			-webkit-transition-property: opacity, color, background-color, border-color;
+			-webkit-transition-duration: 300ms;			
+			-webkit-transition-timing-function: ease-in-out;
+		}
+		#hudtext
+		{
+			-webkit-transition: opacity 100ms ease-in-out;
+			opacity: 0;
+		}
+
+		td
+		{
+			padding-right: 8px;
+			white-space: nowrap;
+		}
+		.smallIndent
+		{
+			width: 10px;
+			border-bottom: solid 1px #ccc;
+			display: inline-block;
+			position: relative;
+			bottom: -1px;
+			vertical-align: bottom;
+		}
+		
+		.leftLine
+		{
+			border-left: solid 1px #ccc;
+		}
+		.bottomLine
+		{
+			border-bottom: solid 1px #ccc;			
+		}
+		/*
+			ClassNames having children have a bottom border — use a white background to hide it
+		*/
+		.bottomLine a
+		{
+			background-color: white;
+		}
+		#hud
+		{
+			position: fixed;
+			bottom: 50px;
+			width: 100%;
+			z-index: 10;
+			text-align: center;
+		}
+		#hudtext
+		{
+			background-color: rgba(0, 0, 0, 0.8);
+			color: white;
+			font-size: 130%;
+
+			-webkit-border-radius: 8px;
+			padding: 2px 10px;
+		}
+		#graphContainer
+		{
+			padding: 1em;
+			padding-top: 0.3em;
+		}
+		#searchDimScreen
+		{
+			background-color: rgba(0, 0, 0, 0.3);
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			z-index: 10;
+			display: none;
+
+			background-color: rgba(0, 0, 0, 0.0);
+			height: 1px;
+		}
+		.searchResult
+		{
+			position: absolute;
+			z-index: 100;
+			color: rgba(255, 0, 0, 0.0);
+			background-color: transparent;
+		}
+		.searchResultHilight
+		{
+			ecolor: white;
+			ebackground-color: black;
+			ebackground-color: rgb(255, 128, 0);
+			ecolor: red;
+			ebackground-color: rgba(0, 0, 0, 0.2);
+			ecolor: white;
+			color: #888;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white;
+			position: absolute;
+			z-index: 1000;
+		}
+		#searchBox
+		{
+			position: fixed;
+			margin-left: 400px;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	
+	<div id='searchDimScreen'></div>
+	
+	<div id='searchBox'>
+	<input>
+	<button onclick='prevSearchResult()'>prev</button>
+	<button onclick='nextSearchResult()'>next</button>
+	</div>
+	<div id='classCount'></div>
+	<div id='graphContainer'></div>
+	
+	<div id='hud'><span id='hudtext'>HUD</span></div>
+
+<!--
+
+	ClassName space ParentClassName
+
+-->
+<!--
+<pre>
+NSPredicateEditor NSRuleEditor
+DOMSVGPathSegCurvetoQuadraticAbs DOMSVGPathSeg
+DOMSVGPaint DOMSVGColor
+NSCalibratedWhiteColor NSColor
+DOMCSSRuleList DOMObject
+CICircularScreen CIFilter
+NSCFError NSError
+NSDisplayPatternTitleBinder NSDisplayPatternBinder
+NSCellAuxiliary NSObject
+NSRuleEditorViewSlice NSView
+CIGaussianPyramid CIFilter
+WebSearchableTextView NSTextView
+WebDownload NSURLDownload
+CAOpenGLLayer CALayer
+NSToolTipPanel NSPanel
+CIImageAccumulator NSObject
+CIFalseColor CIFilter
+NSRandomSpecifier NSScriptObjectSpecifier
+WebEditorUndoTarget NSObject
+NSNotificationQueue NSObject
+NSMessagePort NSPort
+NSHTTPCookieStorage NSObject
+NSPredicateOperator NSObject
+NSSerializer NSObject
+NSAlert NSObject
+CIColorCube CIFilter
+NSRuleEditorViewSliceDropSeparator NSRuleEditorViewSlice
+NSSaveChangesRequest NSPersistentStoreRequest
+NSUndoReplaceCharacters NSUndoTextOperation
+NSStoreMigrationPolicy NSObject
+WebFrameBridge WebCoreFrameBridge
+NSSQLGenerator NSObject
+NSScriptArgumentDescription NSObject
+NSMapTable NSObject
+NSComboBox NSTextField
+NSSetCommand NSScriptCommand
+NSTruePredicate NSPredicate
+NSThemeDocumentButton NSDocumentDragButton
+NSDeserializer NSObject
+NSPredicateEditorRowTemplate NSObject
+DOMUIEvent DOMEvent
+NSMutableData NSData
+DOMSVGPointList DOMObject
+NSVariableExpression NSExpression
+NSCell NSObject
+CATransformLayer CALayer
+NSRTFD NSMutableDictionary
+NSProgressIndicator NSView
+WebCoreStatistics NSObject
+DOMWheelEvent DOMUIEvent
+NSRulebookSetObject NSObject
+__NSFontTypefaceInfo NSObject
+NSGradient NSObject
+WebFramePrivate NSObject
+NSOrderedSet NSObject
+Protocol Object
+_NSFlippedImage NSImage
+NSScriptComplexTypeDescription NSScriptTypeDescription
+NSATSGlyphStorage CTGlyphStorageInterface
+CISixfoldReflectedTile CIFilter
+NSToolbarConfigPanel NSPanel
+NSNavFBEQueryNode NSNavFBENode
+NSRuleEditorPopupButton NSPopUpButton
+_NSButtonImage NSObject
+NSScriptSDEFParser NSObject
+NSConcreteNotifyingMutableAttributedString NSConcreteMutableAttributedString
+CAJS_CGImage NSObject
+NSMoveCommand NSScriptCommand
+DOMHTMLScriptElement DOMHTMLElement
+NSMutableSet NSSet
+NSPrintInfoDictionaryProxy NSMutableDictionary
+NSToolbarItem NSObject
+NSServicesMenuHandler NSObject
+WebBasePluginPackage NSObject
+CAWrappedLayoutManager NSObject
+NSPopUpButton NSButton
+CIConcreteImage CIImage
+NSConcreteAttributedString NSAttributedString
+CICubicGradientGenerator5 CIFilter
+NSKeyValueProxyGetter NSKeyValueGetter
+NSImageViewTextAttachmentCell NSViewTextAttachmentCell
+CICubicGradientGenerator4 CIFilter
+DOMDocument DOMNode
+CICubicGradientGenerator3 CIFilter
+CICubicGradientGenerator2 CIFilter
+NSError NSObject
+CIPinLightBlendMode CIFilter
+NSIdRunStorage NSRunStorage
+NSExceptionHandlingRecursiveLock NSRecursiveLock
+NSClipView NSView
+NSCrayonRow NSObject
+CISphereGradient CIFilter
+_NSHTTPBodyStreamWrapper NSObject
+DOMSVGFontFaceNameElement DOMSVGElement
+NSCIImageRep NSImageRep
+WebUndefined NSObject
+NSScriptClassDescriptionMoreIVars NSObject
+CIRenderProviderDelegate NSObject
+NSMachBootstrapServer NSPortNameServer
+NSForm NSMatrix
+NSKeyValueNotifyingMutableArray NSKeyValueMutableArray
+CIGlideReflectedTile CIFilter
+WebURLsWithTitles NSObject
+CIBitmapContext CIContext
+NSDecimalNumberHandler NSObject
+NSNavOutlineDateCell NSTextFieldCell
+SCTMenuItemGRL SCTGRL
+NSMenuItemCell NSButtonCell
+WebDataSourcePrivate NSObject
+NSDynamicSystemColor NSCatalogColor
+NSAttachmentTextStorage NSTextStorage
+NSManagedObjectModelBundle NSObject
+_NSInvalidationFaultHandler NSFaultHandler
+DOMNodeList DOMObject
+NSBetweenPredicateOperator NSPredicateOperator
+NSURLProtectionSpace NSObject
+NSPageData NSData
+CIExclusionBlendMode CIFilter
+NSLock NSObject
+DOMSVGDefinitionSrcElement DOMSVGElement
+NSCreateCommand NSScriptCommand
+NSClassicHashTable NSHashTable
+NSDeadKeyInputServer NSInputServer
+WebCorePowerNotifier NSObject
+DOMHTMLCollection DOMObject
+NSFileHandle NSObject
+NSQuickDrawView NSView
+TISInputMethodDataFileLoader NSObject
+NSMutableString NSString
+DOMSVGTRefElement DOMSVGTextPositioningElement
+NSNavObservedNodeAndCountValue NSObject
+CIAlphaAddBlendMode CIFilter
+NSNetServiceBrowser NSObject
+CIOpacity CIFilter
+WebResource NSObject
+NSView NSResponder
+WebFramePolicyListener NSObject
+CIGamutClamp CIFilter
+_NSIsNilTransformer _NSNegateBooleanTransformer
+NSDictionaryEntry NSObject
+WebAuthenticationPanel NSObject
+Object 
+CIPartialAreaHistogram CIFilter
+CIAxialMotionBlur CIFilter
+_NSKVCPIvarSetBinding NSKeySetBinding
+NSNavFilepathInputController NSObject
+WebKitRenderTreeCopier NSObject
+NSCFArray NSMutableArray
+DOMSVGFontFaceSrcElement DOMSVGElement
+DOMHTMLDocument DOMDocument
+NSXMLTreeReader NSObject
+_NSColorPanelToolbarItem NSToolbarItem
+CARenderer NSObject
+NSColorPickerPageableNameList NSColorPicker
+CIAxialBlur CIFilter
+NSToolbarFlexibleSpaceItem NSToolbarItem
+DOMSVGAnimatedTransformList DOMObject
+DOMKeyboardEvent DOMUIEvent
+NSHTTPURLResponse NSURLResponse
+HINSMenuItemProxy NSObject
+CIContextImpl NSObject
+NSATSLineFragment NSObject
+NSHyphenator NSObject
+DOMSVGGElement DOMSVGElement
+NSPSMatrix NSObject
+CIMutableFilterShape CIFilterShape
+NSTextFieldCell NSActionCell
+_NSExpectedObservingInfo NSObject
+NSMigrationContext NSObject
+CICrystallize CIFilter
+CIStarShineGenerator CIFilter
+NSExistsCommand NSScriptCommand
+NSDictionaryStoreMap NSPersistentStoreMap
+NSScreen NSObject
+DOMSVGForeignObjectElement DOMSVGElement
+NSURLAuthenticationChallengeState NSObject
+WebIconDatabase NSObject
+NSIBHelpConnector NSObject
+NSNumberFormatter NSFormatter
+NSWordMLWriter NSObject
+NSCatalogColor NSColor
+WebHTMLViewPrivate NSObject
+NSDocumentDeserializer NSAKDeserializer
+PluginReaderOpenVanillaFileModule PluginReaderGenericModule
+DOMSVGZoomEvent DOMUIEvent
+NSHTMLWebDelegate NSObject
+NSMutableStringProxy NSDistantObject
+CAScriptContext NSObject
+CAConstraint NSObject
+NSAccessibilityObjectWrapper NSObject
+WebWindowWatcher NSObject
+CIMedianFilter CIFilter
+CILanczosBayerReconstruction CIFilter
+NSSimpleHorizontalTypesetter NSTypesetter
+DOMSVGUseElement DOMSVGElement
+NSTextContainer NSObject
+HICocoaWindowAdapter NSWindow
+CIMaximumComponent CIFilter
+NSScriptObjectTypeDescription NSScriptTypeDescription
+WebArchive NSObject
+List Object
+CIMultiplyCompositing CIFilter
+_PFWeakReference NSObject
+CIPixellate CIFilter
+NSToolbarSeparatorItem NSToolbarItem
+DOMSVGGlyphElement DOMSVGElement
+NSNavRuleEditor NSRuleEditor
+NSHTTPURLHandle NSURLHandle
+NSCFURLProtocol NSURLProtocol
+NSCoder NSObject
+NonBlockingPanel NSPanel
+_NSDatePickerCellSubfield NSObject
+_NSSavePanelTextView NSTextView
+QSILRUQueue NSObject
+_NSColorWellPlugin _NSValueBinderPlugin
+NSKeyValueComputedProperty NSKeyValueProperty
+NSSQLAdapterOperation NSObject
+NSCFData NSMutableData
+WebDefaultUIDelegate NSObject
+NSCarbonWindowContentView NSView
+NSImageCell NSCell
+JSCocoaPrivateObject NSObject
+NSNavNodePopUpButton NSPopUpButton
+_NSFaultingMutableArray NSMutableArray
+NSDrawer NSResponder
+CITigerBlur CIFilter
+DOMSVGTSpanElement DOMSVGTextPositioningElement
+NSMappingModel NSObject
+CAJS_CGColor NSObject
+NSComparisonPredicate NSPredicate
+NSOutlineColumnMockGroup NSObject
+DOMHTMLFontElement DOMHTMLElement
+CAMediaTimingFunction NSObject
+CIMaterialMap CIFilter
+CIGlassLozenge CIFilter
+NSLanguageContext NSMutableDictionary
+_NSTextPlugin _NSTextFieldPlugin
+NSAppleEventDescriptor NSObject
+NSPrintOperationPrintEventRetrofitInfo NSObject
+NSNavIconViewCell NSIconViewCell
+CILinearBumpField CIFilter
+NSDocInfo NSObject
+NSSystemStatusBar NSStatusBar
+_NSDrawingThreadData NSObject
+_NSUndoStack NSObject
+NSDefaultSpellServerDelegate NSObject
+DOMCSSMediaRule DOMCSSRule
+NSWordMLReader NSObject
+NSColorPickerCrayonView NSView
+PluginReaderDATFileModule PluginReaderGenericModule
+__NSDictionaryObjectEnumerator __NSFastEnumerationEnumerator
+CICheatBlur CIFilter
+NSToolbarItemViewer NSView
+DOMSVGMetadataElement DOMSVGElement
+WebViewPrivate NSObject
+CIDisplaceWithNoise CIFilter
+NSMessageBuilder 
+_NSToolbarFlexibleSpace NSView
+NSTextFinder NSObject
+_NSSQLGenerator NSObject
+_NSNestedDictionary NSMutableDictionary
+DOMSVGScriptElement DOMSVGElement
+NSNavPreviewButtonCell NSNavSimpleButtonCell
+NSAnimationInfo NSObject
+DOMNodeIterator DOMObject
+__NSAppKitThreadSpecificData NSObject
+NSDocumentErrorRecoveryAttempter NSObject
+NSCollatorElement NSObject
+DOMHTMLCanvasElement DOMHTMLElement
+_NSCoreDataException NSException
+WebCoreSharedBufferData NSData
+NSStatusItem NSObject
+NSNavAskPanel NSAlert
+NSInvertedCharacterSet NSCharacterSet
+NSNavSidebarController NSObject
+CIKernel NSObject
+SCTMenuView NSView
+CIYCbCrSubsampledReconstruction CIFilter
+NSSQLCorrelation NSObject
+_NSToolbarButtonCell NSButtonCell
+NSStepperCell NSActionCell
+CIGaussianGradient CIFilter
+NSLogConsole NSObject
+CAKeyframeAnimation CAPropertyAnimation
+DOMCSSFontFaceRule DOMCSSRule
+NSConcreteDistantObjectRequest NSDistantObjectRequest
+NSMutableStringProxyForMutableAttributedString NSMutableString
+NSStream NSObject
+NSKeyValueCollectionGetter NSKeyValueProxyGetter
+NSURLHandleProtocol NSURLProtocol
+CIGamutAlarm CIFilter
+NSCFTimeZone NSTimeZone
+NSMemoryStoreInPredicateOperator NSInPredicateOperator
+NSTextViewSharedData NSObject
+WebCoreScriptDebugger NSObject
+NSURLRequestInternal NSObject
+NSSQLObjectID NSBasicObjectID64
+NSQuitCommand NSScriptCommand
+CIPerspectiveTransform CIFilter
+NSKeyValueMutableArray NSMutableArray
+__NSCFDictionary NSMutableDictionary
+NSCloneCommand NSScriptCommand
+NSConcreteNotification NSNotification
+DOMSVGElementInstance DOMObject
+NSServicesPasteboard2 NSPasteboard
+DOMStyleSheet DOMObject
+NSCFCalendar NSCalendar
+WebIconDatabasePrivate NSObject
+NSKeyValueGetter NSKeyValueAccessor
+MenuItemProxy NSObject
+NSOutlineView NSTableView
+NSCollectionViewItem NSObject
+NSNavBrowserDelegate NSNavFileListDelegate
+NSURLDownload NSObject
+WebFrame NSObject
+NSTargetAnimationInfo NSObject
+NSSubrangeData NSData
+DOMHTMLModElement DOMHTMLElement
+CISourceOverCompositing CIFilter
+NSConcreteMapTable NSMapTable
+WebFrameViewPrivate NSObject
+_NSFilenamePboardTypeConverter _NSPboardTypeConverter
+NSImageView NSControl
+NSSQLProperty NSStoreMapping
+_NSCachedAttributedString NSMutableAttributedString
+NSProcessInfo NSObject
+NSDirectoryEnumerator NSEnumerator
+CIStripGenerator CIFilter
+__NSOrderedSetReverseEnumerator NSEnumerator
+NSGlyphInfo NSObject
+NSCoercionHandler NSScriptCoercionHandler
+CIStencilLumaBlendMode CIFilter
+NSCFType NSObject
+NSNavSavePanel NSSavePanel
+NSWindowMenuItem NSObject
+NSKeyValueFastMutableArray NSKeyValueMutableArray
+NSSound NSObject
+CISpotColor CIFilter
+NSSQLAttribute NSSQLColumn
+CISymmetricNearestNeighbor CIFilter
+_NSPredicateUtilities NSObject
+DOMHTMLSelectElement DOMHTMLElement
+CIColorDodgeBlendMode CIFilter
+_NSValueBinderPlugin _NSBinderPlugin
+DOMHTMLBaseElement DOMHTMLElement
+NSCFDictionary NSMutableDictionary
+NSSQLStoreMappingGenerator NSObject
+NSRangeSpecifier NSScriptObjectSpecifier
+CATextLayer CALayer
+_NSControllerArrayProxy NSArray
+NSNavIconViewDelegate NSNavFileListDelegate
+NSWindowAuxiliary NSObject
+CIOpenGLContextImpl CIContextImpl
+NSPICTImageRep NSImageRep
+DOMHTMLButtonElement DOMHTMLElement
+WebInspectorWindowController NSWindowController
+DOMDocumentFragment DOMNode
+CIUnsharpMask CIFilter
+_NSPboardTypeConverter NSObject
+NSFileDragSource NSObject
+WebJavaScriptTextInputPanel NSWindowController
+CIMaterialMapImageLightGenerator CIFilter
+NSTableBinder NSBinder
+NSMenuPanel NSPanel
+CIGammaAdjust CIFilter
+_NSIndexPathUniqueTree NSObject
+DOMSVGSVGElement DOMSVGElement
+WebNodeHighlightView NSView
+CIBloom CIFilter
+NSMenuItemHighlightColor NSCatalogColor
+WebBaseNetscapePluginStream NSObject
+CIAffineTransform CIFilter
+_NSThemeWidget NSButton
+CFXPreferencesPropertyListSource CFXPreferencesSource
+DOMSVGStopElement DOMSVGElement
+_NSMultipleSelectionMatrixPlugin _NSMatrixPlugin
+NSNibControlConnector NSNibConnector
+NSNavIconView NSIconView
+NSDockTile NSObject
+CISmallChromaMorphologyMinimum CIFilter
+_NSModelObservingTracker NSObject
+CIFilterGeneratorCIFilter CIFilter
+NSTextTab NSObject
+WebCoreRenderThemeNotificationObserver NSObject
+NSConcreteMapTableValueEnumerator NSEnumerator
+NSPersistentStoreCache NSObject
+DOMSVGAngle DOMObject
+NSControl NSView
+_NS128bitWrapper NSObject
+_NSComboBoxPlugin _NSSelectionBinderPlugin
+CIMorphologyLaplacian CIFilter
+SCTButtonGRL SCTViewGRL
+NSThread NSObject
+CISampleAreaOperation CIFilter
+WebCoreOpenPanelController NSObject
+CIRowAverage CIColumnAverage
+NSTextTable NSTextBlock
+NSCarbonMenuWindow NSCarbonWindow
+NSObjectSpecifier NSScriptObjectSpecifier
+NSSQLPredicateAnalyser NSObject
+JSCocoaMethodHolder NSObject
+NSObjectParameterBinder NSBinder
+NSCompressedSimpleCollatorElement NSCollatorElement
+NSRuleEditorLocalizer NSObject
+NSLayoutManager NSObject
+NSCustomImageRep NSImageRep
+NSColorList NSObject
+NSTitledFrame NSFrameView
+_NSToolbarDefaultImageRepWindow NSWindow
+NSCustomView NSView
+CIHatchedScreen CIFilter
+_NSRTFPboardTypeConverter _NSPboardTypeConverter
+_NSMainThreadTiledViewBackingLayer CATiledLayer
+NSInPredicateOperator NSPredicateOperator
+NSWindow NSResponder
+CIProSharpeningEdgesDisplay CIFilter
+NSTitleBinder NSBinder
+CIDisplacementDistortion CIFilter
+_NSCachedBitmapImageRep NSBitmapImageRep
+ApplicationController NSObject
+NSDictionary NSObject
+WebDefaultPolicyDelegate NSObject
+NSMetadataItem NSObject
+NSSearchFieldCell NSTextFieldCell
+HPDTOCEntry NSObject
+NSIconViewCell NSTextFieldCell
+NSPrinter NSObject
+NSMultiReadUniWriteLock NSObject
+CIExposureAdjust CIFilter
+NSPreferencesModule NSObject
+NSTabViewItem NSObject
+NSDocumentSerializer NSAKSerializer
+CIDesaturateGamutMapping CIFilter
+NSNibOutletConnector NSNibConnector
+DOMCSSValueList DOMCSSValue
+_NSToolbarViewClipView NSClipView
+DOMHTMLLabelElement DOMHTMLElement
+CIMinimumCompositing CIFilter
+DOMSVGPathSegMovetoRel DOMSVGPathSeg
+WebPDFView NSView
+NSXMLNSURLTransformerName NSValueTransformer
+CISourceInCompositing CIFilter
+DOMHTMLFrameSetElement DOMHTMLElement
+NSPropertyStoreMapping NSStoreMapping
+DOMSVGPathSegArcRel DOMSVGPathSeg
+WebCoreViewFactory NSObject
+NSValidationErrorLocalizationPolicy NSObject
+CICircleGenerator CIFilter
+CAConstraintLayoutManager NSObject
+_NSObjectAnimator NSProxy
+NSCFNumber NSNumber
+IMKInputSession NSObject
+NSFontDescriptor NSObject
+_NSImageCellPlugin _NSImageViewPlugin
+NSNavOutlineDelegate NSNavFileListDelegate
+_NSMatrixPlugin _NSSelectionBinderPlugin
+_NSTypeSelectData NSObject
+NSOpenDocumentWriter NSObject
+LKNSValueCodingProxy CACodingProxy
+NSParagraphStyle NSObject
+NSURLCacheNode NSObject
+_NSEditableBinderPlugin _NSBinderPlugin
+CAMLParser NSObject
+NSScriptCoercionHandler NSObject
+NSGlyphGenerator NSObject
+CABasicAnimation CAPropertyAnimation
+WebCoreControlTintObserver NSObject
+CAJSString NSString
+CALayer NSObject
+WebKeyGenerator WebCoreKeyGenerator
+NSRuleEditorViewSliceRow NSRuleEditorViewSlice
+NSXMLDTDNode NSXMLNode
+NSDeviceRGBColor NSCalibratedRGBColor
+NSURL NSObject
+DOMProcessingInstruction DOMNode
+NSTextViewTemplate NSViewTemplate
+CITwirlDistortion CIFilter
+NSSourceListCell NSTextFieldCell
+NSTemporaryObjectID NSManagedObjectID
+DOMSVGFontElement DOMSVGElement
+_NSToolbarSegmentedViewSegmentProxy NSAccessibilityReparentingProxy
+_NSTextFieldPlugin _NSValueBinderPlugin
+NSXMLNode NSObject
+DOMHTMLParamElement DOMHTMLElement
+CIFilterGraph CIFilter
+_NSSearchFieldPlugin _NSTextFieldPlugin
+SCTInvocation NSObject
+NSNavNaughtDelegate NSNavFileListDelegate
+DOMSVGTextPathElement DOMSVGTextContentElement
+NSAboutURLProtocol NSURLProtocol
+_PFManagedObjectReferenceQueue NSObject
+_NSClassAndClassInfo NSObject
+DOMSVGSymbolElement DOMSVGElement
+CIPageCurlTransition CIFilter
+CAJS_CGSize NSObject
+NSMethodSignature NSObject
+LKNSDictionaryCodingProxy CACodingProxy
+WebScriptDebugServer NSObject
+NSInvocationOperation NSOperation
+WebPDFRepresentation NSObject
+CIGloom CIFilter
+NSDistributedObjectsStatistics NSDictionary
+CIGaussianChromaBlurMinimum CIFilter
+NSCloseCommand NSScriptCommand
+NSUndoTyping NSUndoTextOperation
+NSKeyValueMutatingCollectionMethodSet NSObject
+WebCoreScrollBar NSScroller
+NSSQLRelationship NSSQLProperty
+NSDPSServerContext NSDPSContext
+NSFontOptionsPreviewBox NSBox
+DOMSVGRenderingIntent DOMObject
+NSKeyPathSpecifierExpression NSExpression
+CIParallelogramTile CIFilter
+CIHeightFieldFromConstraints CIFilter
+DOMSVGPatternElement DOMSVGElement
+NSFindPanelTextView NSTextView
+CIContextDebugImpl NSObject
+NSSpellChecker NSObject
+NSOperationQueue NSObject
+DOMHTMLHeadingElement DOMHTMLElement
+NSKVONotifying_NSUserDefaults NSUserDefaults
+_NSToolbarButtonViewItemViewerAccessibilityHelper _NSToolbarProxyItemViewerAccessibilityHelper
+NSSpecifierTest NSScriptWhoseTest
+__NSPlaceholderDate NSDate
+NSKeyValueNonmutatingSetMethodSet NSKeyValueNonmutatingCollectionMethodSet
+DOMSVGAnimateColorElement DOMSVGAnimationElement
+NSMenuArrowView NSView
+_NSBinderPluginRegistry NSObject
+NSCoreDragManager _NSDragManager
+NSFileWrapper NSObject
+CICubicGradientGenerator CIFilter
+SCTTextFieldGRL SCTViewGRL
+NSScriptObjectSpecifier NSObject
+DOMSVGPreserveAspectRatio DOMObject
+NSKeyBindingAtom NSObject
+DOMSVGSwitchElement DOMSVGElement
+DOMImplementation DOMObject
+CAJS_CGColorSpace NSObject
+CIRAWTemperatureAdjust CIFilter
+NSColorPickerUserView NSView
+NSZipTextReader NSObject
+DOMHTMLTableCaptionElement DOMHTMLElement
+NSSet NSObject
+SCTImageAndTextCell NSTextFieldCell
+NSDOStreamData NSMutableData
+_NSStateMarker NSObject
+CIScreenBlendMode CIFilter
+CIShapedWaterRipple CIFilter
+NSNavDisplayNameFilePropertySortDescriptor NSNavFilePropertySortDescriptor
+WebPluginRequest NSObject
+NSTextField NSControl
+__NSATSStringSegment NSString
+NSPanel NSWindow
+CIHardMixBlendMode CIFilter
+DOMHTMLOptGroupElement DOMHTMLElement
+NSStoreMapping NSObject
+_NSOperationData NSObject
+DOMSVGPathSegList DOMObject
+NSKeyValueIvarMutableCollectionGetter NSKeyValueProxyGetter
+NSKeyValueNestedProperty NSKeyValueProperty
+NSDownloadController NSObject
+NSFlippableView NSView
+NSScriptDeclaredRecordTypeDescription NSScriptRecordTypeDescription
+NSUniqueIDSpecifier NSScriptObjectSpecifier
+CILinearLightBlendMode CIFilter
+CIKaleidoscope CIFilter
+CIBoxBlur CIFilter
+_NSRuleEditorViewUnboundRowHolder NSObject
+NSTextAttachment NSObject
+NSTableViewDynamicToolTipManager NSViewDynamicToolTipManager
+NSNavNodePopUpButtonCell NSPopUpButtonCell
+NSBitwisePredicateOperator NSPredicateOperator
+CILightenBlendMode CIFilter
+NSHTTPURLRequestParameters NSObject
+NSButtonImageSource NSObject
+NSCarbonWindow NSWindow
+CITransferImage CIFilter
+_NSCoreManagedObjectID NSManagedObjectID
+NSToolTipManager NSObject
+_NSNavBrowserColumnSelectionInfo NSObject
+NSShadow NSObject
+NSCachedWhiteColor NSCalibratedWhiteColor
+CIProSharpenEdges CIFilter
+DOMSVGRadialGradientElement DOMSVGGradientElement
+NSClassicMapTable NSMapTable
+NSColorPickerColorSpacePopUp NSPopUpButton
+_NSFileManagerInfo NSObject
+NSDragDestination NSObject
+_NSIndexPathUniqueTreeNode NSObject
+NSIconView NSMatrix
+_NSTableViewDelayProxy NSObject
+NSMenuScrollView NSView
+NSHIUndoObject NSObject
+NSDisplayFontBinder NSBinder
+NSSpeechRecognizer NSObject
+NSCustomObject NSObject
+NSLazyBrowserCell NSBrowserCell
+NSNavScopeButton NSButton
+NSColorPicker NSObject
+CIHDRToneMapping CIFilter
+NSNetworkSettings NSObject
+NSTextColorBinder NSBinder
+NSRLEArray NSObject
+CICropAlphaFilter CIFilter
+CIFlashTransition CIFilter
+CICGContext CIContext
+NSInputContext NSObject
+CAJS_CGRect NSObject
+CIPromise CIImage
+NSSQLOperation NSObject
+NSScriptToOneRelationshipDescription NSScriptAttributeDescription
+NSNavMenuItem NSMenuItem
+__NSPlaceholderOrderedSet NSMutableOrderedSet
+NSViewWindowBackingStoreBuffer NSViewBuffer
+NSNavBox NSView
+NSSelectionArray NSArray
+WebFormDelegate NSObject
+CIChopLines CIFilter
+_NSTableViewReserved NSObject
+NSToolbarView NSView
+JSCocoaFFIClosure NSObject
+NSUndoSetAttributes NSUndoTextOperation
+NSSimpleAttributeDictionaryEnumerator NSEnumerator
+NSTextTableBlock NSTextBlock
+_NSPathLocationAnimation NSAnimation
+NSColorScaleSliderCell NSSliderCell
+NSNavCell NSSourceListCell
+CIGaussianBlur CIFilter
+NSSecureTextStorage NSTextStorage
+DOMCSSStyleSheet DOMStyleSheet
+NSNavMatrix NSMatrix
+NSPathStore2 NSString
+NSTreeNode NSObject
+NSConcretePrintOperation NSPrintOperation
+CIDissolveTransition CIFilter
+NSSubTextStorage NSTextStorage
+CISmallCircularChromaBlur CIFilter
+NSTableOverlappingColumnClipHelper NSObject
+NSFilesystemItemLinkOperation NSFilesystemItemCopyOperation
+NSMappedObjectStore NSPersistentStore
+NSTokenAttachment NSTextAttachment
+NSMachPort NSPort
+NSURLUpload NSObject
+CIMaximumCompositing CIFilter
+SCTGRLResolver SCTInvocation
+NSPlaceholderValue NSNumber
+DOMSVGNumber DOMObject
+DOMOverflowEvent DOMEvent
+NSAnimationManager NSObject
+CAJS_CATransform3D NSObject
+NSAutounbinder NSProxy
+NSEntityDescription NSObject
+NSRefreshRequest NSPersistentStoreRequest
+HPDHelpBook HPDTOCEntry
+CIMaskToAlpha CIFilter
+NSSortDescriptor NSObject
+DOMSVGDocument DOMDocument
+CIAdvancedMaskToAlpha CIFilter
+NSStringPredicateOperator NSPredicateOperator
+NSCallbackDictionary NSDictionary
+_NSFullScreenWindow NSWindow
+NSPathComponentCell NSTextFieldCell
+NSDirectoryTraversalOperation NSOperation
+SCTMenuWindow NSPanel
+CIDeBayer CIFilter
+NSGraphicsContext NSObject
+NSCarbonWindowFrame NSView
+NSTabletEvent NSObject
+NSNavSplitView NSSplitView
+CAEmitterCell NSObject
+NSKeyValueSlowMutableSet NSKeyValueMutableSet
+NSAttributeDictionaryEnumerator NSEnumerator
+NSKeyValueNonmutatingCollectionMethodSet NSObject
+_NSFocusStackElement NSObject
+WebSecurityOrigin NSObject
+DOMSVGMissingGlyphElement DOMSVGElement
+NSKeyValueFastMutableSet NSKeyValueMutableSet
+NSEnumerator NSObject
+_NSRuleEditorCache NSObject
+SCTAccessibilityGRL SCTGRL
+NSSetExpression NSExpression
+NSFont NSObject
+CIMixOver CIFilter
+CISwipeTransition CIFilter
+DOMHTMLTableColElement DOMHTMLElement
+NSAccessibilityWindowGrowBox NSAccessibilityMockUIElement
+NSMultipassCollatorElement NSCollatorElement
+NSSubstringPredicateOperator NSStringPredicateOperator
+WebDefaultEditingDelegate NSObject
+NSLineFragmentRenderingContext NSObject
+NSRecursiveLock NSObject
+CIAddBlendMode CIFilter
+DOMHTMLLinkElement DOMHTMLElement
+NSProxy 
+_NSSelectorSetBinding NSKeySetBinding
+CIHueBlendMode CIFilter
+SCTBackgroundView NSView
+NSTextBlockLayoutHelper NSObject
+CIVector NSObject
+NSToolbarButton NSButton
+NSStatusBarButtonCell NSButtonCell
+NSDocumentDragButton NSButton
+_NSThreadData NSObject
+NSHIObject NSObject
+NSATSUStyleObject NSObject
+_NSTIFFPboardTypeConverter _NSPboardTypeConverter
+NSXMLDocument NSXMLNode
+NSURLResponseInternal NSObject
+_NSTableColumnAuxiliary NSObject
+NSPointerFunctions NSObject
+NSPipe NSObject
+_NSToolbarSeparator NSView
+CATransaction NSObject
+NSPrintSpoolingGraphicsContext NSCGSContext
+CIColumnAverage CIFilter
+NSRunLoop NSObject
+NSSymbolicExpression NSExpression
+NSStorage NSObject
+NSKeyValueAccessor NSObject
+NSDateFormatter NSFormatter
+DOMAttr DOMNode
+DOMSVGPathSegMovetoAbs DOMSVGPathSeg
+_NSFullScreenView NSView
+NSCompoundPredicateOperator NSPredicateOperator
+NSNameSpecifier NSScriptObjectSpecifier
+CIRippleTransition CIFilter
+NSInvocation NSObject
+_WebSafeForwarder NSObject
+NSAssertionHandler NSObject
+_NSToolbarButtonItemViewerAccessibilityHelper _NSToolbarProxyItemViewerAccessibilityHelper
+NSDrawerBinder NSViewStateBinder
+DOMSVGPathSegArcAbs DOMSVGPathSeg
+DOMSVGAnimatedLengthList DOMObject
+CIPromiseInvocation NSObject
+DOMHTMLAreaElement DOMHTMLElement
+CIFilterGeneratorConnection NSObject
+CIHistogram CIFilter
+SCTMatrixGRL SCTViewGRL
+NSNavView NSView
+CIFourfoldRotatedTile CIFilter
+DOMSVGCursorElement DOMSVGElement
+WebRenderNode NSObject
+DOMStyleSheetList DOMObject
+CICircularWrap CIFilter
+CASlotProxy NSObject
+NSTextTemplate NSViewTemplate
+_NSRubberBand NSObject
+NSProgressIndicatorPrivateData NSObject
+PluginReaderNativeFileModule PluginReaderGenericModule
+CICheapMorphology CIFilter
+CIBehindBlendMode CIFilter
+_NSPredicateEditorItem NSObject
+_NSUndoEndMark _NSUndoObject
+_NSMetadataQueryResultArray NSArray
+DOMTreeWalker DOMObject
+NSNavFBENodePreviewHelper NSNavNodePreviewHelper
+_NSToolbarItemViewerLabelCell NSCell
+_NSTextColorBinderPlugin _NSBinderPlugin
+CIModTransition CIFilter
+NSAccessibilityNotifier NSObject
+NSSocketPortNameServer NSPortNameServer
+NSURLQueueNode NSObject
+_NSPathPlugin _NSValueBinderPlugin
+_NSStringAndClassInfo NSObject
+NSCFOutputStream NSOutputStream
+CIColorBurnBlendMode CIFilter
+NSScriptingAppleEventHandler NSObject
+NSUnavailableLanguagePlaceholder NSLanguage
+SCTShowcaseWindow NSWindow
+NSValue NSObject
+NSFileAttributes NSDictionary
+_NSTokenFieldPlugin _NSPlaceholderTextFieldPlugin
+NSSubqueryExpression NSExpression
+CarbonWindowAdapter NSWindow
+NSPathControl NSControl
+NSKeyValueContainerClass NSObject
+NSImmutableStringCharacterSet NSCharacterSet
+NSSecureStringWrapper NSString
+WebDatabaseManager NSObject
+NSAtomicStoreCacheNode NSObject
+NSToolbar NSObject
+_NSImageAuxiliary NSObject
+NSAutoreleasePool NSObject
+_NSUndoLightInvocation _NSUndoObject
+NSKeySetBinding NSKeyBinding
+NSFontOptions NSObject
+DOMSVGFontFaceFormatElement DOMSVGElement
+NSDocumentTypeDescription NSObject
+CAContext NSObject
+NSMenu NSObject
+_NSURLPboardTypeConverter _NSPboardTypeConverter
+WebCoreCursorBundle NSObject
+DOMAbstractView DOMObject
+NSScanner NSObject
+NSURLKeychainCredentialStorageInternal NSObject
+DOMEntity DOMNode
+NSAutoLocale NSLocale
+CIKuwaharaNagaoFilter CIFilter
+NSURLProtocolInternal NSObject
+SCTHelpPointerView NSView
+NSIconRefBitmapImageRep NSBitmapImageRep
+CIMenuBarGenerator CIFilter
+_NSTreeNodeObservingTracker NSObject
+NSWindowTitleBinder NSTitleBinder
+NSAEDescriptorTranslator NSObject
+NSCGSFont NSFont
+NSTableView NSControl
+_NSToolbarProxyItemViewerAccessibilityHelper _NSToolbarItemViewerAccessibilityHelper
+NSCharacterSet NSObject
+CILocalContrast CIFilter
+CISixfoldRotatedTile CIFilter
+NSSQLSelectIntermediate NSSQLIntermediate
+NSScriptSuiteDescription NSObject
+NSDeleteCommand NSScriptCommand
+DOMHTMLIFrameElement DOMHTMLElement
+CILinearGradientWithCubicEndsGenerator CIFilter
+_NSBindingAdaptor NSObject
+CICorrectHighlights CIFilter
+DOMSVGAnimatedInteger DOMObject
+NSNavFBETopLevelNode NSNavFBENode
+NSRTFWriter NSObject
+CIAdjustBrightnessContrast CIFilter
+_NSDOConversationInfo NSObject
+NSNavNameFieldFormatter NSFormatter
+NSXMLElement NSXMLNode
+NSMenuItem NSObject
+SCTGRLListAnalyzer NSObject
+_NSMemoryStorePredicateRemapper NSObject
+NSGradientPatternColor NSPatternColor
+NSTimer NSObject
+CIRAWGamutMapping CIFilter
+NSSQLModel NSStoreMapping
+NSCheapMutableString NSMutableString
+CIMorphologyMax CISampleAreaOperation
+CIPlugIn NSObject
+SCTGRL NSObject
+NSAnimationHelper NSObject
+NSConcreteFileHandle NSFileHandle
+NSPropertyMapping NSObject
+NSHashTable NSObject
+DOMHTMLDirectoryElement DOMHTMLElement
+_NSFaultingMutableSetMutationMethods NSObject
+NSCFSet NSMutableSet
+CocoaNavView WebView
+NSTokenAttachmentCell NSTextAttachmentCell
+DOMSVGAnimatedLength DOMObject
+CIEdges CIFilter
+NSScriptRecordFieldDescription NSObject
+DOMSVGAnimatedPreserveAspectRatio DOMObject
+NSFileInfoCache NSObject
+DOMHTMLFieldSetElement DOMHTMLElement
+NSFontManager NSObject
+DOMSVGLengthList DOMObject
+_NSSelectionBinderPlugin _NSValueBinderPlugin
+CIColorMonochrome CIFilter
+NSEntityMigrationPolicy NSObject
+_NSToolbarItemViewerLabelView NSControl
+NSColorWell NSControl
+NSKeyedUnarchiver NSCoder
+NSConcreteMutableCharacterSet NSMutableCharacterSet
+NSEPSImageRep NSImageRep
+DOMSVGRectElement DOMSVGElement
+NSURLProtocol NSObject
+_NSThemeCloseWidget _NSThemeWidget
+NSBinaryObjectStoreFile NSObject
+NSKeyPathExpression NSFunctionExpression
+NSPasteboardFilter NSObject
+NSActionBinder NSEditorBinder
+CACodingProxy NSObject
+NSPortCoder NSCoder
+NSKnownKeysMappingStrategy1 NSKnownKeysMappingStrategy
+NSFilesystemItemMoveOperation NSOperation
+NSLabelViewCell NSActionCell
+DOMHTMLTextAreaElement DOMHTMLElement
+DOMCSSValue DOMObject
+NSFrameView NSView
+WebImageRendererFactory NSObject
+CIColorBlendMode CIFilter
+_NSKeyedUnarchiveFromDataTransformer _NSSharedValueTransformer
+NSColorSwatch NSView
+__NSPlaceholderArray NSMutableArray
+NSSQLCore NSPersistentStore
+NSSQLiteStatement NSSQLStatement
+_NSUndoBeginMark _NSUndoObject
+NSNavAdvancedSearchController NSObject
+NSURLResponse NSObject
+DOMSVGAnimatedEnumeration DOMObject
+CISpotLight CIFilter
+WebFrameView NSView
+NSSpellServer NSObject
+_NSDisplayFontBinderPlugin _NSBinderPlugin
+NSScriptListTypeDescription NSScriptTypeDescription
+NSMutableIndexSet NSIndexSet
+NSDirInfoDeserializer NSAKDeserializer
+_NSBrowserColumnsContainerView NSView
+NSInFlightAnimation NSObject
+NSColorPickerSliders NSColorPicker
+SCTViewGRL SCTGRL
+NSPrintPreviewGraphicsContext NSProxy
+CAJSFunction NSObject
+DOMEvent DOMObject
+NSScriptSynonymDescription NSObject
+NSFilesystemItemRemoveOperation NSOperation
+CITagWithColorSpace CIFilter
+NSKeyValueArray NSArray
+NSSliderCell NSActionCell
+SCTTabViewGRL SCTViewGRL
+NSCompressedMultipassCollatorElement NSMultipassCollatorElement
+NSSecureTextFieldCell NSTextFieldCell
+NSDeviceWhiteColor NSCalibratedWhiteColor
+NSCreateCommandMoreIVars NSObject
+NSKeyValueIvarSetter NSKeyValueSetter
+NSMutableURLRequest NSURLRequest
+NSController NSObject
+HPDSearchResult NSObject
+NSNextStepFrame NSView
+CIEmboss CIFilter
+NSMessagePortNameServer NSPortNameServer
+NSLineHeightFormatter NSFormatter
+NSRelativeSpecifier NSScriptObjectSpecifier
+NSFunctionExpression NSExpression
+NSAggregateExpression NSExpression
+NSCollator NSObject
+NSXMLElementDeclarationContent NSXMLNode
+DOMSVGClipPathElement DOMSVGElement
+CIAreaHistogram CIFilter
+PluginReaderGenericModule NSObject
+DOMCDATASection DOMText
+NSManagedObjectContext NSObject
+NSGrayFrame NSThemeFrame
+CIOverlayBlendMode CIFilter
+NSNavVirtualNode NSNavNode
+NSObjectDetailBinder NSEditorBinder
+SCTGRLTree NSObject
+NSTask NSObject
+NSRuleEditor NSControl
+__NSEventDiscardInfo NSObject
+_NSUndoInvocation _NSUndoObject
+SCTAXChildAccessor NSObject
+NSMutableAttributedString NSAttributedString
+__NSCFOrderedSet NSMutableOrderedSet
+NSDockFrameView NSView
+NSUnarchiver NSCoder
+DOMHTMLAppletElement DOMHTMLElement
+NSOutlineViewBinder NSBinder
+WebArchiver NSObject
+NSConditionLock NSObject
+NSURLKeychainCredentialInternal NSObject
+__NSCFDate NSDate
+CIBilateralFilter CIFilter
+NSMovieViewTextAttachmentCell NSViewTextAttachmentCell
+NSRulerViewAccessibilityPanelController NSObject
+NSFontEffectsBox NSBox
+DOMHTMLDListElement DOMHTMLElement
+CIAffineTile CIFilter
+NSSimpleAttributeDictionary NSDictionary
+CIEdge NSObject
+NSHTTPURLResponseInternal NSObject
+NSServiceListener NSObject
+NSCachedURLResponse NSObject
+CIRAWFilterImpl CIFilter
+WebCache NSObject
+NSConcretePipe NSPipe
+NSOutlineRow NSTableRow
+WebScriptCallFrame NSObject
+CIUIStripesGenerator CIFilter
+SCTGUIStateGRL SCTGRL
+__NSInputContextAuxiliaryStorage NSObject
+NSDirectorySubpathsOperation NSDirectoryTraversalOperation
+_NSWindowGraphicsContextAux NSObject
+_NSPredicateEditorPlugin _NSValueBinderPlugin
+NSToolTip NSObject
+NSWorkspaceObserver NSObject
+_NSWindowBorderGradient NSGradient
+NSConcretePointerFunctions NSPointerFunctions
+WebPluginPackage WebBasePluginPackage
+WebKitStatistics NSObject
+NSXMLObjectStoreCacheNode2 NSAtomicStoreCacheNode
+NSKnownKeysDictionary NSMutableDictionary
+CIFourfoldTranslatedTile CIFilter
+_NSMenuImpl NSObject
+NSTokenField NSTextField
+HPDClient NSObject
+DOMHTMLAnchorElement DOMHTMLElement
+NSCustomResource NSObject
+_NSToolbarSegmentedViewItemViewerAccessibilityHelper _NSToolbarButtonViewItemViewerAccessibilityHelper
+NSPositionalSpecifier NSObject
+NSKeyValueSlowMutableCollectionGetter NSKeyValueProxyGetter
+_NSBrowserDragSourceContext NSObject
+CIHexagonalPixellate CIFilter
+NSXMLFidelityElement NSXMLElement
+NSKeyValueMethodGetter NSKeyValueGetter
+NSTreeDetailBinder NSArrayDetailBinder
+DOMSVGDefsElement DOMSVGElement
+NSAccessibilityAXUIElementWrapper NSObject
+NSKeyValueIvarGetter NSKeyValueGetter
+NSButtonCell NSActionCell
+CIHomomorphicSharpen CIFilter
+NSCountCommand NSScriptCommand
+NSClassDescription NSObject
+LKNSArrayCodingProxy CACodingProxy
+DOMRect DOMObject
+NSNavDataSource NSObject
+NSCTFontDescriptor NSFontDescriptor
+NSATSGlyphGenerator NSGlyphGenerator
+NSToolbarPoofAnimator NSObject
+NSMetadataQueryAttributeValueTuple NSObject
+_NSCarbonMenuWindowTrackingAreaReference NSObject
+DOMHTMLTitleElement DOMHTMLElement
+CISunbeamsGenerator CIFilter
+NSKitPanelController NSObject
+WebCoreResourceHandleAsDelegate NSObject
+CIBayerReconstructionV0 CIFilter
+NSXMLParser NSObject
+NSScriptPropertiesRecordTypeDescription NSScriptRecordTypeDescription
+NSTableOptionsPanel NSPanel
+NSParagraphStyleExtraData NSObject
+NSMutableOrderedSet NSOrderedSet
+_NSBindingInfo NSObject
+CIAreaMaximum CIFilter
+LKCGImageCodingProxy CACodingProxy
+NSGZipDecoder NSObject
+NSDatePicker NSControl
+NSFalsePredicate NSPredicate
+NSKnownKeysDictionary1 NSKnownKeysDictionary
+NSProgressIndicatorBinder NSViewStateBinder
+NSKeyValueUndefinedGetter NSKeyValueGetter
+NSCIDGlyphInfo NSGlyphInfo
+NSFetchRequest NSObject
+WebPreferencesPrivate NSObject
+NSMultipleSelectionBinder NSSelectionBinder
+NSSelfExpression NSExpression
+DOMSVGLineElement DOMSVGElement
+CISubtractBlendMode CIFilter
+CIVortexDistortion CIFilter
+CIDistanceFieldFromMask CIFilter
+NSFontPanelTableView NSTableView
+NSViewAnimation NSAnimation
+NSHTMLReader NSObject
+CFXPreferencesSource NSObject
+_NSWindowMenuUpdater NSObject
+DOMSVGDescElement DOMSVGElement
+CILinearGradient CIFilter
+NSExtraMICData NSObject
+_NSDisplayOperation NSObject
+CIDifferenceBlendMode CIFilter
+SCTGRLInspectorController NSObject
+CIMenuAppleGenerator CIFilter
+NSAttributeDictionary NSDictionary
+NSPersistentStoreCoordinator NSObject
+NSLanguage NSObject
+CIEdgeWork CIFilter
+SCTApplicatonGRL SCTGRL
+DOMSVGPathSegClosePath DOMSVGPathSeg
+NSRulerMarkerPanel NSPanel
+NSTextAttachmentCell NSCell
+NSSpellingPanel NSPanel
+NSSQLSubqueryExpressionIntermediate NSSQLExpressionIntermediate
+DOMHTMLBodyElement DOMHTMLElement
+CIVideoNoiseFilter CIFilter
+NSBoxAuxiliary NSObject
+CASublayerEnumerator NSEnumerator
+WebHistoryItem NSObject
+JSCocoaController NSObject
+CIConstantColorGenerator CIFilter
+NSDocFormatWriter NSObject
+DOMTextEvent DOMUIEvent
+NSComboBoxButtonCell NSButtonCell
+DOMSVGPolylineElement DOMSVGElement
+NSWhoseTest NSScriptWhoseTest
+NSURLConnectionDelegateProxy NSObject
+NSSQLiteAdapter NSSQLAdapter
+CIDotScreen CIFilter
+DOMCSSPrimitiveValue DOMCSSValue
+_NSEmptyIconViewCell NSCell
+NSPersistentStore NSObject
+NSImageRep NSObject
+NSHTTPCookieStorageInternal NSObject
+_NSDisplayOperationStack NSObject
+NSSpeechRecognizerVars NSObject
+NSKeyValueObservance NSObject
+DOMSVGViewElement DOMSVGElement
+NSClassSwapper NSObject
+NSFormatter NSObject
+NSDocumentControllerPrintContext NSObject
+HPDHelpLink NSObject
+NSMovie NSObject
+DOMSVGPathSegLinetoRel DOMSVGPathSeg
+NSNavOpenPanel NSNavSavePanel
+NSInputServer NSObject
+NSStringDrawingContext NSObject
+NSNavChildrenAndListenersValue NSObject
+NSNotification NSObject
+_NSTableUtilities NSObject
+CIConcretePromise CIPromise
+_NSMatrixPrivateIvars NSObject
+NSTypesetter NSObject
+CISourceAtopCompositing CIFilter
+DOMSVGAnimatedNumberList DOMObject
+NSSavePanelNameFieldCell NSTextFieldCell
+NSGlyphNameGlyphInfo NSIdentityGlyphInfo
+SCTAnimationController NSObject
+NSTabWell NSView
+DOMSVGPathSegCurvetoQuadraticSmoothRel DOMSVGPathSeg
+CIMinimumComponent CIFilter
+NSImage NSObject
+_NSBrowserColumnView NSScrollView
+DOMCSSUnknownRule DOMCSSRule
+NSCachedDeviceWhiteColor NSDeviceWhiteColor
+NSDatePickerCell NSActionCell
+DOMSVGAnimatedAngle DOMObject
+NSSQLManyToMany NSSQLRelationship
+NSQuickDrawPort NSObject
+NSTextViewIvars NSObject
+CIUIBundle2 CIUIBundleBase
+CIUIBundle1 CIUIBundleBase
+NSAccessibilityStepperArrowButton NSAccessibilityMockUIElement
+WebCoreMovieObserver NSObject
+NSPort NSObject
+NSRGBSliders NSColorSpaceSliders
+_NSNavNodeMenuItem NSMenuItem
+_NSSearchFieldBinderPredicateOptionPair NSObject
+NSDictionaryDetailBinder NSArrayDetailBinder
+DOMSVGAnimationElement DOMSVGElement
+NSAutounbinderBinding NSObject
+_NSLocalNotificationCenter NSDistributedNotificationCenter
+CISourceOutCompositing CIFilter
+_NSBrowserTitlesContainerView NSView
+CIFilterShape NSObject
+SCTInfiniteAnimation NSAnimation
+NSRuleEditorTextField NSTextField
+NSObject 
+NSPlaceholderString NSString
+NSBinaryObjectStore NSMappedObjectStore
+NSCFCharacterSet NSMutableCharacterSet
+NSCountedSet NSMutableSet
+NSDocFormatReader NSObject
+NSNull NSObject
+CAContextImpl CAContext
+NSDisplayPatternBinder NSBinder
+_NSRepresentationInfo NSObject
+DOMObject WebScriptObject
+NSRulerLabelCell NSTextFieldCell
+DOMSVGStyleElement DOMSVGElement
+NSScriptCommand NSObject
+NSOutlineMockDisclosureTriangle NSObject
+_NSIsNotNilTransformer _NSNegateBooleanTransformer
+NSAppleEventHandling NSObject
+CIPinchDistortion CIFilter
+NSExtraMIData NSObject
+NSBasicObjectID _NSCoreManagedObjectID
+NSPrintInfo NSObject
+CIOpTile CIFilter
+NSMemoryStoreEqualityPredicateOperator NSEqualityPredicateOperator
+DOMSVGLength DOMObject
+WebUnarchivingState NSObject
+NSSpeechSynthesizerVars NSObject
+DOMSVGPolygonElement DOMSVGElement
+NSIndexSpecifier NSScriptObjectSpecifier
+DOMCSSPageRule DOMCSSRule
+NSSocketPort NSPort
+NSLocalTimeZone NSTimeZone
+CIComicEffect CIFilter
+NSRulerMarkerView NSView
+NSImageKitViewTextAttachmentCellHelper NSViewTextAttachmentCellHelper
+NSConcreteTask NSTask
+NSArchiver NSCoder
+_NSPredicateOperatorUtilities NSObject
+_NSKeyForwardingSetBinding NSKeySetBinding
+NSScriptClassDescription NSClassDescription
+NSConcreteTextStorage NSTextStorage
+CIWhitePointAdjust CIFilter
+_NSAccessibilityOverriddenAttributeUIElementValue NSObject
+HPDSearchManager NSObject
+NSThemeDocumentButtonCell NSButtonCell
+_NSCoreUIDecisionObject NSObject
+NSParser NSObject
+CIMorphologyGradient CIFilter
+NSBrowserBinder NSBinder
+NSCompoundPredicate NSPredicate
+_NSCallStackArray NSArray
+CILineScreen CIFilter
+_NSWindowAnimator _NSObjectAnimator
+NSTextList NSObject
+DOMSVGLinearGradientElement DOMSVGGradientElement
+NSURLFileTypeMappings NSObject
+CIRecordingContextImpl CIContextImpl
+CIBarsSwipeTransition CIFilter
+NSKeyValueSetter NSKeyValueAccessor
+_NSDoubleValueBinderPlugin _NSValueBinderPlugin
+NSKeyValueFastMutableSet2 NSKeyValueFastMutableSet
+NSKeyValueFastMutableSet1 NSKeyValueFastMutableSet
+NSNibBindingConnector NSNibConnector
+NSPlaceholderNumber NSPlaceholderValue
+NSPoofView NSView
+CIOpenGLContext CIContext
+_NSBinderAlertRecoveryAttempter NSObject
+DOMSVGTransform DOMObject
+NSMultipassCollatorState NSObject
+NSScriptAttributeDescription NSScriptPropertyDescription
+NSLikePredicateOperator NSMatchingPredicateOperator
+CIBayerReconstruction CIFilter
+CIVarianceConvolution CIFilter
+_NSThreadPerformInfo NSObject
+NSSpellServerProxy NSObject
+NSConcreteValue NSValue
+NSLocalInputServer NSInputServer
+NSSQLForeignEntityKey NSSQLColumn
+NSCalibratedRGBColor NSColor
+NSXMLSAXParser NSObject
+NSBox NSView
+NSCoreUIImageRep NSImageRep
+DOMSVGEllipseElement DOMSVGElement
+NSDocumentTextAttachmentScrollView NSScrollView
+WebProgressItem NSObject
+_NSPopUpButtonPlugin _NSSelectionBinderPlugin
+_NSNegateBooleanTransformer _NSSharedValueTransformer
+CAScrollLayer CALayer
+NSCFBoolean NSNumber
+SCTHelpItemGRL SCTGRL
+NSScriptPropertyDescription NSObject
+NSException NSObject
+NSURLAuthenticationChallenge NSObject
+CIBlendWithMask CIFilter
+DOMSVGPathSegLinetoHorizontalRel DOMSVGPathSeg
+CATransition CAAnimation
+CIBilateralConvolution CISampleAreaOperation
+SCTReconfiguredWindowGRL SCTWindowGRL
+NSRegion NSObject
+NSToolTipStringDrawingLayoutManager NSObject
+DOMSVGAnimatedRect DOMObject
+_NSLazyFetchingArray NSMutableArray
+CICheckerboardGenerator CIFilter
+NSExternalRefCountedData NSObject
+CISobelEdges CIFilter
+DOMSVGNumberList DOMObject
+_NSParserSyntaxNode NSObject
+NSSQLToMany NSSQLRelationship
+CIGlassDistortion CIFilter
+_NSControllerTreeProxyMutatorArray _NSControllerArrayProxyMutatorArray
+NSSQLAdapter NSObject
+CAJSDictionaryKeyEnumerator NSEnumerator
+DOMHTMLTableSectionElement DOMHTMLElement
+DOMSVGAnimatedString DOMObject
+_NSToolbarViewItemViewerAccessibilityHelper _NSToolbarItemViewerAccessibilityHelper
+NSScriptFakeObjectTypeDescription NSScriptObjectTypeDescription
+_NSPersistenceUtilities NSObject
+NSNavFileListDelegate NSObject
+NSSQLBindVariable NSObject
+NSCalendarDate NSDate
+_NSKeyboardFocusClipView NSClipView
+NSColorSpaceSliders NSObject
+NSScroller NSControl
+NSURLAuthenticationChallengeInternal NSObject
+NSAttributeDescription NSPropertyDescription
+NSKeyValueFastMutableCollection2Getter NSKeyValueProxyGetter
+_NSUndoObject NSObject
+NSURLConnectionInternal NSObject
+NSAKSerializerStream NSObject
+CIZoomBlur CIFilter
+NSViewStateBinder NSBinder
+_NSOpenGLLayer CAOpenGLLayer
+CAAnimation NSObject
+NSNib NSObject
+DOMHTMLMenuElement DOMHTMLElement
+NSAccessibilityTableHeaderCellProxy NSAccessibilityReparentingCellProxy
+WebCoreFrameBridge NSObject
+NSCFInputStream NSInputStream
+NSURLCache NSObject
+DOMHTMLObjectElement DOMHTMLElement
+NSSavePanel NSPanel
+DOMSVGRect DOMObject
+CIMultiplyBlendMode CIFilter
+CIMotionBlur CIFilter
+_NSToolbarItemPlaceholder NSObject
+_NSContextHelpBorderView NSView
+CILenticularHaloGenerator CIFilter
+NSUndoTextOperation NSObject
+DOMSVGMatrix DOMObject
+NSShadowSurface NSSurface
+NSFileWrapperMoreIVars NSObject
+CIDarkerBlendMode CIFilter
+NSColor NSObject
+NSKeyValueObservationInfo NSObject
+CIRecordingContext CIContext
+NSTempAttributeDictionary NSAttributeDictionary
+NSMatchingPredicateOperator NSStringPredicateOperator
+CISmallSharpenEdgesAndChromaBlur CIFilter
+CITwelvefoldReflectedTile CIFilter
+WebScriptObject NSObject
+__NSCFArray NSMutableArray
+_NSNavButtonCell NSButtonCell
+NSURLUploadAuthenticationChallenge NSURLAuthenticationChallenge
+DOMCSSImportRule DOMCSSRule
+NSMovieView NSView
+_NSSearchSliceKindHandler NSObject
+WebResourcePrivate NSObject
+_NSAECoercerData NSObject
+WebView NSView
+NSCGSContext NSGraphicsContext
+DOMHTMLHRElement DOMHTMLElement
+NSKeyValueIvarMutableSet NSKeyValueMutableSet
+_PFRoutines NSObject
+CISilhouetteLumaBlendMode CIFilter
+NSKeyValueUnnestedProperty NSKeyValueProperty
+DOMHTMLPreElement DOMHTMLElement
+NSPDFImageRep NSImageRep
+NSNavExpandedNodeObservingCenter NSObject
+CAJSDictionary NSMutableDictionary
+DOMHTMLTableElement DOMHTMLElement
+DOMSVGAnimatedNumber DOMObject
+_NSFilterPredicateVisitor NSObject
+DOMHTMLFrameElement DOMHTMLElement
+NSConcretePointerArray NSPointerArray
+NSAppleScript NSObject
+CIStripesGenerator CIFilter
+NSDocumentController NSObject
+NSPatternColor NSColor
+WebBaseNetscapePluginView NSView
+NSScriptExecutionContextMoreIVars NSObject
+WebCoreKeyGenerator NSObject
+_NSToolbarItemViewerAccessibilityHelper NSObject
+NSFTPURLHandle NSURLHandle
+NSKnownKeysMappingStrategy NSObject
+NSDirInfo NSMutableDictionary
+_NSKeyedCoderOldStyleArray NSObject
+CIRectsGenerator CIFilter
+CIVividLightBlendMode CIFilter
+NSAutounbinderObservance NSObject
+_NSMetadataQuerySortingPseudoItem NSObject
+NSXMLChildren NSMutableArray
+NSXMLObjectStore NSMappedObjectStore
+NSEntityStoreMapping NSStoreMapping
+NSThemeTearOffFrame NSTearOffFrame
+CICircleSplashDistortion CIFilter
+CIAreaCummulativeHistogramAlpha CIFilter
+DOMHTMLMetaElement DOMHTMLElement
+NSMenuView NSView
+DOMMouseEvent DOMUIEvent
+_NSSourceListButtonImageSource NSButtonImageSource
+NSMigrationManager NSObject
+DOMHTMLOptionElement DOMHTMLElement
+NSTSMInputContext NSInputContext
+SCTGUIStateGRLResolver SCTGRLResolver
+WebNetscapePluginDocumentView WebBaseNetscapePluginView
+NSKeyValueMutableSet NSMutableSet
+CISilhouetteAlphaBlendMode CIFilter
+NSColorProfile NSObject
+DOMSVGPathSegLinetoAbs DOMSVGPathSeg
+NSSQLRowCache NSPersistentStoreCache
+WebHistory NSObject
+_NSDoubleClickActionBinderPlugin _NSActionBinderPlugin
+NSWindowControllerMoreIVars NSObject
+NSNavExpansionButtonCell NSButtonCell
+NSOneLevelViewBuffer NSViewBuffer
+CIPixelZoom CIFilter
+DOMHTMLInputElement DOMHTMLElement
+NSKeyValueProperty NSObject
+CIHueAdjust CIFilter
+CIAreaMinimum CIAreaMaximum
+DOMSVGPathElement DOMSVGElement
+PDFPrefUpdatingProxy NSProxy
+NSAKDeserializer NSObject
+DOMSVGPathSegCurvetoQuadraticSmoothAbs DOMSVGPathSeg
+NSKeyValueNotifyingMutableCollectionGetter NSKeyValueProxyGetter
+NSSQLEntityKey NSSQLColumn
+CILinearBurnBlendMode CIFilter
+NSPreferences NSObject
+DOMHTMLTableCellElement DOMHTMLElement
+DOMRange DOMObject
+CIMenuBarBlendMode CIFilter
+CICGContextImpl CIContextImpl
+__NSFastEnumerationEnumerator NSEnumerator
+NSSplitViewVariables NSObject
+NSStatusBarAction NSObject
+_NSToolbarImageRepView NSView
+NSScrollView NSView
+NSTextViewFindIndicator NSObject
+DOMCSSStyleRule DOMCSSRule
+CICopyMachineTransition CIFilter
+NSComboBoxWindow NSWindow
+CABoxLayoutManager NSObject
+CILanczosScaleTransform CIFilter
+CAJS_CGPoint NSObject
+DOMSVGMaskElement DOMSVGElement
+CIPseudoMedian CIFilter
+NSMutableDictionary NSDictionary
+NSTreeController NSObjectController
+DOMSVGAnimatedBoolean DOMObject
+NSNavNodeContext NSObject
+NSMenuTemplate NSObject
+WebHTMLView NSControl
+NSOutputStream NSStream
+_NSDateValueBinderPlugin _NSValueBinderPlugin
+_NSBrowserAuxiliary NSObject
+CTGlyphStorageInterface NSObject
+_NSTemporaryObjectID2 NSTemporaryObjectID
+NSURLHandle NSObject
+_NSIndexSetEnumerator NSEnumerator
+NSBrowser NSControl
+NSLayoutHole NSObject
+NSSecureTextView NSTextView
+CIAdditionCompositing CIFilter
+NSSet5413174 NSMutableSet
+NSTreeControllerTreeNode NSTreeNode
+_NSQDCGSContext NSCGSContext
+NSWorkspaceCenter NSNotificationCenter
+NSConcreteProtocolChecker NSProtocolChecker
+NSColorSpace NSObject
+_NSCornerView NSView
+NSSQLKeypathExpressionIntermediate NSSQLExpressionIntermediate
+CIShadedMaterial CIFilter
+HPDHelpURL NSObject
+NSTableViewChildCellProxy NSTableViewCellProxy
+NSTabView NSView
+HIViewAdapter NSObject
+DOMHTMLStyleElement DOMHTMLElement
+NSKeyValueFastMutableArray2 NSKeyValueFastMutableArray
+NSMutableArray NSArray
+NSKeyValueFastMutableArray1 NSKeyValueFastMutableArray
+NSPrivateCoreDataClassForFindingBundle NSObject
+NSSynchronousURLConnectionDelegate NSObject
+NSMergedPolicyLocalizationPolicy NSValidationErrorLocalizationPolicy
+NSSurface NSObject
+NSCGImageRep NSImageRep
+CICrop CIFilter
+NSRuleEditorTextFieldCell NSTextFieldCell
+NSPersistentDocument NSDocument
+NSManagedObject NSObject
+NSFormCell NSActionCell
+NSLevelIndicatorCell NSActionCell
+WebScriptObjectPrivate NSObject
+NSText NSView
+NSRuleEditorButtonCell NSButtonCell
+NSDocumentControllerMoreIVars NSObject
+NSNavNodePreviewHelper NSObject
+NSScriptEnumeratorDescription NSObject
+NSPrintThumbnailView NSView
+DOMSVGElement DOMElement
+NSSavePanelAuxiliary NSObject
+NSDictionaryMapNode NSStoreMapNode
+NSKeyValueShareableObservanceKey NSKeyValueObservance
+NSServiceMaster NSObject
+WebHTMLRepresentation NSObject
+NSSearchField NSTextField
+DOMSVGTransformList DOMObject
+NSAffineTransform NSObject
+WebKitPluginContainerView NSView
+NSXMLNamedNode NSXMLNode
+CAFilter NSObject
+_PFContextMapTable NSObject
+NSDeviceCMYKColor NSColor
+NSHSBSliders NSColorSpaceSliders
+CFXPreferencesSearchListSource CFXPreferencesSource
+SCTGRLIndex NSObject
+CarbonWindowContentView NSView
+_NSBrowserDropDestContext NSObject
+NSValueTransformer NSObject
+CIAdvancedHeightFieldFromMask CIFilter
+WebViewFactory WebCoreViewFactory
+NSDistantObjectTableEntry NSObject
+NSMutableCharacterSet NSCharacterSet
+CIDisintegrateWithMaskTransition CIFilter
+NSColorPickerUser NSColorPicker
+WebTextCompleteController NSObject
+NSTableRow NSObject
+_NSColorPanelToolbar NSToolbar
+CFXPreferencesCompatibilitySource CFXPreferencesSource
+DOMSVGPathSegLinetoHorizontalAbs DOMSVGPathSeg
+NSSegmentedCell NSActionCell
+HPDHelpIndex NSObject
+NSScrollAnimationHelper NSAnimationHelper
+NSWorkspace NSObject
+NSColorScaleSlider NSSlider
+DOMElement DOMNode
+_NSThemeCloseWidgetCell _NSThemeWidgetCell
+CIFlat3X3ChromaBlur CIFilter
+NSURLConnection NSObject
+NSComparisonPredicateOperator NSPredicateOperator
+_NSThreadedTiledViewBackingLayer CATiledLayer
+NSPrintPanel NSObject
+DOMHTMLIsIndexElement DOMHTMLInputElement
+NSScriptCommandDescriptionMoreIVars NSObject
+_NSCFURLProtocolBridge NSObject
+_NSFilePromiseTypeConverter NSObject
+NSSQLOrderIntermediate NSSQLIntermediate
+CIColorMap CIFilter
+NSAccessibilityIndexedMockUIElement NSAccessibilityMockUIElement
+NSAKDeserializerStream NSObject
+NSRuleEditorPopupButtonCell NSPopUpButtonCell
+NSNavBrowserCell NSBrowserCell
+NSAccessibilityTextLink NSAccessibilityMockUIElement
+DOMSVGUnitTypes DOMObject
+NSSplitViewSplitter NSAccessibilityMockUIElement
+CISoftLightBlendMode CIFilter
+NSColorSpaceColor NSColor
+NSGetCommand NSScriptCommand
+NSKeyedArchiver NSCoder
+_NSAttributeRun NSObject
+NSRulebookCharacterSet NSCharacterSet
+NSAllDescendantPathsEnumerator NSDirectoryEnumerator
+WebNetscapePluginStream WebBaseNetscapePluginStream
+NSArray NSObject
+NSViewTemplate NSView
+NSWindowController NSResponder
+NSHost NSObject
+NSNavNewFolderController NSObject
+NSSQLiteConnection NSSQLConnection
+DOMSVGPathSegLinetoVerticalRel DOMSVGPathSeg
+NSScriptEnumerationDescription NSScriptValueTypeDescription
+NSSQLIntermediate NSObject
+NSSQLJoinIntermediate NSSQLIntermediate
+WebNetscapePluginPackage WebBasePluginPackage
+NSLocale NSObject
+NSBundle NSObject
+NSSQLEntity NSStoreMapping
+CISampler NSObject
+NSWhoseSpecifier NSScriptObjectSpecifier
+NSTimeZone NSObject
+SCTPopUpButtonGRL SCTViewGRL
+_NSDatePickerRange NSObject
+CIAreaAverage CIFilter
+NSSQLColumn NSSQLProperty
+DOMSVGAElement DOMSVGElement
+NSDrawerWindow NSWindow
+CIMenuGenerator CIFilter
+NSUserDefaultsController NSController
+_NSViewBackingLayer CALayer
+NSCalendar NSObject
+NSSourceListBackgroundColor NSCatalogColor
+NSPageLayout NSObject
+NSScriptCommandConstructionContext NSObject
+NSKeyValueMutatingArrayMethodSet NSKeyValueMutatingCollectionMethodSet
+CIDiscBlur CIFilter
+NSFileManager NSObject
+NSAccessibilityMockUIElement NSObject
+NSColorPanelColorWell NSColorWell
+NSObsoleteBitmap NSObject
+NSRTFReaderTableState NSObject
+DOMSVGImageElement DOMSVGElement
+NSURLKeychainCredential NSURLCredential
+NSTableColumn NSObject
+NSBinaryCollatorElement NSCollatorElement
+NSSQLOptLockKey NSSQLColumn
+CarbonWindowFrame NSView
+NSKeyValueSet NSSet
+NSLevelIndicator NSControl
+CICVImageProviderDelegate NSObject
+NSSplitView NSView
+_NSTreeNodeChildNodesArrayProxy NSObject
+NSNavFilePropertySortDescriptor NSSortDescriptor
+NSTextStorage NSMutableAttributedString
+NSGraphicCell NSCell
+CIFilter NSObject
+CIColorWheelGenerator CIFilter
+_NSMenuItemPlugin _NSValueBinderPlugin
+DOMNativeXPathNSResolver DOMObject
+_NSToolbarSpace NSView
+CIFlat5X5ChromaBlur CIFilter
+NSRulerViewPrivateData NSObject
+DOMHTMLUListElement DOMHTMLElement
+NSVariableAssignmentExpression NSExpression
+CIHoleDistortion CIFilter
+WebHistoryPrivate NSObject
+NSFocusState NSPSMatrix
+NSStopTouchingMeBox NSBox
+NSAccessibilityReparentingProxy NSAccessibilityProxy
+NSDrawerFrame NSFrameView
+NSFileInfoCacheEntry NSObject
+NSNavSplitViewController NSObject
+NSViewBuffer NSObject
+_NSControllerObjectProxy NSObject
+DOMNamedNodeMap DOMObject
+_NSViewAuxiliary NSObject
+NSKeyValueNilSetEnumerator NSEnumerator
+NSTableViewCellProxy NSAccessibilityProxy
+NSURLCacheInternal NSObject
+_NSBalancedModelObservingTracker _NSModelObservingTracker
+NSAccessibilitySliderValueIndicator NSAccessibilityMockUIElement
+NSToolbarGroupView NSView
+NSImageCacheView NSView
+NSFetchRequestExpression NSExpression
+NSExpandedBuiltinCharacterSet NSBuiltinCharacterSet
+NSCollectionViewBinder NSBinder
+NSDistributedNotificationCenter NSNotificationCenter
+WebEditCommand NSObject
+NSEqualityPredicateOperator NSPredicateOperator
+NSCFAttributedString NSMutableAttributedString
+NSConcreteGlyphGenerator NSGlyphGenerator
+NSXMLSchemaType NSObject
+NSDPSContext NSObject
+CIBitmapContextImpl CIContextImpl
+_NSMovieUndoOperation NSObject
+NSSpeechSynthesizer NSObject
+CIPerspectiveTile CIFilter
+WebFontCache NSObject
+CILuminanceGamutMapping CIFilter
+NSZipFileArchive NSObject
+NSTableColumnBinder NSViewStateBinder
+CIPlugInStandardFilter CIFilter
+DOMSVGSetElement DOMSVGAnimationElement
+_NSKVCPIvarGetBinding NSKeyGetBinding
+NSFontPanelImagePopUpButtonCell NSPopUpButtonCell
+NSPPDParse NSObject
+CIFourfoldReflectedTile CIFilter
+CILanczosResize CIFilter
+NSServiceMenuDelegate NSObject
+NSPrintPanelOldAccessoryController NSViewController
+CIFilterGenerator NSObject
+NSMatrix NSControl
+NSTableOptions NSObject
+NSLogicalTest NSScriptWhoseTest
+CIMaterialMapReflectionMapLightGenerator CIFilter
+NSPersistentStoreRequest NSObject
+CIBackground CIFilter
+NSCachedRGBColor NSCalibratedRGBColor
+_NSActionBinderPlugin _NSBinderPlugin
+NSConcreteScanner NSScanner
+NSLogConsoleView WebView
+DOMHTMLLegendElement DOMHTMLElement
+NSBigMutableString NSMutableString
+CIDiffusion CIFilter
+NSXMLNSDataTransformerName NSValueTransformer
+_NSCollectionViewRubberband NSView
+_NSDragManager NSObject
+CAPropertyAnimation CAAnimation
+CIWindowedSincConvolution CIFilter
+NSSQLAliasGenerator NSObject
+NSCFString NSMutableString
+NSStringDrawingTextStorage NSTextStorage
+_NSXMLParserInfo NSObject
+NSOpenGLPixelFormat NSObject
+_NSKeyForwardingGetBinding NSKeyGetBinding
+_NSIconViewDragContext NSObject
+NSDocument NSObject
+CIDarkenBlendMode CIFilter
+NSProtocolChecker NSProxy
+_NSThemeWidgetCell NSButtonCell
+NSURLKeyValuePair NSObject
+NSViewDynamicToolTipManager NSObject
+_NSMagnifier NSObject
+NSNavSegmentSwitchControl NSSegmentedControl
+CIBumpDistortionLinear CIFilter
+NSSQLChannel NSObject
+NSSQLLimitIntermediate NSSQLIntermediate
+WebDashboardRegion NSObject
+NSButton NSControl
+NSPrintCopyingGraphicsContext NSCGSContext
+NSPredicate NSObject
+DOMCounter DOMObject
+NSMultiplePagePDFImageViewTextAttachmentCell NSViewTextAttachmentCell
+NSCachedImageRep NSImageRep
+NSTextViewCompletionController NSObject
+WebCoreScrollView NSScrollView
+NSMutableRLEArray NSRLEArray
+NSBuiltinCharacterSet NSCharacterSet
+NSConstantValueExpression NSExpression
+NSOpenGLContext NSObject
+_NSOutlineViewReserved NSObject
+NSManagedObjectModel NSObject
+_NSTabViewItemAuxiliary NSObject
+_NSControllerArrayProxyMutatorArray NSMutableArray
+NSSQLForeignKeyIntermediate NSSQLConstantValueIntermediate
+NSTextValueBinder NSValueBinder
+NSStatusBarButton NSButton
+DOMSVGGradientElement DOMSVGElement
+NSFontOptionsColorWell NSColorWell
+_NSRuleEditorViewSliceHolder NSView
+__NSArrayReverseEnumerator NSEnumerator
+NSNotificationCenter NSObject
+NSStatusBarWindow NSWindow
+NSColorPickerPageableNameListScrollView NSScrollView
+CIHardLightBlendMode CIFilter
+_NSIconAnimation NSAnimation
+CITorusLensDistortion CIFilter
+CIRefractedMaterial CIFilter
+NSCFTimer NSTimer
+_NSToolbarSeparatorAndSpaceItemViewerAccessibilityHelper _NSToolbarItemViewerAccessibilityHelper
+NSSQLFetchIntermediate NSSQLIntermediate
+IPMDFontRange NSObject
+DOMSVGMarkerElement DOMSVGElement
+DOMHTMLHtmlElement DOMHTMLElement
+NSXMLAttributeDeclaration NSXMLDTDNode
+NSFontPanel NSPanel
+NSSQLConstantValueIntermediate NSSQLIntermediate
+WebPluginDatabase NSObject
+CIContext NSObject
+DOMRGBColor DOMObject
+NSPopUpButtonCell NSMenuItemCell
+CICMYKHalftone CIFilter
+NSAutoCalendar NSCalendar
+NSMouseTracker NSObject
+NSDirInfoSerializer NSAKSerializer
+_NSMovieViewPlugin _NSValueBinderPlugin
+_NSBinderPlugin NSObject
+NSOpenGLView NSView
+_NSProxyWrapperMutableSet _NSNotifyingWrapperMutableSet
+NSSQLExpressionIntermediate NSSQLIntermediate
+NSPrintOperation NSObject
+CIMorphology CIFilter
+DOMSVGCircleElement DOMSVGElement
+NSXMLDocumentMap NSPersistentStoreMap
+NSCharacterProperty NSObject
+DOMSVGTitleElement DOMSVGElement
+DOMSVGTextContentElement DOMSVGElement
+NSSelectionBinder NSValueBinder
+_NSSharedValueTransformer NSValueTransformer
+NSKeyValueProxyShareKey NSObject
+NSPasteboard NSObject
+NSFocusStack NSObject
+NSCountRequest NSPersistentStoreRequest
+NSAnimationContext NSObject
+NSConstantString NSSimpleCString
+NSAppleEventManager NSObject
+NSMoveHelper NSObject
+NSNavOutlineCell NSNavBrowserCell
+NSTextViewCompletionWindow NSWindow
+NSURLKeychainCredentialStorage NSObject
+NSXMLNSArrayTransformerName NSValueTransformer
+NSScriptExecutionContext NSObject
+NSRulebook NSObject
+CIEightfoldReflectedTile CIFilter
+NSProgressPanel NSPanel
+_NSToolbarSingleSegmentSegmentedViewItemViewerAccessibilityHelper _NSToolbarButtonViewItemViewerAccessibilityHelper
+CIFilterClassDescription NSObject
+NSCachedDeviceRGBColor NSDeviceRGBColor
+NSInputManager NSObject
+CIImage NSObject
+DOMHTMLBRElement DOMHTMLElement
+NSHTTPCookie NSObject
+NSAppleMenuController NSObject
+NSColorPickerCrayon NSColorPicker
+NSURLQueue NSObject
+NSViewHierarchyLock NSObject
+NSXMLContext NSObject
+NSMenuItemViewer NSView
+WebCoreMenuTarget NSObject
+NSAccessibilityReparentingCellProxy NSAccessibilityReparentingProxy
+WebInspector NSObject
+CAAnimationGroup CAAnimation
+NSLabelView NSControl
+NSRunStorage NSObject
+NSSearchFieldBinder NSViewStateBinder
+NSColorListAuxiliary NSObject
+_NSKnownKeysEnumerator NSEnumerator
+CATiledLayer CALayer
+DOMSVGPathSegLinetoVerticalAbs DOMSVGPathSeg
+NSEntityMapping NSObject
+WebScriptDebugger NSObject
+NSOpenDocumentReader NSObject
+NSNavScopeView NSView
+NSColorPickerWheelView NSView
+SCTSearchField NSSearchField
+NSDistributedLock NSObject
+NSPlaceholderMutableString NSMutableString
+WebDownloadInternal NSObject
+NSKeyValueFastMutableCollection1Getter NSKeyValueProxyGetter
+CINoiseReduction CIFilter
+NSKeyedArchiverWrapper NSKeyedArchiver
+NSWindowTemplate NSObject
+NSKeyValueSlowMutableArray NSKeyValueMutableArray
+DOMHTMLFormElement DOMHTMLElement
+NSXMLDocumentMapNode NSStoreMapNode
+IMKClient NSObject
+DOMSVGPathSegCurvetoCubicSmoothRel DOMSVGPathSeg
+CISumOf8Conics CIFilter
+CIPointillize CIFilter
+_NSDatePickerCellExtraIvars NSObject
+NSNetService NSObject
+NSBitmapGraphicsContext NSWindowGraphicsContext
+NSNavOutlineHeaderCell NSTableHeaderCell
+DOMHTMLLIElement DOMHTMLElement
+NSKeyValueSlowSetter NSKeyValueSetter
+_NSSegmentedControlPlugin _NSSelectionBinderPlugin
+NSFontPanelSplitView NSSplitView
+NSAttributeStoreMapping NSPropertyStoreMapping
+WebHTMLRepresentationPrivate NSObject
+NSIdentityGlyphInfo NSGlyphInfo
+NSImmutableRangeCharacterSet NSCharacterSet
+NSMutableFontDescriptor NSFontDescriptor
+NSDecimalNumberPlaceholder NSObject
+NSPersistentStoreMap NSObject
+_NSSoundAux NSObject
+_PFTask NSObject
+NSSystemInfoPanel NSObject
+DOMHTMLImageElement DOMHTMLElement
+NSUIHeartBeat NSObject
+NSUndoManager NSObject
+NSNavOutlineView NSOutlineView
+NSBinder NSObject
+_NSClassToBinderMaps NSObject
+NSNavHistoryState NSObject
+PluginParser NSObject
+WebPluginController NSObject
+NSMutableParagraphStyle NSParagraphStyle
+NSGlyphHole NSObject
+DOMDocumentType DOMNode
+NSPortNameServer NSObject
+_NSATSTypesetterGuts NSObject
+_NSClipViewBackingLayer _NSViewBackingLayer
+NSLeafProxy 
+CIRotatingCubeTransition CIFilter
+NSOperation NSObject
+CAEmitterLayer CALayer
+CIGraph NSObject
+NSDate NSObject
+NSTearOffFrame NSTitledFrame
+_NSStringPboardTypeConverter _NSPboardTypeConverter
+NSData NSObject
+WebBackForwardList NSObject
+DOMText DOMCharacterData
+WebDynamicScrollBarsView NSScrollView
+NSApplication NSResponder
+NSInputClientWrapper NSObject
+_PFArray NSArray
+CIMaterialMapLightGenerator CIFilter
+NSAnyKeyExpression NSExpression
+CIUIBundleBase NSObject
+DOMHTMLHeadElement DOMHTMLElement
+CITriangleTile CIFilter
+NSMergePolicy NSObject
+NSSegmentedControl NSControl
+NSAccessibilityProxy NSObject
+DOMSVGTextElement DOMSVGTextPositioningElement
+_NSCheckBoxPlugin _NSValueBinderPlugin
+NSRelationshipDescription NSPropertyDescription
+DOMSVGPoint DOMObject
+_NSToolbarConfigPanelLoader NSObject
+NSFilesystemItemCopyOperation NSDirectoryTraversalOperation
+SCTHelpRectangleView NSView
+_WebCoreHistoryProvider NSObject
+NSKeyValueMethodSetter NSKeyValueSetter
+NSAppleMenuItemRepresentedObject NSObject
+NSHTTPAuthenticator NSObject
+_NSProgressIndicatorPlugin _NSDoubleValueBinderPlugin
+NSInputStream NSStream
+_NSUnarchiveFromDataTransformer _NSSharedValueTransformer
+NSATSTypesetter NSTypesetter
+DOMXPathExpression DOMObject
+NSKeyValueNonmutatingArrayMethodSet NSKeyValueNonmutatingCollectionMethodSet
+NSKeyedUnarchiverWrapper NSKeyedUnarchiver
+NSPositionalSpecifierMoreIVars NSObject
+DOMHTMLTableRowElement DOMHTMLElement
+CIGelBlendMode CIFilter
+NSConcreteMutableData NSMutableData
+DOMSVGPathSegCurvetoCubicRel DOMSVGPathSeg
+NSScriptValueTypeDescription NSScriptTypeDescription
+NSXMLNSDateTransformerName NSValueTransformer
+NSXMLDTD NSXMLNode
+CIAdvancedShadedMaterial CIFilter
+NSSecureTextField NSTextField
+_NSBrowserColumnScrollHelper NSObject
+NSLayoutManagerTextBlockRowArrayCache NSObject
+DOMHTMLEmbedElement DOMHTMLElement
+WebCoreFunctionWrapper NSObject
+NSCondition NSObject
+DOMHTMLQuoteElement DOMHTMLElement
+CIAutoBlackPointWhitePoint CIFilter
+NSFaultHandler NSObject
+NSMetalPatternColor NSPatternColor
+_NSOperationQueueData NSObject
+SCTToolbarGRL SCTGRL
+NSDateComponents NSObject
+CIColor NSObject
+_NSFaultingMutableSet NSMutableSet
+NSIBObjectData NSObject
+CIHeightFieldFromMask CIFilter
+NSTableHeaderCell NSTextFieldCell
+NSCustomPredicateOperator NSPredicateOperator
+_NSNotifyingWrapperMutableSet NSMutableSet
+NSKeyValueUndefinedSetter NSKeyValueSetter
+_NSViewAnimator _NSObjectAnimator
+CISaturationBlendMode CIFilter
+ThreadEnabler NSObject
+_NSArrayControllerExtensions NSObject
+CIAffineClamp CIFilter
+_NSTableRowHeightStorage NSObject
+NSSearchButtonCellProxy NSAccessibilityReparentingCellProxy
+NSTextView NSText
+NSKeyValueSlowGetter NSKeyValueGetter
+NSMultiplePagePDFImageView NSView
+_NSZombie_ 
+CIHighlightShadow CIFilter
+NSNibAXAttributeConnector NSObject
+NSColorPickerWheel NSColorPicker
+NSFileLocator NSObject
+CIWhitePoint CIFilter
+NSSQLConnection NSObject
+NSString NSObject
+NSSQLToOne NSSQLRelationship
+WebPanelAuthenticationHandler NSObject
+NSAccessibilityRulerMarker NSAccessibilityMockUIElement
+NSCellUndoManager NSUndoManager
+NSConnection NSObject
+NSScriptCommandDescription NSObject
+DOMXPathResult DOMObject
+NSStoreMappingGenerator NSObject
+CIMorphologyMin CISampleAreaOperation
+NSFileURLHandle NSURLHandle
+NSFetchedPropertyDescription NSPropertyDescription
+NSURLCredential NSObject
+CIRAWSharpen CIFilter
+CIColorMatrix CIFilter
+NSPathCell NSActionCell
+DOMEntityReference DOMNode
+CIMakeShadowMask CIFilter
+CIStencilAlphaBlendMode CIFilter
+NSDistantObjectRequest NSObject
+NSConcreteMutableAttributedString NSMutableAttributedString
+NSToolbarSpaceItem NSToolbarItem
+CAPDFLayer CALayer
+CICheapBlur CIFilter
+NSNavMediaBrowserDelegate NSNavFileListDelegate
+NSTabViewBinder NSViewStateBinder
+CIConcreteKernel CIKernel
+NSExpression NSObject
+NSNavCustomView NSView
+SCTWindowGRL SCTGRL
+CATableLayoutManager NSObject
+WebPluginContainerCheck NSObject
+_NSPromiseContentsTypeConverter NSObject
+DOMNode DOMObject
+NSHTMLWriter NSObject
+NSPropertyDescription NSObject
+DOMHTMLBaseFontElement DOMHTMLElement
+_NSCoreDataOptimisticLockingException NSException
+NSOpenGLPixelBuffer NSObject
+NSHelpManager NSObject
+WebPolicyDecisionListener NSObject
+NSSQLPrimaryKey NSSQLColumn
+NSScriptRecordTypeDescription NSScriptTypeDescription
+NSConcreteHashTable NSHashTable
+IPMDEventParameter NSObject
+NSKeyValueNotifyingMutableSet NSKeyValueMutableSet
+NSSingleLineTypesetter NSATSTypesetter
+WebNodeHighlight NSObject
+NSScriptWhoseTest NSObject
+_NSPeriodicEventSource NSObject
+NSEditorBinder NSBinder
+__NSSharedFontInstanceInfo NSObject
+NSSQLRow NSExternalRefCountedData
+NSFilePromiseDragSource NSObject
+DOMSVGFontFaceElement DOMSVGElement
+CILuminescentPremultiplyBlendMode CIFilter
+DOMSVGColor DOMCSSValue
+DOMHTMLDivElement DOMHTMLElement
+DOMSVGPathSegCurvetoQuadraticRel DOMSVGPathSeg
+NSXMLNSNumberTransformerName NSValueTransformer
+NSPropertyListSerialization NSObject
+NSAtomicStore NSPersistentStore
+CIAreaMinimumAlpha CIAreaMaximum
+NSValueBinder NSEditorBinder
+CIColorInvert CIFilter
+NSStoreMapNode NSObject
+NSViewController NSResponder
+CIPatternFill CIFilter
+_NSToolbarItemViewerLabelCellPopUpCell NSPopUpButtonCell
+NSRelationshipStoreMapping NSPropertyStoreMapping
+DOMCSSCharsetRule DOMCSSRule
+NSNumber NSValue
+SCTMenuItem NSObject
+NSColorPanelResizeDimple NSView
+CISmallHighpassEdges CIFilter
+DOMHTMLOListElement DOMHTMLElement
+SCTTableView NSTableView
+NSNibConnector NSObject
+NSSlider NSControl
+NSComboBoxCell NSTextFieldCell
+_NSCellTrackingData NSObject
+CIColorControls CIFilter
+WebCoreAXObject NSObject
+NSViewMultiClipDrawingHelper NSObject
+NSTracer NSObject
+NSOpenPanel NSSavePanel
+NSNavScopeButtonCell NSNavSimpleButtonCell
+NSTableHeaderView NSView
+NSKeyValueShareableObservationInfoKey NSObject
+NSConcretePortCoder NSPortCoder
+NSSQLForeignKey NSSQLColumn
+WebElementDictionary NSDictionary
+NSSimpleCString NSString
+NSIndexPath NSObject
+NSDecimalNumber NSNumber
+NSControllerConfigurationBinder NSBinder
+NSRulerView NSView
+WebStringTruncator NSObject
+NSToolbarClippedItemsIndicator NSPopUpButton
+NSBitmapImageRep NSImageRep
+CAJSCGContext NSObject
+NSKeyValueMutatingSetMethodSet NSKeyValueMutatingCollectionMethodSet
+NSScriptCommandMoreIVars NSObject
+NSViewTextAttachmentCellHelper NSObject
+DOMHTMLElement DOMElement
+NSNavFBENode NSNavNode
+WebPolicyDecisionListenerPrivate NSObject
+CIConcreteSampler CISampler
+NSSplitViewDividerDragParams NSObject
+DOMCSSRule DOMObject
+_NSViewGState NSObject
+_PFLock NSObject
+WebDefaultScriptDebugDelegate NSObject
+NSCrayon NSObject
+NSCollectionView NSView
+NSBezierPath NSObject
+NSColorPanelTextController NSObject
+NSXMLNamedFidelityNode NSXMLNamedNode
+NSIndexSet NSObject
+JSCocoaFFIArgument NSObject
+NSPanelController NSObject
+NSSQLWhereIntermediate NSSQLIntermediate
+CIBurnBlendMode CIFilter
+CIRandomGenerator CIFilter
+NSURLConnectionHandle NSURLHandle
+DOMNodeFilter DOMObject
+SCTSearchManager NSResponder
+NSEditableBinder NSBinder
+DOMSVGPathSeg DOMObject
+NSRulerMarker NSObject
+NSPortMessage NSObject
+SCTSegmentedControlGRL SCTViewGRL
+NSColorPanel NSPanel
+_NSControllerKeyValuePair NSObject
+NSStatusBar NSObject
+NSAnimation NSObject
+_NSMetadataQueryResultGroupArray NSArray
+DOMMutationEvent DOMEvent
+DOMCharacterData DOMNode
+NSArrayDetailBinder NSObjectDetailBinder
+CILuminosityBlendMode CIFilter
+NSDisclosureButtonCell NSNavExpansionButtonCell
+SCTCarbonMenu NSObject
+NSRectSet NSObject
+WebNodeHighlightFadeInAnimation NSAnimation
+_NSTextStorageSideData NSObject
+NSToolbarItemGroup NSToolbarItem
+NSAccessibilitySegment NSAccessibilityIndexedMockUIElement
+NSCTGlyphInfo NSGlyphInfo
+CAScrollLayoutManager NSObject
+NSAttributedString NSObject
+NSNavMediaNode NSNavVirtualNode
+NSPrintPreviewController NSViewController
+_NSControllerTreeProxy NSObject
+NSViewTextAttachmentCell NSTextAttachmentCell
+NSSortedArray NSMutableArray
+DOMSVGPathSegCurvetoCubicSmoothAbs DOMSVGPathSeg
+NSImageKitViewTextAttachmentCell NSViewTextAttachmentCell
+NSNavSimpleButtonCell NSButtonCell
+NSCachedURLResponseInternal NSObject
+NSFontPanelEffectsSliderCell NSSliderCell
+NSTextRulerOptions NSObject
+NSScriptTypeDescription NSObject
+_NSAsciiPboardTypeConverter _NSPboardTypeConverter
+NSCarbonMenuImpl NSObject
+NSStepper NSControl
+NSMemoryObjectStore NSMappedObjectStore
+BridgeSupportController NSObject
+DOMHTMLMapElement DOMHTMLElement
+_NSDocumentTrackingInfo NSObject
+NSMetadataQueryResultGroup NSObject
+CAJSArray NSMutableArray
+CIProSharpen CIFilter
+DOMSVGFontFaceUriElement DOMSVGElement
+NSDictionaryController NSArrayController
+NSCTFont NSFont
+NSPointerArray NSObject
+WebClipView NSClipView
+NSWindowGraphicsContext NSCGSContext
+NSSQLCompoundWhereIntermediate NSSQLWhereIntermediate
+NSURLCredentialStorage NSObject
+CISepiaTone CIFilter
+NSConcreteData NSData
+NSMetadataQuery NSObject
+NSMiddleSpecifier NSScriptObjectSpecifier
+_NSToolbarAuxiliary NSObject
+NSLayoutManagerTextBlockHelper NSObject
+DOMHTMLMarqueeElement DOMHTMLElement
+NSInsertionPointHelper NSObject
+CFXPreferencesManagedSource CFXPreferencesPropertyListSource
+NSComboTableView NSTableView
+_NSManagedProxy NSObject
+CISharpenLuminance CIFilter
+CIFilterPlugIn CIPlugIn
+NSURLDownloadInternal NSObject
+NSUserDefaults NSObject
+CIColorPosterize CIFilter
+NSURLHostNameAddressInfo NSObject
+_NSPDFDocument NSObject
+NSNavNode NSObject
+NSNullFileHandle NSFileHandle
+NSObjectController NSController
+NSDistantObject NSProxy
+NSCMYKSliders NSColorSpaceSliders
+NSActionCell NSCell
+NSThemeDocumentButtonPopUpMenuProxy NSProxy
+NSGreySliders NSColorSpaceSliders
+WebCoreHistory NSObject
+NSRTFReader NSObject
+CIConvolution CISampleAreaOperation
+WebPreferences NSObject
+NSCursor NSObject
+HICocoaWindowContentView NSView
+NSHelpAttachment NSTextAttachment
+WebNullPluginView NSImageView
+_NSToolbarPaletteItemViewerAccessibilityHelper _NSToolbarItemViewerAccessibilityHelper
+NSAccessibilityScrollerPart NSAccessibilityMockUIElement
+SCTPopAnimation NSAnimation
+DOMSVGPathSegCurvetoCubicAbs DOMSVGPathSeg
+CICGSFilter NSObject
+CGXImageProvider NSObject
+_NSSelectorGetBinding NSKeyGetBinding
+NSTextBlock NSObject
+NSSQLStatement NSObject
+NSPrintInfoAdditionalIVars NSObject
+NSResponder NSObject
+DOMNotation DOMNode
+NSBasicObjectID64 _NSCoreManagedObjectID
+NSEvent NSObject
+DOMHTMLParagraphElement DOMHTMLElement
+_NSBrowserScrollView NSScrollView
+NSSegmentedControlBinder NSValueBinder
+NSWindowBinder NSViewStateBinder
+CIAreaMaximumAlpha CIAreaMaximum
+DOMSVGElementInstanceList DOMObject
+_NSPlaceholderTextFieldPlugin _NSTextFieldPlugin
+_NSAttributes NSObject
+NSXMLTidy NSObject
+NSScriptToManyRelationshipDescription NSScriptPropertyDescription
+DOMSVGTextPositioningElement DOMSVGTextContentElement
+__NSCFSet NSMutableSet
+NSXMLObjectStore2 NSAtomicStore
+__NSPlaceholderSet NSMutableSet
+NSPropertySpecifier NSScriptObjectSpecifier
+WebDataSource NSObject
+NSGarbageCollector NSObject
+NSTrackableOutlineView NSOutlineView
+NSURLRequest NSObject
+NSTextAttachmentImageView NSImageView
+NSKeyValueIvarMutableArray NSKeyValueMutableArray
+DOMHTMLOptionsCollection DOMObject
+NSDoubleClickActionBinder NSActionBinder
+NSWeakPointerValue NSValue
+IMKEvent NSObject
+NSNetworkSettingsInternal NSObject
+CILinearDodgeBlendMode CIFilter
+NSExtraLMData NSObject
+NSLazyBrowserList NSMutableArray
+NSArrayController NSObjectController
+NSURLFileTypeMappingsInternal NSObject
+WebArchivePrivate NSObject
+NSSQLSimpleWhereIntermediate NSSQLWhereIntermediate
+NSDebugString NSString
+CIBumpDistortion CIFilter
+DOMSVGStringList DOMObject
+SCTCustomSearchResultGRL SCTGRL
+_NSToolbarClippedItemsIndicatorCell NSPopUpButtonCell
+NSNavFBENetworkNode NSNavFBENode
+WebCoreScriptCallFrame NSObject
+NSNibAXRelationshipConnector NSNibConnector
+NSTokenTextView NSTextView
+LKCGColorCodingProxy CACodingProxy
+NSSQLFetchCountIntermediate NSSQLFetchIntermediate
+NSRemoteInputServer NSInputServer
+WebCoreSynchronousLoader NSObject
+_NSImageViewPlugin _NSValueBinderPlugin
+NSAKSerializer NSObject
+DOMCSSStyleDeclaration DOMObject
+_NSKeyBindingStateActual NSObject
+_NSCDBinderMaps NSObject
+NSFileLocationComponent NSObject
+NSFileSpecifier NSObject
+DOMComment DOMCharacterData
+_NSMagnifierWindow NSWindow
+NSManagedObjectID NSObject
+NSBrowserCell NSCell
+NSXMLFidelityNode NSXMLNode
+HPDChapter HPDTOCEntry
+NSColorPickerPageableNameListView NSView
+NSTokenFieldCell NSTextFieldCell
+NSNavSegmentedCell NSSegmentedCell
+CIRectangleGenerator CIFilter
+CIRadialGradient CIFilter
+NSTrackingArea NSObject
+NSJoin NSObject
+__NSPlaceholderDictionary NSMutableDictionary
+NSCFLocale NSLocale
+_NSAETranslatorData NSObject
+NSScriptSDEFElement NSObject
+NSKeyBinding NSObject
+NSThemeFrame NSTitledFrame
+_NSColorPboardTypeConverter _NSPboardTypeConverter
+NSScriptSuiteRegistry NSObject
+CIFullButton CIFilter
+DOMMediaList DOMObject
+CILineOverlay CIFilter
+CIGamutRollOff CIFilter
+NSKeyBindingManager NSObject
+NSKeyGetBinding NSKeyBinding
+NSSegmentItem NSObject
+</pre>
+-->
+	<script>
+
+		//
+		//
+		// Parsing
+		// 
+		// 
+	
+		// Parse classes 
+		var items, hashAllItem
+		var classCount
+		function	parse(text)
+		{
+			items		= []
+			hashAllItem	= {}
+			var lines	= text.split('\n')
+			classCount	= 0
+			for (var i=0; i<lines.length; i++)
+			{
+				var line = lines[i]
+				if (line.length == 0)	continue
+				// Classes
+				{
+					var splitLine = line.split(' ')
+					var className = splitLine[0]
+					var parentClassName = splitLine[1]
+					var item = { className : className, parentClassName : parentClassName }
+					items.push(item)
+					// From a className, return its item
+					hashAllItem[className] = item
+					classCount++
+				}
+			}
+			document.getElementById('classCount').innerHTML = classCount + ' classes'
+		}
+		
+		
+		
+		// Build a hash of { parentClassName : [childClassName, childClassName, ...] }
+		var hashChildren, rootClasses, hashItem
+		function	hashItems(inputItems)
+		{
+			hashChildren = {}
+			rootClasses = []
+			hashItem = {}
+			for (var i=0; i<inputItems.length; i++)
+			{
+				var item = inputItems[i]
+				var className = item.className
+				var parentClassName = item.parentClassName
+				// For a className, return its children
+				if (!hashChildren[parentClassName]) hashChildren[parentClassName] = []
+				hashChildren[parentClassName].push(className)
+				
+				// Root classes (no parentClassName)
+				if (!parentClassName || parentClassName.length == 0)	rootClasses.push(className)
+
+				// From a className, return its item
+				hashItem[className] = item
+			}
+
+			// Sort hash Parent
+			for (var parent in hashChildren)
+				hashChildren[parent].sort()
+		}
+
+
+
+
+
+		//
+		//
+		// Render
+		// 
+		// 
+
+		// Get our nodes
+		var graphContainer	= document.getElementById('graphContainer')
+
+		// Render class tree
+		function	renderClassTree()
+		{
+			var lastY = -1
+			var litLines = {}
+			for (var i=0; i<100; i++) litLines[i] = 0
+			function	goDownStartingFrom(className, depth, y, childIndex, childCount)
+			{
+				var x = depth
+				var addALine = lastY != y
+
+				if (addALine)	
+				{
+					str += '<tr>'
+					for (var i=0; i<x; i++) 
+					{
+						var c = litLines[i] ? 'class="leftLine"' : ''
+						str += '<td ' + c + '></td>'
+					}
+				}
+				var children = hashChildren[className]
+				
+				var style = childIndex ? 'leftLine' : ''
+				if (children) style += ' bottomLine '
+				str += '<td class="' + style + '">'
+				str += '<span class="acontainer"><span class="smallIndent"></span><a href="http://www.google.com/search?q=' + className + '+site:developer.apple.com&btnI">' + className + '</a></span>'
+				str += '</td>'
+				
+				lastY = y
+				
+				var y2 = y
+				var maxn = 0
+
+
+
+				var litLine = childIndex < childCount-1
+				if (litLine)	litLines[depth] = true
+
+				if (children)	
+					for (var i=0; i<children.length; i++)
+					{
+						var n = goDownStartingFrom(children[i], depth+1, y2, i, children.length)
+						maxn += n
+						y2 += n
+					}
+				if (litLine)	litLines[depth] = false
+
+
+				return Math.max(maxn, 1)
+			}
+
+			// Build graph from root nodes
+			var y = 0
+			var str = '<table border="0" cellPadding="0" cellSpacing="0" id="graphTable">'
+			for (var i=0; i<rootClasses.length; i++)
+			{
+				y += goDownStartingFrom(rootClasses[i], 0, y)
+			}
+			str += '</table>'
+
+			
+			graphContainer.innerHTML = str
+
+		}
+
+		var cellNameHash
+		function	buildCellNameHash()
+		{
+			cellNameHash = {}
+			var ns = graphContainer.getElementsByTagName('TD')
+			for (var i=0; i<ns.length; i++)
+			{
+				if (ns[i].firstChild)	cellNameHash[ns[i].innerText] = ns[i]
+			}
+		}
+
+
+		//
+		// HUD
+		// 
+		function	mo(e)
+		{
+			var n = e.target
+			
+			var hud = document.getElementById('hudtext')
+			if (n.nodeName != 'A')
+			{
+				hud.style.opacity = 0
+				return
+			}
+			hud.style.opacity = 1
+			var className = n.innerHTML
+			
+			
+			var ns = [className]
+			
+			while (className)
+			{
+				var parentClassName = hashItem[className].parentClassName
+				if (parentClassName)	ns.push(parentClassName)
+				className = parentClassName
+			}
+			
+			hud.innerHTML = ns.reverse().join('→')
+		}
+		document.body.onmouseover = mo
+
+
+		function	loadClassesFromText(text)
+		{
+			parse(text)
+			hashItems(items)
+			renderClassTree()
+			buildCellNameHash()
+		}
+		
+		
+		function	cleanSearch()
+		{
+			dimScreen.style.display = ''
+			for (var i=0; i<searchNodes.length; i++)
+				searchNodes[i].parentNode.removeChild(searchNodes[i])
+			searchNodes = []
+			var hud = document.getElementById('hudtext')
+			hud.style.opacity = 0
+		}
+		var searchNodes = []
+		var searchResultIdx
+		var searchResults
+		function	search(searchString)
+		{
+			
+			cleanSearch()
+			if (searchString.length == 0)
+			{
+				return
+			}
+			dimScreen.style.display = 'block'
+
+			searchResults = []
+			var r = new RegExp(searchString, 'i')
+			for (var h in cellNameHash)
+			{
+				var m
+				if (m = h.match(r))	
+				{
+					var n2 = document.createElement('SPAN')
+					n2.innerHTML = h.replace(r, '<span class="searchResultHilight">' + m + '</span>')
+					n2.className = 'searchResult'
+					cellNameHash[h].insertBefore(n2, cellNameHash[h].firstChild)
+
+
+					c = cellNameHash[h].getElementsByTagName('A')[0]
+					c.insertBefore(n2, c.firstChild)
+
+					searchResults.push(h)
+					searchNodes.push(n2)
+				}
+			}
+			
+			
+			searchResultIdx = 0
+			selectSearchResult(searchResultIdx)
+		}
+		function	nextSearchResult()
+		{
+			searchResultIdx++
+			if (searchResultIdx >= searchResults.length)	searchResultIdx = 0
+			selectSearchResult(searchResultIdx)
+		}
+		function	prevSearchResult()
+		{
+			searchResultIdx--
+			if (searchResultIdx < 0)	searchResultIdx = searchResults.length-1
+			selectSearchResult(searchResultIdx)
+		}
+		var prevSearchResultNode
+		function	selectSearchResult(idx)
+		{
+			var n = searchNodes[idx]
+			if (prevSearchResultNode)	prevSearchResultNode.style.backgroundColor = ''
+			n = n.getElementsByTagName('SPAN')[0]
+			n.style.backgroundColor = 'red'
+			
+			prevSearchResultNode = n
+			n.scrollIntoView()
+			
+			var hud = document.getElementById('hudtext')
+			
+			hud.style.opacity = 1
+			hud.innerHTML = (idx+1) + '/' + searchResults.length
+		}
+		
+		var input = document.getElementsByTagName('INPUT')[0]
+		var dimScreen = document.getElementById('searchDimScreen')
+		function	f()
+		{
+			input.focus()
+		}
+		function	ku()
+		{
+			search(input.value)
+//			alert(input.value)
+		}
+		document.body.onkeyup = ku
+
+/*
+		setTimeout(f, 10)
+		
+		
+		var sourceElement = document.getElementsByTagName('PRE')[0]
+		loadClassesFromText(sourceElement.innerHTML)
+		// Remove source text so it won't be picked up by Safari as search matches
+		sourceElement.parentNode.removeChild(sourceElement)
+*/		
+	</script>
+
+</body>
+</html>

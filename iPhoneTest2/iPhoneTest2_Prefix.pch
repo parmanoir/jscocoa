@@ -1,0 +1,11 @@
+//
+// Prefix header for all source files of the 'iPhoneTest2' target in the 'iPhoneTest2' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif
+
+#define JSCocoa_iPhone
+#include "JavascriptCore.h"

@@ -1,0 +1,16 @@
+{
+	FilesToRename = {
+		"JSCocoaApp_Prefix.pch" = "«PROJECTNAME»_Prefix.pch";
+		"JSCocoaApp.js" = "«PROJECTNAME».js";
+	};
+	FilesToMacroExpand = (
+		"«PROJECTNAME»_Prefix.pch",
+		"«PROJECTNAME».js",
+		"Info.plist",
+		"English.lproj/InfoPlist.strings",
+		"main.m",
+		"ApplicationController.m",
+		"ApplicationController.h",
+	);
+	Description = "This project builds a JSCocoa-based application written in Javascript.";
+}

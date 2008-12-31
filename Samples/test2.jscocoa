@@ -1,0 +1,10 @@
+
+
+	log('HELLO WORLD ... from test 2 !')
+	
+	for (var i=0; i<10; i++)
+	{
+		var b = 2 + i
+	}
+	
+	log('blah')

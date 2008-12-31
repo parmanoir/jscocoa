@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <function name='objc_getClass'>
+    <arg type='*'/>
+    <retval type='#'/>
+  </function>
+  <function name='objc_allocateClassPair'>
+    <arg type='#'/>
+    <arg type='*'/>
+    <arg type='L'/>
+    <retval type='#'/>
+  </function>
+  <function name='objc_registerClassPair'>
+    <arg type='#'/>
+    <retval type='v'/>
+  </function>
+  <function name='class_addMethod'>
+    <arg type='#'/>
+    <arg type=':'/>
+    <arg type='?'/>
+    <arg type='*'/>
+    <retval type='v'/>
+  </function>
+
+  <function name='CurrentProcessorSpeed'>
+    <retval type='s'/>
+  </function>
+  
+
+
+</signatures>

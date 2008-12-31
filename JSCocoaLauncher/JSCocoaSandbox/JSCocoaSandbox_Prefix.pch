@@ -1,0 +1,11 @@
+//
+// Prefix header for all source files of the 'JSCocoaSandbox' target in the 'JSCocoaSandbox' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
+
+
+//#import "NSLogConsole.h"
+#define NSLog(args...) NSLog(args), NSLogPostLog(__FILE__, __LINE__)

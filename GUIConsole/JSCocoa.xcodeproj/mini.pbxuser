@@ -1,0 +1,399 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 3D8435230E61A0D200056D71 /* JSCocoa */;
+		activeTarget = 8D1107260486CEB800E47090 /* JSCocoa */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* JSCocoa */,
+		);
+		breakpoints = (
+			3D68A3D40E807EF500C2EC5B /* JSCocoaController.m:721 */,
+			3D68A96B0E81F62800C2EC5B /* JSCocoaFFIArgument.m:218 */,
+			3DB04F5C0EE5907A0047773D /* JSCocoaController.m:2161 */,
+		);
+		codeSenseManager = 3DF41CD20E210E5A00B0CF67 /* Code sense */;
+		executables = (
+			3D8435230E61A0D200056D71 /* JSCocoa */,
+		);
+		expressions = (
+			eax,
+		);
+		perUserDictionary = {
+			"PBXConfiguration.PBXBreakpointsDataSource.v1:1CA1AED706398EBD00589147" = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBreakpointsDataSource_BreakpointID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					20,
+					200,
+					20,
+					100,
+					100,
+					30,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBreakpointsDataSource_ActionID,
+					PBXBreakpointsDataSource_TypeID,
+					PBXBreakpointsDataSource_BreakpointID,
+					PBXBreakpointsDataSource_UseID,
+					PBXBreakpointsDataSource_LocationID,
+					PBXBreakpointsDataSource_ConditionID,
+					PBXBreakpointsDataSource_IgnoreCountID,
+					PBXBreakpointsDataSource_ContinueID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					320,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 250234076;
+			PBXWorkspaceStateSaveDate = 250234076;
+		};
+		perUserProjectItems = {
+			3D0B76990EEA452000AE12CE /* PBXTextBookmark */ = 3D0B76990EEA452000AE12CE /* PBXTextBookmark */;
+			3DD947A10EEA44CC00657A6A /* PBXTextBookmark */ = 3DD947A10EEA44CC00657A6A /* PBXTextBookmark */;
+		};
+		sourceControlManager = 3DF41CD10E210E5A00B0CF67 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1090, 730}}";
+			sepNavSelRange = "{190, 0}";
+			sepNavVisRange = "{0, 555}";
+			sepNavWindowFrame = "{{451, 99}, {1149, 843}}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* JSCocoa_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1217, 787}}";
+			sepNavSelRange = "{146, 0}";
+			sepNavVisRange = "{0, 215}";
+			sepNavWindowFrame = "{{107, 189}, {1276, 900}}";
+		};
+	};
+	3D08D07B0E65CED100B81E63 /* main.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 1045}}";
+			sepNavSelRange = "{750, 0}";
+			sepNavVisRange = "{0, 2354}";
+			sepNavWindowFrame = "{{500, 171}, {1124, 804}}";
+		};
+	};
+	3D08D0ED0E65D89500B81E63 /* ClassTree.png */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{176, 126}, {1276, 900}}";
+		};
+	};
+	3D0B76990EEA452000AE12CE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D08D07B0E65CED100B81E63 /* main.js */;
+		name = "main.js: 20";
+		rLen = 0;
+		rLoc = 750;
+		rType = 0;
+		vrLen = 2354;
+		vrLoc = 0;
+	};
+	3D37DD7A0E2AD13D003EB846 /* JSCocoaFFIArgument.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = JSCocoaFFIArgument.m;
+		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoaGUIConsole/JSCocoaFFIArgument.m";
+		sourceTree = "<absolute>";
+	};
+	3D45274A0E7A1DA00044D504 /* JSCocoa.icns */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{15, 320}, {1229, 853}}";
+		};
+	};
+	3D4FAC150E6798FA005874A3 /* NSLogConsole.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1252, 3874}}";
+			sepNavSelRange = "{7670, 49}";
+			sepNavVisRange = "{7104, 1112}";
+			sepNavWindowFrame = "{{398, 96}, {1276, 900}}";
+		};
+	};
+	3D4FAC160E6798FA005874A3 /* NSLogConsole.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1217, 814}}";
+			sepNavSelRange = "{0, 1348}";
+			sepNavVisRange = "{0, 1347}";
+			sepNavWindowFrame = "{{571, 155}, {1276, 900}}";
+		};
+	};
+	3D4FAC1B0E67990F005874A3 /* NSLogConsole.html */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1217, 4829}}";
+			sepNavSelRange = "{9831, 7}";
+			sepNavVisRange = "{8707, 1436}";
+			sepNavWindowFrame = "{{205, 171}, {1276, 900}}";
+		};
+	};
+	3D68A3D40E807EF500C2EC5B /* JSCocoaController.m:721 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 3DF426A50E251B7400B0CF67 /* JSCocoaController.m */;
+		functionName = "-formatJSException:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 721;
+		location = JSCoreAnimation;
+		modificationTime = 250230479.14228;
+		state = 2;
+	};
+	3D68A5CF0E81698500C2EC5B /* CocoaNavJS.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1147, 696}}";
+			sepNavSelRange = "{45, 10}";
+			sepNavVisRange = "{0, 1685}";
+			sepNavWindowFrame = "{{329, 339}, {1206, 809}}";
+		};
+	};
+	3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1170, 29997}}";
+			sepNavSelRange = "{77491, 19}";
+			sepNavVisRange = "{76936, 1247}";
+			sepNavWindowFrame = "{{203, 171}, {1229, 853}}";
+		};
+	};
+	3D68A85A0E81D61C00C2EC5B /* JSCocoaHelper.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1170, 740}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 218}";
+			sepNavWindowFrame = "{{418, 157}, {1229, 853}}";
+		};
+	};
+	3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1170, 740}}";
+			sepNavSelRange = "{666, 0}";
+			sepNavVisRange = "{0, 1213}";
+			sepNavWindowFrame = "{{137, 160}, {1229, 853}}";
+		};
+	};
+	3D68A96B0E81F62800C2EC5B /* JSCocoaFFIArgument.m:218 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 3D37DD7A0E2AD13D003EB846 /* JSCocoaFFIArgument.m */;
+		functionName = "-fromJSValueRef:inContext:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 218;
+		location = JSCoreAnimation;
+		modificationTime = 250230479.142296;
+		state = 2;
+	};
+	3D8435230E61A0D200056D71 /* JSCocoa */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = JSCocoa;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	3D9BA7950EB10CCE005F9A76 /* class.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1002, 4323}}";
+			sepNavSelRange = "{7495, 0}";
+			sepNavVisRange = "{6045, 2523}";
+			sepNavWindowFrame = "{{575, 172}, {1061, 954}}";
+		};
+	};
+	3DAA879C0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {806, 804}}";
+			sepNavSelRange = "{153, 13}";
+			sepNavVisRange = "{0, 717}";
+			sepNavWindowFrame = "{{1008, 114}, {865, 917}}";
+		};
+	};
+	3DB04F5C0EE5907A0047773D /* JSCocoaController.m:2161 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 3DF574490EACD1E7001018F7 /* JSCocoaController.m */;
+		functionName = "_jsCocoaObject_callAsFunction()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 2161;
+		location = TestsRunner;
+		modificationTime = 250230479.142301;
+		state = 1;
+	};
+	3DB050AA0EE5AF030047773D /* main.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 1045}}";
+			sepNavSelRange = "{1168, 0}";
+			sepNavVisRange = "{0, 2358}";
+			sepNavWindowFrame = "{{500, 170}, {1124, 804}}";
+		};
+	};
+	3DD947A10EEA44CC00657A6A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D08D07B0E65CED100B81E63 /* main.js */;
+		name = "main.js: 20";
+		rLen = 0;
+		rLoc = 750;
+		rType = 0;
+		vrLen = 2354;
+		vrLoc = 0;
+	};
+	3DF41CD10E210E5A00B0CF67 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryName = "";
+		};
+	};
+	3DF41CD20E210E5A00B0CF67 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	3DF426A50E251B7400B0CF67 /* JSCocoaController.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = JSCocoaController.m;
+		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoaGUIConsole/JSCocoaController.m";
+		sourceTree = "<absolute>";
+	};
+	3DF574470EACD1E7001018F7 /* BridgeSupportController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 2013}}";
+			sepNavSelRange = "{1258, 0}";
+			sepNavVisRange = "{690, 1632}";
+			sepNavWindowFrame = "{{537, 259}, {1125, 850}}";
+		};
+	};
+	3DF574480EACD1E7001018F7 /* JSCocoaController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 1694}}";
+			sepNavSelRange = "{3518, 9}";
+			sepNavVisRange = "{2281, 1943}";
+			sepNavWindowFrame = "{{107, 285}, {1124, 804}}";
+		};
+	};
+	3DF574490EACD1E7001018F7 /* JSCocoaController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 26422}}";
+			sepNavSelRange = "{48535, 0}";
+			sepNavVisRange = "{46883, 2238}";
+			sepNavWindowFrame = "{{611, 113}, {1156, 851}}";
+		};
+	};
+	3DF5744A0EACD1E7001018F7 /* JSCocoaFFIArgument.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 957}}";
+			sepNavSelRange = "{3060, 0}";
+			sepNavVisRange = "{419, 2724}";
+			sepNavWindowFrame = "{{84, 306}, {1124, 804}}";
+		};
+	};
+	3DF5744B0EACD1E7001018F7 /* JSCocoaFFIArgument.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1112, 11638}}";
+			sepNavSelRange = "{27724, 15}";
+			sepNavVisRange = "{27530, 1824}";
+			sepNavWindowFrame = "{{540, 109}, {1171, 851}}";
+		};
+	};
+	3DF5744D0EACD1E7001018F7 /* JSCocoaFFIClosure.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 1892}}";
+			sepNavSelRange = "{3495, 22}";
+			sepNavVisRange = "{2413, 2051}";
+			sepNavWindowFrame = "{{176, 222}, {1124, 804}}";
+		};
+	};
+	3DF5744E0EACD1E7001018F7 /* JSCocoaPrivateObject.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 737}}";
+			sepNavSelRange = "{290, 80}";
+			sepNavVisRange = "{0, 1216}";
+			sepNavWindowFrame = "{{166, 184}, {1125, 850}}";
+		};
+	};
+	3DF5744F0EACD1E7001018F7 /* JSCocoaPrivateObject.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 1254}}";
+			sepNavSelRange = "{216, 37}";
+			sepNavVisRange = "{594, 1137}";
+			sepNavWindowFrame = "{{177, 200}, {1125, 850}}";
+		};
+	};
+	8D1107260486CEB800E47090 /* JSCocoa */ = {
+		activeExec = 0;
+		executables = (
+			3D8435230E61A0D200056D71 /* JSCocoa */,
+		);
+	};
+	8D1107310486CEB800E47090 /* Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1254, 762}}";
+			sepNavSelRange = "{520, 0}";
+			sepNavVisRange = "{0, 819}";
+			sepNavWindowFrame = "{{245, 88}, {1313, 875}}";
+		};
+	};
+}

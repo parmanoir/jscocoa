@@ -1,0 +1,448 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<head>
+	<style>
+		body
+		{
+			background-color: white;
+			padding: 0;
+			margin: 0;
+			font-family: Lucida Grande;
+			font-size: 80%;
+			color: #444;
+		}
+
+
+		/*
+			Messages
+		*/
+		#nomessages
+		{
+			text-align: center;
+			font-size: 20px;
+			color: #aaa;
+			position: absolute;
+			top: 45%;
+			width: 100%;
+		}
+		#noresults
+		{
+			text-align: center;
+			font-size: 20px;
+			color: #aaa;
+			position: absolute;
+			top: 45%;
+			width: 100%;
+		}
+
+
+		/*
+			Table
+		*/
+		td
+		{
+			border: solid 1px #ddd;
+			border-left: 0;
+			border-right: 0;
+		}
+		.date
+		{
+			ebackground-color: #eee;
+			width: 60px;
+			color: #888;
+			font-size: 80%;
+			padding: 2px 8px;
+			white-space: nowrap;
+		}
+		.date-day
+		{
+			font-weight: bold;
+		}
+		.date-time
+		{
+			font-size: 80%;
+		}
+		.message
+		{
+			efont-family: Andale Mono;
+			padding: 1px 4px;
+		}
+		
+		/*
+			Clickable div to reveal in XCode
+		*/
+		#revealer
+		{
+			color: white;
+			background-color: black;
+			background-color: rgba(0, 0, 0, 0.7);
+			position: absolute;
+			top: -30000px;
+			font-weight: bold;
+		}
+		#revealer a
+		{
+			display: block;
+			position: absolute;
+			color: #aaa;
+			text-decoration: none;
+			width: 100%;
+		}
+		#revealer a div
+		{
+			text-align: center;
+			width: 100%;
+			position: absolute;
+		}
+		#revealer a div span
+		{
+			color: white;
+		}
+		
+		
+		/*
+			Overlay help
+		*/
+		#overlayHelp
+		{
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: rgba(0, 0, 0, 0.85);
+			color: white;
+			display: none;
+		}
+		#overlayHelp .description
+		{
+			color: rgba(255, 255, 255, 0.5);
+			margin-top: 1em;
+			margin-left: 1em;
+		}
+		#overlayHelp .action
+		{
+			margin-bottom: 1em;
+			margin-left: 1em;
+			cursor: pointer;
+			-webkit-border-radius: 8px;
+			padding: 2px 10px;
+			background-color: red;
+			display: inline-block;
+			background-color: transparent;
+		}
+		#overlayHelp .action:hover
+		{
+			background-color: white;
+			color: black;
+		}
+		*
+		{
+			-webkit-transition-property: background-color, color, opacity;
+			-webkit-transition-duration: .4s;
+		}
+		#overlayHelp
+		{
+			-webkit-transition-property: opacity;
+			-webkit-transition-duration: .2s;
+		}
+		
+		.startCommand
+		{
+			font-size: 100%;
+			padding: 4px 4px;
+			font-weight: bold;
+			background-color: #ddd;
+		}
+		.endCommand
+		{
+			font-size: 100%;
+			padding: 10px 10px;
+			font-weight: bold;
+		}
+	</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+	<div id='nomessages'>Nothing here yet !<br/><a href='#' style='font-size: 70%; color: #888' onclick='openHelp(); return false'>sample commands</a></div>
+	<div id='noresults'>No results</div>
+	<div id='ioo-log'></div>
+
+
+	<div id='revealer'><a href='#'><div>File + LineNumber</div></a></div>
+
+	<div id='messagesContainer'>
+		<table cellPadding='0' cellSpacing='0' eborder='1' style='width: 100%; border-collapse: collapse'>
+		<tbody id='messages'></tbody></table>
+	</div>
+	
+	
+	<!--
+	
+		Overlay help
+	
+	-->
+	<div id='overlayHelp'>
+		<div class='description'>Current application</div>
+		<div class='action'>NSWorkspace.sharedWorkspace.activeApplication</div>
+
+		<div class='description'>Change current window title</div>
+		<div class='action'>NSApplication.sharedApplication.keyWindow.title = 'Hello from Javascript !'</div>
+
+		<div class='description'>Move window frame</div>
+		<div class='action'>var w = NSApplication.sharedApplication.keyWindow; w.frameOrigin = (NSMakePoint(w.frame.origin.x+10, w.frame.origin.y-10))</div>
+		
+		<div class='description'>Grow window frame</div>
+		<div class='action'>var w = NSApplication.sharedApplication.keyWindow; w.set({frame:NSMakeRect(w.frame.origin.x, w.frame.origin.y, w.frame.size.width+10, w.frame.size.height+10), display:false})</div>
+
+		<div class='description'>New window</div>
+		<div class='action'>var w = NSWindow.instance({withContentRect:NSMakeRect(100, 100, 200, 605), styleMask:NSTitledWindowMask+NSClosableWindowMask, backing:NSBackingStoreBuffered, defer:false});w.title='New window !'; w.orderFront(null)</div>
+
+		<div class='description'>Add buttons to last created window</div>
+		<div class='action'>for (var i=0;i!=20; i++) { var b = NSButton.instance({withFrame:NSMakeRect(10, i*30+5, 100, 28)}); b.bezelStyle = i; w.contentView.addSubview(b); }</div>
+	</div>
+	
+	<script>
+		document.getElementById('noresults').style.display = 'none'
+		
+		var	searchString = ''
+		
+		function	htmlEncode(str)
+		{
+			return	str.replace(/</gi, '&lt;')
+		}
+		
+		
+		//
+		// Add a line to table log
+		//
+		function	log(logLine, file, line)
+		{
+//			hideRevealer()
+			document.getElementById('nomessages').style.display = 'none'
+			document.getElementById('noresults').style.display = 'none'
+			
+			var bracketPosition = logLine.indexOf(']')
+			var message = logLine.substr(bracketPosition+1)
+			var date = logLine.substr(0, bracketPosition).split(' ')
+			
+			var c = document.getElementById('messages')
+			var n = document.createElement('TR')
+			c.appendChild(n)
+			var n1 = document.createElement('TD')
+			n1.className = 'date'
+			n.appendChild(n1)
+			var n2 = document.createElement('TD')
+			n2.className = 'message'
+			n.appendChild(n2)
+			n1.innerHTML = '<div class="date-day">' + date[0] + '</div><div class="date-time">' + date[1] + '</div>'
+
+			message = htmlEncode(message)
+			message = message.replace(/\n/gi, '<br/>')
+			n2.innerHTML = message
+			
+			document.body.scrollTop = 50000000
+			
+			n.logData = { logLine : logLine, file : file, line : line }
+			
+			filterRow(n, searchString)
+		}
+		
+		
+		//
+		// Remove all logs
+		//
+		function	clear()
+		{
+			document.getElementById('nomessages').style.display = ''
+			document.getElementById('noresults').style.display = 'none'
+			document.body.scrollTop = 0
+			document.getElementById('messages').innerHTML = ''
+			hideRevealer(0)
+		}
+		
+		
+		//
+		// Given a table row, hide or show it if its content matches searchString
+		//
+		function	filterRow(row, searchString)
+		{
+			if (searchString.length == 0)
+			{
+				row.style.display = ''
+			}
+			var match = row.logData.logLine.toLowerCase().indexOf(searchString) != -1
+			row.style.display = match ? '' : 'none'
+			return	match
+		}
+
+		
+		//
+		// Update search
+		//
+		function	search(string)
+		{
+			hideRevealer(0)
+			searchString = string.toLowerCase()
+//			document.getElementById('ioo-log').innerHTML = string
+			var matchesCount = 0
+			for (var f = document.getElementById('messages').firstChild; f; f=f.nextSibling)
+			{
+				matchesCount += !!filterRow(f, searchString)
+			}
+			
+			// Always stay at the bottom
+			document.body.scrollTop = 50000000
+			if (matchesCount == 0) document.getElementById('nomessages').style.display = 'none'
+			document.getElementById('noresults').style.display = matchesCount == 0 ? '' : 'none'
+
+		}
+		
+
+		function	mouseover(e)
+		{
+//			document.getElementById('ioo-log').innerHTML = (new Date).getTime() +  ' ' + e.target
+			
+			var n = e.target
+			while (n && n.nodeName != 'TR')	n = n.parentNode
+			if (!n)	return
+
+			positionRevealer(n)
+		}
+
+		function	mouseout(e)
+		{
+//			document.getElementById('ioo-log').innerHTML = (new Date).getTime() +  ' ' + e.target
+		}
+		
+		var revealerTimeout = null
+		var revealerInterval = null
+		function	positionRevealer(n)
+		{
+			var r = document.getElementById('revealer')
+			
+			var y = 0
+			var n2 = n
+			while (n2)	y+=n2.offsetTop, n2 = n2.offsetParent
+
+			r.style.opacity = ''
+			r.style.top = y + 'px'
+			r.style.width = n.offsetWidth + 'px'
+			r.style.height = n.offsetHeight + 'px'
+			// Size link
+			r.firstChild.style.height = r.style.height
+			// Position inner text
+			var text = r.firstChild.firstChild
+			text.style.top = Math.round((n.offsetHeight-text.offsetHeight)/2) + 'px'
+
+			// Set revealer file name and line number
+			var file = n.logData.file.split('/')
+			file = file[file.length-1]
+			var line = n.logData.line
+			text.innerHTML = '<span>' + file + '</span> line <span>' + line + '</span>'
+			
+			// Set link
+			r.firstChild.href = n.logData.file + ' ' + line
+
+			
+			clearTimeout(revealerTimeout)
+			revealerTimeout = setTimeout(hideRevealer, 3000)
+		}
+		
+		function	hideRevealer(d)
+		{
+			var r = document.getElementById('revealer')
+//			r.style.opacity = 0
+
+			var i = 0
+			var duration = d
+			if (d == undefined) duration = 300
+			var t0 = (new Date).getTime()
+			function	fade()
+			{
+				var t = (new Date).getTime()
+				if (t-t0 > duration)
+				{
+					clearInterval(revealerInterval)
+					document.getElementById('revealer').style.top = '-10000px'
+				}
+				t = (t-t0)/duration
+				r.style.opacity = 1-t
+			}
+			clearInterval(revealerInterval)
+			revealerInterval = setInterval(fade, 10)
+		}
+		
+//		document.body.onmouseover = mouseover
+//		document.body.onmouseout = mouseout
+
+
+		function	click(e)
+		{
+			if (e.target.className == 'action')
+			{
+				NSLogConsoleView.evalJSCocoa_(e.target.innerHTML)
+				closeHelp()
+			}
+		}
+
+		document.body.onclick = click
+
+
+
+		//
+		// Overlay help
+		//
+		function	openHelp()
+		{
+			var n = document.getElementById('overlayHelp')
+			n.style.opacity = 0
+			n.style.display = 'block'
+			setTimeout(function () { n.style.opacity = 1 }, 0)
+		}
+		function	closeHelp()
+		{
+			var n = document.getElementById('overlayHelp')
+			setTimeout(function () { n.style.display = 'none' }, 500)
+			n.style.opacity = 0
+		}
+		function	isHelpOpen()
+		{
+			var n = document.getElementById('overlayHelp')
+			return	n.style.display == 'block'
+		}
+		
+		//
+		// Command display
+		//
+		function	startCommand(cmd)
+		{
+			var c = document.getElementById('messages')
+			var n = document.createElement('TR')
+			c.appendChild(n)
+			var n1 = document.createElement('TD')
+			n1.className = 'startCommand'
+			n.appendChild(n1)
+			var n1 = document.createElement('TD')
+			n1.className = 'startCommand'
+			n.appendChild(n1)
+			n1.innerHTML = cmd
+		}
+		function	endCommand()
+		{
+			var c = document.getElementById('messages')
+			var n = document.createElement('TR')
+			c.appendChild(n)
+			var n1 = document.createElement('TD')
+			n1.colSpan = 2
+			n.appendChild(n1)
+			n1.className = 'endCommand'
+			document.body.scrollTop = 50000000
+		}
+		
+		
+	</script>
+	
+</body>
+</html>

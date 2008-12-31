@@ -1,0 +1,7 @@
+
+
+
+	NSBundle.loadNib({ named : 'SecondWindow', owner : null })
+	
+	
+	performClick

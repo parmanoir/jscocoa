@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'JSCocoa' target in the 'JSCocoa' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
+
+#define NSLog(args...) NSLog(args), NSLogPostLog(__FILE__, __LINE__)

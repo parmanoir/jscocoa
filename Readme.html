@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>JSCocoa — A bridge from JavascriptCore to Cocoa</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style>
+		html
+		{
+			font-family: Helvetica Neue, Corbel, Verdana;
+			font-size: 90%;
+		}
+		pre, code
+		{
+			background-color: #eee;
+		}
+		.samplebox
+		{
+			float: right;
+			width: 25%;
+			border: solid 1px #ddd;
+			padding: 0 1.5em;
+			background-color: white;
+			background-color: #f8f8f8;
+		}
+	</style>
+</head>
+<body>
+<h1>JSCocoa, a bridge from Javascript to Cocoa</h1>
+Written by Patrick Geiller — <a href='mailto:parmanoir@gmail.com'>parmanoir@gmail.com</a> — <a href='http://code.google.com/p/jscocoa/'>Google Home</a> — Wanna contribute ? Send me a mail !
+
+
+
+
+<h2>QuickStart</h2>
+<ul>
+	<li><b>JSCocoa.app</b> interactive console that can execute Javascript commands. You can call anything here, provided it fits on one line. Click the help button to execute sample commands.</li>
+	<li><b>JSCoreAnimation.app</b> Core Animation process viewer written in Javascript.</li>
+</ul>
+
+<div class='samplebox'>
+	<h2>What's in here</h2>
+	<ul>
+		<li><b>JSCocoa</b> JSCocoa files</li>
+		<li><b>JSCocoaGUIConsole</b> interactive console that can execute Javascript commands. You can call anything here, provided it fits on one line. Click the help button to execute sample commands</li>
+		<li><b>JSCocoaConsole</b> REPL console written by Tom Robinson</li>
+		<li><b>JSProcessViewer</b> Core Animation process viewer, written in JSCocoa </li>
+		<li><b>iPhoneTest2</b> sample iPhone code running in iPhone simulator</li>
+	</ul>
+
+	<h2>JSCocoa in the wild</h2>
+	<ul>
+		<li><a href='http://ido.nu/kuma/2008/11/22/jscocoa-interactive-console-for-iphone/'><b>Kumagai Kentaro's iPhone console</b></a> run Javascript commands on the iPhone simulator</li>
+		<li><a href='http://gusmueller.com/blog/archives/2008/11/jscocoacodaloader.html'><b>Gus Mueller's Coda plugin</b></a> run Javascript commands in <a href='http://www.panic.com/coda/'>Coda</a></li>
+		<li><a href='http://tlrobinson.net/blog/2008/10/10/command-line-interpreter-and-repl-for-jscocoa/'><b>Tom Robinson's JSCocoa REPL console</b></a> a Read-Eval-Print-Loop console to run in Terminal</li>
+	</ul>
+</div>
+
+<h2>Adding JSCocoa to your project</h2>
+After building <code>JSCocoa/JSCocoa.xcodeproj</code>, drag <code>/Library/Frameworks/JSCocoa.framework</code> into your project and import it with <code>#import &lt;JSCocoa/JSCocoa.h&gt;</code>.
+
+<h2>Adding JSCocoa to your project (non framework version)</h2>
+If you don't want to use JSCocoa as a framework, you can manually add it to your project :
+<ul>
+	<li>Copy (or reference) all the files from the JSCocoa folder in your project. </li>
+	<li>Add JavascriptCore.framework to frameworks</li>
+	<li>In 'Build' project settings, add -lffi to 'Other linker flags'</li>
+</ul>
+
+<h2>Starting JSCocoa</h2>
+Starting JSCocoa depends on the lifetime you want for your JS objects.
+<ul><li><b>program lifetime</b> start JSCocoa in main.c
+<pre>
+	[[NSAutoreleasePool alloc] init];
+	id JSCocoa = [JSCocoaController sharedController];
+	[JSCocoa evalJSFile:@"myFile.js"];
+	// Standard ObjC alloc
+	return NSApplicationMain(argc,  (const char **) argv);
+</pre>
+</li>
+<li><b>use and discard lifetime</b> for things like executing a script after 
+	<ul>
+		<li>manually create a controller with <code>[[JSCocoaController alloc] init]</code></li>
+		<li>Call <code>evalJSFile</code> or <code>evalJSString</code></li>
+		<li>Destroy the allocated controller. Any object you allocated/retained will be deallocated/released when <code>JSCocoaController</code>'s <code>dealloc</code> calls JS GC.</li>
+	</ul>
+</li>
+</ul>
+
+
+<h2>Garbage Collection</h2>
+<a href='http://code.google.com/p/jscocoa/wiki/GarbageCollection'>How Javascript Garbage Collection works with ObjC objects</a>
+
+</body>
+</html>

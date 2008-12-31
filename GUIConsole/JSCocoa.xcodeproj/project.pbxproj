@@ -1,0 +1,370 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3D08D07C0E65CED100B81E63 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D08D07B0E65CED100B81E63 /* main.js */; };
+		3D08D0EE0E65D89500B81E63 /* ClassTree.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D08D0ED0E65D89500B81E63 /* ClassTree.png */; };
+		3D0E37F60ED8BE9400077F66 /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 3D0E37CF0ED8BE9400077F66 /* Tests */; };
+		3D45274B0E7A1DA00044D504 /* JSCocoa.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3D45274A0E7A1DA00044D504 /* JSCocoa.icns */; };
+		3D4FAC170E6798FA005874A3 /* NSLogConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4FAC150E6798FA005874A3 /* NSLogConsole.m */; };
+		3D4FAC1C0E67990F005874A3 /* NSLogConsole.html in Resources */ = {isa = PBXBuildFile; fileRef = 3D4FAC1B0E67990F005874A3 /* NSLogConsole.html */; };
+		3D68A5D10E81698500C2EC5B /* CocoaNavJS.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D68A5CF0E81698500C2EC5B /* CocoaNavJS.js */; };
+		3D68A6FC0E81779F00C2EC5B /* CocoaNavJS.html in Resources */ = {isa = PBXBuildFile; fileRef = 3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */; };
+		3D68A85C0E81D61C00C2EC5B /* JSCocoaHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */; };
+		3D8858B90E70073F00166DAA /* CocoaNavJS.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8858B80E70073F00166DAA /* CocoaNavJS.xib */; };
+		3D8858D50E70079200166DAA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8858D40E70079200166DAA /* MainMenu.xib */; };
+		3D8915680EA8F35C00BE4E70 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8915670EA8F35C00BE4E70 /* WebKit.framework */; };
+		3D9BA7960EB10CCE005F9A76 /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D9BA7950EB10CCE005F9A76 /* class.js */; };
+		3DAA879D0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 3DAA879C0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport */; };
+		3DDED3540E5A17B500324A7D /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DDED3530E5A17B500324A7D /* JavaScriptCore.framework */; };
+		3DF574500EACD1E7001018F7 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF574470EACD1E7001018F7 /* BridgeSupportController.m */; };
+		3DF574510EACD1E7001018F7 /* JSCocoaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF574490EACD1E7001018F7 /* JSCocoaController.m */; };
+		3DF574520EACD1E7001018F7 /* JSCocoaFFIArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF5744B0EACD1E7001018F7 /* JSCocoaFFIArgument.m */; };
+		3DF574530EACD1E7001018F7 /* JSCocoaFFIClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF5744D0EACD1E7001018F7 /* JSCocoaFFIClosure.m */; };
+		3DF574540EACD1E7001018F7 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF5744F0EACD1E7001018F7 /* JSCocoaPrivateObject.m */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* JSCocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoa_Prefix.pch; sourceTree = "<group>"; };
+		3D08D07B0E65CED100B81E63 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		3D08D0ED0E65D89500B81E63 /* ClassTree.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClassTree.png; sourceTree = "<group>"; };
+		3D0E37CF0ED8BE9400077F66 /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tests; path = ../Tests; sourceTree = SOURCE_ROOT; };
+		3D45274A0E7A1DA00044D504 /* JSCocoa.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = JSCocoa.icns; sourceTree = "<group>"; };
+		3D4FAC150E6798FA005874A3 /* NSLogConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLogConsole.m; sourceTree = "<group>"; };
+		3D4FAC160E6798FA005874A3 /* NSLogConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLogConsole.h; sourceTree = "<group>"; };
+		3D4FAC1B0E67990F005874A3 /* NSLogConsole.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = NSLogConsole.html; sourceTree = "<group>"; };
+		3D68A5CF0E81698500C2EC5B /* CocoaNavJS.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CocoaNavJS.js; sourceTree = "<group>"; };
+		3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CocoaNavJS.html; sourceTree = "<group>"; };
+		3D68A85A0E81D61C00C2EC5B /* JSCocoaHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaHelper.h; sourceTree = "<group>"; };
+		3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaHelper.m; sourceTree = "<group>"; };
+		3D8435220E61A0D200056D71 /* JSCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D8858B80E70073F00166DAA /* CocoaNavJS.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CocoaNavJS.xib; sourceTree = "<group>"; };
+		3D8858D40E70079200166DAA /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		3D8915670EA8F35C00BE4E70 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		3D9BA7950EB10CCE005F9A76 /* class.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = class.js; path = ../JSCocoa/class.js; sourceTree = SOURCE_ROOT; };
+		3DAA879C0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ObjCRuntime.bridgesupport; sourceTree = "<group>"; };
+		3DB050AA0EE5AF030047773D /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		3DDED3530E5A17B500324A7D /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
+		3DF574460EACD1E7001018F7 /* BridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BridgeSupportController.h; path = ../JSCocoa/BridgeSupportController.h; sourceTree = SOURCE_ROOT; };
+		3DF574470EACD1E7001018F7 /* BridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BridgeSupportController.m; path = ../JSCocoa/BridgeSupportController.m; sourceTree = SOURCE_ROOT; };
+		3DF574480EACD1E7001018F7 /* JSCocoaController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaController.h; path = ../JSCocoa/JSCocoaController.h; sourceTree = SOURCE_ROOT; };
+		3DF574490EACD1E7001018F7 /* JSCocoaController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaController.m; path = ../JSCocoa/JSCocoaController.m; sourceTree = SOURCE_ROOT; };
+		3DF5744A0EACD1E7001018F7 /* JSCocoaFFIArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaFFIArgument.h; path = ../JSCocoa/JSCocoaFFIArgument.h; sourceTree = SOURCE_ROOT; };
+		3DF5744B0EACD1E7001018F7 /* JSCocoaFFIArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaFFIArgument.m; path = ../JSCocoa/JSCocoaFFIArgument.m; sourceTree = SOURCE_ROOT; };
+		3DF5744C0EACD1E7001018F7 /* JSCocoaFFIClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaFFIClosure.h; path = ../JSCocoa/JSCocoaFFIClosure.h; sourceTree = SOURCE_ROOT; };
+		3DF5744D0EACD1E7001018F7 /* JSCocoaFFIClosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaFFIClosure.m; path = ../JSCocoa/JSCocoaFFIClosure.m; sourceTree = SOURCE_ROOT; };
+		3DF5744E0EACD1E7001018F7 /* JSCocoaPrivateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaPrivateObject.h; path = ../JSCocoa/JSCocoaPrivateObject.h; sourceTree = SOURCE_ROOT; };
+		3DF5744F0EACD1E7001018F7 /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaPrivateObject.m; path = ../JSCocoa/JSCocoaPrivateObject.m; sourceTree = SOURCE_ROOT; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				3DDED3540E5A17B500324A7D /* JavaScriptCore.framework in Frameworks */,
+				3D8915680EA8F35C00BE4E70 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* JSCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				3DF574470EACD1E7001018F7 /* BridgeSupportController.m */,
+				3DF574460EACD1E7001018F7 /* BridgeSupportController.h */,
+				3DF574490EACD1E7001018F7 /* JSCocoaController.m */,
+				3DF574480EACD1E7001018F7 /* JSCocoaController.h */,
+				3DF5744B0EACD1E7001018F7 /* JSCocoaFFIArgument.m */,
+				3DF5744A0EACD1E7001018F7 /* JSCocoaFFIArgument.h */,
+				3DF5744D0EACD1E7001018F7 /* JSCocoaFFIClosure.m */,
+				3DF5744C0EACD1E7001018F7 /* JSCocoaFFIClosure.h */,
+				3DF5744F0EACD1E7001018F7 /* JSCocoaPrivateObject.m */,
+				3DF5744E0EACD1E7001018F7 /* JSCocoaPrivateObject.h */,
+				3D9BA7950EB10CCE005F9A76 /* class.js */,
+			);
+			name = JSCocoa;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D8435220E61A0D200056D71 /* JSCocoa.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* JSCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				3DB050AA0EE5AF030047773D /* main.js */,
+				080E96DDFE201D6D7F000001 /* JSCocoa */,
+				3D4FAC140E6798FA005874A3 /* JSConsole */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = JSCocoa;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* JSCocoa_Prefix.pch */,
+				3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */,
+				3D68A85A0E81D61C00C2EC5B /* JSCocoaHelper.h */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3D0E37CF0ED8BE9400077F66 /* Tests */,
+				3D68A8480E81CFFE00C2EC5B /* JS */,
+				3DAA879C0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport */,
+				3D4FAC1B0E67990F005874A3 /* NSLogConsole.html */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				3D45274A0E7A1DA00044D504 /* JSCocoa.icns */,
+				3D08D0ED0E65D89500B81E63 /* ClassTree.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D8915670EA8F35C00BE4E70 /* WebKit.framework */,
+				3DDED3530E5A17B500324A7D /* JavaScriptCore.framework */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D4FAC140E6798FA005874A3 /* JSConsole */ = {
+			isa = PBXGroup;
+			children = (
+				3D4FAC150E6798FA005874A3 /* NSLogConsole.m */,
+				3D4FAC160E6798FA005874A3 /* NSLogConsole.h */,
+			);
+			name = JSConsole;
+			sourceTree = "<group>";
+		};
+		3D68A8480E81CFFE00C2EC5B /* JS */ = {
+			isa = PBXGroup;
+			children = (
+				3D08D07B0E65CED100B81E63 /* main.js */,
+				3D8858D40E70079200166DAA /* MainMenu.xib */,
+				3D68A5CF0E81698500C2EC5B /* CocoaNavJS.js */,
+				3D8858B80E70073F00166DAA /* CocoaNavJS.xib */,
+				3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */,
+			);
+			name = JS;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* JSCocoa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "JSCocoa" */;
+			buildPhases = (
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JSCocoa;
+			productInstallPath = "$(HOME)/Applications";
+			productName = JSCocoa;
+			productReference = 3D8435220E61A0D200056D71 /* JSCocoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JSCocoa" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* JSCocoa */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* JSCocoa */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DAA879D0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport in Resources */,
+				3D08D07C0E65CED100B81E63 /* main.js in Resources */,
+				3D08D0EE0E65D89500B81E63 /* ClassTree.png in Resources */,
+				3D4FAC1C0E67990F005874A3 /* NSLogConsole.html in Resources */,
+				3D8858B90E70073F00166DAA /* CocoaNavJS.xib in Resources */,
+				3D8858D50E70079200166DAA /* MainMenu.xib in Resources */,
+				3D45274B0E7A1DA00044D504 /* JSCocoa.icns in Resources */,
+				3D68A5D10E81698500C2EC5B /* CocoaNavJS.js in Resources */,
+				3D68A6FC0E81779F00C2EC5B /* CocoaNavJS.html in Resources */,
+				3D9BA7960EB10CCE005F9A76 /* class.js in Resources */,
+				3D0E37F60ED8BE9400077F66 /* Tests in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				3D4FAC170E6798FA005874A3 /* NSLogConsole.m in Sources */,
+				3D68A85C0E81D61C00C2EC5B /* JSCocoaHelper.m in Sources */,
+				3DF574500EACD1E7001018F7 /* BridgeSupportController.m in Sources */,
+				3DF574510EACD1E7001018F7 /* JSCocoaController.m in Sources */,
+				3DF574520EACD1E7001018F7 /* JSCocoaFFIArgument.m in Sources */,
+				3DF574530EACD1E7001018F7 /* JSCocoaFFIClosure.m in Sources */,
+				3DF574540EACD1E7001018F7 /* JSCocoaPrivateObject.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Documents/xcode projects/Xcode build data/Debug\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JSCocoa_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = JSCocoa;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Documents/xcode projects/Xcode build data/Debug\"",
+				);
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = JSCocoa_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = JSCocoa;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-lffi";
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-lffi";
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "JSCocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JSCocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

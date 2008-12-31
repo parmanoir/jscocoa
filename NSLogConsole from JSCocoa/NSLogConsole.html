@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+<head>
+	<style>
+		body
+		{
+			background-color: white;
+			padding: 0;
+			margin: 0;
+			font-family: Lucida Grande;
+			font-size: 80%;
+			color: #444;
+		}
+
+
+		/*
+			Messages
+		*/
+		#nomessages
+		{
+			text-align: center;
+			font-size: 20px;
+			color: #aaa;
+			position: absolute;
+			top: 45%;
+			width: 100%;
+		}
+		#noresults
+		{
+			text-align: center;
+			font-size: 20px;
+			color: #aaa;
+			position: absolute;
+			top: 45%;
+			width: 100%;
+		}
+
+
+		/*
+			Table
+		*/
+		td
+		{
+			border: solid 1px #ddd;
+			border-left: 0;
+			border-right: 0;
+		}
+		.date
+		{
+			width: 60px;
+			color: #888;
+			font-size: 80%;
+			padding: 2px 8px;
+			white-space: nowrap;
+			vertical-align: top
+		}
+		.date-day
+		{
+			font-weight: bold;
+		}
+		.date-time
+		{
+			font-size: 80%;
+		}
+		.message
+		{
+			padding: 1px 4px;
+		}
+		
+		
+		/*
+			Clickable div to reveal in XCode
+		*/
+		#revealer
+		{
+			color: white;
+			background-color: black;
+			background-color: rgba(0, 0, 0, 0.7);
+			position: absolute;
+			top: -30000px;
+			font-weight: bold;
+		}
+		#revealer a
+		{
+			display: block;
+			position: absolute;
+			color: #aaa;
+			text-decoration: none;
+			width: 100%;
+		}
+		#revealer a div
+		{
+			text-align: center;
+			width: 100%;
+			position: absolute;
+		}
+		#revealer a div span
+		{
+			color: white;
+		}
+	</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+	<div id='nomessages'>No messages</div>
+	<div id='noresults'>No results</div>
+	<div id='ioo-log'></div>
+
+
+	<div id='revealer'><a href='#'><div>File + LineNumber</div></a></div>
+
+
+	<div id='messagesContainer'>
+		<table cellPadding='0' cellSpacing='0' eborder='1' style='width: 100%; border-collapse: collapse'>
+		<tbody id='messages'></tbody></table>
+	</div>
+	
+	<script>
+		document.getElementById('noresults').style.display = 'none'
+		
+		var	searchString = ''
+		
+		//
+		// Add a line to table log
+		//
+		function	log(logLine, file, line)
+		{
+			if (logLine.length == 0)	return
+			
+			var lines = logLine.split('\n')
+			
+			var logLine = ''
+			for (var i=0; i<lines.length; i++)
+			{
+				var l = lines[i]
+				if (l.match(/\d{4}-\d{2}-\d{2}/) && logLine.length > 0)
+				{
+					_log(logLine, '', 0)
+					logLine = ''
+				}
+				logLine += l
+				if (i != lines.length-1)	logLine += '<br>'
+			}
+			_log(logLine, file, line)
+		}
+		function	_log(logLine, file, line)
+		{
+			if (logLine.length == 0)	return
+			document.getElementById('nomessages').style.display = 'none'
+			document.getElementById('noresults').style.display = 'none'
+			
+			var bracketPosition = logLine.indexOf(']')
+			var message = logLine.substr(bracketPosition+1)
+			var date = logLine.substr(0, bracketPosition).split(' ')
+			
+			// Log message line is TD (date) TD (message)
+			var c = document.getElementById('messages')
+			var n = document.createElement('TR')
+			
+			c.appendChild(n)
+			var n1 = document.createElement('TD')
+			n1.className = 'date'
+			n.appendChild(n1)
+			var n2 = document.createElement('TD')
+			n2.className = 'message'
+			n.appendChild(n2)
+			n1.innerHTML = '<div class="date-day">' + date[0] + '</div><div class="date-time">' + date[1] + '</div>'
+			n2.innerHTML = message
+
+			// Scroll to bottom
+			document.body.scrollTop = 50000000
+			
+			// Fill file and line number info
+			n.logData = { logLine : logLine, file : file, line : line }
+			// Update search
+			filterRow(n, searchString)
+		}
+		
+		
+		//
+		// Remove all logs
+		//
+		function	clear()
+		{
+			document.getElementById('nomessages').style.display = ''
+			document.getElementById('noresults').style.display = 'none'
+			document.body.scrollTop = 0
+			document.getElementById('messages').innerHTML = ''
+			hideRevealer(0)
+		}
+		
+		
+		//
+		// Given a table row, hide or show it if its content matches searchString
+		//
+		function	filterRow(row, searchString)
+		{
+			if (searchString.length == 0)
+			{
+				row.style.display = ''
+			}
+			var match = row.logData.logLine.toLowerCase().indexOf(searchString) != -1
+			row.style.display = match ? '' : 'none'
+			return	match
+		}
+
+		
+		//
+		// Update search
+		//
+		function	search(string)
+		{
+			hideRevealer(0)
+			searchString = string.toLowerCase()
+//			document.getElementById('ioo-log').innerHTML = string
+			
+			var matchesCount = 0
+			for (var f = document.getElementById('messages').firstChild; f; f=f.nextSibling)
+			{
+				matchesCount += !!filterRow(f, searchString)
+			}
+			
+			// Always stay at the bottom
+			document.body.scrollTop = 50000000
+			if (matchesCount == 0) document.getElementById('nomessages').style.display = 'none'
+			document.getElementById('noresults').style.display = matchesCount == 0 ? '' : 'none'
+
+		}
+		
+
+		
+		//
+		// Show / hide tooltip indicating line and file number
+		//
+		function	mouseover(e)
+		{
+			var n = e.target
+			while (n && n.nodeName != 'TR')	n = n.parentNode
+			if (!n)	return
+
+			positionRevealer(n)
+		}
+
+		var revealerTimeout = null
+		var revealerInterval = null
+		function	positionRevealer(n)
+		{
+			if (!n.logData.line)	return
+
+			var r = document.getElementById('revealer')
+			
+			var y = 0
+			var n2 = n
+			while (n2)	y+=n2.offsetTop, n2 = n2.offsetParent
+
+			r.style.opacity = ''
+			r.style.top = y + 'px'
+			r.style.width = n.offsetWidth + 'px'
+			r.style.height = n.offsetHeight + 'px'
+			// Size link
+			r.firstChild.style.height = r.style.height
+			// Position inner text
+			var text = r.firstChild.firstChild
+			text.style.top = Math.round((n.offsetHeight-text.offsetHeight)/2) + 'px'
+
+			// Set revealer file name and line number
+			var file = n.logData.file.split('/')
+			file = file[file.length-1]
+			var line = n.logData.line
+			text.innerHTML = '<span>' + file + '</span> line <span>' + line + '</span>'
+			
+			// Set link
+			r.firstChild.href = n.logData.file + ' ' + line
+			
+			clearTimeout(revealerTimeout)
+			revealerTimeout = setTimeout(hideRevealer, 3000)
+		}
+		
+		function	hideRevealer(d)
+		{
+			var r = document.getElementById('revealer')
+
+			var i = 0
+			var duration = d
+			if (d == undefined) duration = 300
+			var t0 = (new Date).getTime()
+			function	fade()
+			{
+				var t = (new Date).getTime()
+				if (t-t0 > duration)
+				{
+					clearInterval(revealerInterval)
+					document.getElementById('revealer').style.top = '-10000px'
+				}
+				t = (t-t0)/duration
+				r.style.opacity = 1-t
+			}
+			clearInterval(revealerInterval)
+			revealerInterval = setInterval(fade, 10)
+		}
+		
+		document.body.onmouseover = mouseover
+
+//log("2008-11-07 03:24:47.643 JSCocoaSandbox[2181:10b] NSView(0x185120) - NSView not correctly initialized. Did you forget to call super?\n2008-11-07 03:24:47.644 JSCocoaSandbox[2181:10b] hop2")
+
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+// !$*UTF8*$!
+{
+	089C165DFE840E0CC02AAC07 /* English */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 45}";
+			sepNavWindowFrame = "{{15, 322}, {1156, 851}}";
+		};
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 3D8A020A0EB372F100B4B080 /* JSCocoaLauncher */;
+		activeTarget = 8D1107260486CEB800E47090 /* JSCocoaLauncher */;
+		addToTargets = (
+			8D1107260486CEB800E47090 /* JSCocoaLauncher */,
+		);
+		breakpoints = (
+			3D8C00730EBC0CA600F57F76 /* OriginalApplicationController.m:42 */,
+		);
+		codeSenseManager = 3D8A02130EB372FA00B4B080 /* Code sense */;
+		executables = (
+			3D8A020A0EB372F100B4B080 /* JSCocoaLauncher */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					238,
+					20,
+					48.16259765625,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					198,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 250187090;
+			PBXWorkspaceStateSaveDate = 250187090;
+		};
+		perUserProjectItems = {
+			3DD9451D0EE98D6A00657A6A /* PBXTextBookmark */ = 3DD9451D0EE98D6A00657A6A /* PBXTextBookmark */;
+			3DD946FD0EE9A53F00657A6A /* PBXTextBookmark */ = 3DD946FD0EE9A53F00657A6A /* PBXTextBookmark */;
+		};
+		sourceControlManager = 3D8A02120EB372FA00B4B080 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 737}}";
+			sepNavSelRange = "{234, 0}";
+			sepNavVisRange = "{0, 780}";
+			sepNavWindowFrame = "{{220, 154}, {1125, 850}}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* JSCocoaLauncher_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{164, 0}";
+			sepNavVisRange = "{0, 233}";
+			sepNavWindowFrame = "{{285, 144}, {1156, 851}}";
+		};
+	};
+	3D8A020A0EB372F100B4B080 /* JSCocoaLauncher */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = JSCocoaLauncher;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	3D8A02120EB372FA00B4B080 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	3D8A02130EB372FA00B4B080 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	3D8A02390EB3730E00B4B080 /* BridgeSupportController.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 668}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 800}";
+			sepNavWindowFrame = "{{38, 348}, {1124, 804}}";
+		};
+	};
+	3D8A023A0EB3730E00B4B080 /* BridgeSupportController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 1969}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1318}";
+			sepNavWindowFrame = "{{130, 217}, {1156, 851}}";
+		};
+	};
+	3D8A023B0EB3730E00B4B080 /* class.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 4675}}";
+			sepNavSelRange = "{8059, 0}";
+			sepNavVisRange = "{10270, 1887}";
+			sepNavWindowFrame = "{{580, 172}, {1125, 850}}";
+		};
+	};
+	3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 26059}}";
+			sepNavSelRange = "{4778, 0}";
+			sepNavVisRange = "{3542, 1963}";
+			sepNavWindowFrame = "{{635, 84}, {1156, 851}}";
+		};
+	};
+	3D8A023F0EB3730E00B4B080 /* JSCocoaFFIArgument.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 10626}}";
+			sepNavSelRange = "{15241, 19}";
+			sepNavVisRange = "{12378, 1098}";
+		};
+	};
+	3D8A02420EB3730E00B4B080 /* JSCocoaPrivateObject.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 738}}";
+			sepNavSelRange = "{578, 6}";
+			sepNavVisRange = "{0, 1216}";
+			sepNavWindowFrame = "{{130, 217}, {1156, 851}}";
+		};
+	};
+	3D8C00730EBC0CA600F57F76 /* OriginalApplicationController.m:42 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 3DF5756F0EAD5613001018F7 /* OriginalApplicationController.m */;
+		functionName = "-readFromURL:ofType:error:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 42;
+		modificationTime = 250022684.549204;
+		state = 0;
+	};
+	3DD9451D0EE98D6A00657A6A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */;
+		name = "JSCocoaLauncher.js: 148";
+		rLen = 84;
+		rLoc = 4040;
+		rType = 0;
+		vrLen = 2401;
+		vrLoc = 2985;
+	};
+	3DD946FD0EE9A53F00657A6A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */;
+		name = "JSCocoaLauncher.js: 199";
+		rLen = 24;
+		rLoc = 5832;
+		rType = 0;
+		vrLen = 2246;
+		vrLoc = 4154;
+	};
+	3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1066, 3498}}";
+			sepNavSelRange = "{5832, 24}";
+			sepNavVisRange = "{4154, 2246}";
+			sepNavWindowFrame = "{{245, 139}, {1125, 850}}";
+		};
+	};
+	3DF5756F0EAD5613001018F7 /* OriginalApplicationController.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = OriginalApplicationController.m;
+		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoaLauncher/OriginalApplicationController.m";
+		sourceTree = "<absolute>";
+	};
+	8D1107260486CEB800E47090 /* JSCocoaLauncher */ = {
+		activeExec = 0;
+		executables = (
+			3D8A020A0EB372F100B4B080 /* JSCocoaLauncher */,
+		);
+	};
+	8D1107310486CEB800E47090 /* Info.plist */ = {
+		uiCtxt = {
+			sepNavWindowFrame = "{{500, 44}, {1125, 850}}";
+		};
+	};
+}
