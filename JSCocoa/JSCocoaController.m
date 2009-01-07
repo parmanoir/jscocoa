@@ -205,6 +205,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 {
 	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
 #ifdef __OBJC_GC__
+// Mark internal object as non collectable
 [[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
 #endif
 	JSObjectRef o = JSObjectMake(ctx, jsCocoaObjectClass, private);
@@ -592,6 +593,9 @@ void blah(id a, SEL b)
 	Find the matching selector and set new values for methodName, argumentCount, arguments
 		object.setValue_forKey_(5, 'messageCount')
 
+	After calling, arguments NEED TO BE DEALLOCATED if they changed.
+	-> introduced because under GC, NSData gets collected early.
+
 */
 - (BOOL)trySplitCall:(id*)_methodName class:(Class)class argumentCount:(size_t*)_argumentCount arguments:(JSValueRef**)_arguments ctx:(JSContextRef)c
 {
@@ -802,7 +806,7 @@ void blah(id a, SEL b)
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
 	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
-	[b autorelease];
+	[NSMakeCollectable(b) autorelease];
 
 	if (JSValueGetType(ctx, exception) != kJSTypeObject)	return	b;
 
@@ -823,9 +827,9 @@ void blah(id a, SEL b)
 		
 		if ([name isEqualToString:@"line"])			line = value;
 		if ([name isEqualToString:@"sourceURL"])	sourceURL = value;
-		[name release];
+		[NSMakeCollectable(name) release];
 		// Autorelease because we assigned it to line / sourceURL
-		[value autorelease];
+		[NSMakeCollectable(value) autorelease];
 	}
 	JSPropertyNameArrayRelease(jsNames);
 	return [NSString stringWithFormat:@"%@ on line %@ of %@", b, line, sourceURL];
@@ -898,7 +902,7 @@ void blah(id a, SEL b)
 	{
 		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
 #ifdef __OBJC
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsArguments];
+//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsArguments];
 #endif
 		for (int i=0; i<argumentCount; i++)
 		{
@@ -1304,12 +1308,17 @@ int	liveInstanceCount	= 0;
 + (JSValueRef)instanceWithContext:(JSContextRef)ctx argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments exception:(JSValueRef*)exception
 {
 	id methodName  = @"init";
+	JSValueRef*	argumentsToFree = NULL;
 	// Recover init method
 	if (argumentCount == 1)
 	{
 		id	splitMethodName				= @"init";
 		BOOL isSplitCall = [[JSCocoaController sharedController] trySplitCall:&splitMethodName class:self argumentCount:&argumentCount arguments:&arguments ctx:ctx];
-		if (isSplitCall)	methodName = splitMethodName;
+		if (isSplitCall)	
+		{
+			methodName		= splitMethodName;
+			argumentsToFree	= arguments;
+		}
 		else				return	throwException(ctx, exception, @"Instance split call did not find an init method"), NULL;
 	}
 //	NSLog(@"=>Called instance on %@ with init=%@", self, methodName);
@@ -1332,6 +1341,7 @@ int	liveInstanceCount	= 0;
 	// Call callAsFunction on our new instance with our init method
 	JSValueRef exceptionFromInitCall = NULL;
 	JSValueRef returnValue = jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, arguments, &exceptionFromInitCall);
+	free(argumentsToFree);
 	if (exceptionFromInitCall)	return	*exception = exceptionFromInitCall, NULL;
 	
 	// Release object
@@ -1565,6 +1575,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// Immediate release if dealloc is not overloaded
 	[o release];
 #ifdef __OBJC_GC__
+// Mark internal object as collectable
 [[NSGarbageCollector defaultCollector] enableCollectorForPointer:o];
 #endif
 }
@@ -2045,7 +2056,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 static bool GC_jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
-	[propertyName autorelease];
+	[NSMakeCollectable(propertyName) autorelease];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Deleting property %@", propertyName);
@@ -2118,7 +2129,7 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 // callAsFunction
 //	enumerate dictionary keys
 //
-static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass);
+static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree);
 
 //
 // This method handles Super by retrieving the method name to call
@@ -2127,7 +2138,7 @@ static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef 
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
-	JSValueRef*	arguments2 = NULL;
+	JSValueRef*	superArguments = NULL;
 	id	superSelector = NULL;
 	id	superSelectorClass = NULL;
 /*
@@ -2184,12 +2195,12 @@ static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef 
 		int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
 		if (superArgumentCount)
 		{
-			arguments2 = malloc(sizeof(JSValueRef)*superArgumentCount);
+			superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:arguments2];
+//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:superArguments];
 #endif
 			for (i=0; i<superArgumentCount; i++)
-				arguments2[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
+				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
 		}
 		
 		argumentCount = superArgumentCount;
@@ -2204,16 +2215,18 @@ static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef 
 		superSelectorClass = [[[JSCocoaController sharedController] classForJSFunction:jsCallee] superclass];
 	}
 
-	JSValueRef* functionArguments = arguments2 ? arguments2 : (JSValueRef*)arguments;
-	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass);
+	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
+	JSValueRef*	argumentsToFree		= NULL;
+	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
 	
-	if (arguments2)	
+	if (superArguments)	
 	{
-		free(arguments2);
+		free(superArguments);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enableCollectorForPointer:arguments2];
+//[[NSGarbageCollector defaultCollector] enableCollectorForPointer:arguments2];
 #endif
 	}
+	if (argumentsToFree)	free(argumentsToFree);
 	
 	return	jsReturnValue;
 }
@@ -2221,7 +2234,7 @@ static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef 
 //
 // That's where the actual calling happens.
 //
-static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass)
+static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
@@ -2275,7 +2288,12 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 			{
 				id			splitMethodName		= privateObject.methodName;
 				BOOL isSplitCall = [[JSCocoaController sharedController] trySplitCall:&splitMethodName class:[callee class] argumentCount:&argumentCount arguments:&arguments ctx:ctx];
-				if (isSplitCall)		methodName = splitMethodName;
+				if (isSplitCall)		
+				{
+					methodName = splitMethodName;
+					// trySplitCall returned new arguments that we'll need to free later on
+					*argumentsToFree = arguments;
+				}
 			}
 		}
 		Method method = class_getInstanceMethod([callee class], NSSelectorFromString(methodName));
@@ -2371,7 +2389,7 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	{
 		args = malloc(sizeof(ffi_type*)*effectiveArgumentCount);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:args];
+//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:args];
 #endif
 		values = malloc(sizeof(void*)*effectiveArgumentCount);
 
@@ -2469,7 +2487,6 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 
 
 #endif
-
 	JSValueRef returnValue = GC_jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, arguments, exception);
 
 #ifdef __OBJC_GC__
