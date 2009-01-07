@@ -42,12 +42,17 @@
 	ptr = NULL;
 }
 
-
 - (void)dealloc
 {
 	if (structureTypeEncoding) [structureTypeEncoding release];
 	[self cleanUp];
 	[super dealloc];
+}
+- (void)finalize
+{
+	if (structureTypeEncoding) [structureTypeEncoding release];
+	[self cleanUp];
+	[super finalize];
 }
 
 
@@ -314,6 +319,7 @@
 		case	_C_CHARPTR:
 		{
 			id str = NSStringFromJSValue(value, ctx);
+//TAG BAD CONVERSION NOT ALIVE LONG ENOUGH
 			*(char**)ptr = (char*)[str UTF8String];
 			return	YES;
 		}
@@ -905,7 +911,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
 		NSString* resultString = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 		JSStringRelease(resultStringJS);
-		[resultString autorelease];
+		[NSMakeCollectable(resultString) autorelease];
 		*(id*)o = resultString;
 		return	YES;
 	}
@@ -1033,7 +1039,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		// Add converted value to hash
 		id key				= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, name);
 		[hash setObject:value forKey:key];
-		[key release];
+		[NSMakeCollectable(key) release];
 	}
 	JSPropertyNameArrayRelease(names);
 	*o = hash;

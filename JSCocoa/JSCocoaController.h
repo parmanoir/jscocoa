@@ -133,9 +133,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @end
 
 
+//
+// Helpers
+//
 id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
-
-void* malloc_autorelease(size_t size);
+//void* malloc_autorelease(size_t size);
 
 
 //

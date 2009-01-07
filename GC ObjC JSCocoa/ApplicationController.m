@@ -41,7 +41,19 @@ int	runCount;
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	runCount++;
 	NSLog(@">>>>Ran %d", runCount);
+	[[NSGarbageCollector defaultCollector] collectExhaustively];
+	objc_collect(OBJC_FULL_COLLECTION);
+	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);
+	objc_collect(OBJC_WAIT_UNTIL_DONE);
 NSLog(@"GC enabled=%d", [[NSGarbageCollector defaultCollector] isEnabled]);
+}
+
+- (IBAction)collect:(id)sender
+{
+	[[NSGarbageCollector defaultCollector] collectExhaustively];
+	objc_collect(OBJC_FULL_COLLECTION);
+	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);
+	objc_collect(OBJC_WAIT_UNTIL_DONE);
 }
 
 @end

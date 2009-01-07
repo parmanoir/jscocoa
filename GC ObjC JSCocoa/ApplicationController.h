@@ -14,5 +14,6 @@
 }
 
 - (IBAction)runJSTests:(id)sender;
+- (IBAction)collect:(id)sender;
 
 @end

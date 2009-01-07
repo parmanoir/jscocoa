@@ -611,7 +611,7 @@ void blah(id a, SEL b)
 	// Length of target selector = length of method + length of each (argument + ':')
 	int targetSelectorLength = [methodName length];
 	// Actual arguments
-	JSValueRef*	actualArguments = malloc_autorelease(sizeof(JSValueRef)*nameCount);
+	JSValueRef*	actualArguments = malloc(sizeof(JSValueRef)*nameCount);
 	for (i=0; i<nameCount; i++)
 	{
 		JSStringRef jsName = JSPropertyNameArrayGetNameAtIndex(jsNames, i);
@@ -619,7 +619,7 @@ void blah(id a, SEL b)
 		id nameWithColon = [[NSString stringWithFormat:@"%@:", name] lowercaseString];
 		targetSelectorLength += [nameWithColon length];
 		[names addObject:nameWithColon];
-		[name release];
+		[NSMakeCollectable(name) release];
 		
 		// Get actual argument
 		actualArguments[i] = JSObjectGetProperty(ctx, o, jsName, NULL);
@@ -698,7 +698,7 @@ void blah(id a, SEL b)
 		free(methods);
 		class = [class superclass];
 	}
-	
+	free(actualArguments);
 	return	NO;
 }
 
@@ -897,6 +897,9 @@ void blah(id a, SEL b)
 	if (argumentCount)
 	{
 		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
+#ifdef __OBJC
+[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsArguments];
+#endif
 		for (int i=0; i<argumentCount; i++)
 		{
 			char typeEncoding = _C_ID;
@@ -1063,7 +1066,10 @@ NSLog(@"releaseBoxedObject:%d->%d", [o retainCount], [o retainCount]-1);
 //
 - (NSUInteger)blankRetainCount
 {
-	return	[super retainCount];
+//	return	[super retainCount];
+	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
+	struct objc_super superData = { self, parentClass };
+	return	(NSUInteger)objc_msgSendSuper(&superData, @selector(retainCount));
 }
 - (void)cleanRetainCount:(id)class
 {
@@ -1356,7 +1362,7 @@ int	liveInstanceCount	= 0;
 JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
-	[propertyName autorelease];
+	[NSMakeCollectable(propertyName) autorelease];
 	
 //	NSLog(@"Asking for global property %@", propertyName);
 	
@@ -1578,7 +1584,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
-	[propertyName autorelease];
+	[NSMakeCollectable(propertyName) autorelease];
 	
 	// Autocall instance
 	if ([propertyName isEqualToString:@"thisObject"])	return	NULL;
@@ -1841,11 +1847,11 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	JSValueRef returnValue = GC_jsCocoaObject_getProperty(ctx, object, propertyNameJS, exception);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 	return	returnValue;
 }
@@ -1864,7 +1870,7 @@ static bool GC_jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, J
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
-	[propertyName autorelease];
+	[NSMakeCollectable(propertyName) autorelease];
 	
 //	if ([privateObject.type  isEqualToString:@"struct"])
 //	{
@@ -2022,11 +2028,11 @@ static bool GC_jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, J
 static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	bool returnValue = GC_jsCocoaObject_setProperty(ctx, object, propertyNameJS, jsValue, exception);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 	return	returnValue;
 }
@@ -2056,11 +2062,11 @@ static bool GC_jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object
 static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	bool returnValue = GC_jsCocoaObject_deleteProperty(ctx, object, propertyNameJS, exception);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 	return	returnValue;
 }
@@ -2097,11 +2103,11 @@ static void GC_jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef obje
 static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	GC_jsCocoaObject_getPropertyNames(ctx, object, propertyNames);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 }
 
@@ -2115,7 +2121,7 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass);
 
 //
-// This first method handles Super : it retrieves the correct method name
+// This method handles Super by retrieving the method name to call
 //
 static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
@@ -2364,6 +2370,9 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	if (effectiveArgumentCount > 0)
 	{
 		args = malloc(sizeof(ffi_type*)*effectiveArgumentCount);
+#ifdef __OBJC_GC__
+[[NSGarbageCollector defaultCollector] disableCollectorForPointer:args];
+#endif
 		values = malloc(sizeof(void*)*effectiveArgumentCount);
 
 		// If calling ObjC, setup instance and selector
@@ -2522,11 +2531,11 @@ static JSObjectRef GC_jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObject
 static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	JSObjectRef returnValue = GC_jsCocoaObject_callAsConstructor(ctx, constructor, argumentCount, arguments, exception);
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 	return	returnValue;
 }
@@ -2552,7 +2561,7 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx)
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
 	NSString* resultString = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
-	return	[resultString autorelease];
+	return	[NSMakeCollectable(resultString) autorelease];
 }
 
 static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason)
@@ -2570,12 +2579,13 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 	JSStringRelease(jsName);
 	*exception	= jsString;
 }
-
+/*
+// Can't use in GC as data does not live until the end of the current run loop cycle
 void* malloc_autorelease(size_t size)
 {
 	void*	p = malloc(size);
 	[NSData dataWithBytesNoCopy:p length:size freeWhenDone:YES];
 	return	p;
 }
-
+*/
 

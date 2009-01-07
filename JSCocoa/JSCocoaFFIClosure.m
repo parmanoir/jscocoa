@@ -19,11 +19,11 @@
 void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disable];
+//[[NSGarbageCollector defaultCollector] disable];
 #endif
 	[(id)userdata calledByClosureWithArgs:args returnValue:resp];
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enable];
+//[[NSGarbageCollector defaultCollector] enable];
 #endif
 }
 
@@ -38,7 +38,10 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	return	o;
 }
 
-- (void)dealloc
+//
+// Cleanup : called by dealloc and finalize
+//
+- (void)cleanup
 {
 	if (encodings)	[encodings release];
 	if (argTypes)	free(argTypes);
@@ -50,9 +53,18 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	}
 	
 	if (munmap(closure, sizeof(closure)) == -1)	NSLog(@"FFI closure munmap failed");
-	
+}
+- (void)dealloc
+{
+	[self cleanup];
 //	NSLog(@"ClosureDealloc %x", self);
 	[super dealloc];
+}
+- (void)finalize
+{
+	[self cleanup];
+//	NSLog(@"ClosureDealloc %x", self);
+	[super finalize];
 }
 
 - (void*)functionPointer
