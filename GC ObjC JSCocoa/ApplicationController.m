@@ -52,6 +52,7 @@ NSLog(@"GC enabled=%d", [[NSGarbageCollector defaultCollector] isEnabled]);
 
 - (IBAction)collect:(id)sender
 {
+	[JSCocoaController garbageCollect];
 	[[NSGarbageCollector defaultCollector] collectExhaustively];
 	objc_collect(OBJC_FULL_COLLECTION);
 	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);

@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DF5BC650F15BD6C00AEDF7D</string>
+						<string>3DF5BCA40F1655E500AEDF7D</string>
 						<key>history</key>
 						<array>
-							<string>3DF5BC060F15233900AEDF7D</string>
+							<string>3DF5BCA30F1655E500AEDF7D</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>568 191 1124 748 0 0 1920 1178 </string>
+				<string>610 163 1124 748 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -314,13 +314,13 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>10</integer>
-											<integer>1</integer>
+											<integer>32</integer>
+											<integer>31</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 2}, {333, 334}}</string>
+									<string>{{0, 227}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -430,7 +430,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>555</real>
+										<real>333</real>
 									</array>
 									<key>PBXSmartGroupTreeModuleColumnsKey_v4</key>
 									<array>
@@ -448,7 +448,7 @@
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {555, 301}}</string>
+									<string>{{0, 0}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -458,11 +458,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {572, 319}}</string>
+								<string>{{10, 27}, {350, 352}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>555</real>
+									<real>333</real>
 								</array>
 							</dict>
 							<key>Module</key>
@@ -517,14 +517,13 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3DF5BC490F153D5500AEDF7D</string>
-		<string>3DF5BB110F14D60200AEDF7D</string>
-		<string>3DF5BA3B0F149FC800AEDF7D</string>
-		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>3DF5BCA50F1655E500AEDF7D</string>
+		<string>3DF5BCA60F1655E500AEDF7D</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3DF5BB7B0F150DB700AEDF7D</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/GC ObjC JSCocoa/GC ObjC JSCocoa.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -923,6 +922,8 @@
 							<string>635pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -968,7 +969,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D57069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

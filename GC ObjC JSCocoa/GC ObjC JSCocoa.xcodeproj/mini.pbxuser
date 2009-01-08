@@ -408,6 +408,10 @@
 			3DF5BC4D0F153D5500AEDF7D /* PBXTextBookmark */ = 3DF5BC4D0F153D5500AEDF7D /* PBXTextBookmark */;
 			3DF5BC4E0F153D5500AEDF7D /* PBXTextBookmark */ = 3DF5BC4E0F153D5500AEDF7D /* PBXTextBookmark */;
 			3DF5BC650F15BD6C00AEDF7D /* PBXTextBookmark */ = 3DF5BC650F15BD6C00AEDF7D /* PBXTextBookmark */;
+			3DF5BC7F0F15C2DD00AEDF7D /* PBXTextBookmark */ = 3DF5BC7F0F15C2DD00AEDF7D /* PBXTextBookmark */;
+			3DF5BC800F15C2DD00AEDF7D /* PBXTextBookmark */ = 3DF5BC800F15C2DD00AEDF7D /* PBXTextBookmark */;
+			3DF5BCA30F1655E500AEDF7D /* PBXTextBookmark */ = 3DF5BCA30F1655E500AEDF7D /* PBXTextBookmark */;
+			3DF5BCA40F1655E500AEDF7D /* PBXTextBookmark */ = 3DF5BCA40F1655E500AEDF7D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DD063F80EFF746F007655AD /* Source Control */;
 		userBuildSettings = {
@@ -483,10 +487,10 @@
 	};
 	3D788F790F01F96300175ADD /* BridgeSupportController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1131, 2013}}";
-			sepNavSelRange = "{2717, 13}";
-			sepNavVisRange = "{2136, 1289}";
-			sepNavWindowFrame = "{{164, 332}, {1107, 795}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 2068}}";
+			sepNavSelRange = "{2030, 9}";
+			sepNavVisRange = "{1214, 1439}";
+			sepNavWindowFrame = "{{134, 330}, {1107, 795}}";
 		};
 	};
 	3D788F7A0F01F96300175ADD /* class.js */ = {
@@ -507,10 +511,10 @@
 	};
 	3D788F870F01F96300175ADD /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 28963}}";
-			sepNavSelRange = "{64293, 17}";
-			sepNavVisRange = "{63698, 2331}";
-			sepNavWindowFrame = "{{35, 333}, {1107, 795}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 29128}}";
+			sepNavSelRange = "{29923, 41}";
+			sepNavVisRange = "{27972, 2576}";
+			sepNavWindowFrame = "{{607, 318}, {1107, 795}}";
 		};
 	};
 	3D788F890F01F96300175ADD /* JSCocoaFFIArgument */ = {
@@ -599,9 +603,9 @@
 	};
 	3DD0642B0EFF74D2007655AD /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 935}}";
-			sepNavSelRange = "{1943, 0}";
-			sepNavVisRange = "{512, 1512}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 946}}";
+			sepNavSelRange = "{1445, 0}";
+			sepNavVisRange = "{512, 1543}";
 			sepNavWindowFrame = "{{439, 137}, {1124, 804}}";
 		};
 	};
@@ -1078,7 +1082,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1169,7 +1173,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1243,7 +1247,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1293,7 +1297,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1343,7 +1347,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1400,7 +1404,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1450,7 +1454,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1497,7 +1501,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1544,7 +1548,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1584,7 +1588,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1815,7 +1819,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1919,7 +1923,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -1959,7 +1963,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 57";
 		rLen = 0;
-		rLoc = 1587;
+		rLoc = 1624;
 		rType = 0;
 		vrLen = 1588;
 		vrLoc = 0;
@@ -2747,7 +2751,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 63";
 		rLen = 0;
-		rLoc = 2015;
+		rLoc = 2052;
 		rType = 0;
 		vrLen = 1621;
 		vrLoc = 31;
@@ -2811,7 +2815,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 63";
 		rLen = 0;
-		rLoc = 2012;
+		rLoc = 2049;
 		rType = 0;
 		vrLen = 1641;
 		vrLoc = 31;
@@ -2861,7 +2865,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 63";
 		rLen = 0;
-		rLoc = 1949;
+		rLoc = 1986;
 		rType = 0;
 		vrLen = 1580;
 		vrLoc = 98;
@@ -3059,7 +3063,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 67";
 		rLen = 0;
-		rLoc = 2012;
+		rLoc = 2049;
 		rType = 0;
 		vrLen = 1622;
 		vrLoc = 51;
@@ -3223,7 +3227,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 63";
 		rLen = 0;
-		rLoc = 1626;
+		rLoc = 1663;
 		rType = 0;
 		vrLen = 1587;
 		vrLoc = 216;
@@ -3333,7 +3337,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 77";
 		rLen = 0;
-		rLoc = 1907;
+		rLoc = 1944;
 		rType = 0;
 		vrLen = 1460;
 		vrLoc = 513;
@@ -3443,7 +3447,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 77";
 		rLen = 0;
-		rLoc = 1907;
+		rLoc = 1944;
 		rType = 0;
 		vrLen = 1469;
 		vrLoc = 513;
@@ -3453,7 +3457,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
 		vrLoc = 512;
@@ -3590,7 +3594,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
 		vrLoc = 512;
@@ -3744,7 +3748,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
 		vrLoc = 512;
@@ -3854,7 +3858,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
 		vrLoc = 512;
@@ -3976,7 +3980,7 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
 		vrLoc = 512;
@@ -4006,9 +4010,49 @@
 		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
 		name = "ApplicationController.m: 78";
 		rLen = 0;
-		rLoc = 1943;
+		rLoc = 1980;
 		rType = 0;
 		vrLen = 1512;
+		vrLoc = 512;
+	};
+	3DF5BC7F0F15C2DD00AEDF7D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 78";
+		rLen = 0;
+		rLoc = 1980;
+		rType = 0;
+		vrLen = 1512;
+		vrLoc = 512;
+	};
+	3DF5BC800F15C2DD00AEDF7D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 56";
+		rLen = 0;
+		rLoc = 1445;
+		rType = 0;
+		vrLen = 1542;
+		vrLoc = 512;
+	};
+	3DF5BCA30F1655E500AEDF7D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 56";
+		rLen = 0;
+		rLoc = 1445;
+		rType = 0;
+		vrLen = 1544;
+		vrLoc = 512;
+	};
+	3DF5BCA40F1655E500AEDF7D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 56";
+		rLen = 0;
+		rLoc = 1445;
+		rType = 0;
+		vrLen = 1543;
 		vrLoc = 512;
 	};
 	8D1107260486CEB800E47090 /* GC ObjC JSCocoa */ = {
