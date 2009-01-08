@@ -15,5 +15,6 @@
 
 - (IBAction)runJSTests:(id)sender;
 - (IBAction)collect:(id)sender;
+- (IBAction)dumpMemory:(id)sender;
 
 @end

@@ -1,3 +1,0 @@
-
-
-//	scanInt:(int*)value

@@ -41,11 +41,13 @@ int	runCount;
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	runCount++;
 	NSLog(@">>>>Ran %d", runCount);
+/*	
 	[[NSGarbageCollector defaultCollector] collectExhaustively];
 	objc_collect(OBJC_FULL_COLLECTION);
 	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);
 	objc_collect(OBJC_WAIT_UNTIL_DONE);
 NSLog(@"GC enabled=%d", [[NSGarbageCollector defaultCollector] isEnabled]);
+*/
 }
 
 - (IBAction)collect:(id)sender
@@ -55,5 +57,28 @@ NSLog(@"GC enabled=%d", [[NSGarbageCollector defaultCollector] isEnabled]);
 	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);
 	objc_collect(OBJC_WAIT_UNTIL_DONE);
 }
+
+- (IBAction)dumpMemory:(id)sender
+{
+	unsigned int i;
+	id v = [sender stringValue];
+	BOOL scanned = [[NSScanner scannerWithString:v] scanHexInt:&i];
+
+	if (!scanned)
+	{
+		NSLog(@"couldn't scan %@", v);
+		return;
+	}
+	
+	char buf[17];
+	char* source = *(char**)i;
+	memcpy(buf, source, 16);
+	buf[17];
+	NSLog(@"raw=%s", buf);
+	NSLog(@"raw=%@", (NSString*)source);
+
+//	NSLog(@"%@-%@ %d=%d", sender, [sender stringValue], scanned, i);
+}
+
 
 @end

@@ -1571,12 +1571,12 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 {
 	// if dealloc is overloaded, releasing now will trigger JS code and fail
 	// As we're being called by GC, KJS might assert() in operationInProgress == NoOperation
-	id o = JSObjectGetPrivate(object);
+	id private = JSObjectGetPrivate(object);
 	// Immediate release if dealloc is not overloaded
-	[o release];
+	[private release];
 #ifdef __OBJC_GC__
 // Mark internal object as collectable
-[[NSGarbageCollector defaultCollector] enableCollectorForPointer:o];
+[[NSGarbageCollector defaultCollector] enableCollectorForPointer:private];
 #endif
 }
 
