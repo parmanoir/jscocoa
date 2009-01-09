@@ -60,8 +60,9 @@
 	if (error)	return	NSLog(@"loadBridgeSupport : %@", error), NO;
 
 	char* c = (char*)[xmlDocument UTF8String];
+	char* originalC = c;
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:c];
+[[NSGarbageCollector defaultCollector] disableCollectorForPointer:originalC];
 #endif
 	// Start parsing
 	for (; *c; c++)
@@ -123,7 +124,7 @@
 		}
 	}
 #ifdef __OBJC_GC__
-[[NSGarbageCollector defaultCollector] enableCollectorForPointer:c];
+[[NSGarbageCollector defaultCollector] enableCollectorForPointer:originalC];
 #endif
 	[paths addObject:path];
 	[xmlDocuments addObject:xmlDocument];

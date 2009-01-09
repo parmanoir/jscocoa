@@ -16,6 +16,61 @@
 		3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */; };
 		3D7A818F0EA238D3009DE07C /* hiPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818D0EA238D3009DE07C /* hiPointCount.png */; };
 		3D7A81900EA238D3009DE07C /* lowPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818E0EA238D3009DE07C /* lowPointCount.png */; };
+		3D8562780F17C1C00039906A /* acinclude.m4 in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562150F17C1C00039906A /* acinclude.m4 */; };
+		3D8562790F17C1C00039906A /* aclocal.m4 in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562160F17C1C00039906A /* aclocal.m4 */; };
+		3D8562800F17C1C00039906A /* fficonfig.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 3D85621D0F17C1C00039906A /* fficonfig.h.in */; };
+		3D8562810F17C1C00039906A /* ffi.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 3D85621F0F17C1C00039906A /* ffi.h.in */; };
+		3D8562820F17C1C00039906A /* Makefile.am in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562210F17C1C00039906A /* Makefile.am */; };
+		3D8562830F17C1C00039906A /* Makefile.in in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562220F17C1C00039906A /* Makefile.in */; };
+		3D8562880F17C1C00039906A /* README in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562270F17C1C00039906A /* README */; };
+		3D8562890F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85622A0F17C1C00039906A /* ffi.c */; };
+		3D85628A0F17C1C00039906A /* osf.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85622C0F17C1C00039906A /* osf.S */; };
+		3D85628B0F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85622E0F17C1C00039906A /* ffi.c */; };
+		3D85628C0F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562300F17C1C00039906A /* sysv.S */; };
+		3D85628D0F17C1C00039906A /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562310F17C1C00039906A /* debug.c */; };
+		3D85628E0F17C1C00039906A /* ffitest.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562320F17C1C00039906A /* ffitest.c */; };
+		3D85628F0F17C1C00039906A /* eabi.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562340F17C1C00039906A /* eabi.S */; };
+		3D8562900F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562350F17C1C00039906A /* ffi.c */; };
+		3D8562910F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562380F17C1C00039906A /* ffi.c */; };
+		3D8562920F17C1C00039906A /* unix.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85623B0F17C1C00039906A /* unix.S */; };
+		3D8562930F17C1C00039906A /* java_raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85623C0F17C1C00039906A /* java_raw_api.c */; };
+		3D8562940F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85623E0F17C1C00039906A /* ffi.c */; };
+		3D8562950F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562400F17C1C00039906A /* sysv.S */; };
+		3D8562960F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562420F17C1C00039906A /* ffi.c */; };
+		3D8562970F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562440F17C1C00039906A /* sysv.S */; };
+		3D8562980F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562460F17C1C00039906A /* ffi.c */; };
+		3D8562990F17C1C00039906A /* n32.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562480F17C1C00039906A /* n32.S */; };
+		3D85629A0F17C1C00039906A /* o32.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562490F17C1C00039906A /* o32.S */; };
+		3D85629B0F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85624B0F17C1C00039906A /* ffi.c */; };
+		3D85629C0F17C1C00039906A /* linux.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85624D0F17C1C00039906A /* linux.S */; };
+		3D85629D0F17C1C00039906A /* aix.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85624F0F17C1C00039906A /* aix.S */; };
+		3D85629E0F17C1C00039906A /* aix_closure.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562500F17C1C00039906A /* aix_closure.S */; };
+		3D85629F0F17C1C00039906A /* darwin.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562520F17C1C00039906A /* darwin.S */; };
+		3D8562A00F17C1C00039906A /* darwin_closure.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562530F17C1C00039906A /* darwin_closure.S */; };
+		3D8562A10F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562540F17C1C00039906A /* ffi.c */; };
+		3D8562A20F17C1C00039906A /* ffi_darwin.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562550F17C1C00039906A /* ffi_darwin.c */; };
+		3D8562A30F17C1C00039906A /* linux64.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562570F17C1C00039906A /* linux64.S */; };
+		3D8562A40F17C1C00039906A /* linux64_closure.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562580F17C1C00039906A /* linux64_closure.S */; };
+		3D8562A50F17C1C00039906A /* ppc_closure.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562590F17C1C00039906A /* ppc_closure.S */; };
+		3D8562A60F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85625A0F17C1C00039906A /* sysv.S */; };
+		3D8562A70F17C1C00039906A /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85625B0F17C1C00039906A /* prep_cif.c */; };
+		3D8562A80F17C1C00039906A /* raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85625C0F17C1C00039906A /* raw_api.c */; };
+		3D8562A90F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85625E0F17C1C00039906A /* ffi.c */; };
+		3D8562AA0F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562600F17C1C00039906A /* sysv.S */; };
+		3D8562AB0F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562620F17C1C00039906A /* ffi.c */; };
+		3D8562AC0F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562640F17C1C00039906A /* sysv.S */; };
+		3D8562AD0F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562660F17C1C00039906A /* ffi.c */; };
+		3D8562AE0F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562680F17C1C00039906A /* sysv.S */; };
+		3D8562AF0F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85626A0F17C1C00039906A /* ffi.c */; };
+		3D8562B00F17C1C00039906A /* v8.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85626C0F17C1C00039906A /* v8.S */; };
+		3D8562B10F17C1C00039906A /* v9.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D85626D0F17C1C00039906A /* v9.S */; };
+		3D8562B20F17C1C00039906A /* types.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D85626E0F17C1C00039906A /* types.c */; };
+		3D8562B30F17C1C00039906A /* ffi.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562700F17C1C00039906A /* ffi.c */; };
+		3D8562B40F17C1C00039906A /* ffi64.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562710F17C1C00039906A /* ffi64.c */; };
+		3D8562B50F17C1C00039906A /* sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562730F17C1C00039906A /* sysv.S */; };
+		3D8562B60F17C1C00039906A /* unix64.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562740F17C1C00039906A /* unix64.S */; };
+		3D8562B70F17C1C00039906A /* win32.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D8562750F17C1C00039906A /* win32.S */; };
+		3D8562B80F17C1C00039906A /* stamp-h.in in Resources */ = {isa = PBXBuildFile; fileRef = 3D8562760F17C1C00039906A /* stamp-h.in */; };
 		3D9BA7DB0EB10DC9005F9A76 /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D9BA7DA0EB10DC9005F9A76 /* class.js */; };
 		3DA390150EA7523300CB6F74 /* JSCocoaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */; };
 		3DA390160EA7523300CB6F74 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3900D0EA7523300CB6F74 /* JSCocoaPrivateObject.m */; };
@@ -38,6 +93,78 @@
 		3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = iPhone.bridgesupport; sourceTree = "<group>"; };
 		3D7A818D0EA238D3009DE07C /* hiPointCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hiPointCount.png; sourceTree = "<group>"; };
 		3D7A818E0EA238D3009DE07C /* lowPointCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lowPointCount.png; sourceTree = "<group>"; };
+		3D8562150F17C1C00039906A /* acinclude.m4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = acinclude.m4; sourceTree = "<group>"; };
+		3D8562160F17C1C00039906A /* aclocal.m4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aclocal.m4; sourceTree = "<group>"; };
+		3D85621D0F17C1C00039906A /* fficonfig.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fficonfig.h.in; sourceTree = "<group>"; };
+		3D85621F0F17C1C00039906A /* ffi.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ffi.h.in; sourceTree = "<group>"; };
+		3D8562200F17C1C00039906A /* ffi_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_common.h; sourceTree = "<group>"; };
+		3D8562210F17C1C00039906A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		3D8562220F17C1C00039906A /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		3D8562270F17C1C00039906A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		3D85622A0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85622B0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D85622C0F17C1C00039906A /* osf.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = osf.S; sourceTree = "<group>"; };
+		3D85622E0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85622F0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562300F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562310F17C1C00039906A /* debug.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = debug.c; sourceTree = "<group>"; };
+		3D8562320F17C1C00039906A /* ffitest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffitest.c; sourceTree = "<group>"; };
+		3D8562340F17C1C00039906A /* eabi.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = eabi.S; sourceTree = "<group>"; };
+		3D8562350F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562360F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562380F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562390F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D85623A0F17C1C00039906A /* ia64_flags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ia64_flags.h; sourceTree = "<group>"; };
+		3D85623B0F17C1C00039906A /* unix.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = unix.S; sourceTree = "<group>"; };
+		3D85623C0F17C1C00039906A /* java_raw_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = java_raw_api.c; sourceTree = "<group>"; };
+		3D85623E0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85623F0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562400F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562420F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562430F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562440F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562460F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562470F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562480F17C1C00039906A /* n32.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = n32.S; sourceTree = "<group>"; };
+		3D8562490F17C1C00039906A /* o32.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = o32.S; sourceTree = "<group>"; };
+		3D85624B0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85624C0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D85624D0F17C1C00039906A /* linux.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = linux.S; sourceTree = "<group>"; };
+		3D85624F0F17C1C00039906A /* aix.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = aix.S; sourceTree = "<group>"; };
+		3D8562500F17C1C00039906A /* aix_closure.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = aix_closure.S; sourceTree = "<group>"; };
+		3D8562510F17C1C00039906A /* asm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asm.h; sourceTree = "<group>"; };
+		3D8562520F17C1C00039906A /* darwin.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = darwin.S; sourceTree = "<group>"; };
+		3D8562530F17C1C00039906A /* darwin_closure.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = darwin_closure.S; sourceTree = "<group>"; };
+		3D8562540F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562550F17C1C00039906A /* ffi_darwin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi_darwin.c; sourceTree = "<group>"; };
+		3D8562560F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562570F17C1C00039906A /* linux64.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = linux64.S; sourceTree = "<group>"; };
+		3D8562580F17C1C00039906A /* linux64_closure.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = linux64_closure.S; sourceTree = "<group>"; };
+		3D8562590F17C1C00039906A /* ppc_closure.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = ppc_closure.S; sourceTree = "<group>"; };
+		3D85625A0F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D85625B0F17C1C00039906A /* prep_cif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prep_cif.c; sourceTree = "<group>"; };
+		3D85625C0F17C1C00039906A /* raw_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = raw_api.c; sourceTree = "<group>"; };
+		3D85625E0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85625F0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562600F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562620F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562630F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562640F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562660F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562670F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562680F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D85626A0F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D85626B0F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D85626C0F17C1C00039906A /* v8.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = v8.S; sourceTree = "<group>"; };
+		3D85626D0F17C1C00039906A /* v9.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = v9.S; sourceTree = "<group>"; };
+		3D85626E0F17C1C00039906A /* types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = types.c; sourceTree = "<group>"; };
+		3D8562700F17C1C00039906A /* ffi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi.c; sourceTree = "<group>"; };
+		3D8562710F17C1C00039906A /* ffi64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi64.c; sourceTree = "<group>"; };
+		3D8562720F17C1C00039906A /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		3D8562730F17C1C00039906A /* sysv.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv.S; sourceTree = "<group>"; };
+		3D8562740F17C1C00039906A /* unix64.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = unix64.S; sourceTree = "<group>"; };
+		3D8562750F17C1C00039906A /* win32.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = win32.S; sourceTree = "<group>"; };
+		3D8562760F17C1C00039906A /* stamp-h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "stamp-h.in"; sourceTree = "<group>"; };
 		3D9BA7DA0EB10DC9005F9A76 /* class.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = class.js; path = ../JSCocoa/class.js; sourceTree = SOURCE_ROOT; };
 		3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaController.m; path = ../JSCocoa/JSCocoaController.m; sourceTree = SOURCE_ROOT; };
 		3DA3900C0EA7523300CB6F74 /* JSCocoaController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaController.h; path = ../JSCocoa/JSCocoaController.h; sourceTree = SOURCE_ROOT; };
@@ -136,9 +263,217 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3D8562130F17C1C00039906A /* libffi */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562150F17C1C00039906A /* acinclude.m4 */,
+				3D8562160F17C1C00039906A /* aclocal.m4 */,
+				3D85621D0F17C1C00039906A /* fficonfig.h.in */,
+				3D85621E0F17C1C00039906A /* include */,
+				3D8562270F17C1C00039906A /* README */,
+				3D8562280F17C1C00039906A /* src */,
+				3D8562760F17C1C00039906A /* stamp-h.in */,
+			);
+			path = libffi;
+			sourceTree = "<group>";
+		};
+		3D85621E0F17C1C00039906A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				3D85621F0F17C1C00039906A /* ffi.h.in */,
+				3D8562200F17C1C00039906A /* ffi_common.h */,
+				3D8562210F17C1C00039906A /* Makefile.am */,
+				3D8562220F17C1C00039906A /* Makefile.in */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		3D8562280F17C1C00039906A /* src */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562290F17C1C00039906A /* alpha */,
+				3D85622D0F17C1C00039906A /* arm */,
+				3D8562310F17C1C00039906A /* debug.c */,
+				3D8562320F17C1C00039906A /* ffitest.c */,
+				3D8562330F17C1C00039906A /* frv */,
+				3D8562370F17C1C00039906A /* ia64 */,
+				3D85623C0F17C1C00039906A /* java_raw_api.c */,
+				3D85623D0F17C1C00039906A /* m32r */,
+				3D8562410F17C1C00039906A /* m68k */,
+				3D8562450F17C1C00039906A /* mips */,
+				3D85624A0F17C1C00039906A /* pa */,
+				3D85624E0F17C1C00039906A /* powerpc */,
+				3D85625B0F17C1C00039906A /* prep_cif.c */,
+				3D85625C0F17C1C00039906A /* raw_api.c */,
+				3D85625D0F17C1C00039906A /* s390 */,
+				3D8562610F17C1C00039906A /* sh */,
+				3D8562650F17C1C00039906A /* sh64 */,
+				3D8562690F17C1C00039906A /* sparc */,
+				3D85626E0F17C1C00039906A /* types.c */,
+				3D85626F0F17C1C00039906A /* x86 */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		3D8562290F17C1C00039906A /* alpha */ = {
+			isa = PBXGroup;
+			children = (
+				3D85622A0F17C1C00039906A /* ffi.c */,
+				3D85622B0F17C1C00039906A /* ffitarget.h */,
+				3D85622C0F17C1C00039906A /* osf.S */,
+			);
+			path = alpha;
+			sourceTree = "<group>";
+		};
+		3D85622D0F17C1C00039906A /* arm */ = {
+			isa = PBXGroup;
+			children = (
+				3D85622E0F17C1C00039906A /* ffi.c */,
+				3D85622F0F17C1C00039906A /* ffitarget.h */,
+				3D8562300F17C1C00039906A /* sysv.S */,
+			);
+			path = arm;
+			sourceTree = "<group>";
+		};
+		3D8562330F17C1C00039906A /* frv */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562340F17C1C00039906A /* eabi.S */,
+				3D8562350F17C1C00039906A /* ffi.c */,
+				3D8562360F17C1C00039906A /* ffitarget.h */,
+			);
+			path = frv;
+			sourceTree = "<group>";
+		};
+		3D8562370F17C1C00039906A /* ia64 */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562380F17C1C00039906A /* ffi.c */,
+				3D8562390F17C1C00039906A /* ffitarget.h */,
+				3D85623A0F17C1C00039906A /* ia64_flags.h */,
+				3D85623B0F17C1C00039906A /* unix.S */,
+			);
+			path = ia64;
+			sourceTree = "<group>";
+		};
+		3D85623D0F17C1C00039906A /* m32r */ = {
+			isa = PBXGroup;
+			children = (
+				3D85623E0F17C1C00039906A /* ffi.c */,
+				3D85623F0F17C1C00039906A /* ffitarget.h */,
+				3D8562400F17C1C00039906A /* sysv.S */,
+			);
+			path = m32r;
+			sourceTree = "<group>";
+		};
+		3D8562410F17C1C00039906A /* m68k */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562420F17C1C00039906A /* ffi.c */,
+				3D8562430F17C1C00039906A /* ffitarget.h */,
+				3D8562440F17C1C00039906A /* sysv.S */,
+			);
+			path = m68k;
+			sourceTree = "<group>";
+		};
+		3D8562450F17C1C00039906A /* mips */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562460F17C1C00039906A /* ffi.c */,
+				3D8562470F17C1C00039906A /* ffitarget.h */,
+				3D8562480F17C1C00039906A /* n32.S */,
+				3D8562490F17C1C00039906A /* o32.S */,
+			);
+			path = mips;
+			sourceTree = "<group>";
+		};
+		3D85624A0F17C1C00039906A /* pa */ = {
+			isa = PBXGroup;
+			children = (
+				3D85624B0F17C1C00039906A /* ffi.c */,
+				3D85624C0F17C1C00039906A /* ffitarget.h */,
+				3D85624D0F17C1C00039906A /* linux.S */,
+			);
+			path = pa;
+			sourceTree = "<group>";
+		};
+		3D85624E0F17C1C00039906A /* powerpc */ = {
+			isa = PBXGroup;
+			children = (
+				3D85624F0F17C1C00039906A /* aix.S */,
+				3D8562500F17C1C00039906A /* aix_closure.S */,
+				3D8562510F17C1C00039906A /* asm.h */,
+				3D8562520F17C1C00039906A /* darwin.S */,
+				3D8562530F17C1C00039906A /* darwin_closure.S */,
+				3D8562540F17C1C00039906A /* ffi.c */,
+				3D8562550F17C1C00039906A /* ffi_darwin.c */,
+				3D8562560F17C1C00039906A /* ffitarget.h */,
+				3D8562570F17C1C00039906A /* linux64.S */,
+				3D8562580F17C1C00039906A /* linux64_closure.S */,
+				3D8562590F17C1C00039906A /* ppc_closure.S */,
+				3D85625A0F17C1C00039906A /* sysv.S */,
+			);
+			path = powerpc;
+			sourceTree = "<group>";
+		};
+		3D85625D0F17C1C00039906A /* s390 */ = {
+			isa = PBXGroup;
+			children = (
+				3D85625E0F17C1C00039906A /* ffi.c */,
+				3D85625F0F17C1C00039906A /* ffitarget.h */,
+				3D8562600F17C1C00039906A /* sysv.S */,
+			);
+			path = s390;
+			sourceTree = "<group>";
+		};
+		3D8562610F17C1C00039906A /* sh */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562620F17C1C00039906A /* ffi.c */,
+				3D8562630F17C1C00039906A /* ffitarget.h */,
+				3D8562640F17C1C00039906A /* sysv.S */,
+			);
+			path = sh;
+			sourceTree = "<group>";
+		};
+		3D8562650F17C1C00039906A /* sh64 */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562660F17C1C00039906A /* ffi.c */,
+				3D8562670F17C1C00039906A /* ffitarget.h */,
+				3D8562680F17C1C00039906A /* sysv.S */,
+			);
+			path = sh64;
+			sourceTree = "<group>";
+		};
+		3D8562690F17C1C00039906A /* sparc */ = {
+			isa = PBXGroup;
+			children = (
+				3D85626A0F17C1C00039906A /* ffi.c */,
+				3D85626B0F17C1C00039906A /* ffitarget.h */,
+				3D85626C0F17C1C00039906A /* v8.S */,
+				3D85626D0F17C1C00039906A /* v9.S */,
+			);
+			path = sparc;
+			sourceTree = "<group>";
+		};
+		3D85626F0F17C1C00039906A /* x86 */ = {
+			isa = PBXGroup;
+			children = (
+				3D8562700F17C1C00039906A /* ffi.c */,
+				3D8562710F17C1C00039906A /* ffi64.c */,
+				3D8562720F17C1C00039906A /* ffitarget.h */,
+				3D8562730F17C1C00039906A /* sysv.S */,
+				3D8562740F17C1C00039906A /* unix64.S */,
+				3D8562750F17C1C00039906A /* win32.S */,
+			);
+			path = x86;
+			sourceTree = "<group>";
+		};
 		3DB581EF0EA17C9000EB80D9 /* JSCocoa */ = {
 			isa = PBXGroup;
 			children = (
+				3D8562130F17C1C00039906A /* libffi */,
 				3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */,
 				3DB5820B0EA17CAC00EB80D9 /* JavascriptCore */,
 				3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */,
@@ -222,6 +557,14 @@
 				3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */,
 				3D7A818F0EA238D3009DE07C /* hiPointCount.png in Resources */,
 				3D7A81900EA238D3009DE07C /* lowPointCount.png in Resources */,
+				3D8562780F17C1C00039906A /* acinclude.m4 in Resources */,
+				3D8562790F17C1C00039906A /* aclocal.m4 in Resources */,
+				3D8562800F17C1C00039906A /* fficonfig.h.in in Resources */,
+				3D8562810F17C1C00039906A /* ffi.h.in in Resources */,
+				3D8562820F17C1C00039906A /* Makefile.am in Resources */,
+				3D8562830F17C1C00039906A /* Makefile.in in Resources */,
+				3D8562880F17C1C00039906A /* README in Resources */,
+				3D8562B80F17C1C00039906A /* stamp-h.in in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +598,53 @@
 				3DA390170EA7523300CB6F74 /* JSCocoaFFIArgument.m in Sources */,
 				3DA390180EA7523300CB6F74 /* JSCocoaFFIClosure.m in Sources */,
 				3DA390190EA7523300CB6F74 /* BridgeSupportController.m in Sources */,
+				3D8562890F17C1C00039906A /* ffi.c in Sources */,
+				3D85628A0F17C1C00039906A /* osf.S in Sources */,
+				3D85628B0F17C1C00039906A /* ffi.c in Sources */,
+				3D85628C0F17C1C00039906A /* sysv.S in Sources */,
+				3D85628D0F17C1C00039906A /* debug.c in Sources */,
+				3D85628E0F17C1C00039906A /* ffitest.c in Sources */,
+				3D85628F0F17C1C00039906A /* eabi.S in Sources */,
+				3D8562900F17C1C00039906A /* ffi.c in Sources */,
+				3D8562910F17C1C00039906A /* ffi.c in Sources */,
+				3D8562920F17C1C00039906A /* unix.S in Sources */,
+				3D8562930F17C1C00039906A /* java_raw_api.c in Sources */,
+				3D8562940F17C1C00039906A /* ffi.c in Sources */,
+				3D8562950F17C1C00039906A /* sysv.S in Sources */,
+				3D8562960F17C1C00039906A /* ffi.c in Sources */,
+				3D8562970F17C1C00039906A /* sysv.S in Sources */,
+				3D8562980F17C1C00039906A /* ffi.c in Sources */,
+				3D8562990F17C1C00039906A /* n32.S in Sources */,
+				3D85629A0F17C1C00039906A /* o32.S in Sources */,
+				3D85629B0F17C1C00039906A /* ffi.c in Sources */,
+				3D85629C0F17C1C00039906A /* linux.S in Sources */,
+				3D85629D0F17C1C00039906A /* aix.S in Sources */,
+				3D85629E0F17C1C00039906A /* aix_closure.S in Sources */,
+				3D85629F0F17C1C00039906A /* darwin.S in Sources */,
+				3D8562A00F17C1C00039906A /* darwin_closure.S in Sources */,
+				3D8562A10F17C1C00039906A /* ffi.c in Sources */,
+				3D8562A20F17C1C00039906A /* ffi_darwin.c in Sources */,
+				3D8562A30F17C1C00039906A /* linux64.S in Sources */,
+				3D8562A40F17C1C00039906A /* linux64_closure.S in Sources */,
+				3D8562A50F17C1C00039906A /* ppc_closure.S in Sources */,
+				3D8562A60F17C1C00039906A /* sysv.S in Sources */,
+				3D8562A70F17C1C00039906A /* prep_cif.c in Sources */,
+				3D8562A80F17C1C00039906A /* raw_api.c in Sources */,
+				3D8562A90F17C1C00039906A /* ffi.c in Sources */,
+				3D8562AA0F17C1C00039906A /* sysv.S in Sources */,
+				3D8562AB0F17C1C00039906A /* ffi.c in Sources */,
+				3D8562AC0F17C1C00039906A /* sysv.S in Sources */,
+				3D8562AD0F17C1C00039906A /* ffi.c in Sources */,
+				3D8562AE0F17C1C00039906A /* sysv.S in Sources */,
+				3D8562AF0F17C1C00039906A /* ffi.c in Sources */,
+				3D8562B00F17C1C00039906A /* v8.S in Sources */,
+				3D8562B10F17C1C00039906A /* v9.S in Sources */,
+				3D8562B20F17C1C00039906A /* types.c in Sources */,
+				3D8562B30F17C1C00039906A /* ffi.c in Sources */,
+				3D8562B40F17C1C00039906A /* ffi64.c in Sources */,
+				3D8562B50F17C1C00039906A /* sysv.S in Sources */,
+				3D8562B60F17C1C00039906A /* unix64.S in Sources */,
+				3D8562B70F17C1C00039906A /* win32.S in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
