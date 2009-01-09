@@ -20,6 +20,8 @@
 		3D9D7F890EF81A0900D71763 /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D7F880EF81A0900D71763 /* class.js */; };
 		3D9D7F8E0EF81A3100D71763 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9D7F8D0EF81A3100D71763 /* JavaScriptCore.framework */; };
 		3D9D7FBC0EF81CC600D71763 /* JSCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9D7FBA0EF81CC600D71763 /* JSCocoa.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DF5BCBD0F17436900AEDF7D /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DF5BCBB0F17436900AEDF7D /* JSCocoaLib.m */; };
+		3DF5BCBE0F17436900AEDF7D /* JSCocoaLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DF5BCBC0F17436900AEDF7D /* JSCocoaLib.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -43,6 +45,8 @@
 		3D9D7F880EF81A0900D71763 /* class.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = class.js; sourceTree = "<group>"; };
 		3D9D7F8D0EF81A3100D71763 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
 		3D9D7FBA0EF81CC600D71763 /* JSCocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoa.h; sourceTree = "<group>"; };
+		3DF5BCBB0F17436900AEDF7D /* JSCocoaLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaLib.m; sourceTree = "<group>"; };
+		3DF5BCBC0F17436900AEDF7D /* JSCocoaLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaLib.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* JSCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -105,16 +109,18 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				3D9D7F700EF81A0100D71763 /* BridgeSupportController.h */,
 				3D9D7F710EF81A0100D71763 /* BridgeSupportController.m */,
-				3D9D7F720EF81A0100D71763 /* JSCocoaController.h */,
+				3D9D7F700EF81A0100D71763 /* BridgeSupportController.h */,
 				3D9D7F730EF81A0100D71763 /* JSCocoaController.m */,
-				3D9D7F740EF81A0100D71763 /* JSCocoaFFIArgument.h */,
+				3D9D7F720EF81A0100D71763 /* JSCocoaController.h */,
 				3D9D7F750EF81A0100D71763 /* JSCocoaFFIArgument.m */,
-				3D9D7F760EF81A0100D71763 /* JSCocoaFFIClosure.h */,
+				3D9D7F740EF81A0100D71763 /* JSCocoaFFIArgument.h */,
 				3D9D7F770EF81A0100D71763 /* JSCocoaFFIClosure.m */,
-				3D9D7F780EF81A0100D71763 /* JSCocoaPrivateObject.h */,
+				3D9D7F760EF81A0100D71763 /* JSCocoaFFIClosure.h */,
 				3D9D7F790EF81A0100D71763 /* JSCocoaPrivateObject.m */,
+				3D9D7F780EF81A0100D71763 /* JSCocoaPrivateObject.h */,
+				3DF5BCBB0F17436900AEDF7D /* JSCocoaLib.m */,
+				3DF5BCBC0F17436900AEDF7D /* JSCocoaLib.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -158,6 +164,7 @@
 				3D9D7F800EF81A0100D71763 /* JSCocoaFFIClosure.h in Headers */,
 				3D9D7F820EF81A0100D71763 /* JSCocoaPrivateObject.h in Headers */,
 				3D9D7FBC0EF81CC600D71763 /* JSCocoa.h in Headers */,
+				3DF5BCBE0F17436900AEDF7D /* JSCocoaLib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +230,7 @@
 				3D9D7F7F0EF81A0100D71763 /* JSCocoaFFIArgument.m in Sources */,
 				3D9D7F810EF81A0100D71763 /* JSCocoaFFIClosure.m in Sources */,
 				3D9D7F830EF81A0100D71763 /* JSCocoaPrivateObject.m in Sources */,
+				3DF5BCBD0F17436900AEDF7D /* JSCocoaLib.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
