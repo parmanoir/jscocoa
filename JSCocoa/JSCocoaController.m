@@ -1298,6 +1298,8 @@ int	liveInstanceCount	= 0;
 	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
 	struct objc_super superData = { self, parentClass };
 	objc_msgSendSuper(&superData, @selector(finalize));
+	
+	// Ignore warning about missing [super finalize] as the call IS made via objc_msgSendSuper
 }
 
 
@@ -2609,3 +2611,9 @@ void* malloc_autorelease(size_t size)
 }
 */
 
+
+//
+// JSCocoa shorthand
+//
+@implementation JSCocoa
+@end

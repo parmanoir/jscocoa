@@ -16,8 +16,10 @@
 	NSLog(@"DONE");
 
 	id c = [JSCocoaController sharedController];
+[[JSCocoa sharedController] setUseAutoCall:NO];
 	id mainJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/main.js", [[NSBundle mainBundle] bundlePath]];
 	[c evalJSFile:mainJSFile];
+[[JSCocoa sharedController] setUseAutoCall:YES];
 
 
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
@@ -32,6 +34,7 @@
 int	runCount;
 - (IBAction)runJSTests:(id)sender
 {
+
 	NSLog(@"RUN TESTS");
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
@@ -41,6 +44,8 @@ int	runCount;
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	runCount++;
 	NSLog(@">>>>Ran %d", runCount);
+
+
 /*	
 	[[NSGarbageCollector defaultCollector] collectExhaustively];
 	objc_collect(OBJC_FULL_COLLECTION);

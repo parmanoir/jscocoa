@@ -132,6 +132,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 @end
 
+//
+// JSCocoa shorthand
+//
+@interface JSCocoa : JSCocoaController
+@end
 
 //
 // Helpers
