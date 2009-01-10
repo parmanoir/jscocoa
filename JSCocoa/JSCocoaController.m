@@ -901,9 +901,6 @@ void blah(id a, SEL b)
 	if (argumentCount)
 	{
 		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
-#ifdef __OBJC
-//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsArguments];
-#endif
 		for (int i=0; i<argumentCount; i++)
 		{
 			char typeEncoding = _C_ID;
@@ -914,8 +911,14 @@ void blah(id a, SEL b)
 
 	JSValueRef exception = NULL;
 	JSValueRef returnValue = JSObjectCallAsFunction(ctx, jsFunction, NULL, argumentCount, jsArguments, &exception);
-
 	if (jsArguments) free(jsArguments);
+
+    if (exception) 
+	{
+		NSLog(@"JSException in callJSFunction : %@", [[JSCocoaController sharedController] formatJSException:exception]);
+		return	NULL;
+    }
+
 	return	returnValue;
 }
 

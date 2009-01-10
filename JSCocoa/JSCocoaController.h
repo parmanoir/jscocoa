@@ -8,9 +8,9 @@
 #ifndef JSCocoa_iPhone
 #import <Cocoa/Cocoa.h>
 #import <JavascriptCore/JavascriptCore.h>
-#endif
 #define MACOSX
 #import <ffi/ffi.h>
+#endif
 #import "BridgeSupportController.h"
 #import "JSCocoaPrivateObject.h"
 #import "JSCocoaFFIArgument.h"

@@ -7,8 +7,8 @@
 			8DC2EF4F0486A6940098B216 /* JSCocoa */,
 		);
 		breakpoints = (
-			3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:912 */,
-			3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:919 */,
+			3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:909 */,
+			3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:922 */,
 		);
 		codeSenseManager = 3D9D7F5F0EF819CB00D71763 /* Code sense */;
 		perUserDictionary = {
@@ -58,8 +58,16 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 253182812;
-			PBXWorkspaceStateSaveDate = 253182812;
+			PBXPerProjectTemplateStateSaveDate = 253264223;
+			PBXWorkspaceStateSaveDate = 253264223;
+		};
+		perUserProjectItems = {
+			3D8521F40F1881650014E654 /* PBXBookmark */ = 3D8521F40F1881650014E654 /* PBXBookmark */;
+			3D8521F90F18817B0014E654 /* PBXTextBookmark */ = 3D8521F90F18817B0014E654 /* PBXTextBookmark */;
+			3D8521FA0F18895F0014E654 /* PBXTextBookmark */ = 3D8521FA0F18895F0014E654 /* PBXTextBookmark */;
+			3D8522000F1889E90014E654 /* PBXTextBookmark */ = 3D8522000F1889E90014E654 /* PBXTextBookmark */;
+			3D8522010F1889E90014E654 /* PBXTextBookmark */ = 3D8522010F1889E90014E654 /* PBXTextBookmark */;
+			3D8522030F1889EB0014E654 /* PBXTextBookmark */ = 3D8522030F1889EB0014E654 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D9D7F5E0EF819CB00D71763 /* Source Control */;
 		userBuildSettings = {
@@ -72,6 +80,58 @@
 			sepNavVisRange = "{0, 45}";
 			sepNavWindowFrame = "{{438, 138}, {1124, 804}}";
 		};
+	};
+	3D8521F40F1881650014E654 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+	};
+	3D8521F90F18817B0014E654 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 888";
+		rLen = 0;
+		rLoc = 30908;
+		rType = 0;
+		vrLen = 2218;
+		vrLoc = 30738;
+	};
+	3D8521FA0F18895F0014E654 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 904";
+		rLen = 0;
+		rLoc = 31382;
+		rType = 0;
+		vrLen = 2192;
+		vrLoc = 30738;
+	};
+	3D8522000F1889E90014E654 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: method possibly missing a [super finalize] call";
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		rLen = 1;
+		rLoc = 1300;
+		rType = 1;
+	};
+	3D8522010F1889E90014E654 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1301";
+		rLen = 2;
+		rLoc = 44481;
+		rType = 0;
+		vrLen = 647;
+		vrLoc = 43836;
+	};
+	3D8522030F1889EB0014E654 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 916";
+		rLen = 0;
+		rLoc = 31840;
+		rType = 0;
+		vrLen = 1912;
+		vrLoc = 30548;
 	};
 	3D9D7F5E0EF819CB00D71763 /* Source Control */ = {
 		isa = PBXSourceControlManager;
@@ -110,9 +170,9 @@
 	};
 	3D9D7F730EF81A0100D71763 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 28468}}";
-			sepNavSelRange = "{31233, 81}";
-			sepNavVisRange = "{30259, 2077}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 29150}}";
+			sepNavSelRange = "{31840, 0}";
+			sepNavVisRange = "{30548, 1912}";
 			sepNavWindowFrame = "{{636, 88}, {1124, 804}}";
 		};
 	};
@@ -180,7 +240,7 @@
 			sepNavWindowFrame = "{{460, 153}, {1124, 804}}";
 		};
 	};
-	3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:912 */ = {
+	3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:909 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -192,12 +252,12 @@
 		functionName = "-callJSFunctionNamed:withArguments:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 912;
+		lineNumber = 909;
 		location = JSCoreAnimation;
 		modificationTime = 251421993.318058;
 		state = 0;
 	};
-	3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:919 */ = {
+	3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:922 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -209,7 +269,7 @@
 		functionName = "-callJSFunctionNamed:withArguments:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 919;
+		lineNumber = 922;
 		location = JSCoreAnimation;
 		modificationTime = 251421993.319206;
 		state = 0;

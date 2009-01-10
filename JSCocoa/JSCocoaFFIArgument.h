@@ -9,10 +9,12 @@
 #ifndef JSCocoa_iPhone
 #import <Cocoa/Cocoa.h>
 #import <JavascriptCore/JavascriptCore.h>
-#endif
 #define MACOSX
 #include <ffi/ffi.h>
-
+#endif
+#ifdef	JSCocoa_iPhone
+//#import "../iPhoneTest2/libffi/include/ffi.h.in"
+#endif
 
 @interface JSCocoaFFIArgument : NSObject {
 	char		typeEncoding;
