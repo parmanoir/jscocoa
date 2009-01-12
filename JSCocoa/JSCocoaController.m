@@ -181,7 +181,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Dealloc
 //
-- (void)dealloc
+- (void)cleanUp
 {
 	NSLog(@"JSCocoa : %x dying", self);
 	JSValueUnprotect(ctx, callbackObjectValueOfCallback);
@@ -197,8 +197,16 @@ static id JSCocoaSingleton = NULL;
 	[closureHash release];
 	[splitCallCache release];
 	[jsClassParents release];
-
+}
+- (void)dealloc
+{
+	[self cleanUp];
 	[super dealloc];
+}
+- (void)finalize
+{
+	[self cleanUp];
+	[super finalize];
 }
 
 # pragma mark Unclassed methods

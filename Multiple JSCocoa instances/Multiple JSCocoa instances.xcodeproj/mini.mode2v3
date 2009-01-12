@@ -202,6 +202,46 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>3D3B52A40F1BA5B400D60188</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>JSCocoaController.m</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>3D3B52A50F1BA5B400D60188</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>JSCocoaController.m</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3D3B54490F1BF26200D60188</string>
+						<key>history</key>
+						<array>
+							<string>3D3B54480F1BF26200D60188</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1140, 707}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>705 233 1140 748 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>3D3B521D0F1BA07000D60188</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>MyDocument.m</string>
@@ -216,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3B543C0F1BDE6400D60188</string>
+						<string>3D3B544A0F1BF26200D60188</string>
 						<key>history</key>
 						<array>
 							<string>3D3B54330F1BDE4600D60188</string>
@@ -242,46 +282,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>3D3B52A40F1BA5B400D60188</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>JSCocoaController.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D3B52A50F1BA5B400D60188</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>JSCocoaController.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>3D3B543D0F1BDE6400D60188</string>
-						<key>history</key>
-						<array>
-							<string>3D3B54260F1BDD9500D60188</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1140, 707}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>705 233 1140 748 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>3D3B521A0F1BA07000D60188</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>documentCode.js</string>
@@ -296,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3B543E0F1BDE6400D60188</string>
+						<string>3D3B544B0F1BF26200D60188</string>
 						<key>history</key>
 						<array>
 							<string>3D3B53200F1BBE8A00D60188</string>
@@ -393,8 +393,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>20</integer>
-											<integer>17</integer>
+											<integer>8</integer>
+											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -604,10 +604,10 @@
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>3D3B521A0F1BA07000D60188</string>
-		<string>3D3B52A40F1BA5B400D60188</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/Multiple JSCocoa instances/Multiple JSCocoa instances.xcodeproj</string>
 		<string>3D3B521D0F1BA07000D60188</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/Multiple JSCocoa instances/Multiple JSCocoa instances.xcodeproj</string>
+		<string>3D3B52A40F1BA5B400D60188</string>
 	</array>
 	<key>WindowString</key>
 	<string>1572 758 350 420 0 0 1920 1178 </string>
