@@ -53,7 +53,6 @@
 
 	// Start JSCocoa
 	jsc = [[JSCocoa alloc] init];
-	return;
 		
 	// Set our custom variables
 	[jsc setObject:textField1 withName:@"field1"];

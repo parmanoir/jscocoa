@@ -41,7 +41,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 //
 // Cleanup : called by dealloc and finalize
 //
-- (void)cleanup
+- (void)cleanUp
 {
 	if (encodings)	[encodings release];
 	if (argTypes)	free(argTypes);
@@ -56,13 +56,13 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 }
 - (void)dealloc
 {
-	[self cleanup];
+	[self cleanUp];
 //	NSLog(@"ClosureDealloc %x", self);
 	[super dealloc];
 }
 - (void)finalize
 {
-	[self cleanup];
+	[self cleanUp];
 //	NSLog(@"ClosureDealloc %x", self);
 	[super finalize];
 }

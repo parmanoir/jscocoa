@@ -29,10 +29,9 @@ static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObje
 
 static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason);
 
-static	JSClassRef			OSXObjectClass;
-static	JSClassRef			jsCocoaObjectClass;
-static	JSClassRef			exceptionClass;
-static	JSClassRef			hashObjectClass;
+static	JSClassRef			OSXObjectClass		= NULL;
+static	JSClassRef			jsCocoaObjectClass	= NULL;
+static	JSClassRef			hashObjectClass		= NULL;
 
 
 #define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
@@ -96,7 +95,7 @@ static id JSCocoaSingleton = NULL;
 	instanceStats		= [[NSMutableDictionary alloc] init];
 	splitCallCache		= [[NSMutableDictionary alloc] init];
 	jsClassParents		= [[NSMutableDictionary alloc] init];
-	
+
 
 	useAutoCall			= YES;
 	isSpeaking			= YES;
@@ -108,7 +107,8 @@ static id JSCocoaSingleton = NULL;
 	//
 	JSClassDefinition OSXObjectDefinition	= kJSClassDefinitionEmpty;
 	OSXObjectDefinition.getProperty	= OSXObject_getProperty;
-	OSXObjectClass = JSClassCreate(&OSXObjectDefinition);
+	if (!OSXObjectClass)
+		OSXObjectClass = JSClassCreate(&OSXObjectDefinition);
 
 
 	//
@@ -125,26 +125,21 @@ static id JSCocoaSingleton = NULL;
 	jsCocoaObjectDefinition.callAsConstructor	= jsCocoaObject_callAsConstructor;
 	jsCocoaObjectDefinition.convertToType		= jsCocoaObject_convertToType;
 	
-	jsCocoaObjectClass = JSClassCreate(&jsCocoaObjectDefinition);
-	
-	//
-	// Exception object
-	//
-	JSClassDefinition exceptionClassDefinition	= kJSClassDefinitionEmpty;
-	exceptionClass = JSClassCreate(&exceptionClassDefinition);
+	if (!jsCocoaObjectClass)
+		jsCocoaObjectClass = JSClassCreate(&jsCocoaObjectDefinition);
 	
 	//
 	// Private Hash of derived classes, storing js values
 	//
 	JSClassDefinition jsCocoaHashObjectDefinition	= kJSClassDefinitionEmpty;
-	hashObjectClass = JSClassCreate(&jsCocoaHashObjectDefinition);
+	if (!hashObjectClass)
+		hashObjectClass = JSClassCreate(&jsCocoaHashObjectDefinition);
 
-	
 
 	//
 	// Start context
 	//
-	ctx = JSGlobalContextCreate(JSClassCreate(&OSXObjectDefinition));
+	ctx = JSGlobalContextCreate(OSXObjectClass);
 	
 	// Create callback used for autocall, set as property on JavascriptCore's [CallbackObject]
 	callbackObjectValueOfCallback = JSObjectMakeFunctionWithCallback(ctx, NULL, valueOfCallback);
@@ -1049,9 +1044,8 @@ void blah(id a, SEL b)
 	JSValueRef	exception = NULL;
 	// Delete
 	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-	bool b = JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
+	JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
 	JSStringRelease(jsName);
-	NSLog(@"delete = %d %@", b, name);
 
     if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
 	return	YES;
@@ -1153,6 +1147,7 @@ static id autoreleasePool;
 - (void)unlinkAllReferences
 {
 	// Null and delete every reference to every live object
+//	[self evalJSString:@"for (var i in this) { log('DELETE ' + i); this[i] = null; delete this[i]; }"];
 	[self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
 	// Everything is now collectable !
 }
@@ -2703,7 +2698,6 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 		NSLog(@"JSCocoa exception : %@", reason);
 		if ([[JSCocoaController sharedController] isSpeaking])	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
 	}
-//	*exception = JSObjectMake(ctx, exceptionClass, NULL);
 
 	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
 	JSValueRef jsString = JSValueMakeString(ctx, jsName);
