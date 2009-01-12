@@ -1001,6 +1001,22 @@ void blah(id a, SEL b)
 }
 
 //
+// Check if function exists
+//
+- (BOOL)hasJSFunctionNamed:(NSString*)name
+{
+	JSValueRef exception		= NULL;
+	// Get function as property of global object
+	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsFunctionName, &exception);
+	JSStringRelease(jsFunctionName);
+	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NO;
+	
+	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
+}
+
+
+//
 // Add/Remove an ObjC object variable to the global context
 //
 - (BOOL)setObject:(id)object withName:(id)name

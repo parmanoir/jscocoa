@@ -28,10 +28,6 @@
 //	[[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:self];
 	
 //	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
-for (int i=0; i<4; i++)
-{
-	NSLog(@"%d", i);
-}
 }
 int runCount = 0;
 - (IBAction)runJSTests:(id)sender

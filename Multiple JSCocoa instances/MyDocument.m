@@ -33,7 +33,10 @@
 - (IBAction)clicked:(id)sender
 {
 	NSLog(@"clicked");
-	[jsc callJSFunctionNamed:@"click" withArguments:nil];
+	NSLog(@"hasJSFunctionNamed('click')=%d", [jsc hasJSFunctionNamed:@"click"]);
+	NSLog(@"hasJSFunctionNamed('clicked')=%d", [jsc hasJSFunctionNamed:@"clicked"]);	
+	
+	if ([jsc hasJSFunctionNamed:@"click"])	[jsc callJSFunctionNamed:@"click" withArguments:nil];
 }
 
 
