@@ -1,7 +1,9 @@
 
 	function	log(str)	{	JSCocoaController.log('' + str)	}
-	
-	var jsc = JSCocoaController.sharedController
+	log('hasshared=' + JSCocoaController.hasSharedController)
+
+
+	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
 
 	/*
 		
@@ -182,7 +184,9 @@
 	// Shared class methods : call these at runtime to add outlets, methods, actions to an existing class
 	// 
 	// 
-	var __jsc__ = JSCocoaController.sharedController
+	// Now set by JSCocoaController
+//	var __jsc__ = JSCocoaController.sharedController
+//	var __jsc__ = jsc
 	
 	//
 	// Outlets are set as properties starting with an underscore, to avoid recursive call in setProperty

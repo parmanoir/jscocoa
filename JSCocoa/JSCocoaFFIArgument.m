@@ -957,7 +957,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	{
 		return	NO;
 	}
-	[[JSCocoaController sharedController] ensureJSValueIsObjectAfterInstanceAutocall:value];
+	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:value inContext:ctx];
 	
 	JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);

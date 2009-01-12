@@ -55,12 +55,13 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 // JSCocoaController
 //
+static id JSCocoaSingleton = NULL;
+
 + (id)sharedController
 {
-	static id singleton = NULL;
 	@synchronized(self)
 	{
-		if (!singleton)
+		if (!JSCocoaSingleton)
 		{
 			// 1. alloc
 			// 2. store pointer 
@@ -68,11 +69,16 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 			//	
 			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
 			//
-			singleton = [self alloc];
-			[singleton init];
+			JSCocoaSingleton = [self alloc];
+			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+			[JSCocoaSingleton init];
 		}
 	}
-	return singleton;
+	return	JSCocoaSingleton;
+}
++ (BOOL)hasSharedController
+{
+	return	!!JSCocoaSingleton;
 }
 
 //
@@ -80,6 +86,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)init
 {
+	NSLog(@"JSCocoa : %x spawning", self);
 	id o	= [super init];
 
 	closureHash			= [[NSMutableDictionary alloc] init];
@@ -139,12 +146,25 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	//
 	ctx = JSGlobalContextCreate(JSClassCreate(&OSXObjectDefinition));
 	
-//	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:ctx];
-	
 	// Create callback used for autocall, set as property on JavascriptCore's [CallbackObject]
 	callbackObjectValueOfCallback = JSObjectMakeFunctionWithCallback(ctx, NULL, valueOfCallback);
 	// And protect it from GC
 	JSValueProtect(ctx, callbackObjectValueOfCallback);
+	JSStringRef	jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
+	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, callbackObjectValueOfCallback, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
+	JSStringRelease(jsName);
+
+	// Create a reference to ourselves
+	JSObjectRef jsc = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsc);
+	private.type = @"@";
+	// If we've overloaded retain, we'll be calling ourselves until the stack dies
+	[private setObjectNoRetain:self];
+	jsName = JSStringCreateWithUTF8CString("__jsc__");
+	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, jsc, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
+	JSStringRelease(jsName);
+	
+
 #ifndef JSCocoa_iPhone
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
@@ -163,6 +183,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (void)dealloc
 {
+	NSLog(@"JSCocoa : %x dying", self);
 	JSValueUnprotect(ctx, callbackObjectValueOfCallback);
 	
 	[self unlinkAllReferences];
@@ -233,10 +254,17 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 // Set a valueOf callback on a jsObject
 //
-- (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject
+//- (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject
++ (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject inContext:(JSContextRef)ctx
 {
-	JSStringRef jsName = JSStringCreateWithUTF8CString("valueOf");
-	JSObjectSetProperty(ctx, jsObject, jsName, [self callbackObjectValueOfCallback], JSCocoaInternalAttribute, NULL);
+	// Get valueOf callback
+	JSStringRef jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
+	JSValueRef valueOfCallback = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
+	JSStringRelease(jsName);					
+	// Add it to object
+	jsName = JSStringCreateWithUTF8CString("valueOf");
+//	JSObjectSetProperty(ctx, jsObject, jsName, [self callbackObjectValueOfCallback], JSCocoaInternalAttribute, NULL);
+	JSObjectSetProperty(ctx, jsObject, jsName, valueOfCallback, JSCocoaInternalAttribute, NULL);
 	JSStringRelease(jsName);					
 }
 
@@ -246,7 +274,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //	* in fromJSValueRef
 //	* in property get (NSString.instance.count, getting 'count')
 //	* in valueOf (handled automatically as JavascriptCore will request 'valueOf' through property get)
-- (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue
++ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx;
 {
 	// It's an instance if it has a property 'thisObject', holding the class name
 	// value is an object holding the method name, 'instance' - its only use is storing 'thisObject'
@@ -836,7 +864,11 @@ void blah(id a, SEL b)
 }
 
 
-#pragma mark Script evaluation : File and String
+#pragma mark Script evaluation
+
+//
+// Evaluate a file
+// 
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
 {
 	NSError*	error;
@@ -862,11 +894,18 @@ void blah(id a, SEL b)
     }
 	return	YES;
 }
+
+//
+// Evaluate a file, without caring about return result
+// 
 - (BOOL)evalJSFile:(NSString*)path
 {
 	return	[self evalJSFile:path toJSValueRef:nil];
 }
 
+//
+// Evaluate a string
+// 
 - (JSValueRefAndContextRef)evalJSString:(NSString*)script
 {
 	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
@@ -889,6 +928,9 @@ void blah(id a, SEL b)
 	return	v;
 }
 
+//
+// Call a Javascript function by function reference (JSValueRef)
+// 
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments
 {
 	JSObjectRef	jsFunction = JSValueToObject(ctx, function, NULL);
@@ -915,23 +957,30 @@ void blah(id a, SEL b)
 
     if (exception) 
 	{
-		NSLog(@"JSException in callJSFunction : %@", [[JSCocoaController sharedController] formatJSException:exception]);
+		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
 		return	NULL;
     }
 
 	return	returnValue;
 }
 
+//
+// Call a Javascript function by name
+//	Requires nil termination : [[JSCocoa sharedController] callJSFunctionNamed:arg1, arg2, nil]
+// 
 - (JSValueRef)callJSFunctionNamed:(NSString*)name withArguments:(id)firstArg, ... 
 {
 	// Convert args to array
 	id arg, arguments = [NSMutableArray array];
 	if (firstArg)	[arguments addObject:firstArg];
 
-	va_list	args;
-	va_start(args, firstArg);
-	while (arg = va_arg(args, id))	[arguments addObject:arg];
-	va_end(args);
+	if (firstArg)
+	{
+		va_list	args;
+		va_start(args, firstArg);
+		while (arg = va_arg(args, id))	[arguments addObject:arg];
+		va_end(args);
+	}
 
 	// Get global object
 	JSObjectRef globalObject	= JSContextGetGlobalObject(ctx);
@@ -950,6 +999,41 @@ void blah(id a, SEL b)
 	// Call !
 	return	[self callJSFunction:jsFunction withArguments:arguments];
 }
+
+//
+// Add/Remove an ObjC object variable to the global context
+//
+- (BOOL)setObject:(id)object withName:(id)name
+{
+	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+	private.type = @"@";
+	[private setObject:object];
+
+	// Set
+	JSValueRef	exception = NULL;
+	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeNone, &exception);
+	JSStringRelease(jsName);
+
+    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	return	YES;
+}
+
+- (BOOL)removeObjectWithName:(id)name
+{
+	JSValueRef	exception = NULL;
+	// Delete
+	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+	bool b = JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
+	JSStringRelease(jsName);
+	NSLog(@"delete = %d %@", b, name);
+
+    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	return	YES;
+}
+
+
 
 
 
@@ -1604,7 +1688,7 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 	
 	// Autocall instance
 	if ([propertyName isEqualToString:@"thisObject"])	return	NULL;
-	[[JSCocoaController sharedController] ensureJSValueIsObjectAfterInstanceAutocall:object];
+	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
@@ -1669,7 +1753,8 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 		// Attempt Zero arg autocall
 		// Object.alloc().init() -> Object.alloc.init
 		//
-		if ([[JSCocoaController sharedController] useAutoCall])
+		BOOL useAutoCall = JSCocoaSingleton ? [[JSCocoaController sharedController] useAutoCall] : YES;
+		if (useAutoCall)
 		{
 			id callee	= [privateObject object];
 			SEL sel		= NSSelectorFromString(propertyName);
@@ -1757,7 +1842,7 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 				{
 					JSObjectRef jsObject = JSValueToObject(ctx, jsReturnValue, NULL);
 					// Set the valueOf callback : JavascriptCore will call it when requesting default value
-					[[JSCocoaController sharedController] setValueOfCallBackOnJSObject:jsObject];					
+					[JSCocoaController setValueOfCallBackOnJSObject:jsObject inContext:ctx];
 				}
 				
 
@@ -1843,7 +1928,7 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 			BUT JSObject::toBoolean always returns true, therefore even !!(new Object(false)) returns true : 
 			this will yield false positives for properties that are detected as things that could be split calls but aren't.
 		*/
-		[[JSCocoaController sharedController] setValueOfCallBackOnJSObject:o];					
+		[JSCocoaController setValueOfCallBackOnJSObject:o inContext:ctx];
 
 		// Special case for instance : setup a valueOf callback calling instance
 		if ([callee class] == callee && [propertyName isEqualToString:@"instance"])
@@ -1880,7 +1965,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 static bool GC_jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
-	[[JSCocoaController sharedController] ensureJSValueIsObjectAfterInstanceAutocall:object];
+	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
@@ -2096,7 +2181,7 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 static void GC_jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
-	[[JSCocoaController sharedController] ensureJSValueIsObjectAfterInstanceAutocall:object];
+	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);

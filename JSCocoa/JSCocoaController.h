@@ -65,6 +65,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @property BOOL logAllExceptions;
 
 + (id)sharedController;
++ (BOOL)hasSharedController;
 - (JSGlobalContextRef)ctx;
 
 //
@@ -92,6 +93,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
+- (BOOL)setObject:(id)object withName:(id)name;
+- (BOOL)removeObjectWithName:(id)name;
+
 
 //
 // Framework
@@ -125,7 +129,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder;
 
 - (JSObjectRef)callbackObjectValueOfCallback;
-- (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value;
++ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;
 
