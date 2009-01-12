@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Multiple JSCocoa instances' target in the 'Multiple JSCocoa instances' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
