@@ -7,8 +7,8 @@
 			8DC2EF4F0486A6940098B216 /* JSCocoa */,
 		);
 		breakpoints = (
-			3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:909 */,
-			3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:922 */,
+			3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:908 */,
+			3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:921 */,
 		);
 		codeSenseManager = 3D9D7F5F0EF819CB00D71763 /* Code sense */;
 		perUserDictionary = {
@@ -58,12 +58,12 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 253396639;
-			PBXWorkspaceStateSaveDate = 253396639;
+			PBXPerProjectTemplateStateSaveDate = 253543989;
+			PBXWorkspaceStateSaveDate = 253543989;
 		};
 		perUserProjectItems = {
-			3D3B507A0F1A53BB00D60188 /* PBXTextBookmark */ = 3D3B507A0F1A53BB00D60188 /* PBXTextBookmark */;
 			3D3B50DE0F1A86A600D60188 /* PBXTextBookmark */ = 3D3B50DE0F1A86A600D60188 /* PBXTextBookmark */;
+			3D3B55600F1CD26E00D60188 /* PBXTextBookmark */ = 3D3B55600F1CD26E00D60188 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D9D7F5E0EF819CB00D71763 /* Source Control */;
 		userBuildSettings = {
@@ -77,25 +77,25 @@
 			sepNavWindowFrame = "{{438, 138}, {1124, 804}}";
 		};
 	};
-	3D3B507A0F1A53BB00D60188 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 2199";
-		rLen = 19;
-		rLoc = 76145;
-		rType = 0;
-		vrLen = 2952;
-		vrLoc = 74981;
-	};
 	3D3B50DE0F1A86A600D60188 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2199";
 		rLen = 19;
-		rLoc = 76145;
+		rLoc = 76853;
 		rType = 0;
 		vrLen = 2986;
 		vrLoc = 74970;
+	};
+	3D3B55600F1CD26E00D60188 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2243";
+		rLen = 19;
+		rLoc = 76853;
+		rType = 0;
+		vrLen = 2267;
+		vrLoc = 75628;
 	};
 	3D9D7F5E0EF819CB00D71763 /* Source Control */ = {
 		isa = PBXSourceControlManager;
@@ -134,9 +134,9 @@
 	};
 	3D9D7F730EF81A0100D71763 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 29007}}";
-			sepNavSelRange = "{76145, 19}";
-			sepNavVisRange = "{74970, 2986}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 30250}}";
+			sepNavSelRange = "{76853, 19}";
+			sepNavVisRange = "{75628, 2267}";
 			sepNavWindowFrame = "{{593, 157}, {1124, 804}}";
 		};
 	};
@@ -174,9 +174,9 @@
 	};
 	3D9D7F880EF81A0900D71763 /* class.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 4642}}";
-			sepNavSelRange = "{12159, 0}";
-			sepNavVisRange = "{10595, 1564}";
+			sepNavIntBoundsRect = "{{0, 0}, {923, 4917}}";
+			sepNavSelRange = "{56, 0}";
+			sepNavVisRange = "{0, 727}";
 			sepNavWindowFrame = "{{160, 122}, {1124, 804}}";
 		};
 	};
@@ -204,7 +204,7 @@
 			sepNavWindowFrame = "{{460, 153}, {1124, 804}}";
 		};
 	};
-	3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:909 */ = {
+	3DF7D43B0EFC3A7800F2DCCD /* JSCocoaController.m:908 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -216,12 +216,12 @@
 		functionName = "-callJSFunctionNamed:withArguments:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 909;
+		lineNumber = 908;
 		location = JSCoreAnimation;
 		modificationTime = 251421993.318058;
 		state = 0;
 	};
-	3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:922 */ = {
+	3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:921 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -233,7 +233,7 @@
 		functionName = "-callJSFunctionNamed:withArguments:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 922;
+		lineNumber = 921;
 		location = JSCoreAnimation;
 		modificationTime = 251421993.319206;
 		state = 0;

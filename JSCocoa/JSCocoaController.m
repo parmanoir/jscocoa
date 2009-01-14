@@ -25,34 +25,42 @@ static	void		jsCocoaObject_getPropertyNames(JSContextRef, JSObjectRef, JSPropert
 static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
 
+// valueOf() is called by Javascript on objects, eg someObject + ' someString'
 static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
+// Set on valueOf callback property of objects
+#define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
 
-static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason);
-
+// These will always stay alive, even after last JSCocoa has died
 static	JSClassRef			OSXObjectClass		= NULL;
 static	JSClassRef			jsCocoaObjectClass	= NULL;
 static	JSClassRef			hashObjectClass		= NULL;
 
-
-#define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
-
-#pragma mark JSCocoaController
-
-@implementation JSCocoaController
-
-@synthesize useAutoCall, isSpeaking, logAllExceptions;
+// Convenience method to throw a Javascript exception
+static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason);
 
 
-
+// iPhone specifics
 #ifdef JSCocoa_iPhone
 const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0, 
 													NULL, NULL, 
 													NULL, NULL, 
 													NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+#import "GDataDefines.h"
+#import "GDataXMLNode.h"
 #endif
+
 
 //
 // JSCocoaController
+//
+#pragma mark JSCocoaController
+
+@implementation JSCocoaController
+@synthesize useAutoCall, isSpeaking, logAllExceptions;
+
+
+//
+// Shared instance
 //
 static id JSCocoaSingleton = NULL;
 
@@ -95,7 +103,6 @@ static id JSCocoaSingleton = NULL;
 	instanceStats		= [[NSMutableDictionary alloc] init];
 	splitCallCache		= [[NSMutableDictionary alloc] init];
 	jsClassParents		= [[NSMutableDictionary alloc] init];
-
 
 	useAutoCall			= YES;
 	isSpeaking			= YES;
@@ -892,7 +899,7 @@ void blah(id a, SEL b)
     JSStringRelease(scriptJS);
     if (exception) 
 	{
-		NSLog(@"JSException in %@ : %@", path, [[JSCocoaController sharedController] formatJSException:exception]);
+		NSLog(@"JSException in %@ : %@", path, [self formatJSException:exception]);
 		return	NO;
     }
 	return	YES;
@@ -922,7 +929,7 @@ void blah(id a, SEL b)
 	v.value = JSValueMakeNull(ctx);
     if (exception) 
 	{
-		NSLog(@"JSException in %@ : %@", @"js string", [[JSCocoaController sharedController] formatJSException:exception]);
+		NSLog(@"JSException in %@ : %@", @"js string", [self formatJSException:exception]);
 		return	v;
     }
 	
@@ -1095,6 +1102,9 @@ void blah(id a, SEL b)
 #pragma mark Tests
 - (BOOL)runTests:(NSString*)path
 {
+#if defined(TARGET_OS_IPHONE)
+#elif defined(TARGET_IPHONE_SIMULATOR)
+#else
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	id predicate = [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
 	files = [files filteredArrayUsingPredicate:predicate]; 
@@ -1116,6 +1126,7 @@ void blah(id a, SEL b)
 		}
 		[JSCocoaController garbageCollect];
 	}
+#endif	
 	return	YES;
 }
 
@@ -1177,7 +1188,7 @@ NSLog(@"releaseBoxedObject:%d->%d", [o retainCount], [o retainCount]-1);
 - (NSUInteger)blankRetainCount
 {
 //	return	[super retainCount];
-	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
+	id parentClass = [self parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
 	struct objc_super superData = { self, parentClass };
 	return	(NSUInteger)objc_msgSendSuper(&superData, @selector(retainCount));
 }
@@ -1594,7 +1605,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 
 
 
-#pragma mark JS Cocoa object
+#pragma mark JSCocoa object
 
 
 //
@@ -1849,7 +1860,7 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 				{
 					JSObjectRef jsObject = JSValueToObject(ctx, jsReturnValue, NULL);
 					// Set the valueOf callback : JavascriptCore will call it when requesting default value
-					[[JSCocoaController sharedController] setValueOfCallBackOnJSObject:jsObject];					
+					[JSCocoaController setValueOfCallBackOnJSObject:jsObject inContext:ctx];
 				}
 				
 				id o = JSObjectGetPrivate(JSValueToObject(ctx, jsReturnValue, NULL));
@@ -2520,8 +2531,11 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 				callAddress = objc_msgSendSuper;
 				if (usingStret)	callAddress = objc_msgSendSuper_stret;
 				_super.receiver = callee;
-				_super.class	= [callee superclass];
+#ifndef JSCocoa_iPhone
 				_super.class	= superSelectorClass;
+#else			
+				_super.super_class	= superSelectorClass;
+#endif			
 				superPointer	= &_super;
 				values[0]		= &superPointer;
 //				NSLog(@"superClass=%@ (old=%@) (%@) function=%x", superSelectorClass, [callee superclass], [callee class], function);

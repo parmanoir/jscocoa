@@ -12,3 +12,10 @@ log('hello from document ' + document)
 
 		field4.stringValue = ((new Date).getTime()) + ' Added ' + field1 + ' and ' + field2 + ' to ' + field3 + '\n' + field4.stringValue
 	}
+	
+	
+	log(jsc)
+	log(__jsc__)
+	log('HAS=' + ('NSObject2' in this))
+	defineClass(actuallyCreateOne)
+	

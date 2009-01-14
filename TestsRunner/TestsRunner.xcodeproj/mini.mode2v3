@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3B541D0F1BC33900D60188</string>
+						<string>3D3B555F0F1CD26C00D60188</string>
 						<key>history</key>
 						<array>
 							<string>3D3B54190F1BC32F00D60188</string>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>27 197 1325 807 0 0 1920 1178 </string>
+				<string>183 133 1325 807 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -308,14 +308,16 @@
 										<string>080E96DDFE201D6D7F000001</string>
 										<string>29B97315FDCFA39411CA2CEA</string>
 										<string>29B97317FDCFA39411CA2CEA</string>
+										<string>3D0E388B0ED8CE1D00077F66</string>
 										<string>29B97323FDCFA39411CA2CEA</string>
 										<string>19C28FACFE9D520D11CA2CBB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>2</integer>
-											<integer>1</integer>
+											<integer>12</integer>
+											<integer>8</integer>
+											<integer>7</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -431,7 +433,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>555</real>
+										<real>333</real>
 									</array>
 									<key>PBXSmartGroupTreeModuleColumnsKey_v4</key>
 									<array>
@@ -449,7 +451,7 @@
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {555, 301}}</string>
+									<string>{{0, 0}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -459,11 +461,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {572, 319}}</string>
+								<string>{{10, 27}, {350, 352}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>555</real>
+									<real>333</real>
 								</array>
 							</dict>
 							<key>Module</key>
@@ -521,9 +523,9 @@
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 		<string>3D3B541B0F1BC33900D60188</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1209 758 350 420 0 0 1920 1178 </string>

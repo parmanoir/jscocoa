@@ -13,7 +13,7 @@
 #include <ffi/ffi.h>
 #endif
 #ifdef	JSCocoa_iPhone
-//#import "../iPhoneTest2/libffi/include/ffi.h.in"
+#import "iPhone/ffi.h"
 #endif
 
 @interface JSCocoaFFIArgument : NSObject {

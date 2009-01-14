@@ -11,9 +11,13 @@
 #import "JSCocoaPrivateObject.h"
 #import <objc/runtime.h>
 
+
+#ifdef JSCocoa_iPhone
+#import "GDataDefines.h"
+#import "GDataXMLNode.h"
+#endif
+
 @implementation JSCocoaFFIArgument
-
-
 
 - (id)init
 {

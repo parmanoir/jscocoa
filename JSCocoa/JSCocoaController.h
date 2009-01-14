@@ -163,6 +163,9 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 #   define SMALL_STRUCT_LIMIT 	8
 #elif defined(__x86_64__) 
 #   define SMALL_STRUCT_LIMIT	16
+#elif TARGET_OS_IPHONE
+// TOCHECK
+#   define SMALL_STRUCT_LIMIT	4
 #else
 #   error "Unsupported MACOSX platform"
 #endif

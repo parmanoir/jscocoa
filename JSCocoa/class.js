@@ -1,9 +1,8 @@
 
 	function	log(str)	{	JSCocoaController.log('' + str)	}
-	log('hasshared=' + JSCocoaController.hasSharedController)
 
-
-	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
+//	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
+	var jsc = __jsc__
 
 	/*
 		

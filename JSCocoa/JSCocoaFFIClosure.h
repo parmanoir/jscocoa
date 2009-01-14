@@ -9,10 +9,14 @@
 #ifndef JSCocoa_iPhone
 #import <Cocoa/Cocoa.h>
 #import <JavascriptCore/JavascriptCore.h>
-#endif
 #define MACOSX
 #import <ffi/ffi.h>
+#endif
 #import "JSCocoaFFIArgument.h"
+
+#ifdef JSCocoa_iPhone
+#import "iPhone/ffi.h"
+#endif
 
 
 @interface JSCocoaFFIClosure : NSObject {
