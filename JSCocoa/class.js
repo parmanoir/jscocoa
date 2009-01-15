@@ -426,4 +426,5 @@
 	
 	
 	// Running ObjC GC ?
-	var hasObjCGC = !!NSGarbageCollector.defaultCollector
+	var hasObjCGC = false
+	if (('NSGarbageCollector' in this) && !!NSGarbageCollector.defaultCollector) hasObjCGC = true

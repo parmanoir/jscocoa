@@ -52,7 +52,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		[JSCocoaController downJSValueProtectCount];
 	}
 	
-	if (munmap(closure, sizeof(closure)) == -1)	NSLog(@"FFI closure munmap failed");
+	if (munmap(closure, sizeof(closure)) == -1)	NSLog(@"ffi closure munmap failed");
 }
 - (void)dealloc
 {
@@ -77,14 +77,12 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 //
 // Bind a js function to closure. We'll jsValueProtect that function from GC.
 //
-- (void)setJSFunction:(JSValueRef)fn inContext:(JSContextRef)context argumentEncodings:(NSMutableArray*)argumentEncodings objC:(BOOL)objC
+- (IMP)setJSFunction:(JSValueRef)fn inContext:(JSContextRef)context argumentEncodings:(NSMutableArray*)argumentEncodings objC:(BOOL)objC
 {
-	if ([argumentEncodings count] == 0)	return;
+	if ([argumentEncodings count] == 0)	return NULL;
 	
 	encodings = argumentEncodings;
 	[encodings retain];
-	jsFunction	= fn;
-	ctx			= context;
 	isObjC		= objC;
 	
 	int i, argumentCount = [argumentEncodings count]-1;
@@ -97,27 +95,39 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 //closure = malloc(sizeof(ffi_closure));	
 	if ((closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == (void*)-1)
 	{
-		NSLog(@"FFI closure mmap failed");
-		return;
+		NSLog(@"ffi closure mmap failed");
+		return NULL;
 	}
-	
 
 	id returnValue = [argumentEncodings objectAtIndex:0];
 	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argumentCount, [returnValue ffi_type], argTypes);
-	if (prep_status != FFI_OK)	return;
+	if (prep_status != FFI_OK)	
+	{
+		NSLog(@"ffi_prep_cif failed");
+		return NULL;
+	}
 	
-	ffi_prep_closure(closure, &cif, closure_function, (void *)self); 
+	if (ffi_prep_closure(closure, &cif, closure_function, (void *)self) != FFI_OK)
+	{
+		NSLog(@"ffi_prep_closure failed");
+		return NULL;
+	}
 	
 	if (mprotect(closure, sizeof(closure), PROT_READ | PROT_EXEC) == -1)
 	{
-		NSLog(@"FFI closure mprotect failed");
-		return;
+		NSLog(@"ffi closure mprotect failed");
+		return NULL;
 	}
+	
+	jsFunction	= fn;
+	ctx			= context;
 	
 	// Protect function from GC
 	JSValueProtect(ctx, jsFunction);
 //	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsFunction];
 	[JSCocoaController upJSValueProtectCount];
+	
+	return	(IMP)closure;
 }
 
 

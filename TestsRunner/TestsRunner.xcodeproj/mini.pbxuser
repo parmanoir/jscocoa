@@ -62,12 +62,13 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 253477663;
-			PBXWorkspaceStateSaveDate = 253477663;
+			PBXPerProjectTemplateStateSaveDate = 253735304;
+			PBXWorkspaceStateSaveDate = 253735304;
 		};
 		perUserProjectItems = {
-			3D3B54190F1BC32F00D60188 /* PBXBookmark */ = 3D3B54190F1BC32F00D60188 /* PBXBookmark */;
-			3D3B555F0F1CD26C00D60188 /* PBXTextBookmark */ = 3D3B555F0F1CD26C00D60188 /* PBXTextBookmark */;
+			3D3B57660F1FAC2500D60188 = 3D3B57660F1FAC2500D60188 /* PBXTextBookmark */;
+			3D3B57A50F1FAE2300D60188 = 3D3B57A50F1FAE2300D60188 /* PBXTextBookmark */;
+			3D3B57B30F1FB18B00D60188 /* PBXTextBookmark */ = 3D3B57B30F1FB18B00D60188 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D89158A0EA8F4BA00BE4E70 /* Source Control */;
 		userBuildSettings = {
@@ -81,11 +82,7 @@
 			sepNavWindowFrame = "{{34, 167}, {1325, 863}}";
 		};
 	};
-	3D3B54190F1BC32F00D60188 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
-	};
-	3D3B555F0F1CD26C00D60188 /* PBXTextBookmark */ = {
+	3D3B57660F1FAC2500D60188 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 31";
@@ -93,6 +90,26 @@
 		rLoc = 1125;
 		rType = 0;
 		vrLen = 2262;
+		vrLoc = 0;
+	};
+	3D3B57A50F1FAE2300D60188 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 31";
+		rLen = 0;
+		rLoc = 1125;
+		rType = 0;
+		vrLen = 2262;
+		vrLoc = 0;
+	};
+	3D3B57B30F1FB18B00D60188 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 31";
+		rLen = 0;
+		rLoc = 1125;
+		rType = 0;
+		vrLen = 2238;
 		vrLoc = 0;
 	};
 	3D4BC1300EF95D6C00882E0E /* evalJSFile: */ = {
@@ -159,9 +176,9 @@
 	};
 	3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1266, 836}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 792}}";
 			sepNavSelRange = "{1125, 0}";
-			sepNavVisRange = "{0, 2262}";
+			sepNavVisRange = "{0, 2238}";
 			sepNavWindowFrame = "{{183, 77}, {1325, 863}}";
 		};
 	};

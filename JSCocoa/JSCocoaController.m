@@ -588,8 +588,7 @@ void blah(id a, SEL b)
 
 	// Make a FFI closure, a function pointer callable with the argument encodings we provide)
 	id typeEncodings = [JSCocoaController parseObjCMethodEncoding:encoding];
-	[closure setJSFunction:valueAndContext.value inContext:ctx argumentEncodings:typeEncodings objC:YES];
-	void* fn = [closure functionPointer];
+	IMP fn = [closure setJSFunction:valueAndContext.value inContext:ctx argumentEncodings:typeEncodings objC:YES];
 
 	// If successful, set it as method
 	if (fn)

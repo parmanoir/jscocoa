@@ -35,7 +35,7 @@
 	BOOL			isObjC;
 }
 
-- (void)setJSFunction:(JSValueRef)fn inContext:(JSContextRef)ctx argumentEncodings:(NSMutableArray*)argumentEncodings objC:(BOOL)objC;
+- (IMP)setJSFunction:(JSValueRef)fn inContext:(JSContextRef)ctx argumentEncodings:(NSMutableArray*)argumentEncodings objC:(BOOL)objC;
 - (void*)functionPointer;
 - (void)calledByClosureWithArgs:(void**)args returnValue:(void*)returnValue;
 
