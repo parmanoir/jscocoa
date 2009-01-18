@@ -5,7 +5,7 @@
 //  Created by Patrick Geiller on 09/07/08.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
-#ifndef JSCocoa_iPhone
+#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
 #import <JavascriptCore/JavascriptCore.h>
 #define MACOSX

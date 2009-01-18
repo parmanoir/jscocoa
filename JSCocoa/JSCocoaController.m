@@ -40,7 +40,7 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 
 
 // iPhone specifics
-#ifdef JSCocoa_iPhone
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0, 
 													NULL, NULL, 
 													NULL, NULL, 
@@ -167,7 +167,7 @@ static id JSCocoaSingleton = NULL;
 	JSStringRelease(jsName);
 	
 
-#ifndef JSCocoa_iPhone
+#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
 	[self loadFrameworkWithName:@"Foundation"];
@@ -2530,7 +2530,7 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 				callAddress = objc_msgSendSuper;
 				if (usingStret)	callAddress = objc_msgSendSuper_stret;
 				_super.receiver = callee;
-#ifndef JSCocoa_iPhone
+#if TARGET_IPHONE_SIMULATOR || !TARGET_OS_IPHONE
 				_super.class	= superSelectorClass;
 #else			
 				_super.super_class	= superSelectorClass;

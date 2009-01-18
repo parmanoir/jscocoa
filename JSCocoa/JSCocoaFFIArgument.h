@@ -6,13 +6,13 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef JSCocoa_iPhone
+#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
 #import <JavascriptCore/JavascriptCore.h>
 #define MACOSX
 #include <ffi/ffi.h>
 #endif
-#ifdef	JSCocoa_iPhone
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 #import "iPhone/ffi.h"
 #endif
 

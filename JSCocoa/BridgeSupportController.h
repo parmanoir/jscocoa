@@ -6,7 +6,7 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef JSCocoa_iPhone
+#if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
 #endif
 

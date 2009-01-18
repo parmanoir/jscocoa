@@ -12,7 +12,7 @@
 #import <objc/runtime.h>
 
 
-#ifdef JSCocoa_iPhone
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 #import "GDataDefines.h"
 #import "GDataXMLNode.h"
 #endif
