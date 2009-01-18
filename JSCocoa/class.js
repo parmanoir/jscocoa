@@ -428,3 +428,9 @@
 	// Running ObjC GC ?
 	var hasObjCGC = false
 	if (('NSGarbageCollector' in this) && !!NSGarbageCollector.defaultCollector) hasObjCGC = true
+	
+	
+	function	loadFramework(name)
+	{
+		jsc.loadFrameworkWithName(name)
+	}

@@ -7,9 +7,6 @@
 
 
 
-
-
-
 //	SET NSMENU TITLE ! JSCocoaLauncher -> Test2.js. De mem pour le nom alt-tab + dock
 
 
