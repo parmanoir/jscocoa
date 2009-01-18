@@ -151,6 +151,10 @@
 			3DB05F360F23C5BA0043C238 /* PBXTextBookmark */ = 3DB05F360F23C5BA0043C238 /* PBXTextBookmark */;
 			3DB05F370F23C5BA0043C238 /* PBXTextBookmark */ = 3DB05F370F23C5BA0043C238 /* PBXTextBookmark */;
 			3DB05F380F23C5BA0043C238 /* PBXTextBookmark */ = 3DB05F380F23C5BA0043C238 /* PBXTextBookmark */;
+			3DB05F430F23D5320043C238 /* PBXBookmark */ = 3DB05F430F23D5320043C238 /* PBXBookmark */;
+			3DB05F490F23D5890043C238 /* PBXTextBookmark */ = 3DB05F490F23D5890043C238 /* PBXTextBookmark */;
+			3DB05F4A0F23D5890043C238 /* PBXTextBookmark */ = 3DB05F4A0F23D5890043C238 /* PBXTextBookmark */;
+			3DB05F4B0F23D5890043C238 /* PBXTextBookmark */ = 3DB05F4B0F23D5890043C238 /* PBXTextBookmark */;
 			3DD9451D0EE98D6A00657A6A = 3DD9451D0EE98D6A00657A6A /* PBXTextBookmark */;
 			3DD946FD0EE9A53F00657A6A = 3DD946FD0EE9A53F00657A6A /* PBXTextBookmark */;
 		};
@@ -239,9 +243,9 @@
 	};
 	3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1041, 30404}}";
-			sepNavSelRange = "{30767, 7}";
-			sepNavVisRange = "{29658, 1153}";
+			sepNavIntBoundsRect = "{{0, 0}, {1097, 28952}}";
+			sepNavSelRange = "{91918, 0}";
+			sepNavVisRange = "{91034, 2428}";
 			sepNavWindowFrame = "{{643, 127}, {1156, 851}}";
 		};
 	};
@@ -315,7 +319,7 @@
 		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 1719";
 		rLen = 0;
-		rLoc = 57777;
+		rLoc = 57774;
 		rType = 0;
 		vrLen = 2663;
 		vrLoc = 61197;
@@ -349,7 +353,7 @@
 		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 1719";
 		rLen = 0;
-		rLoc = 57777;
+		rLoc = 57774;
 		rType = 0;
 		vrLen = 2733;
 		vrLoc = 61197;
@@ -1036,7 +1040,7 @@
 		comments = "error: 'struct objc_super' has no member named 'super_class'";
 		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
 		rLen = 1;
-		rLoc = 2535;
+		rLoc = 2486;
 		rType = 1;
 	};
 	3DB05F370F23C5BA0043C238 /* PBXTextBookmark */ = {
@@ -1044,7 +1048,7 @@
 		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2533";
 		rLen = 0;
-		rLoc = 88806;
+		rLoc = 87167;
 		rType = 0;
 		vrLen = 1210;
 		vrLoc = 88259;
@@ -1058,6 +1062,40 @@
 		rType = 0;
 		vrLen = 1153;
 		vrLoc = 29658;
+	};
+	3DB05F430F23D5320043C238 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
+	};
+	3DB05F490F23D5890043C238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2601";
+		rLen = 0;
+		rLoc = 91918;
+		rType = 0;
+		vrLen = 2428;
+		vrLoc = 91034;
+	};
+	3DB05F4A0F23D5890043C238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */;
+		name = "JSCocoaLauncher.js: 49";
+		rLen = 2;
+		rLoc = 1120;
+		rType = 0;
+		vrLen = 1329;
+		vrLoc = 0;
+	};
+	3DB05F4B0F23D5890043C238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */;
+		name = "JSCocoaLauncher.js: 49";
+		rLen = 2;
+		rLoc = 1120;
+		rType = 0;
+		vrLen = 1308;
+		vrLoc = 0;
 	};
 	3DD9451D0EE98D6A00657A6A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1083,7 +1121,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1066, 3718}}";
 			sepNavSelRange = "{1120, 2}";
-			sepNavVisRange = "{0, 1329}";
+			sepNavVisRange = "{0, 1308}";
 			sepNavWindowFrame = "{{245, 139}, {1125, 850}}";
 		};
 	};

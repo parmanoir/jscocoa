@@ -1710,7 +1710,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 //
 //	At method start, handle special cases for arrays (integers, length) and dictionaries
 //
-static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
+static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
@@ -1973,25 +1973,13 @@ static JSValueRef GC_jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef obj
 	
 	return	NULL;
 }
-// GC stub
-static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
-	JSValueRef returnValue = GC_jsCocoaObject_getProperty(ctx, object, propertyNameJS, exception);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
-	return	returnValue;
-}
 
 
 //
 // setProperty
 //	call setter : propertyName -> setPropertyName
 //
-static bool GC_jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
+static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
 	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
@@ -2154,25 +2142,13 @@ static bool GC_jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, J
 //	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object does not support setting"]), false;
 	return	false;
 }
-// GC stub
-static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
-	bool returnValue = GC_jsCocoaObject_setProperty(ctx, object, propertyNameJS, jsValue, exception);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
-	return	returnValue;
-}
 
 
 //
 // deleteProperty
 //	delete property in hash
 //
-static bool GC_jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
+static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
@@ -2188,26 +2164,13 @@ static bool GC_jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object
 	name.value = JSValueMakeString(ctx, propertyNameJS);
 	return [callee deleteJSValueForJSName:name];
 }
-// GC stub
-static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
-	bool returnValue = GC_jsCocoaObject_deleteProperty(ctx, object, propertyNameJS, exception);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
-	return	returnValue;
-}
-
 
 
 //
 // getPropertyNames
 //	enumerate dictionary keys
 //
-static void GC_jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
+static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
 	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
@@ -2229,18 +2192,6 @@ static void GC_jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef obje
 		}
 	}
 }
-// GC stub
-static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
-	GC_jsCocoaObject_getPropertyNames(ctx, object, propertyNames);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
-}
-
 
 
 
@@ -2253,7 +2204,7 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 //
 // This method handles Super by retrieving the method name to call
 //
-static JSValueRef GC_jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
+static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
@@ -2598,29 +2549,6 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	
 	return	jsReturnValue;
 }
-// GC stub
-static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-
-//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:arguments];
-//for (int i=0; i<argumentCount; i++)	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:arguments[i]];
-
-
-#endif
-	JSValueRef returnValue = GC_jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, arguments, exception);
-
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-
-
-//for (int i=0; i<argumentCount; i++)	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:arguments[i]];
-//[[NSGarbageCollector defaultCollector] enableCollectorForPointer:arguments];
-
-#endif
-	return	returnValue;
-}
 
 
 
@@ -2633,7 +2561,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 //	// Initial values argument call : fills structure with arguments[] contents — THROWS exception if arguments.length != structure.elementCount 
 //	var p = new NSPoint(1, 2, 3, 4)		returns { origin : { x : 1, y : 2 }, size : { width : 3, height : 4 } }
 //
-static JSObjectRef GC_jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
+static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(constructor);
 	if (!privateObject)		return throwException(ctx, exception, @"Calling set on a non mutable dictionary"), NULL;
@@ -2666,19 +2594,12 @@ static JSObjectRef GC_jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObject
 	if (!convertedStruct)	return throwException(ctx, exception, @"Cound not instance structure"), NULL;
 	return	JSValueToObject(ctx, convertedStruct, NULL);
 }
-// GC stub
-static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
-{
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
-	JSObjectRef returnValue = GC_jsCocoaObject_callAsConstructor(ctx, constructor, argumentCount, arguments, exception);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
-	return	returnValue;
-}
 
+
+
+//
+// convertToType
+//
 static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception)
 {
 	// Only invoked when converting to strings and numbers.

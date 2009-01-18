@@ -440,8 +440,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3D3B51DA0F1B8AB500D60188</string>
-				<string>3D3B51DB0F1B8AB500D60188</string>
+				<string>3DB05F7F0F23D5AF0043C238</string>
+				<string>3DB05F800F23D5AF0043C238</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -474,12 +474,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3D3B52970F1BA57500D60188</string>
-		<string>3D3B52980F1BA57500D60188</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/GC ObjC JSCocoa/GC ObjC JSCocoa.xcodeproj</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
 	</array>
 	<key>WindowString</key>
 	<string>1245 758 350 420 0 0 1920 1178 </string>
@@ -635,12 +633,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>JSCocoaController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -698,7 +698,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>3D3B51DC0F1B8AB500D60188</string>
+				<string>3DB05F810F23D5AF0043C238</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -709,7 +709,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -818,13 +818,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>3D3B51DD0F1B8AB500D60188</string>
+				<string>3DB05F820F23D5AF0043C238</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>3D3B51DE0F1B8AB500D60188</string>
-				<string>3D3B51DF0F1B8AB500D60188</string>
-				<string>3D3B51E00F1B8AB500D60188</string>
-				<string>3D3B51E10F1B8AB500D60188</string>
-				<string>3D3B51E20F1B8AB500D60188</string>
+				<string>3DB05F830F23D5AF0043C238</string>
+				<string>3DB05F840F23D5AF0043C238</string>
+				<string>3DB05F850F23D5AF0043C238</string>
+				<string>3DB05F860F23D5AF0043C238</string>
+				<string>3DB05F870F23D5AF0043C238</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -978,7 +978,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D5B069F1CE1000CFCEE</string>
-				<string>3D3B51E30F1B8AB500D60188</string>
+				<string>3DB05F880F23D5AF0043C238</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
