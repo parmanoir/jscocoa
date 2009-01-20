@@ -18,13 +18,7 @@
 //
 void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disable];
-#endif
 	[(id)userdata calledByClosureWithArgs:args returnValue:resp];
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enable];
-#endif
 }
 
 - (id)init

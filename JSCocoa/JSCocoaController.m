@@ -167,12 +167,15 @@ static id JSCocoaSingleton = NULL;
 	JSStringRelease(jsName);
 	
 
+//	double t0 = CFAbsoluteTimeGetCurrent();
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
 	[self loadFrameworkWithName:@"Foundation"];
 	[self loadFrameworkWithName:@"CoreGraphics" inPath:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
 #endif	
+//	double t1 = CFAbsoluteTimeGetCurrent();
+//	NSLog(@"%f", t1-t0);
 
 	// Load class kit
 	[self evalJSFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"]];
@@ -1702,7 +1705,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 
 //
 // getProperty
-//	Return property in object's internal hash if its contains propertyName
+//	Return property in object's internal Javascript hash if its contains propertyName
 //	else ...
 //	Get objC method matching propertyName, autocall it
 //	else ...
@@ -2266,9 +2269,6 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		if (superArgumentCount)
 		{
 			superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:superArguments];
-#endif
 			for (i=0; i<superArgumentCount; i++)
 				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
 		}
@@ -2289,13 +2289,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	JSValueRef*	argumentsToFree		= NULL;
 	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
 	
-	if (superArguments)	
-	{
-		free(superArguments);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] enableCollectorForPointer:arguments2];
-#endif
-	}
+	if (superArguments)		free(superArguments);
 	if (argumentsToFree)	free(argumentsToFree);
 	
 	return	jsReturnValue;
@@ -2458,9 +2452,6 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	if (effectiveArgumentCount > 0)
 	{
 		args = malloc(sizeof(ffi_type*)*effectiveArgumentCount);
-#ifdef __OBJC_GC__
-//[[NSGarbageCollector defaultCollector] disableCollectorForPointer:args];
-#endif
 		values = malloc(sizeof(void*)*effectiveArgumentCount);
 
 		// If calling ObjC, setup instance and selector
