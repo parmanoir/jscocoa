@@ -59,34 +59,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 @synthesize useAutoCall, isSpeaking, logAllExceptions;
 
 
-//
-// Shared instance
-//
-static id JSCocoaSingleton = NULL;
-
-+ (id)sharedController
-{
-	@synchronized(self)
-	{
-		if (!JSCocoaSingleton)
-		{
-			// 1. alloc
-			// 2. store pointer 
-			// 3. call init
-			//	
-			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
-			//
-			JSCocoaSingleton = [self alloc];
-			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
-			[JSCocoaSingleton init];
-		}
-	}
-	return	JSCocoaSingleton;
-}
-+ (BOOL)hasSharedController
-{
-	return	!!JSCocoaSingleton;
-}
 
 //
 // Init
@@ -162,6 +134,8 @@ static id JSCocoaSingleton = NULL;
 	private.type = @"@";
 	// If we've overloaded retain, we'll be calling ourselves until the stack dies
 	[private setObjectNoRetain:self];
+
+	// Register ourselves
 	jsName = JSStringCreateWithUTF8CString("__jsc__");
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, jsc, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
 	JSStringRelease(jsName);
@@ -213,6 +187,49 @@ static id JSCocoaSingleton = NULL;
 	[self cleanUp];
 	[super finalize];
 }
+
+
+//
+// Shared instance
+//
+static id JSCocoaSingleton = NULL;
+
++ (id)sharedController
+{
+	@synchronized(self)
+	{
+		if (!JSCocoaSingleton)
+		{
+			// 1. alloc
+			// 2. store pointer 
+			// 3. call init
+			//	
+			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
+			//
+			JSCocoaSingleton = [self alloc];
+			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+			[JSCocoaSingleton init];
+		}
+	}
+	return	JSCocoaSingleton;
+}
++ (BOOL)hasSharedController
+{
+	return	!!JSCocoaSingleton;
+}
+
+// Retrieves the __jsc__ variable from a context and unbox it
++ (id)controllerFromContext:(JSContextRef)ctx
+{
+	JSStringRef jsName = JSStringCreateWithUTF8CString("__jsc__");
+	JSValueRef jsValue = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
+	JSStringRelease(jsName);
+	id jsc = nil;
+	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&jsc inContext:ctx];
+	return	jsc;
+}
+
+
 
 # pragma mark Unclassed methods
 + (void)log:(NSString*)string
@@ -276,7 +293,6 @@ static id JSCocoaSingleton = NULL;
 	JSStringRelease(jsName);					
 	// Add it to object
 	jsName = JSStringCreateWithUTF8CString("valueOf");
-//	JSObjectSetProperty(ctx, jsObject, jsName, [self callbackObjectValueOfCallback], JSCocoaInternalAttribute, NULL);
 	JSObjectSetProperty(ctx, jsObject, jsName, valueOfCallback, JSCocoaInternalAttribute, NULL);
 	JSStringRelease(jsName);					
 }
@@ -1012,6 +1028,7 @@ void blah(id a, SEL b)
 	return	[self callJSFunction:jsFunction withArguments:arguments];
 }
 
+
 //
 // Check if function exists
 //
@@ -1651,27 +1668,49 @@ BOOL	isUsingStret(id argumentEncodings)
 		return	NO;				
 }
 
-
+//
 // Autocall : return value
+//
 JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception)
 {
-//	NSLog(@"valueOf callback");
 	// Holding a native JS value ? Return it
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	if ([thisPrivateObject.type isEqualToString:@"jsValueRef"])	
 	{
 		return [thisPrivateObject jsValueRef];
 	}
+	
+//	NSLog(@"valueOfCallback %@ %@", thisPrivateObject.type, thisPrivateObject.structureName);
 
 	// Convert to string
-	NSString*	toString = [NSString stringWithFormat:@"%@", [thisPrivateObject.type isEqualToString:@"@"] ? [[thisPrivateObject object] description] : @"JSCocoaPrivateObject"];
-//	JSStringRef jsToString = JSStringCreateWithUTF8CString([toString UTF8String]);
+	id toString = [NSString stringWithFormat:@"JSCocoaPrivateObject type=%@", thisPrivateObject.type];
+	
+	// Object
+	if ([thisPrivateObject.type isEqualToString:@"@"])
+		toString = [NSString stringWithFormat:@"%@", [[thisPrivateObject object] description]];
+
+	// Struct
+	if ([thisPrivateObject.type isEqualToString:@"struct"])
+	{
+		id structDescription = nil;
+		id self = [JSCocoaController controllerFromContext:ctx];
+		if ([self hasJSFunctionNamed:@"describeStruct"])
+		{
+			JSStringRef scriptJS = JSStringCreateWithUTF8CString("return describeStruct(arguments[0])");
+			JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+			JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&thisObject, NULL);
+			JSStringRelease(scriptJS);
+
+			[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&structDescription inContext:ctx];
+		}
+		toString = [NSString stringWithFormat:@"<%@ %@>", thisPrivateObject.structureName, structDescription];
+	}
+
+	// Convert to string and return
     JSStringRef jsToString = JSStringCreateWithCFString((CFStringRef)toString);
 	JSValueRef jsValueToString = JSValueMakeString(ctx, jsToString);
 	JSStringRelease(jsToString);
-//	NSLog(@"valueOf callback %@", toString);
 	return	jsValueToString;
-//	return	JSValueMakeNull(ctx);
 }
 
 //

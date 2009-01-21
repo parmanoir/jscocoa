@@ -5,7 +5,6 @@
 	*/
 
 
-	var processes = {}
 
 	Class('JSCocoaDocument < NSDocument').definition = function ()
 	{
@@ -43,11 +42,12 @@
 
 
 
-var globalTEST
 		Class('ApplicationController < NSObject').definition = function ()
 		{
 			Method('applicationDidFinishLaunching:').encoding('void id').fn = function (notification)
 			{
+				appDelegate = this
+				
 				// Reparent progress indicator
 				var themeView = this.window.contentView.superview
 				themeView.addSubview(this.progressIndicator)
@@ -65,6 +65,15 @@ var globalTEST
 				this.window.isVisible = true
 				
 
+				// Load a rowView to get its height
+				NSBundle.loadNibNamed_owner('RowView', this)
+				this.rowHeight = this.rowView.frame.size.height
+
+				// Globals
+				rowHeight	= appDelegate.rowHeight
+				scrollView	= this.scrollView
+
+
 				// Start query
 				var query = NSMetadataQuery.instance()
 //				var descriptors = NSArray.arrayWithObject(NSSortDescriptor.instance({withKey:'kMDItemFSName', ascending:true}))
@@ -81,6 +90,7 @@ var globalTEST
 				query.startQuery
 
 
+/*
 log('====')
 log('scrollView=' + this.scrollView)
 log('scrollViewContent=' + this.scrollViewContent)
@@ -94,13 +104,13 @@ parentView = this.scrollViewContent
 
 this.parentView = parentView
 
-
+*/
 /*
 		NSBundle.loadNibNamed_owner('RowView', this)
 parentView.addSubview(this.rowView)				
 this.rowView.frame = NSMakeRect(0, h*1, w, h)
 */
-
+/*
 var frame = parentView.frame
 log('parentView height=' + frame.size.height + ' ' + h*2)
 //frame.size.height = h*2
@@ -109,8 +119,8 @@ parentView.frame = frame
 log(parentView.superview)
 log(parentView.superview.superview)
 log('contentView=' + parentView.superview.superview.contentView)
-
-
+*/
+/*
 for (var i=0; i<5; i++)
 {
 		NSBundle.loadNibNamed_owner('RowView', this)
@@ -122,7 +132,11 @@ for (var i=0; i<5; i++)
 		this.rowView.frame = NSMakeRect(0, h*i, w, h)
 		
 }
-		globalTEST = this.rowView
+*/
+		
+
+
+//		globalTEST = this.rowView
 
 			}
 			Method('applicationWillTerminate:').encoding('void id').fn = function (notification)
@@ -145,13 +159,15 @@ log('*********results**********')
 //					log(notification.object.results[i].valueForAttribute('kMDItemPath'))// + '=' + notification.object.results[i].valueForAttribute('kMDItemContentModificationDate'))
 
 				}
-
-				var resultCount = notification.object.results.length
-				this.statusText.stringValue = resultCount + ' jscocoa' + (resultCount > 1 ? 's' : '')
 				
-				var f = this.parentView.frame
-				f.size.height = resultCount*20
-				this.parentView.frame = f
+				spotLightNotified(notification)
+
+//				var resultCount = notification.object.results.length
+//				this.statusText.stringValue = resultCount + ' jscocoa' + (resultCount > 1 ? 's' : '')
+				
+//				var f = this.parentView.frame
+//				f.size.height = resultCount*20
+//				this.parentView.frame = f
 	//	
 	
 //	NON RESTRIX A HOME -> SINON LES VOLUMES SON SOYRA TROUVE !
@@ -174,7 +190,7 @@ log('*********results**********')
 			IBOutlet('statusText')
 
 		}
-		NSApplication.sharedApplication.delegate = ApplicationController.instance()
+//		NSApplication.sharedApplication.delegate = ApplicationController.instance()
 
 
 
@@ -187,15 +203,50 @@ log('*********results**********')
 		Method('drawRect:').fn = function ()
 		{
 			var rect = this.superview.superview.documentVisibleRect
-			log('DRAWRECt ' + rect.origin.x + ' ' + rect.origin.y + ' ' + rect.size.width + ' ' + rect.size.height)
+//			log('DRAWRECt ' + rect.origin.x + ' ' + rect.origin.y + ' ' + rect.size.width + ' ' + rect.size.height)
+			listFrameChanged(this)
 
-if (!globalTEST)	return
-		var f = globalTEST.frame
-		globalTEST.frame = NSMakeRect(0, 0, f.size.w, f.size.h)
+//if (!globalTEST)	return
+//		var f = globalTEST.frame
+//		globalTEST.frame = NSMakeRect(0, 0, f.size.w, f.size.h)
 
 		}
 	}
 	
 	
+
+	function	spotLightNotified(notification)
+	{
+		log('notify result')
+		
+		resultCount	= notification.object.results.length
+		
+		// Set frame size
+		var frame = appDelegate.scrollViewContent.frame
+		frame.size.height = resultCount*rowHeight
+		appDelegate.scrollViewContent.frame = frame
+
+
+		appDelegate.statusText.stringValue = resultCount + ' jscocoa' + (resultCount > 1 ? 's' : '')
+
+	}
+	function	listFrameChanged(list)
+	{
+		// STRUCT 
+		log('notify frame change ' + scrollView + ' rect=' + scrollView.documentVisibleRect)
+	}
+
 	
 	
+	
+
+	var appDelegate
+	var resultCount
+	var rowHeight
+	var scrollView
+
+	var processes = {}
+
+
+	var str = describeStruct({ a : 'b', c : { a1 : 'hello', b2 : 'world', c3 : { a : 54 } }, d : 'elklk' })
+	log('struct=' + str)

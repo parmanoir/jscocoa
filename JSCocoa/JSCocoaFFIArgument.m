@@ -948,7 +948,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		return	YES;
 	}
 
-	// number
+	// bool
 	if (JSValueIsBoolean(ctx, value))
 	{
 		bool v = JSValueToBoolean(ctx, value);
@@ -957,15 +957,15 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		return	YES;
 	}
 
+	// From here we must have a Javascript object (Array, Hash) or a boxed Cocoa object
 	if (!JSValueIsObject(ctx, value))	
-	{
 		return	NO;
-	}
+
 	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:value inContext:ctx];
 	
 	JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
-	// Pure js hashes and arrays should be converted to NSArray and NSDictionary. ##Later.
+	// Pure js hashes and arrays are converted to NSArray and NSDictionary
 	if (!private)
 	{
 		// Use an anonymous function to test if object is Array or Object (hash)
@@ -1049,12 +1049,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	*o = hash;
 	return	YES;
 }
-
-
-
-	/*
-		javascript:alert([].constructor==Array.prototype.constructor)		
-	*/
 
 
 

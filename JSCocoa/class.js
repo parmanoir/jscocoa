@@ -434,3 +434,25 @@
 	{
 		jsc.loadFrameworkWithName(name)
 	}
+	
+	
+	//
+	// Describe struct
+	//
+	function	describeStruct(o)
+	{
+		var str = ''
+		if (typeof(o) == 'object' || typeof(o) == 'function')
+		{
+			str += '{'
+			var elements = []
+			for (var i in o)
+				elements.push(i + ':' + describeStruct(o[i]))
+			str += elements.join(', ')
+			str += '}'
+		}
+		else
+			str += o
+		return	str
+	}
+	
