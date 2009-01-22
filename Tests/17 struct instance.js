@@ -70,3 +70,4 @@
 	}
 	if (!failed)					throw	'expected CGRect structure instance with too many arguments to fail'
 
+

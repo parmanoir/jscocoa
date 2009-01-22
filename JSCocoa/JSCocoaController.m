@@ -2201,15 +2201,19 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		}
 	}
 
+	//
+	// From here we return false to have Javascript set values on Javascript objects : valueOf, thisObject, structures
+	//
+
 	// Special case for autocall : allow current js object to receive a custom valueOf method that will handle autocall
 	// And a thisObject property holding class for instance autocall
 	if ([propertyName isEqualToString:@"valueOf"])		return	false;
 	if ([propertyName isEqualToString:@"thisObject"])	return	false;
+	// Allow general setting on structs
+	if ([privateObject.type isEqualToString:@"struct"])	return	false;
 
 	// ## Setter should fail AND WARN if propertyName can't be set. 
-	// Warning is disabled as set on structures need a special check, yet to be written
-//	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object does not support setting"]), false;
-	return	false;
+	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting", privateObject.object]), false;
 }
 
 
