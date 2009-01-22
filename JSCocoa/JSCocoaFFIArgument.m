@@ -660,7 +660,6 @@
 }
 
 /*
-
 	__alignOf__ returns 8 for double, but its struct align is 4
 
 	use dummy structures to get struct alignment, each having a byte as first element

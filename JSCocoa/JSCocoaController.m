@@ -56,30 +56,64 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #pragma mark JSCocoaController
 
 @implementation JSCocoaController
-@synthesize useAutoCall, isSpeaking, logAllExceptions;
+//@synthesize useAutoCall, isSpeaking, logAllExceptions;
+
+	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
+	static	id	closureHash;
+	// Given a jsFunction, retrieve its selector
+	static	id	jsFunctionSelectors;
+	// Given a jsFunction, retrieve which class it's attached to
+	static	id	jsFunctionClasses;
+	// Given a class, return the parent class implementing JSCocoaHolder method
+	static	id	jsClassParents;
+	
+	// Given a class + methodName, retrieve its jsFunction
+	static	id	jsFunctionHash;
+	
+	// Split call cache
+	static	id	splitCallCache;
+
+	// Shared instance stats
+	static	id	sharedInstanceStats	= nil;
 
 
+	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
+	static	BOOL	useAutoCall;
+	// If true, all exceptions will be sent to NSLog, event if they're caught later on by some Javascript core
+	static	BOOL	logAllExceptions;
+	// Is speaking when throwing exceptions
+	static	BOOL	isSpeaking;
+
+	// .valueOf() callback
+	static	JSObjectRef	callbackObjectValueOfCallback = NULL;
 
 //
 // Init
 //
 - (id)init
 {
-	NSLog(@"JSCocoa : %x spawning", self);
+//	NSLog(@"JSCocoa : %x spawning", self);
 	id o	= [super init];
 
-	closureHash			= [[NSMutableDictionary alloc] init];
-	jsFunctionSelectors	= [[NSMutableDictionary alloc] init];
-	jsFunctionClasses	= [[NSMutableDictionary alloc] init];
-	jsFunctionHash		= [[NSMutableDictionary alloc] init];
-	instanceStats		= [[NSMutableDictionary alloc] init];
-	splitCallCache		= [[NSMutableDictionary alloc] init];
-	jsClassParents		= [[NSMutableDictionary alloc] init];
+	@synchronized(self)
+	{
+		if (!sharedInstanceStats)	
+		{
+			sharedInstanceStats = [[NSMutableDictionary alloc] init];
+			closureHash			= [[NSMutableDictionary alloc] init];
+			jsFunctionSelectors	= [[NSMutableDictionary alloc] init];
+			jsFunctionClasses	= [[NSMutableDictionary alloc] init];
+			jsFunctionHash		= [[NSMutableDictionary alloc] init];
+			splitCallCache		= [[NSMutableDictionary alloc] init];
+			jsClassParents		= [[NSMutableDictionary alloc] init];
 
-	useAutoCall			= YES;
-	isSpeaking			= YES;
-//	isSpeaking			= NO;
-	logAllExceptions	= NO;
+			useAutoCall			= YES;
+			isSpeaking			= YES;
+			isSpeaking			= NO;
+			logAllExceptions	= NO;
+		}
+	}
+
 
 	//
 	// OSX object javascript definition
@@ -121,12 +155,15 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	ctx = JSGlobalContextCreate(OSXObjectClass);
 	
 	// Create callback used for autocall, set as property on JavascriptCore's [CallbackObject]
-	callbackObjectValueOfCallback = JSObjectMakeFunctionWithCallback(ctx, NULL, valueOfCallback);
-	// And protect it from GC
-	JSValueProtect(ctx, callbackObjectValueOfCallback);
-	JSStringRef	jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
-	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, callbackObjectValueOfCallback, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
-	JSStringRelease(jsName);
+	@synchronized(self)
+	{
+		if (!callbackObjectValueOfCallback)
+		{
+			callbackObjectValueOfCallback = JSObjectMakeFunctionWithCallback(ctx, NULL, valueOfCallback);
+			// And protect it from GC
+			JSValueProtect(ctx, callbackObjectValueOfCallback);
+		}
+	}
 
 	// Create a reference to ourselves
 	JSObjectRef jsc = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
@@ -136,7 +173,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	[private setObjectNoRetain:self];
 
 	// Register ourselves
-	jsName = JSStringCreateWithUTF8CString("__jsc__");
+	JSStringRef jsName = JSStringCreateWithUTF8CString("__jsc__");
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, jsc, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
 	JSStringRelease(jsName);
 	
@@ -162,20 +199,11 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (void)cleanUp
 {
-	NSLog(@"JSCocoa : %x dying", self);
-	JSValueUnprotect(ctx, callbackObjectValueOfCallback);
+//	NSLog(@"JSCocoa : %x dying", self);
 	
 	[self unlinkAllReferences];
 	JSGarbageCollect(NULL);
 	JSGlobalContextRelease(ctx);
-
-	[instanceStats release];
-	[jsFunctionHash release];
-	[jsFunctionClasses release];
-	[jsFunctionSelectors release];
-	[closureHash release];
-	[splitCallCache release];
-	[jsClassParents release];
 }
 - (void)dealloc
 {
@@ -207,7 +235,7 @@ static id JSCocoaSingleton = NULL;
 			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
 			//
 			JSCocoaSingleton = [self alloc];
-			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+//			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
 			[JSCocoaSingleton init];
 		}
 	}
@@ -249,7 +277,7 @@ static id JSCocoaSingleton = NULL;
 + (void)logAndSay:(NSString*)string
 {
 	[self log:string];
-	if ([[self sharedController] isSpeaking])	system([[NSString stringWithFormat:@"say %@ &", string] UTF8String]);
+	if (isSpeaking)	system([[NSString stringWithFormat:@"say %@ &", string] UTF8String]);
 }
 
 + (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx
@@ -272,7 +300,7 @@ static id JSCocoaSingleton = NULL;
 
 - (id)instanceStats
 {
-	return	instanceStats;
+	return	sharedInstanceStats;
 }
 
 
@@ -288,12 +316,12 @@ static id JSCocoaSingleton = NULL;
 + (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject inContext:(JSContextRef)ctx
 {
 	// Get valueOf callback
-	JSStringRef jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
-	JSValueRef valueOfCallback = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
-	JSStringRelease(jsName);					
+//	JSStringRef jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
+//	JSValueRef valueOfCallback = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
+//	JSStringRelease(jsName);					
 	// Add it to object
-	jsName = JSStringCreateWithUTF8CString("valueOf");
-	JSObjectSetProperty(ctx, jsObject, jsName, valueOfCallback, JSCocoaInternalAttribute, NULL);
+	JSStringRef jsName = JSStringCreateWithUTF8CString("valueOf");
+	JSObjectSetProperty(ctx, jsObject, jsName, callbackObjectValueOfCallback, JSCocoaInternalAttribute, NULL);
 	JSStringRelease(jsName);					
 }
 
@@ -466,7 +494,7 @@ static id JSCocoaSingleton = NULL;
 
 #pragma mark Class Creation
 
-- (Class)createClass:(char*)className parentClass:(char*)parentClass
++ (Class)createClass:(char*)className parentClass:(char*)parentClass
 {
 	Class class = objc_getClass(className);
 	if (class)	return class;
@@ -523,7 +551,9 @@ static id JSCocoaSingleton = NULL;
 	return	class;
 }
 
-- (BOOL)overloadInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
+
+
++ (BOOL)overloadInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
 {
 	JSObjectRef jsObject = JSValueToObject(valueAndContext.ctx, valueAndContext.value, NULL);
 	if (!jsObject)	return	NSLog(@"overloadInstanceMethod : function is not an object"), NO;
@@ -535,7 +565,7 @@ static id JSCocoaSingleton = NULL;
 	return	[self addInstanceMethod:methodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(m)];
 }
 
-- (BOOL)overloadClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
++ (BOOL)overloadClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
 {
 	JSObjectRef jsObject = JSValueToObject(valueAndContext.ctx, valueAndContext.value, NULL);
 	if (!jsObject)	return	NSLog(@"overloadClassMethod : function is not an object"), NO;
@@ -559,12 +589,7 @@ static id JSCocoaSingleton = NULL;
 	The closure made from the jsFunction+its encoding is stored in closureHash.
 
 */
-/*
-void blah(id a, SEL b)
-{
-}
-*/
-- (BOOL)addMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
++ (BOOL)addMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
 	SEL selector = NSSelectorFromString(methodName);
 
@@ -580,9 +605,10 @@ void blah(id a, SEL b)
 
 //	NSLog(@"keyForFunction=%x for %@.%@", keyForFunction, class, methodName);
 	
-	
+	id jsc = [JSCocoaController controllerFromContext:valueAndContext.ctx];
+	JSContextRef ctx = [jsc ctx];
 	id privateObject = [[JSCocoaPrivateObject alloc] init];
-	[privateObject setJSValueRef:valueAndContext.value ctx:valueAndContext.ctx];
+	[privateObject setJSValueRef:valueAndContext.value ctx:ctx];
 
 	//	Remove previous method
 	id existingPrivateObject = [jsFunctionHash objectForKey:keyForClassAndMethod];
@@ -631,11 +657,11 @@ void blah(id a, SEL b)
 }
 
 
-- (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
++ (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
 	return [self addMethod:methodName class:class jsFunction:valueAndContext encoding:encoding];
 }
-- (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
++ (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
 	return [self addMethod:methodName class:objc_getMetaClass(class_getName(class)) jsFunction:valueAndContext encoding:encoding];
 }
@@ -653,7 +679,7 @@ void blah(id a, SEL b)
 	-> introduced because under GC, NSData gets collected early.
 
 */
-- (BOOL)trySplitCall:(id*)_methodName class:(Class)class argumentCount:(size_t*)_argumentCount arguments:(JSValueRef**)_arguments ctx:(JSContextRef)c
++ (BOOL)trySplitCall:(id*)_methodName class:(Class)class argumentCount:(size_t*)_argumentCount arguments:(JSValueRef**)_arguments ctx:(JSContextRef)c
 {
 	id methodName			= *_methodName;
 	int argumentCount		= *_argumentCount;
@@ -682,7 +708,7 @@ void blah(id a, SEL b)
 		[NSMakeCollectable(name) release];
 		
 		// Get actual argument
-		actualArguments[i] = JSObjectGetProperty(ctx, o, jsName, NULL);
+		actualArguments[i] = JSObjectGetProperty(c, o, jsName, NULL);
 		// NO ! We didn't create it, we don't release it
 //		JSStringRelease(jsName);
 	}
@@ -768,8 +794,9 @@ void blah(id a, SEL b)
 	If NO, we'll return NULL in getProperty
 
 */
-- (BOOL)isMaybeSplitCall:(NSString*)_start forClass:(id)class
++ (BOOL)isMaybeSplitCall:(NSString*)_start forClass:(id)class
 {
+//	NSLog(@"isMaybeSplitCall=%@.%@ %d", _start, class, class == [class class]);
 //	id key = [NSString stringWithFormat:@"%@ %@", [obj class], str];
 	int i;
 
@@ -781,13 +808,16 @@ void blah(id a, SEL b)
 		unsigned int methodCount;
 		Method* methods = class_copyMethodList(class, &methodCount);
 
+//		NSLog(@"isMaybeSplitCall class=%@==============", class);
 		// Search each method of this level
 		for (i=0; i<methodCount; i++)
 		{
 			Method m = methods[i];
 			id name = [NSStringFromSelector(method_getName(m)) lowercaseString];
+//			NSLog(@"isMaybeSplitCall=%@", name);
 			if ([name hasPrefix:start])
 			{
+//				NSLog(@"isMaybeSplitCall FOUND=%@", name);
 				free(methods);
 				return	YES;
 			}
@@ -1166,10 +1196,8 @@ static id autoreleasePool;
 //
 // Collect on top of the run loop, not in some JS function
 //
-+ (void)garbageCollect
-{
-	JSGarbageCollect(NULL);
-}
++ (void)garbageCollect	{	JSGarbageCollect(NULL); }
+- (void)garbageCollect	{	JSGarbageCollect(NULL); }
 
 //
 // Make all root Javascript variables point to null
@@ -1251,25 +1279,23 @@ int	liveInstanceCount	= 0;
 	fullInstanceCount++;
 	liveInstanceCount++;
 
-	id stats = [[JSCocoaController sharedController] instanceStats];
 	id key = [NSMutableString stringWithFormat:@"%@", [o class]];
 	
-	id existingCount = [stats objectForKey:key];
+	id existingCount = [sharedInstanceStats objectForKey:key];
 	int count = 0;
 	if (existingCount)	count = [existingCount intValue];
 	
 	count++;
-	[stats setObject:[NSNumber numberWithInt:count] forKey:key];
+	[sharedInstanceStats setObject:[NSNumber numberWithInt:count] forKey:key];
 }
 + (void)downInstanceCount:(id)o
 {
 //	NSLog(@"DOWN %@ %x", o, o);
 	liveInstanceCount--;
 
-	id stats = [[JSCocoaController sharedController] instanceStats];
 	id key = [NSMutableString stringWithFormat:@"%@", [o class]];
 	
-	id existingCount = [stats objectForKey:key];
+	id existingCount = [sharedInstanceStats objectForKey:key];
 	if (!existingCount)
 	{
 		NSLog(@"downInstanceCount on %@ without any up", o);
@@ -1278,30 +1304,28 @@ int	liveInstanceCount	= 0;
 	int count = [existingCount intValue];
 	count--;
 	
-	if (count)	[stats setObject:[NSNumber numberWithInt:count] forKey:key];
-	else		[stats removeObjectForKey:key];
+	if (count)	[sharedInstanceStats setObject:[NSNumber numberWithInt:count] forKey:key];
+	else		[sharedInstanceStats removeObjectForKey:key];
 }
 + (int)liveInstanceCount:(Class)c
 {
 	id key = [NSMutableString stringWithFormat:@"%@", c];
 	
-	id stats = [[JSCocoaController sharedController] instanceStats];
-	id existingCount = [stats objectForKey:key];
+	id existingCount = [sharedInstanceStats objectForKey:key];
 	if (!existingCount)	return	0;
 	return	[existingCount intValue];
 }
 + (id)liveInstanceHash
 {
-	return	[[JSCocoaController sharedController] instanceStats];
+	return	sharedInstanceStats;
 }
 
 
 + (void)logInstanceStats
 {
-	id stats = [[JSCocoaController sharedController] instanceStats];
-	id allKeys = [stats allKeys];
+	id allKeys = [sharedInstanceStats allKeys];
 	NSLog(@"====instanceStats : %d classes spawned %d live instances (%d since launch, %d dead)====", [allKeys count], liveInstanceCount, fullInstanceCount, fullInstanceCount-liveInstanceCount);
-	for (id key in allKeys)		NSLog(@"====%@=%d", key, [[stats objectForKey:key] intValue]);
+	for (id key in allKeys)		NSLog(@"====%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
 }
 
 
@@ -1323,7 +1347,7 @@ int	liveInstanceCount	= 0;
 {
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
-		JSContextRef c = [[JSCocoaController sharedController] ctx];
+		JSContextRef c = valueAndContext.ctx;
         JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
@@ -1337,7 +1361,7 @@ int	liveInstanceCount	= 0;
 			[JSCocoaController upJSCocoaHashCount];
 		}
 	
-//		NSLog(@"SET JS VALUE %x %@", valueAndContext.value, [JSStringCopyCFString(kCFAllocatorDefault, name) autorelease]);
+//		NSLog(@"SET JS VALUE %x %@", valueAndContext.value, [(id)JSStringCopyCFString(kCFAllocatorDefault, name) autorelease]);
 		JSObjectSetProperty(c, hash, name, valueAndContext.value, kJSPropertyAttributeNone, NULL);
         JSStringRelease(name);
 		return	YES;
@@ -1349,7 +1373,7 @@ int	liveInstanceCount	= 0;
 	JSValueRefAndContextRef valueAndContext = { JSValueMakeNull(nameAndContext.ctx), NULL };
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
-		JSContextRef c = [[JSCocoaController sharedController] ctx];
+		JSContextRef c = nameAndContext.ctx;
         JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
@@ -1369,7 +1393,7 @@ int	liveInstanceCount	= 0;
 {
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
-		JSContextRef c = [[JSCocoaController sharedController] ctx];
+		JSContextRef c = nameAndContext.ctx;
         JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
@@ -1451,7 +1475,7 @@ int	liveInstanceCount	= 0;
 	if (argumentCount == 1)
 	{
 		id	splitMethodName				= @"init";
-		BOOL isSplitCall = [[JSCocoaController sharedController] trySplitCall:&splitMethodName class:self argumentCount:&argumentCount arguments:&arguments ctx:ctx];
+		BOOL isSplitCall = [JSCocoaController trySplitCall:&splitMethodName class:self argumentCount:&argumentCount arguments:&arguments ctx:ctx];
 		if (isSplitCall)	
 		{
 			methodName		= splitMethodName;
@@ -1810,7 +1834,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		{
 //			JSValueRef hashProperty = [callee JSValueForJSName:propertyNameJS];
 
-			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), NULL } ;
+			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), ctx } ;
 			name.value = JSValueMakeString(ctx, propertyNameJS);
 			JSValueRef hashProperty = [callee JSValueForJSName:name].value;
 			if (hashProperty && !JSValueIsNull(ctx, hashProperty))	
@@ -1824,7 +1848,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		// Attempt Zero arg autocall
 		// Object.alloc().init() -> Object.alloc.init
 		//
-		BOOL useAutoCall = JSCocoaSingleton ? [[JSCocoaController sharedController] useAutoCall] : YES;
 		if (useAutoCall)
 		{
 			id callee	= [privateObject object];
@@ -1977,8 +2000,12 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				}
 
 				methodName = propertyName;
+				// Get the meta class if callee is a class
+				class = [callee class];
+				if (callee == class)
+					class = objc_getMetaClass(object_getClassName(class));
 				// Try split start
-				BOOL isMaybeSplit = [[JSCocoaController sharedController] isMaybeSplitCall:methodName forClass:[callee class]];
+				BOOL isMaybeSplit = [JSCocoaController isMaybeSplitCall:methodName forClass:class];
 				// If not split and not NSString, return (if NSString, try to convert to JS string in callAsFunction and use native JS methods)
 				if (!isMaybeSplit && ![callee isKindOfClass:[NSString class]])	
 				{
@@ -2087,7 +2114,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		if ([propertyName rangeOfString:@":"].location != NSNotFound)
 		{
 			JSValueRefAndContextRef v = { jsValue, ctx };
-			[[JSCocoaController sharedController] overloadInstanceMethod:propertyName class:[callee class] jsFunction:v];
+			[JSCocoaController overloadInstanceMethod:propertyName class:[callee class] jsFunction:v];
 			return	true;
 		}
 		
@@ -2164,10 +2191,10 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		{
 			// Set as instance variable
 //			BOOL set = [callee setJSValue:jsValue forJSName:propertyNameJS];
-			JSValueRefAndContextRef value = { JSValueMakeNull(ctx), NULL };
+			JSValueRefAndContextRef value = { JSValueMakeNull(ctx), ctx };
 			value.value = jsValue;
 
-			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), NULL } ;
+			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), ctx } ;
 			name.value = JSValueMakeString(ctx, propertyNameJS);
 			BOOL set = [callee setJSValue:value forJSName:name];
 			if (set)	return	true;
@@ -2202,7 +2229,7 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 
 	id callee	= [privateObject object];
 	if (![callee respondsToSelector:@selector(setJSValue:forJSName:)])	return	false;
-	JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), NULL } ;
+	JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), ctx } ;
 	name.value = JSValueMakeString(ctx, propertyNameJS);
 	return [callee deleteJSValueForJSName:name];
 }
@@ -2319,9 +2346,9 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
 		JSStringRelease(jsCalleeName);
 		JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
-		superSelector = [[JSCocoaController sharedController] selectorForJSFunction:jsCallee];
+		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
 		if (!superSelector)	return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
-		superSelectorClass = [[[JSCocoaController sharedController] classForJSFunction:jsCallee] superclass];
+		superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
 	}
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
@@ -2390,7 +2417,10 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 			if (![callee respondsToSelector:NSSelectorFromString(methodName)])
 			{
 				id			splitMethodName		= privateObject.methodName;
-				BOOL isSplitCall = [[JSCocoaController sharedController] trySplitCall:&splitMethodName class:[callee class] argumentCount:&argumentCount arguments:&arguments ctx:ctx];
+				id class = [callee class];
+				if (callee == class)
+					class = objc_getMetaClass(object_getClassName(class));
+				BOOL isSplitCall = [JSCocoaController trySplitCall:&splitMethodName class:class argumentCount:&argumentCount arguments:&arguments ctx:ctx];
 				if (isSplitCall)		
 				{
 					methodName = splitMethodName;
@@ -2465,8 +2495,8 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	BOOL isVariadic = NO;
 	if (callAddressArgumentCount != argumentCount)	
 	{
-		if (methodName)		isVariadic = [[JSCocoaController sharedController] isMethodVariadic:methodName class:[callee class]];
-		else				isVariadic = [[JSCocoaController sharedController] isFunctionVariadic:functionName];
+		if (methodName)		isVariadic = [[JSCocoaController controllerFromContext:ctx] isMethodVariadic:methodName class:[callee class]];
+		else				isVariadic = [[JSCocoaController controllerFromContext:ctx] isFunctionVariadic:functionName];
 		
 		// Bail if not variadic
 		if (!isVariadic)
@@ -2657,10 +2687,10 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx)
 static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason)
 {
 	// Don't speak and log here as the exception may be caught
-	if ([[JSCocoaController sharedController] logAllExceptions])
+	if (logAllExceptions)
 	{
 		NSLog(@"JSCocoa exception : %@", reason);
-		if ([[JSCocoaController sharedController] isSpeaking])	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
+		if (isSpeaking)	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
 	}
 
 	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);

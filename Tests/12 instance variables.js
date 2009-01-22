@@ -19,7 +19,7 @@
 	//
 	// Allocate a class, set instance variables on it
 	//
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("InstanceVariableTester", "NSObject")
+	var newClass = JSCocoaController.createClass_parentClass("InstanceVariableTester", "NSObject")
 	
 	var container = InstanceVariableTester.alloc.init
 	
@@ -40,13 +40,19 @@
 	//
 	// One more test with a derived class
 	//
-	var newClass2 = JSCocoaController.sharedController.createClass_parentClass("InstanceVariableTester2", "InstanceVariableTester")
+	var newClass2 = JSCocoaController.createClass_parentClass("InstanceVariableTester2", "InstanceVariableTester")
 	var container2 = InstanceVariableTester.alloc.init
 	container2.myValue1 = 7.89
 
 //	JSCocoaController.log('container2.myValue1=' + container2.myValue1)
 	if (container2.myValue1 != 7.89)			throw "(4) Invalid instance variable"	
 	
+
+
+	// Test deletion
+	delete container.myValue1
+	if (('myValue1' in container) != false)		throw "(5) Couldn't delete instance variable"
+
 	
 //	JSCocoaController.log('JSCocoaHashCount=' + JSCocoaController.JSCocoaHashCount)
 
@@ -67,6 +73,9 @@
 //	JSCocoaController.logInstanceStats
 	if (!hasObjCGC)
 		if (Number(count2) != Number(count0))	throw 'invalid hash count after GC — got ' + count2 + ', expected ' + count0
+	
+	
+	
 	
 	
 /*	

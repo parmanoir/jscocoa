@@ -9,7 +9,7 @@
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
 	// Define a new class
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("AutoSetterTester", "NSObject")
+	var newClass = JSCocoaController.createClass_parentClass("AutoSetterTester", "NSObject")
 	
 	
 	var	globalValue = null
@@ -34,14 +34,14 @@
 	var fn			= getterCall
 	var fnName		= 'myValue'
 	var fnEncoding	= objc_encoding('charpointer')
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, AutoSetterTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, AutoSetterTester, fn, fnEncoding)
 
 	// Add setter
 	var fn			= setterCall
 	var fnName		= 'setMyValue:'
 	var fnEncoding	= objc_encoding('void', 'charpointer')
 //	JSCocoaController.log('e=' + fnEncoding);
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, AutoSetterTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, AutoSetterTester, fn, fnEncoding)
 	
 	var o = AutoSetterTester.alloc.init
 	o.release

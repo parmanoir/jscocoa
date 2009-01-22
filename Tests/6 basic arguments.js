@@ -11,7 +11,7 @@
 
 
 	// Define a new class
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("BasicArgumentsTester", "NSObject")
+	var newClass = JSCocoaController.createClass_parentClass("BasicArgumentsTester", "NSObject")
 
 	// Test all encodings with a small float bias (0.1)
 	// that bias will disappear during int conversion
@@ -26,7 +26,7 @@
 		var fnName		= 'test' + encoding + ':' + encoding + ':'
 		var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
-		JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
+		JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
 //		JSCocoaController.log('Adding method ' + fnName + ' with encoding ' + fnEncoding)
 	}
 
@@ -80,7 +80,7 @@
 	var fnName		= 'test' + encoding + ':' + encoding + ':'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
 	
 	var b = tester[fnName](true, false)
 	if (b != true)	throw 'bool failed : true^false != true'
@@ -103,7 +103,7 @@
 	var fnName		= 'testSEL:SEL:'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
 
 	var r = tester[fnName]('hello', 'world')
 	if (r != 'helloworld')	throw 'string failed'
@@ -119,7 +119,7 @@
 	var fnName		= 'testCHARPTR:CHARPTR:'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, BasicArgumentsTester, fn, fnEncoding)
 
 	var r = tester[fnName]('hello', 'world')
 	if (r != 'helloworld')	throw 'string failed'

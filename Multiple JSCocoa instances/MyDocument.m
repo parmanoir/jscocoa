@@ -32,9 +32,9 @@
 
 - (IBAction)clicked:(id)sender
 {
-	NSLog(@"clicked");
-	NSLog(@"hasJSFunctionNamed('click')=%d", [jsc hasJSFunctionNamed:@"click"]);
-	NSLog(@"hasJSFunctionNamed('clicked')=%d", [jsc hasJSFunctionNamed:@"clicked"]);	
+//	NSLog(@"clicked");
+//	NSLog(@"hasJSFunctionNamed('click')=%d", [jsc hasJSFunctionNamed:@"click"]);
+//	NSLog(@"hasJSFunctionNamed('clicked')=%d", [jsc hasJSFunctionNamed:@"clicked"]);	
 	
 	if ([jsc hasJSFunctionNamed:@"click"])	[jsc callJSFunctionNamed:@"click" withArguments:nil];
 }
@@ -47,11 +47,23 @@
     return @"MyDocument";
 }
 
+- (void)close
+{
+	// 
+	[jsc removeObjectWithName:@"document"];
+	[jsc unlinkAllReferences];
+	[jsc garbageCollect];
+
+	[super close];
+}
+
+
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
 
 	// Start JSCocoa
+	
 	jsc = [[JSCocoa alloc] init];
 		
 	// Set our custom variables
@@ -59,8 +71,10 @@
 	[jsc setObject:textField2 withName:@"field2"];
 	[jsc setObject:textField3 withName:@"field3"];
 	[jsc setObject:textField4 withName:@"field4"];
+	NSLog(@"retainCount=%d", [self retainCount]);
 	[jsc setObject:self withName:@"document"];
-	
+	NSLog(@"retainCount=%d", [self retainCount]);
+
 	// Load script
 	id path = [[NSBundle mainBundle] pathForResource:@"documentCode" ofType:@"js"];
 	[jsc evalJSFile:path];

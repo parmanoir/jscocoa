@@ -1,6 +1,7 @@
 
 	function	log(str)	{	JSCocoaController.log('' + str)	}
 
+	// A global variable named __jsc__ set by JSCocoaController in each context
 //	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
 	var jsc = __jsc__
 
@@ -121,8 +122,7 @@
 		if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
 //		JSCocoaController.log('parentclass=' + parentClass)
 
-//		var c = JSCocoaController.sharedController
-		var newClass = __jsc__.create({ 'class' : className, parentClass : parentClassName})
+		var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
 		for (var method in methods)
 		{
 			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
@@ -134,8 +134,8 @@
 				var fn = methods[method]
 				if (!fn || (typeof fn) != 'function')	throw 'Method ' + method + ' not a function'
 
-				if (isInstanceMethod)	__jsc__.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
-				else					__jsc__.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
+				if (isInstanceMethod)	JSCocoa.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
+				else					JSCocoa.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
 			}
 			else
 			{
@@ -183,9 +183,6 @@
 	// Shared class methods : call these at runtime to add outlets, methods, actions to an existing class
 	// 
 	// 
-	// Now set by JSCocoaController
-//	var __jsc__ = JSCocoaController.sharedController
-//	var __jsc__ = jsc
 	
 	//
 	// Outlets are set as properties starting with an underscore, to avoid recursive call in setProperty
@@ -201,12 +198,12 @@
 			if (typeof setter != 'function')	throw 'outlet setter not a function (' + setter + ')'
 			fn = setter
 		}
-		__jsc__.add({ instanceMethod : outletMethod, 'class' : newClass, jsFunction : fn, encoding : encoding })
+		JSCocoa.add({ instanceMethod : outletMethod, 'class' : newClass, jsFunction : fn, encoding : encoding })
 
 		var fn = new Function('return this.JSValueForJSName("_' + name + '")')
 		var encoding = objc_encoding('id')
 		
-		__jsc__.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
+		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
 	}
 	
 	//
@@ -216,7 +213,7 @@
 	{
 		if (name.charAt(name.length-1) != ':')	name += ':'
 		var encoding = objc_encoding('void', 'id')
-		__jsc__.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
+		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
 	}
 	
 	//
@@ -231,7 +228,7 @@
 			if (typeof getter != 'function')	throw 'key getter not a function (' + getter + ')'
 			fn = getter
 		}
-		__jsc__.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('id') })
+		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('id') })
 
 		// Set
 		var setMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
@@ -241,7 +238,7 @@
 			if (typeof setter != 'function')	throw 'key setter not a function (' + setter + ')'
 			fn = setter
 		}
-		__jsc__.add({ instanceMethod : setMethod, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('void', 'id') })
+		JSCocoa.add({ instanceMethod : setMethod, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('void', 'id') })
 	}
 	
 	//
@@ -249,7 +246,7 @@
 	// 
 	function	class_add_method(newClass, name, fn, encoding)
 	{
-		__jsc__.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
+		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
 	}
 	
 	//
@@ -294,7 +291,7 @@
 		// Get parent class
 		var parentClass = this[parentClassName]
 		if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
-		var newClass = __jsc__.create({ 'class' : className, parentClass : parentClassName})
+		var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
 
 		//
 		// Overloaded and new methods
@@ -310,8 +307,8 @@
 				var fn = h.methods[method].fn
 				if (!fn || (typeof fn) != 'function')	throw 'Method ' + method + ' not a function'
 
-				if (isInstanceMethod)	__jsc__.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
-				else					__jsc__.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
+				if (isInstanceMethod)	JSCocoa.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
+				else					JSCocoa.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
 			}
 			else
 			{
@@ -432,7 +429,7 @@
 	
 	function	loadFramework(name)
 	{
-		jsc.loadFrameworkWithName(name)
+		__jsc__.loadFrameworkWithName(name)
 	}
 	
 	

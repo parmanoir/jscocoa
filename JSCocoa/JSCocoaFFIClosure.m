@@ -203,7 +203,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	}
 
 	if (effectiveArgumentCount)	free(args);
-	if (exception)	NSLog(@"%@", [[JSCocoaController sharedController] formatJSException:exception]);
+	if (exception)	NSLog(@"%@", [[JSCocoaController controllerFromContext:ctx] formatJSException:exception]);
 }
 
 

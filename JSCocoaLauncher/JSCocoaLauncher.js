@@ -86,7 +86,8 @@
 //				mdfind "(kMDItemDisplayName = 'jscocoa*'cdw) && (kMDItemFSName = '*.jscocoa'c)"
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like [cd]'*\.jscocoa')"))
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
-				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
+//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
+				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*')"))
 				query.startQuery
 
 
@@ -173,7 +174,7 @@ log('*********results**********')
 //	NON RESTRIX A HOME -> SINON LES VOLUMES SON SOYRA TROUVE !
 			
 				log('GOT NOTIFICATION' + notification)
-				log(notification.object.results.length)
+				log('count=' + notification.object.results.length)
 /*
 				for (var i=0; i<l; i++)
 					log(notification.object.results[i].valueForAttribute('kMDItemFSName') + '=' + notification.object.results[i].valueForAttribute('kMDItemContentModificationDate'))
@@ -214,10 +215,11 @@ log('*********results**********')
 	}
 	
 	
-
+	
 	function	spotLightNotified(notification)
 	{
 		log('notify result')
+		results	= notification.object.results
 		
 		resultCount	= notification.object.results.length
 		
@@ -232,12 +234,68 @@ log('*********results**********')
 	}
 	function	listFrameChanged(list)
 	{
+		if (!scrollView)	return
 		// STRUCT 
 		log('notify frame change ' + scrollView + ' rect=' + scrollView.documentVisibleRect)
+		
+		var from = Math.floor(scrollView.documentVisibleRect.origin.y/rowHeight)
+		var to = from + Math.ceil(scrollView.documentVisibleRect.size.height/rowHeight)
+		if (to > results.length) to = results.length
+		log('displaying from ' + from + ' to ' + to + ' (' + (to-from) + ')')
+
+
+		var usedViews = []
+		for (var i=from; i<to; i++)
+		{
+			var r = results[i]
+			var v = getView()
+			v.frameOrigin = { x : 0, y : rowHeight*i }
+			usedViews.push(v)
+			log('=>start add')
+			log('superview=' + v.superview + ' parent=' + scrollView + ' ?=' + (v.superview==scrollView))
+			scrollView.addSubview(v)
+			log('=>END ADD')
+		}
+		
+		for (var i=0; i<views.length; i++)
+		{
+			views[i].frameOrigin = { x : -30000, y : -30000 }
+		}
+		
+		views = usedViews
+/*		
+		if (results.length < 100)	return
+		var r = results[3]
+		log('ATTS=' + r.valuesForAttributes(r.attributes))
+		for (var i=0; i<results[0].attributes.length; i++)
+		{
+			log(results[0].attributes[i] + '=' + results[0].valueFor results[0].attributes
+		}
+		log('id=' + results[3].valueForAttribute('kMDItemID'))
+*/		
+	}
+	
+	var views = []
+	function	getView()
+	{
+		if (views.length)	return	views.pop()
+		
+		log('*******************************!!!!!!!!SPAWN')
+		
+		// Load a rowView to get its height
+		NSBundle.loadNibNamed_owner('RowView', appDelegate)
+//		this.rowHeight = this.rowView.frame.size.height
+		var view = appDelegate.rowView
+		appDelegate.rowView = null
+		return	view
 	}
 
 	
-	
+	/*
+
+		TOFIX : rowView outlet in ListView !
+
+	*/
 	
 
 	var appDelegate
@@ -247,6 +305,4 @@ log('*********results**********')
 
 	var processes = {}
 
-
-	var str = describeStruct({ a : 'b', c : { a1 : 'hello', b2 : 'world', c3 : { a : 54 } }, d : 'elklk' })
-	log('struct=' + str)
+	var results

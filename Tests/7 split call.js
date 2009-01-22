@@ -4,7 +4,7 @@
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
 	// Define a new class
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("SplitCallTester", "NSObject")
+	var newClass = JSCocoaController.createClass_parentClass("SplitCallTester", "NSObject")
 	
 	//
 	// Test bool
@@ -18,7 +18,7 @@
 	
 
 //	JSCocoaController.log('Adding method ' + fnName + ' with encoding ' + fnEncoding)
-	JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding(fnName, SplitCallTester, fn, fnEncoding)
+	JSCocoaController.addInstanceMethod_class_jsFunction_encoding(fnName, SplitCallTester, fn, fnEncoding)
 	
 	var o = SplitCallTester.alloc.init
 	o.release

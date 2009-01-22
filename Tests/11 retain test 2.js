@@ -15,7 +15,7 @@
 	// Cannot be tested as ObjC GC has no way of blocking the main thread to collect everything
 	if (!hasObjCGC)
 	{
-		var newClass = JSCocoaController.sharedController.createClass_parentClass("SomeRetainCountTest", "NSObject")
+		var newClass = JSCocoaController.createClass_parentClass("SomeRetainCountTest", "NSObject")
 
 		var count0 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
 		

@@ -18,6 +18,8 @@
 		3D3B50430F1A366900D60188 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3B503A0F1A366900D60188 /* JSCocoaPrivateObject.m */; };
 		3D3B50570F1A369B00D60188 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B50560F1A369B00D60188 /* JavaScriptCore.framework */; };
 		3D3B52140F1BA03400D60188 /* documentCode.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D3B52130F1BA03400D60188 /* documentCode.js */; };
+		3DB064E80F28CE360043C238 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB064E70F28CE360043C238 /* ApplicationController.m */; };
+		3DB065150F28CEF10043C238 /* classCode.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB065140F28CEF10043C238 /* classCode.js */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
@@ -55,6 +57,9 @@
 		3D3B503A0F1A366900D60188 /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaPrivateObject.m; sourceTree = "<group>"; };
 		3D3B50560F1A369B00D60188 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
 		3D3B52130F1BA03400D60188 /* documentCode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = documentCode.js; sourceTree = "<group>"; };
+		3DB064E60F28CE360043C238 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		3DB064E70F28CE360043C238 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
+		3DB065140F28CEF10043C238 /* classCode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = classCode.js; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Multiple JSCocoa instances.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiple JSCocoa instances.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -114,6 +119,9 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3DB064E60F28CE360043C238 /* ApplicationController.h */,
+				3DB064E70F28CE360043C238 /* ApplicationController.m */,
+				3DB065140F28CEF10043C238 /* classCode.js */,
 				3D3B52130F1BA03400D60188 /* documentCode.js */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
@@ -219,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D3B52140F1BA03400D60188 /* documentCode.js in Resources */,
+				3DB065150F28CEF10043C238 /* classCode.js in Resources */,
 				3D3B503C0F1A366900D60188 /* class.js in Resources */,
 				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
@@ -242,6 +251,7 @@
 				3D3B50410F1A366900D60188 /* JSCocoaFFIClosure.m in Sources */,
 				3D3B50420F1A366900D60188 /* JSCocoaLib.m in Sources */,
 				3D3B50430F1A366900D60188 /* JSCocoaPrivateObject.m in Sources */,
+				3DB064E80F28CE360043C238 /* ApplicationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

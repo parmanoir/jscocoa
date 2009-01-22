@@ -12,10 +12,6 @@
 int main(int argc, char *argv[])
 {
 	[JSCocoaController allocAutoreleasePool];
-	
-	// Load class construction kit
-	id classJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/class.js", [[NSBundle mainBundle] bundlePath]];
-	[[JSCocoaController sharedController] evalJSFile:classJSFile];
 
 	// Load jscocoa list
 	id mainJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/JSCocoaLauncher.js", [[NSBundle mainBundle] bundlePath]];

@@ -30,39 +30,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
-
-	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
-	id	closureHash;
-	// Given a jsFunction, retrieve its selector
-	id	jsFunctionSelectors;
-	// Given a jsFunction, retrieve which class it's attached to
-	id	jsFunctionClasses;
-	// Given a class, return the parent class implementing JSCocoaHolder method
-	id	jsClassParents;
-	
-	// Given a class + methodName, retrieve its jsFunction
-	id	jsFunctionHash;
-	
-	// Instance stats
-	id	instanceStats;
-	
-	// Split call cache
-	id	splitCallCache;
-	
-	// Used to convert callbackObject (zero call)
-	JSObjectRef	callbackObjectValueOfCallback;
-	
-	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
-	BOOL	useAutoCall;
-	// If true, all exceptions will be sent to NSLog, event if they're caught later on by some Javascript core
-	BOOL	logAllExceptions;
-	// Is speaking when throwing exceptions
-	BOOL	isSpeaking;
 }
-
-@property BOOL useAutoCall;
-@property BOOL isSpeaking;
-@property BOOL logAllExceptions;
 
 + (id)sharedController;
 + (id)controllerFromContext:(JSContextRef)ctx;
@@ -73,6 +41,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // Garbage collection
 //
 + (void)garbageCollect;
+- (void)garbageCollect;
 - (void)unlinkAllReferences;
 + (void)upJSCocoaPrivateObjectCount;
 + (void)downJSCocoaPrivateObjectCount;
@@ -91,10 +60,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
 - (JSValueRefAndContextRef)evalJSString:(NSString*)script;
-- (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
++ (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
-- (id)unboxCallJSFunctionNamed:(NSString*)name withArguments:(id)firstArg, ... NS_REQUIRES_NIL_TERMINATION;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
 - (BOOL)setObject:(id)object withName:(id)name;
 - (BOOL)removeObjectWithName:(id)name;
@@ -109,11 +77,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Class handling
 //
-- (BOOL)overloadInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext;
-- (BOOL)overloadClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext;
++ (BOOL)overloadInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext;
++ (BOOL)overloadClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext;
 
-- (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding;
-- (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding;
++ (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding;
++ (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding;
 
 // Tests
 - (BOOL)runTests:(NSString*)path;
@@ -131,7 +99,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding;
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder;
 
-- (JSObjectRef)callbackObjectValueOfCallback;
 + (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;

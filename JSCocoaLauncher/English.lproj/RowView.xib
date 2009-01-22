@@ -156,10 +156,10 @@
 						<object class="NSButtonCell" key="NSCell" id="495766160">
 							<int key="NSCellFlags">-2080244224</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents">Round Rect Button</string>
+							<string key="NSContents"/>
 							<reference key="NSSupport" ref="506004973"/>
 							<reference key="NSControlView" ref="92921235"/>
-							<int key="NSButtonFlags">-2042347265</int>
+							<int key="NSButtonFlags">-2041822977</int>
 							<int key="NSButtonFlags2">164</int>
 							<object class="NSCustomResource" key="NSNormalImage">
 								<string key="NSClassName">NSImage</string>
@@ -176,6 +176,33 @@
 						<int key="NSvFlags">265</int>
 						<string key="NSFrame">{{283, 11}, {18, 19}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<bool key="NSViewIsLayerTreeHost">YES</bool>
+						<object class="NSShadow" key="NSViewShadow">
+							<double key="NSShadowVert">-1.000000e+00</double>
+							<double key="NSShadowBlurRadius">1.000000e+00</double>
+							<object class="NSColor" key="NSShadowColor" id="185088881">
+								<int key="NSColorSpace">1</int>
+								<bytes key="NSRGB">MCAwIDAgMC40NwA</bytes>
+							</object>
+						</object>
+						<object class="NSArray" key="NSViewContentFilters">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="CIFalseColor">
+								<object class="CIColor" key="CI_inputColor0">
+									<float key="red">1.000000e+00</float>
+									<float key="green">7.874012e-03</float>
+									<float key="blue">7.874012e-03</float>
+									<float key="alpha">1.000000e+00</float>
+								</object>
+								<object class="CIColor" key="CI_inputColor1">
+									<float key="red">6.741571e-02</float>
+									<float key="green">6.094156e-02</float>
+									<float key="blue">5.457659e-02</float>
+									<float key="alpha">1.000000e+00</float>
+								</object>
+								<bool key="CIEnabled">YES</bool>
+							</object>
+						</object>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="395149936">
 							<int key="NSCellFlags">-2080244224</int>
@@ -400,8 +427,16 @@
 					<string>16.IBPluginDependency</string>
 					<string>17.IBPluginDependency</string>
 					<string>18.IBPluginDependency</string>
+					<string>18.IBViewIntegration.shadowBlurRadius</string>
+					<string>18.IBViewIntegration.shadowColor</string>
+					<string>18.IBViewIntegration.shadowOffsetHeight</string>
+					<string>18.IBViewIntegration.shadowOffsetWidth</string>
 					<string>19.IBPluginDependency</string>
 					<string>20.IBPluginDependency</string>
+					<string>20.IBViewIntegration.shadowBlurRadius</string>
+					<string>20.IBViewIntegration.shadowColor</string>
+					<string>20.IBViewIntegration.shadowOffsetHeight</string>
+					<string>20.IBViewIntegration.shadowOffsetWidth</string>
 					<string>21.IBPluginDependency</string>
 					<string>7.IBPluginDependency</string>
 					<string>8.IBPluginDependency</string>
@@ -423,8 +458,19 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<real value="1.000000e+00"/>
+					<object class="NSColor">
+						<int key="NSColorSpace">3</int>
+						<bytes key="NSWhite">MCAwLjY4MDAwMDAxAA</bytes>
+					</object>
+					<real value="-1.000000e+00"/>
+					<real value="0.000000e+00"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<real value="1.000000e+00"/>
+					<reference ref="185088881"/>
+					<real value="-1.000000e+00"/>
+					<real value="0.000000e+00"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

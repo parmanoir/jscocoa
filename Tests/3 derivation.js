@@ -1,7 +1,7 @@
 
 
 	// Define a new class
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("NSDerivedObjectTest", "NSObject")
+	var newClass = JSCocoaController.createClass_parentClass("NSDerivedObjectTest", "NSObject")
 
 	// Allocate instance
 	var o = NSDerivedObjectTest.alloc.init
@@ -24,7 +24,7 @@
 		return	parentRetainCount
 	}
 
-	var added = JSCocoaController.sharedController.overloadInstanceMethod_class_jsFunction('retainCount', NSDerivedObjectTest, myRetainCount)
+	var added = JSCocoaController.overloadInstanceMethod_class_jsFunction('retainCount', NSDerivedObjectTest, myRetainCount)
 
 
 	if (!added)	throw "Couldn't overload method 1"
@@ -39,7 +39,7 @@
 
 	
 	// Derivation of derivation
-	var newClass = JSCocoaController.sharedController.createClass_parentClass("NSDerivedObjectTest2", "NSDerivedObjectTest")
+	var newClass = JSCocoaController.createClass_parentClass("NSDerivedObjectTest2", "NSDerivedObjectTest")
 
 	// Allocate instance
 	var o2 = NSDerivedObjectTest2.alloc.init
@@ -53,7 +53,7 @@
 		parentRetainCount2 = this.Super(arguments)
 		return	parentRetainCount2
 	}
-	var added = JSCocoaController.sharedController.overloadInstanceMethod_class_jsFunction('retainCount', NSDerivedObjectTest2, myRetainCount2)
+	var added = JSCocoaController.overloadInstanceMethod_class_jsFunction('retainCount', NSDerivedObjectTest2, myRetainCount2)
 	if (!added)	throw "Couldn't overload method 2"
 
 

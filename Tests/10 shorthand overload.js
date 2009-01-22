@@ -4,21 +4,21 @@
 
 	// Shorthand notation for over(ride|load)ing
 
-	JSCocoaController.sharedController.create( { 'class' : 'ShorthandOverloadTest', parentClass : 'NSObject' } )
-	JSCocoaController.sharedController.create( { 'class' : 'ShorthandOverloadTest2', parentClass : 'ShorthandOverloadTest' } )
+	JSCocoa.create( { 'class' : 'ShorthandOverloadTest', parentClass : 'NSObject' } )
+	JSCocoa.create( { 'class' : 'ShorthandOverloadTest2', parentClass : 'ShorthandOverloadTest' } )
 
 
 	function	fn(a, b, c)
 	{
 		return '1' + a + '2' + b + '3' + c + '4'
 	}
-	var added = JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding('performStuff:withThis:andThat:', ShorthandOverloadTest, fn, objc_encoding('charpointer', 'charpointer', 'charpointer', 'charpointer'))
+	var added = JSCocoa.addInstanceMethod_class_jsFunction_encoding('performStuff:withThis:andThat:', ShorthandOverloadTest, fn, objc_encoding('charpointer', 'charpointer', 'charpointer', 'charpointer'))
 
 	function	fn2Add(a, b)
 	{
 		return a+b
 	}
-	var added = JSCocoaController.sharedController.addInstanceMethod_class_jsFunction_encoding('add:and:', ShorthandOverloadTest, fn2Add, objc_encoding('int', 'int', 'int'))
+	var added = JSCocoa.addInstanceMethod_class_jsFunction_encoding('add:and:', ShorthandOverloadTest, fn2Add, objc_encoding('int', 'int', 'int'))
 
 	var o = ShorthandOverloadTest2.alloc.init
 
@@ -47,7 +47,7 @@
 	var c = 'world'
 	var r = o['performStuff:withThis:andThat:'](a, b, c)
 //	JSCocoaController.log('r=' + r)
-	if (r != ('^' + a + '!' + b + '?' + c + '$' + '1' + a + '2' + b + '3' + c + '4'))	throw	'shorthand overload faield'
+	if (r != ('^' + a + '!' + b + '?' + c + '$' + '1' + a + '2' + b + '3' + c + '4'))	throw	'shorthand overload failed'
 
 
 	// LATER : Direct add method via assign ?

@@ -38,6 +38,7 @@ int runCount = 0;
 	BOOL b = [[JSCocoaController sharedController] runTests:path];
 	[self garbageCollect:nil];
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
+	else	NSLog(@"All tests ran OK !");
 //	NSLog(@"===========OK ! Ran %d from %@", runCount, path);
 	runCount++;
 }
