@@ -154,6 +154,7 @@
 - (ffi_type*)ffi_type
 {
 	if (!typeEncoding)	return	NULL;
+	if (pointerTypeEncoding)	return	&ffi_type_pointer;
 
 	if (typeEncoding == '{')	return	&structureType;
 

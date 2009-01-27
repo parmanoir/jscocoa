@@ -42,7 +42,7 @@
 	var rect1 = new outArgument
 	var rect2 = new outArgument
 	NSDivideRect(rect, rect1, rect2, 5, NSMinXEdge);
-
+	log('PASSED arg')
 
 //	[NSScanner scanDecimal:]
 //	[NSFileManager fileExistsAtPath:isDirectory:}
