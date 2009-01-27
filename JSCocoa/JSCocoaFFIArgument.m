@@ -31,6 +31,8 @@
 	structureTypeEncoding	= nil;
 	structureType.elements	= NULL;
 	
+	pointerTypeEncoding		= nil;
+	
 	// Used to store string data while converting JSStrings to char*
 	customData		= nil;
 	
@@ -39,8 +41,10 @@
 
 - (void)cleanUp
 {
-	if (ptr && ownsStorage)	free(ptr);
-	if (customData)			[customData release];
+	if (structureTypeEncoding)	[structureTypeEncoding release];
+	if (pointerTypeEncoding)	[pointerTypeEncoding release];
+	if (ptr && ownsStorage)		free(ptr);
+	if (customData)				[customData release];
 
 	if (structureType.elements)	free(structureType.elements);
 	ptr = NULL;
@@ -48,13 +52,11 @@
 
 - (void)dealloc
 {
-	if (structureTypeEncoding) [structureTypeEncoding release];
 	[self cleanUp];
 	[super dealloc];
 }
 - (void)finalize
 {
-	if (structureTypeEncoding) [structureTypeEncoding release];
 	[self cleanUp];
 	[super finalize];
 }
@@ -105,6 +107,7 @@
 {
 	typeEncoding = '{';
 	structureTypeEncoding = [[NSString alloc] initWithString:encoding];
+	
 	if (storagePtr)
 	{
 		ownsStorage		= NO;
@@ -132,7 +135,20 @@
 	structureType.elements[elementCount] = NULL;
 }
 
+//
+// type o handling
+//	(pointers passed as arguments to a function, function writes values to these arguments)
+//
+- (void)setPointerTypeEncoding:(NSString*)encoding
+{
+	typeEncoding = '^';
+	pointerTypeEncoding = [[NSString alloc] initWithString:encoding];
+}
 
+- (id)pointerTypeEncoding
+{
+	return	pointerTypeEncoding;
+}
 
 
 - (ffi_type*)ffi_type
@@ -150,8 +166,9 @@
 - (void*)allocateStorage
 {
 	if (!typeEncoding)	return	NULL;
-	
-	[self cleanUp];
+
+	// NO ! will destroy structureTypeEncoding
+//	[self cleanUp];
 	// Special case for structs
 	if (typeEncoding == '{')
 	{
@@ -169,16 +186,29 @@
 	int size = [JSCocoaFFIArgument sizeOfTypeEncoding:typeEncoding];
 
 	// Bail if we can't handle our type
-	if (size == -1)	return	NULL;
+	if (size == -1)	return	NSLog(@"Can't handle type %c", typeEncoding), NULL;
 	if (size >= 0)	
 	{
 		int	minimalReturnSize = sizeof(long);
 		if (isReturnValue && size < minimalReturnSize)	size = minimalReturnSize;
 		ptr = malloc(size);
-		memset(ptr, size, 1);
 	}
 //	NSLog(@"Allocated size=%d %x for object %@", size, ptr, self);
 	return	ptr;
+}
+
+// type o
+- (void*)allocatePointerStorage
+{
+	typeEncoding = [pointerTypeEncoding UTF8String][1];
+	if (typeEncoding == '{')
+	{
+		structureTypeEncoding = [pointerTypeEncoding substringFromIndex:1];
+		[structureTypeEncoding retain];
+		NSLog(@"STRUCTCHECK");
+	}
+	[self allocateStorage];
+	return ptr;
 }
 
 - (void**)storage
@@ -191,6 +221,12 @@
 		if ((address % alignOnSize) != 0)
 			address = (address+alignOnSize) & ~(alignOnSize-1);
 		return (void**)address;
+	}
+	
+	// Type o : return writable address
+	if (pointerTypeEncoding)
+	{
+		return &ptr;
 	}
 
 	return ptr;
@@ -525,7 +561,7 @@
 		{
 			char* c2 = c+1;
 			while (c2 && *c2 != '"') c2++;
-			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSASCIIStringEncoding] autorelease];
+			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
 			c = c2;
 			
 			// Skip '"'
@@ -590,7 +626,7 @@
 		{
 			char* c2 = c+1;
 			while (c2 && *c2 != '"') c2++;
-			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSASCIIStringEncoding] autorelease];
+			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
 			c = c2;
 			
 			// Skip '"'
@@ -729,17 +765,16 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	return	NULL;
 }
 
+
+#pragma mark Structure encoding, size
+
 /*
 	From
 		{_NSRect={_NSPoint=ff}{_NSSize=ff}}
 		
 	Return
 		{_NSRect="origin"{_NSPoint="x"f"y"f}"size"{_NSSize="width"f"height"f}}
-
 */
-
-#pragma mark Structure encoding, size
-
 + (NSString*)structureNameFromStructureTypeEncoding:(NSString*)encoding
 {
 	// Extract structure name
@@ -749,7 +784,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	if (*c == '_')	c++;
 	char*	c2 = c;
 	while (*c2 && *c2 != '=') c2++;
-	return [[[NSString alloc] initWithBytes:c length:(c2-c) encoding:NSASCIIStringEncoding] autorelease];
+	return [[[NSString alloc] initWithBytes:c length:(c2-c) encoding:NSUTF8StringEncoding] autorelease];
 }
 
 + (NSMutableArray*)encodingsFromStructureTypeEncoding:(NSString*)encoding

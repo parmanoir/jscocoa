@@ -72,6 +72,7 @@
 				// Globals
 				rowHeight	= appDelegate.rowHeight
 				scrollView	= this.scrollView
+				scrollViewContent	= this.scrollViewContent
 
 
 				// Start query
@@ -201,6 +202,13 @@ log('*********results**********')
 		{
 			return	true
 		}
+		
+		Method('acceptsFirstResponder').encoding('bool void').fn = function ()
+		{
+			return	true
+		}
+		
+		
 		Method('drawRect:').fn = function ()
 		{
 			var rect = this.superview.superview.documentVisibleRect
@@ -232,35 +240,58 @@ log('*********results**********')
 		appDelegate.statusText.stringValue = resultCount + ' jscocoa' + (resultCount > 1 ? 's' : '')
 
 	}
+	
+	var discardFrameChanged = false
 	function	listFrameChanged(list)
 	{
 		if (!scrollView)	return
 		// STRUCT 
-		log('notify frame change ' + scrollView + ' rect=' + scrollView.documentVisibleRect)
+//		log('notify frame change ' + scrollView + ' rect=' + scrollView.documentVisibleRect)
 		
 		var from = Math.floor(scrollView.documentVisibleRect.origin.y/rowHeight)
 		var to = from + Math.ceil(scrollView.documentVisibleRect.size.height/rowHeight)
 		if (to > results.length) to = results.length
-		log('displaying from ' + from + ' to ' + to + ' (' + (to-from) + ')')
+//		log('displaying from ' + from + ' to ' + to + ' (' + (to-from) + ')')
+
+		if (discardFrameChanged)
+		{
+			discardFrameChanged = false
+			return
+		}
+		
+
+
+
+
+
+if (views.length)	return
+
 
 
 		var usedViews = []
+//		from = 0
+//		to = 1200
+//		to = 12
 		for (var i=from; i<to; i++)
 		{
 			var r = results[i]
 			var v = getView()
 			v.frameOrigin = { x : 0, y : rowHeight*i }
 			usedViews.push(v)
-			log('=>start add')
-			log('superview=' + v.superview + ' parent=' + scrollView + ' ?=' + (v.superview==scrollView))
-			scrollView.addSubview(v)
-			log('=>END ADD')
+//			log('=>start add')
+//			log('superview=' + v.superview + ' parent=' + scrollView + ' ?=' + (v.superview==scrollView))
+//			scrollView.addSubview(v)
+//			log('=>END ADD')
 		}
+		discardFrameChanged = true
 		
 		for (var i=0; i<views.length; i++)
 		{
 			views[i].frameOrigin = { x : -30000, y : -30000 }
 		}
+		
+		
+//		NON PARENTÉ A LISTVIEW !
 		
 		views = usedViews
 /*		
@@ -280,13 +311,14 @@ log('*********results**********')
 	{
 		if (views.length)	return	views.pop()
 		
-		log('*******************************!!!!!!!!SPAWN')
+//		log('*******************************!!!!!!!!SPAWN')
 		
 		// Load a rowView to get its height
 		NSBundle.loadNibNamed_owner('RowView', appDelegate)
 //		this.rowHeight = this.rowView.frame.size.height
 		var view = appDelegate.rowView
 		appDelegate.rowView = null
+		scrollViewContent.addSubview(view)
 		return	view
 	}
 
@@ -302,7 +334,11 @@ log('*********results**********')
 	var resultCount
 	var rowHeight
 	var scrollView
+	var scrollViewContent
 
 	var processes = {}
 
 	var results
+
+
+

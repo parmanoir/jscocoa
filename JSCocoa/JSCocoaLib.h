@@ -7,16 +7,26 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "JSCocoa.h"
 
 
-@interface JSCocoaMemoryBuffer : NSObject
+@interface JSCocoaOutArgument : NSObject
 {
 	
+	void*		ptr;
+	char		typeEncoding;
+	id			structureTypeEncoding;
+	
+	JSCocoaFFIArgument*	arg;
 }
 
 //- (id)init;
 //- (void)dealloc;
 
 //- (BOOL)pushData:(?)data ofType:(char)typeEncoding;
+
+- (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)arg;
+- (JSValueRef)outObjectInContext:(JSContextRef)ctx;
+
 
 @end

@@ -22,6 +22,7 @@
 [[JSCocoa sharedController] setUseAutoCall:YES];
 
 
+
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 //	objc_assignIvar();
 }

@@ -103,6 +103,10 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;
 
+- (BOOL)useAutoCall;
+- (void)setUseAutoCall:(BOOL)b;
+
+
 
 @end
 

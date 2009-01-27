@@ -8,6 +8,7 @@
 
 
 #import "JSCocoaController.h"
+#import "JSCocoaLib.h"
 
 #pragma mark JS objects forward definitions
 
@@ -56,7 +57,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #pragma mark JSCocoaController
 
 @implementation JSCocoaController
-//@synthesize useAutoCall, isSpeaking, logAllExceptions;
 
 	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
 	static	id	closureHash;
@@ -94,7 +94,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 {
 //	NSLog(@"JSCocoa : %x spawning", self);
 	id o	= [super init];
-
+	
 	@synchronized(self)
 	{
 		if (!sharedInstanceStats)	
@@ -178,19 +178,28 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	JSStringRelease(jsName);
 	
 
-//	double t0 = CFAbsoluteTimeGetCurrent();
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
 	[self loadFrameworkWithName:@"Foundation"];
 	[self loadFrameworkWithName:@"CoreGraphics" inPath:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
 #endif	
-//	double t1 = CFAbsoluteTimeGetCurrent();
-//	NSLog(@"%f", t1-t0);
 
 	// Load class kit
 	[self evalJSFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"]];
 	
+/*
+	// Check out 'o' type_modifier
+	NSLog(@"scanDecimal= %s", [self typeEncodingOfMethod:@"scanDecimal:" class:@"NSScanner"]);
+	NSLog(@"scanDouble= %s", [self typeEncodingOfMethod:@"scanDouble:" class:@"NSScanner"]);
+	NSLog(@"fileExistsAtPath:isDirectory:= %s", [self typeEncodingOfMethod:@"fileExistsAtPath:isDirectory:" class:@"NSFileManager"]);
+	NSLog(@"sortedArrayUsingFunction:context:= %s", [self typeEncodingOfMethod:@"sortedArrayUsingFunction:context:" class:@"NSArray"]);
+	NSLog(@"instantiateNibWithOwner:topLevelObjects:= %s", [self typeEncodingOfMethod:@"instantiateNibWithOwner:topLevelObjects:" class:@"NSNib"]);
+*/
+
+	
+
+
 	return	o;
 }
 
@@ -292,6 +301,15 @@ static id JSCocoaSingleton = NULL;
 	return	o;
 }
 
+- (BOOL)useAutoCall
+{
+	return	useAutoCall;
+}
+- (void)setUseAutoCall:(BOOL)b
+{
+	useAutoCall = b;
+}
+
 
 - (JSGlobalContextRef)ctx
 {
@@ -382,7 +400,10 @@ static id JSCocoaSingleton = NULL;
 }
 
 #pragma mark Common encoding parsing
-// Use method_copyArgumentType ?
+//
+// This is parsed from method_getTypeEncoding
+//
+//	Later : Use method_copyArgumentType ?
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding
 {
 	id argumentEncodings = [NSMutableArray array];
@@ -401,7 +422,7 @@ static id JSCocoaSingleton = NULL;
 			int count = 0;
 			[JSCocoaFFIArgument typeEncodingsFromStructureTypeEncoding:[NSString stringWithUTF8String:argsParser] parsedCount:&count];
 
-			id encoding = [[NSString alloc] initWithBytes:argsParser length:count encoding:NSASCIIStringEncoding];
+			id encoding = [[NSString alloc] initWithBytes:argsParser length:count encoding:NSUTF8StringEncoding];
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
 			// Set return value
 			if ([argumentEncodings count] == 0)	[argumentEncoding setIsReturnValue:YES];
@@ -415,15 +436,25 @@ static id JSCocoaSingleton = NULL;
 		else
 		{
 			// Custom handling for pointers as they're not one char long.
-			// ##TOFIX : copy pointer type (^i, ^{NSRect}) to the argumentEncoding
-			char type = *argsParser;
+//			char type = *argsParser;
+			char* typeStart = argsParser;
 			if (*argsParser == '^')
 				while (*argsParser && !(*argsParser >= '0' && *argsParser <= '9'))	argsParser++;
 
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
 			// Set return value
 			if ([argumentEncodings count] == 0)	[argumentEncoding setIsReturnValue:YES];
-			[argumentEncoding setTypeEncoding:type];
+			
+			// If pointer, copy pointer type (^i, ^{NSRect}) to the argumentEncoding
+			if (*typeStart == '^')
+			{
+				id encoding = [[NSString alloc] initWithBytes:typeStart length:argsParser-typeStart encoding:NSUTF8StringEncoding];
+				[argumentEncoding setPointerTypeEncoding:encoding];
+				[encoding release];
+			}
+			else
+				[argumentEncoding setTypeEncoding:*typeStart];
+			
 			[argumentEncodings addObject:argumentEncoding];
 			[argumentEncoding release];
 		}
@@ -432,6 +463,9 @@ static id JSCocoaSingleton = NULL;
 	return	argumentEncodings;
 }
 
+//
+// This is parsed from BridgeSupport's xml
+//
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder
 {
 	id argumentEncodings = [NSMutableArray array];
@@ -457,9 +491,13 @@ static id JSCocoaSingleton = NULL;
 		
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
 			// Set return value
-			if ([argumentEncodings count] == 0)	[argumentEncoding setIsReturnValue:YES];
-			if (typeEncodingChar == '{')		[argumentEncoding setStructureTypeEncoding:typeEncoding];
-			else								[argumentEncoding setTypeEncoding:typeEncodingChar];
+			if ([argumentEncodings count] == 0)		[argumentEncoding setIsReturnValue:YES];
+					if (typeEncodingChar == '{')	[argumentEncoding setStructureTypeEncoding:typeEncoding];
+			else	if (typeEncodingChar == '^')
+			{
+				[argumentEncoding setPointerTypeEncoding:typeEncoding];
+			}
+			else									[argumentEncoding setTypeEncoding:typeEncodingChar];
 
 			// Add argument
 			if (!isReturnValue)
@@ -1704,6 +1742,12 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		return [thisPrivateObject jsValueRef];
 	}
 	
+	if ([thisPrivateObject.object isKindOfClass:[NSNumber class]])
+	{
+		return	JSValueMakeNumber(ctx, [thisPrivateObject.object doubleValue]);
+	}
+	
+	
 //	NSLog(@"valueOfCallback %@ %@", thisPrivateObject.type, thisPrivateObject.structureName);
 
 	// Convert to string
@@ -1711,7 +1755,12 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	
 	// Object
 	if ([thisPrivateObject.type isEqualToString:@"@"])
+	{
+		if ([thisPrivateObject.object isKindOfClass:[JSCocoaOutArgument class]])
+			return	[(JSCocoaOutArgument*)thisPrivateObject.object outObjectInContext:ctx];
+
 		toString = [NSString stringWithFormat:@"%@", [[thisPrivateObject object] description]];
+	}
 
 	// Struct
 	if ([thisPrivateObject.type isEqualToString:@"struct"])
@@ -2212,7 +2261,8 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 	// Allow general setting on structs
 	if ([privateObject.type isEqualToString:@"struct"])	return	false;
 
-	// ## Setter should fail AND WARN if propertyName can't be set. 
+	// Setter fails AND WARNS if propertyName can't be set
+	// This happens of non-JSCocoa ObjC objects, eg NSWorkspace.sharedWorspace.someVariable = value
 	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting", privateObject.object]), false;
 }
 
@@ -2280,7 +2330,7 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
-	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
+//	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	JSValueRef*	superArguments = NULL;
 	id	superSelector = NULL;
 	id	superSelectorClass = NULL;
@@ -2307,6 +2357,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	// Javascript custom methods
 	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
 	{
+		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
+		if ([privateObject.methodName isEqualToString:@"toString"])	return	JSValueMakeString(ctx, JSValueToStringCopy(ctx, jsValue, NULL));
+		return	jsValue;
+/*	
 		// Custom handling for NSNumber
 		if ([privateObject.methodName isEqualToString:@"valueOf"] && [thisPrivateObject.object isKindOfClass:[NSNumber class]])
 		{
@@ -2319,6 +2373,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		JSValueRef jsValueToString = JSValueMakeString(ctx, jsToString);
 		JSStringRelease(jsToString);
 		return	jsValueToString;
+*/
 	}
 	
 	// Super handling : get method name and move js arguments to C array
@@ -2570,11 +2625,38 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 			else
 				arg		= [argumentEncodings objectAtIndex:idx+1];
 
+
 			// Convert argument
 			JSValueRef			jsValue	= arguments[i];
-			BOOL	converted = [arg fromJSValueRef:jsValue inContext:ctx];
-			if (!converted)		return	throwException(ctx, exception, [NSString stringWithFormat:@"Argument %c not converted", [arg typeEncoding]]), NULL;
+
+			BOOL	shouldConvert = YES;
+			// Check type o modifiers
+			if ([arg typeEncoding] == '^')
+			{
+				// Allocate custom storage ?
+				if (JSValueGetType(ctx, jsValue) == kJSTypeObject)
+				{
+//					JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
+					id unboxed = nil;
+					[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&unboxed inContext:ctx];
+					if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
+					{
+						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
+						shouldConvert = NO;
+					}
+										
+				}
+				else
+				// Allocate default storage
+					[arg allocateStorage];
+			}
+
 			args[idx]		= [arg ffi_type];
+			if (shouldConvert)
+			{
+				BOOL	converted = [arg fromJSValueRef:jsValue inContext:ctx];
+				if (!converted)		return	throwException(ctx, exception, [NSString stringWithFormat:@"Argument %c not converted", [arg typeEncoding]]), NULL;
+			}
 			values[idx]		= [arg storage];
 		}
 	}

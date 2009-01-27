@@ -453,3 +453,11 @@
 		return	str
 	}
 	
+
+	//
+	// type o
+	//
+	function	outArgument()
+	{
+		return	JSCocoaOutArgument.instance()
+	}

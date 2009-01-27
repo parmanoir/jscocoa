@@ -19,6 +19,7 @@
 @interface JSCocoaFFIArgument : NSObject {
 	char		typeEncoding;
 	NSString*	structureTypeEncoding;
+	NSString*	pointerTypeEncoding;
 
 	void*		ptr;
 
@@ -33,6 +34,7 @@
 - (void)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr;
 - (void)setStructureTypeEncoding:(NSString*)encoding;
 - (void)setStructureTypeEncoding:(NSString*)encoding withCustomStorage:(void*)storagePtr;
+- (void)setPointerTypeEncoding:(NSString*)encoding;
 
 + (int)sizeOfTypeEncoding:(char)encoding;
 + (int)alignmentOfTypeEncoding:(char)encoding;
@@ -63,9 +65,12 @@
 
 
 - (void*)allocateStorage;
+- (void*)allocatePointerStorage;
 - (void**)storage;
 - (char)typeEncoding;
 - (NSString*)structureTypeEncoding;
+- (id)pointerTypeEncoding;
+
 
 - (void)setIsReturnValue:(BOOL)v;
 //- (void)setCustomData:(id)data;

@@ -27,7 +27,16 @@
 */	
 //	[[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:self];
 	
-//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+
+	NSRect rect = { 10, 20, 30, 40 };
+	NSRect rect1, rect2;
+	NSDivideRect(rect, &rect1, &rect2, 5, 0);
+	float* r;
+	r = &rect;	NSLog(@"r=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
+	r = &rect1;	NSLog(@"r1=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
+	r = &rect2;	NSLog(@"r2=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
+	
+	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 int runCount = 0;
 - (IBAction)runJSTests:(id)sender

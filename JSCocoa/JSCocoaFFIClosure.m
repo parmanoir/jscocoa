@@ -118,7 +118,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	
 	// Protect function from GC
 	JSValueProtect(ctx, jsFunction);
-//	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:jsFunction];
 	[JSCocoaController upJSValueProtectCount];
 	
 	return	(IMP)closure;

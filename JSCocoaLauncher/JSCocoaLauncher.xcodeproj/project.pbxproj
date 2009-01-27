@@ -14,7 +14,6 @@
 		3D8A02470EB3730E00B4B080 /* JSCocoaFFIArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A023F0EB3730E00B4B080 /* JSCocoaFFIArgument.m */; };
 		3D8A02480EB3730E00B4B080 /* JSCocoaFFIClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A02410EB3730E00B4B080 /* JSCocoaFFIClosure.m */; };
 		3D8A02490EB3730E00B4B080 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A02430EB3730E00B4B080 /* JSCocoaPrivateObject.m */; };
-		3D8CFF280EBAAAD900F57F76 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8CFF270EBAAAD900F57F76 /* WebKit.framework */; };
 		3DB05FCC0F24BF960043C238 /* RowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DB05FCA0F24BF960043C238 /* RowView.xib */; };
 		3DF575330EAD2367001018F7 /* JSCocoaLauncher.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */; };
 		3DF5754E0EAD23C9001018F7 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DF5754D0EAD23C9001018F7 /* JavaScriptCore.framework */; };
@@ -43,7 +42,6 @@
 		3D8A02410EB3730E00B4B080 /* JSCocoaFFIClosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaFFIClosure.m; sourceTree = "<group>"; };
 		3D8A02420EB3730E00B4B080 /* JSCocoaPrivateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaPrivateObject.h; sourceTree = "<group>"; };
 		3D8A02430EB3730E00B4B080 /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaPrivateObject.m; sourceTree = "<group>"; };
-		3D8CFF270EBAAAD900F57F76 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		3DB05FCB0F24BF960043C238 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RowView.xib; sourceTree = "<group>"; };
 		3DF575320EAD2367001018F7 /* JSCocoaLauncher.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSCocoaLauncher.js; sourceTree = "<group>"; };
 		3DF5754D0EAD23C9001018F7 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
@@ -58,7 +56,6 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				3DF5754E0EAD23C9001018F7 /* JavaScriptCore.framework in Frameworks */,
-				3D8CFF280EBAAAD900F57F76 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +132,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3D8CFF270EBAAAD900F57F76 /* WebKit.framework */,
 				3DF5754D0EAD23C9001018F7 /* JavaScriptCore.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
