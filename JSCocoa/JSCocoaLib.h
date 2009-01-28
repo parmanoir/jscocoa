@@ -26,7 +26,7 @@
 //- (BOOL)pushData:(?)data ofType:(char)typeEncoding;
 
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)arg;
-- (JSValueRef)outObjectInContext:(JSContextRef)ctx;
+- (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx;
 
 
 @end

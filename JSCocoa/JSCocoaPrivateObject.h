@@ -16,6 +16,16 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+//
+// Boxing object
+//	type
+//	@			ObjC object
+//	struct		C struct
+//	method		ObjC method name
+//	rawPointer	raw C pointer (_C_PTR)
+//	function	Javascript function
+//
+
 @interface JSCocoaPrivateObject : NSObject {
 
 	NSString*	type;

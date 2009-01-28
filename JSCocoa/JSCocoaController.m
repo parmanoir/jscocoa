@@ -84,9 +84,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Is speaking when throwing exceptions
 	static	BOOL	isSpeaking;
 
-	// .valueOf() callback
-	static	JSObjectRef	callbackObjectValueOfCallback = NULL;
-
 //
 // Init
 //
@@ -153,17 +150,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Start context
 	//
 	ctx = JSGlobalContextCreate(OSXObjectClass);
-	
-	// Create callback used for autocall, set as property on JavascriptCore's [CallbackObject]
-	@synchronized(self)
-	{
-		if (!callbackObjectValueOfCallback)
-		{
-			callbackObjectValueOfCallback = JSObjectMakeFunctionWithCallback(ctx, NULL, valueOfCallback);
-			// And protect it from GC
-			JSValueProtect(ctx, callbackObjectValueOfCallback);
-		}
-	}
 
 	// Create a reference to ourselves
 	JSObjectRef jsc = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
@@ -321,34 +307,14 @@ static id JSCocoaSingleton = NULL;
 	return	sharedInstanceStats;
 }
 
-
-- (JSObjectRef)callbackObjectValueOfCallback
-{
-	return	callbackObjectValueOfCallback;
-}
-
 //
-// Set a valueOf callback on a jsObject
-//
-//- (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject
-+ (void)setValueOfCallBackOnJSObject:(JSObjectRef)jsObject inContext:(JSContextRef)ctx
-{
-	// Get valueOf callback
-//	JSStringRef jsName = JSStringCreateWithUTF8CString("__valueOfCallback__");
-//	JSValueRef valueOfCallback = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
-//	JSStringRelease(jsName);					
-	// Add it to object
-	JSStringRef jsName = JSStringCreateWithUTF8CString("valueOf");
-	JSObjectSetProperty(ctx, jsObject, jsName, callbackObjectValueOfCallback, JSCocoaInternalAttribute, NULL);
-	JSStringRelease(jsName);					
-}
-
 // On auto calling 'instance' (eg NSString.instance), call is not done on property get (unlike NSWorkspace.sharedWorkspace)
 // Instancing can't happen on get as instance may have parameters. 
 // Instancing will therefore be delayed and must happen
 //	* in fromJSValueRef
 //	* in property get (NSString.instance.count, getting 'count')
 //	* in valueOf (handled automatically as JavascriptCore will request 'valueOf' through property get)
+//
 + (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx;
 {
 	// It's an instance if it has a property 'thisObject', holding the class name
@@ -1742,13 +1708,9 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		return [thisPrivateObject jsValueRef];
 	}
 	
+	// NSNumber special case
 	if ([thisPrivateObject.object isKindOfClass:[NSNumber class]])
-	{
 		return	JSValueMakeNumber(ctx, [thisPrivateObject.object doubleValue]);
-	}
-	
-	
-//	NSLog(@"valueOfCallback %@ %@", thisPrivateObject.type, thisPrivateObject.structureName);
 
 	// Convert to string
 	id toString = [NSString stringWithFormat:@"JSCocoaPrivateObject type=%@", thisPrivateObject.type];
@@ -1756,10 +1718,20 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	// Object
 	if ([thisPrivateObject.type isEqualToString:@"@"])
 	{
+	
+		// Holding an out value ?
 		if ([thisPrivateObject.object isKindOfClass:[JSCocoaOutArgument class]])
-			return	[(JSCocoaOutArgument*)thisPrivateObject.object outObjectInContext:ctx];
-
-		toString = [NSString stringWithFormat:@"%@", [[thisPrivateObject object] description]];
+		{
+			JSValueRef outValue = [(JSCocoaOutArgument*)thisPrivateObject.object outJSValueRefInContext:ctx];
+			// Holding an object ? Call valueOf on it
+			if (JSValueGetType(ctx, outValue) == kJSTypeObject)
+				return	valueOfCallback(ctx, NULL, JSValueToObject(ctx, outValue, NULL), 0, NULL, NULL);
+			// Return raw JSValueRef
+			return outValue;
+		}
+		else
+		
+			toString = [NSString stringWithFormat:@"%@", [[thisPrivateObject object] description]];
 	}
 
 	// Struct
@@ -1954,45 +1926,22 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				JSValueRef	jsReturnValue = NULL;
 				BOOL converted = [returnValue toJSValueRef:&jsReturnValue inContext:ctx];
 				if (!converted)	return	throwException(ctx, exception, [NSString stringWithFormat:@"Return value not converted in %@", propertyName]), NULL;
-//				NSLog(@"autocallpropName = %@ %x %x", propertyName, jsReturnValue, *(void**)[returnValue storage]);
-/*				
-				// When returning NULL or numbers, return value won't be an object — box it
-				if (jsReturnValue == NULL || JSValueGetType(ctx, jsReturnValue) != kJSTypeObject)
-				{
-					JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-					
-					// Store our converted js value
-					JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(jsObject);
-					[privateObject setType:@"jsValueRef"];
-					[privateObject setJSValueRef:jsReturnValue ctx:ctx];
-					jsReturnValue = jsObject;
-				}
-
-				// If return value is an object, set a valueOf callback on it
-				if (JSValueGetType(ctx, jsReturnValue) == kJSTypeObject)
-				{
-					JSObjectRef jsObject = JSValueToObject(ctx, jsReturnValue, NULL);
-					// Set the valueOf callback : JavascriptCore will call it when requesting default value
-					[JSCocoaController setValueOfCallBackOnJSObject:jsObject inContext:ctx];
-				}
-				
-				id o = JSObjectGetPrivate(JSValueToObject(ctx, jsReturnValue, NULL));
-				[o setIsAutoCall:YES];
-*/				
-				if (jsReturnValue == nil)	return	JSValueMakeNull(ctx);
-				// If return value is an object, set a valueOf callback on it
-				if (JSValueGetType(ctx, jsReturnValue) == kJSTypeObject)
-				{
-					JSObjectRef jsObject = JSValueToObject(ctx, jsReturnValue, NULL);
-					// Set the valueOf callback : JavascriptCore will call it when requesting default value
-					[JSCocoaController setValueOfCallBackOnJSObject:jsObject inContext:ctx];
-				}
-				
 
 				return	jsReturnValue;
 			}
 		}
 		
+		// Check if we're holding an out value
+		if ([privateObject.object isKindOfClass:[JSCocoaOutArgument class]])
+		{
+			JSValueRef outValue = [(JSCocoaOutArgument*)privateObject.object outJSValueRefInContext:ctx];
+			if (JSValueGetType(ctx, outValue) == kJSTypeObject)
+			{
+				JSObjectRef outObject = JSValueToObject(ctx, outValue, NULL);
+				JSValueRef possibleReturnValue = JSObjectGetProperty(ctx, outObject, propertyNameJS, NULL);
+				return	possibleReturnValue;
+			}
+		}
 
 		//
 		// Do some filtering here on property name : 
@@ -2029,7 +1978,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				while (class)
 				{
 					id script = [NSString stringWithFormat:@"__globalJSFunctionRepository__.%@.%@", class, propertyName];
-//					NSLog(@"%@", script);
 					JSStringRef	jsScript = JSStringCreateWithUTF8CString([script UTF8String]);
 					result = JSEvaluateScript(ctx, jsScript, NULL, NULL, 1, NULL);
 					JSStringRelease(jsScript);
@@ -2058,7 +2006,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// If not split and not NSString, return (if NSString, try to convert to JS string in callAsFunction and use native JS methods)
 				if (!isMaybeSplit && ![callee isKindOfClass:[NSString class]])	
 				{
-//					NSLog(@"NON SPLIT %@.%@", callee, methodName);
 					return	NULL;
 				}
 			}
@@ -2070,13 +2017,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		private.type = @"method";
 		private.methodName = methodName;
 		
-		/*
-			setting valueOf allows us to return NULL when conversion is being done, eg 'string' + obj.property -> valueOf is called and returns NULL if property is a split call.
-			BUT JSObject::toBoolean always returns true, therefore even !!(new Object(false)) returns true : 
-			this will yield false positives for properties that are detected as things that could be split calls but aren't.
-		*/
-		[JSCocoaController setValueOfCallBackOnJSObject:o inContext:ctx];
-
 		// Special case for instance : setup a valueOf callback calling instance
 		if ([callee class] == callee && [propertyName isEqualToString:@"instance"])
 		{
@@ -2085,9 +2025,21 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			JSStringRelease(jsName);
 		}
 
-	
 		return	o;
 	}
+
+	// Struct valueOf
+	if ([privateObject.type isEqualToString:@"struct"] && [propertyName isEqualToString:@"valueOf"])
+	{
+		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+		private.type = @"method";
+		private.methodName = propertyName;
+		return	o;
+	}
+	
+	// Structs will get here when being asked javascript attributes (eg 'x' in point.x)
+//	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
 	
 	return	NULL;
 }
@@ -2349,6 +2301,8 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		return	function;
 	}
 */
+
+	// Pure JS functions for derived ObjC classes
 	if ([privateObject jsValueRef] && [privateObject.type isEqualToString:@"jsFunction"])
 	{
 		JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
@@ -2360,20 +2314,6 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
 		if ([privateObject.methodName isEqualToString:@"toString"])	return	JSValueMakeString(ctx, JSValueToStringCopy(ctx, jsValue, NULL));
 		return	jsValue;
-/*	
-		// Custom handling for NSNumber
-		if ([privateObject.methodName isEqualToString:@"valueOf"] && [thisPrivateObject.object isKindOfClass:[NSNumber class]])
-		{
-			return	JSValueMakeNumber(ctx, [thisPrivateObject.object doubleValue]);
-		}
-		// Convert everything else to string
-		NSString*	toString = [NSString stringWithFormat:@"%@", [thisPrivateObject.type isEqualToString:@"@"] ? [[thisPrivateObject object] description] : @"JSCocoaPrivateObject"];
-//		JSStringRef jsToString = JSStringCreateWithUTF8CString([toString UTF8String]);
-		JSStringRef jsToString = JSStringCreateWithCFString((CFStringRef)toString);
-		JSValueRef jsValueToString = JSValueMakeString(ctx, jsToString);
-		JSStringRelease(jsToString);
-		return	jsValueToString;
-*/
 	}
 	
 	// Super handling : get method name and move js arguments to C array

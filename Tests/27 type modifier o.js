@@ -18,6 +18,9 @@
 */
 
 
+	//
+	// Test basic type encoding (int)
+	//
 	var major = new outArgument
 	var minor = new outArgument
 	NSOpenGLGetVersion(major, minor)
@@ -36,13 +39,24 @@
 	if (typeof (minor.valueOf()) != 'number')	throw 'type o failed (4)'
 	if (!(major >= 1))							throw 'type o failed (5)'
 
-//	throw	"type modifier 'o' failed for function"
 	
+	//
+	// Test structs
+	//
 	var rect = new NSRect(10, 20, 30, 40)
+
 	var rect1 = new outArgument
 	var rect2 = new outArgument
 	NSDivideRect(rect, rect1, rect2, 5, NSMinXEdge);
-	log('PASSED arg')
+
+	if (rect1.origin.x != 10 || rect1.origin.y != 20 || rect1.size.width != 5 || rect1.size.height != 40)	throw 'type o failed (6)'
+	if (rect2.origin.x != 15 || rect2.origin.y != 20 || rect2.size.width != 25 || rect2.size.height != 40)	throw 'type o failed (7)'
+
+
+
+	//
+	// Test ObjC call
+	//
 
 //	[NSScanner scanDecimal:]
 //	[NSFileManager fileExistsAtPath:isDirectory:}

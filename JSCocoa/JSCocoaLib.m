@@ -48,11 +48,11 @@
 {
 }
 
-- (JSValueRef)outObjectInContext:(JSContextRef)ctx
+- (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx
 {
 //	JSValueRefAndContextRef ret;
 //	return	ret;
-	JSValueRef jsValue;
+	JSValueRef jsValue = NULL;
 	[arg toJSValueRef:&jsValue inContext:ctx];
 	return	jsValue;
 }
@@ -63,6 +63,7 @@
 //	
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)_arg
 {
+//	NSLog(@"pointerTypeEncoding=%@=", [_arg pointerTypeEncoding]);
 	if (![_arg allocatePointerStorage])	return	NO;
 //	ptr						= [arg storage];
 //	typeEncoding			= [arg typeEncoding];

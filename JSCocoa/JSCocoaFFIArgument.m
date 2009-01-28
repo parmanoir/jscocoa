@@ -175,12 +175,13 @@
 	{
 //		NSLog(@"allocateStorage: Allocating struct");
 		// Some front padding for alignment and tail padding for structure
-		// (http://developer.apple.com/documentation/DeveloperTools/Conceptual/LowLevelABI/Articles/IA32.html)
+		// ( http://developer.apple.com/documentation/DeveloperTools/Conceptual/LowLevelABI/Articles/IA32.html )
 		// Structures are tail-padded to 32-bit multiples.
 		
 		//	+16 for alignment
 		//	+4 for tail padding
-		ptr = malloc([JSCocoaFFIArgument sizeOfStructure:structureTypeEncoding] + 16 + 4); 
+//		ptr = malloc([JSCocoaFFIArgument sizeOfStructure:structureTypeEncoding] + 16 + 4); 
+		ptr = malloc([JSCocoaFFIArgument sizeOfStructure:structureTypeEncoding] + 4); 
 		return	ptr;
 	}
 	
@@ -206,7 +207,6 @@
 	{
 		structureTypeEncoding = [pointerTypeEncoding substringFromIndex:1];
 		[structureTypeEncoding retain];
-		NSLog(@"STRUCTCHECK");
 	}
 	[self allocateStorage];
 	return ptr;
@@ -216,12 +216,17 @@
 {
 	if (typeEncoding == '{')
 	{
+/*	
 		int alignOnSize = 16;
 		
 		int address = (int)ptr;
 		if ((address % alignOnSize) != 0)
 			address = (address+alignOnSize) & ~(alignOnSize-1);
-		return (void**)address;
+			
+		if (pointerTypeEncoding)	NSLog(@"THERE");
+*/		
+		if (pointerTypeEncoding)	return &ptr;
+//		return (void**)address;
 	}
 	
 	// Type o : return writable address
@@ -403,6 +408,7 @@
 		}
 	}
 #endif	
+//	if (typeEncoding == '{')	p = [self storage];
 	BOOL r = [JSCocoaFFIArgument toJSValueRef:value inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:structureTypeEncoding fromStorage:p];
 	if (!r)	NSLog(@"toJSValueRef FAILED");
 	return	r;
@@ -564,7 +570,6 @@
 			while (c2 && *c2 != '"') c2++;
 			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
 			c = c2;
-			
 			// Skip '"'
 			c++;
 			char encoding = *c;
@@ -577,7 +582,7 @@
 			}
 			else
 			{
-				// If a pointer to raw C structure data is given, convert its members to JS values
+				// Given a pointer to raw C structure data, convert its members to JS values
 				if (ptr)
 				{
 					// Align 
@@ -588,7 +593,7 @@
 					[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
 				}
 				else
-				// No pointer ? Get values from initialValues array. If not present, create undefined values
+				// Given no pointer, get values from initialValues array. If not present, create undefined values
 				{
 					if (!convertedValueCount)	return 0;
 					if (initialValues && initialValueCount && *convertedValueCount < initialValueCount)	valueJS = initialValues[*convertedValueCount];
