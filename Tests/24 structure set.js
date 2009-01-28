@@ -6,14 +6,13 @@
 
 
 	var o = NSView.instance()
-	log('====================================')
 	o.frame.origin.x = 0
 //	o.frame.origin.x = o.frame.size.width + o.frame.size.height + 13
 
-	log('++++++++++++++++++++++++++++++++++++')
+
 	var frame = o.frame
 	frame.origin.x = 13
-	log('====================================')
+
 	if (frame.origin.x != 13)	throw 'structure set FAILED 1'
 	
 	if (o.frame.origin.x != 0)	throw 'structure set FAILED 2'

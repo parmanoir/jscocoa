@@ -16,3 +16,5 @@
 
 //	log('point=' + point)
 //	log('rect=' + rect)
+	point = null
+	rect = null

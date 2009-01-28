@@ -58,8 +58,18 @@
 	// Test ObjC call
 	//
 
-//	[NSScanner scanDecimal:]
-//	[NSFileManager fileExistsAtPath:isDirectory:}
+
+	var scanner = NSScanner.scannerWithString('4.56 123')
+	var extractedFloat = new outArgument
+	scanner.scanFloat(extractedFloat)
+//	log(extractedFloat)
+	if (Math.abs(4.56-extractedFloat) > 0.01)	throw 'type o failed (6)'
+
+	var extractedInteger = new outArgument
+	scanner.scanInteger(extractedInteger)
+//	log(extractedInteger)
+	if (extractedInteger != 123)				throw 'type o failed (7)'
+
 	
 	
 	major = null

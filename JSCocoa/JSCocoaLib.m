@@ -23,6 +23,7 @@
 - (void)cleanUp
 {
 	if (ptr)	free(ptr);
+	[arg release];
 }
 - (void)dealloc
 {

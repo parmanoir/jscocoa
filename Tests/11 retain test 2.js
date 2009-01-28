@@ -25,7 +25,7 @@
 
 		newClass.instance()
 		
-	//	JSCocoaController.logInstanceStats
+//		JSCocoaController.logInstanceStats
 		var count1 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
 		if (count1 != 3)	throw 'invalid retain count - got '  + count1 + ', expected 3'
 		
@@ -34,11 +34,11 @@
 		
 		JSCocoaController.garbageCollect
 
-	//	JSCocoaController.logInstanceStats
+		JSCocoaController.logInstanceStats
 		var count2 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
 		if (count2 != 0)	throw 'invalid retain count - got '  + count2 + ', expected 0'
 
-	//	JSCocoaController.log('***' + count0 + '***' + count1 + '***' + count2 + '***')
-	//	JSCocoaController.logInstanceStats
+//		JSCocoaController.log('***' + count0 + '***' + count1 + '***' + count2 + '***')
+		JSCocoaController.logInstanceStats
 	
 	}

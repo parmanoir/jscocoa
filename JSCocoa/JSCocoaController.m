@@ -1329,7 +1329,13 @@ int	liveInstanceCount	= 0;
 {
 	id allKeys = [sharedInstanceStats allKeys];
 	NSLog(@"====instanceStats : %d classes spawned %d live instances (%d since launch, %d dead)====", [allKeys count], liveInstanceCount, fullInstanceCount, fullInstanceCount-liveInstanceCount);
-	for (id key in allKeys)		NSLog(@"====%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
+	BOOL	printedSomething = NO;
+	for (id key in allKeys)		
+	{
+		NSLog(@"%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
+		printedSomething = YES;
+	}
+	if (printedSomething)	NSLog(@"====");
 }
 
 
