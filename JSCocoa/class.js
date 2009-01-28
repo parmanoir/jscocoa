@@ -439,6 +439,7 @@
 	function	describeStruct(o)
 	{
 		var str = ''
+		
 		if (typeof(o) == 'object' || typeof(o) == 'function')
 		{
 			str += '{'
@@ -450,6 +451,7 @@
 		}
 		else
 			str += o
+
 		return	str
 	}
 	

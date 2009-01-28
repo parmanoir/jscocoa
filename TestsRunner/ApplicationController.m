@@ -54,9 +54,11 @@ int runCount = 0;
 
 - (IBAction)garbageCollect:(id)sender
 {
-//	NSLog(@">>>>=>GO FOR GC");
-	[JSCocoaController garbageCollect];
-//	NSLog(@">>>>=>DONE GC");
+	NSLog(@">>>>=>GO FOR GC");
+	[JSCocoa logInstanceStats];
+	[JSCocoa garbageCollect];
+	NSLog(@">>>>=>DONE GC");
+	[JSCocoa logInstanceStats];
 }
 
 
@@ -80,6 +82,13 @@ int runCount = 0;
 	[r release];
 }
 
+- (IBAction)unlinkAllReferences:(id)sender
+{
+//	[JSCocoa logInstanceStats];
+	[[JSCocoaController sharedController] unlinkAllReferences];
+//	[self garbageCollect:nil];
+//	[JSCocoa logInstanceStats];
+}
 
 
 @end

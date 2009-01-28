@@ -51,22 +51,15 @@
 
 	
 	var path = NSBundle.mainBundle.bundlePath + '/Contents/Resources/Tests/Resources/standalone window.nib'
-//	log('path=' + path)
-//	var path = 'Tests/Resources/standalone window'
-//	var path = 'Tests/Resources/standalone window'
-//	var path = 'standalone window'
-	
-	// Does not work ... why ? loadNibNamed:owner: is defined in a category, does not appear in class_copyMethodList
-//	var nib = NSBundle.loadNib({ named : path, owner : o })
 
-	// This will be the NIB's owner, it will receive some outlets
-	var owner = NibTestOwner.instance
-//	var nib = NSBundle.loadNibNamed_owner_(path, owner)
+	// This will be the NIB's owner, it will receive outlets after loading
+	var owner = NibTestOwner.instance()
 
-	// loadNibNamed does not allow path data, load nib with NSNib
+	// loadNibNamed does not allow path data, load with NSNib
 	var nib = NSNib.instance({withContentsOfURL:NSURL.fileURLWithPath(path)})
-	if (!nib.instantiateNibWithOwner_topLevelObjects(owner, null))	throw 'NIB not loaded ' + path
-//log('r=' + owner.button['class'])
+	
+	var nibObjects = new outArgument
+	if (!nib.instantiateNibWithOwner_topLevelObjects(owner, nibObjects))	throw 'NIB not loaded ' + path
 
 	// Check if outlets are connected
 	if (owner.window['class'] != 'NSWindow')					throw 'window IBOutlet not connected'
@@ -137,7 +130,7 @@
 	bindingsAlreadyTested = true
 	
 	// Hide window
-	owner.window.orderOut(null)
+//	owner.window.orderOut(null)
 	
 
 //	JSCocoaController.log('contentView=' + owner.window.contentView)
@@ -151,10 +144,15 @@
 	//
 	//	... manually releasing the window works.
 	//
+	
+	
+//	log('nibObjects.length=' + nibObjects.length)
+	for (var i=0; i<nibObjects.length; i++)		nibObjects[i].release
+	nibObjects = null
 
-	owner.window.release
+
 	owner = null
-	JSCocoaController.garbageCollect
+	path = null
 
 	nib = null
 	JSCocoaController.garbageCollect

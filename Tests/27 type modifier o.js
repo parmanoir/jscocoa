@@ -17,7 +17,6 @@
 
 */
 
-
 	//
 	// Test basic type encoding (int)
 	//
@@ -39,6 +38,7 @@
 	if (typeof (minor.valueOf()) != 'number')	throw 'type o failed (4)'
 	if (!(major >= 1))							throw 'type o failed (5)'
 
+
 	
 	//
 	// Test structs
@@ -47,7 +47,9 @@
 
 	var rect1 = new outArgument
 	var rect2 = new outArgument
+
 	NSDivideRect(rect, rect1, rect2, 5, NSMinXEdge);
+//	log('rect1=' + rect1)
 
 	if (rect1.origin.x != 10 || rect1.origin.y != 20 || rect1.size.width != 5 || rect1.size.height != 40)	throw 'type o failed (6)'
 	if (rect2.origin.x != 15 || rect2.origin.y != 20 || rect2.size.width != 25 || rect2.size.height != 40)	throw 'type o failed (7)'
@@ -77,3 +79,7 @@
 	windowCount = null
 	rect1 = null
 	rect2 = null
+	
+	extractedInteger = null
+	extractedFloat = null
+

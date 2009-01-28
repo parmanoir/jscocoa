@@ -17,5 +17,7 @@
 - (IBAction)garbageCollect:(id)sender;
 
 - (IBAction)runSimpleTestFile:(id)sender;
+- (IBAction)unlinkAllReferences:(id)sender;
+
 
 @end
