@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		3D316B7A0F3127A900F0F4BA /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D316B790F3127A900F0F4BA /* JSCocoaLib.m */; };
 		3D8A02440EB3730E00B4B080 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A023A0EB3730E00B4B080 /* BridgeSupportController.m */; };
 		3D8A02450EB3730E00B4B080 /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D8A023B0EB3730E00B4B080 /* class.js */; };
 		3D8A02460EB3730E00B4B080 /* JSCocoaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D8A023D0EB3730E00B4B080 /* JSCocoaController.m */; };
@@ -31,6 +32,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* JSCocoaLauncher_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaLauncher_Prefix.pch; sourceTree = "<group>"; };
+		3D316B780F3127A900F0F4BA /* JSCocoaLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaLib.h; sourceTree = "<group>"; };
+		3D316B790F3127A900F0F4BA /* JSCocoaLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaLib.m; sourceTree = "<group>"; };
 		3D8A02390EB3730E00B4B080 /* BridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupportController.h; sourceTree = "<group>"; };
 		3D8A023A0EB3730E00B4B080 /* BridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupportController.m; sourceTree = "<group>"; };
 		3D8A023B0EB3730E00B4B080 /* class.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = class.js; sourceTree = "<group>"; };
@@ -153,6 +156,8 @@
 				3D8A02410EB3730E00B4B080 /* JSCocoaFFIClosure.m */,
 				3D8A02430EB3730E00B4B080 /* JSCocoaPrivateObject.m */,
 				3D8A02420EB3730E00B4B080 /* JSCocoaPrivateObject.h */,
+				3D316B780F3127A900F0F4BA /* JSCocoaLib.h */,
+				3D316B790F3127A900F0F4BA /* JSCocoaLib.m */,
 			);
 			name = JSCocoa;
 			path = ../JSCocoa;
@@ -222,6 +227,7 @@
 				3D8A02470EB3730E00B4B080 /* JSCocoaFFIArgument.m in Sources */,
 				3D8A02480EB3730E00B4B080 /* JSCocoaFFIClosure.m in Sources */,
 				3D8A02490EB3730E00B4B080 /* JSCocoaPrivateObject.m in Sources */,
+				3D316B7A0F3127A900F0F4BA /* JSCocoaLib.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

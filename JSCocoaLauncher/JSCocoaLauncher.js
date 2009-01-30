@@ -267,7 +267,7 @@ log('*********results**********')
 if (views.length)	return
 
 
-
+log('DRAW')
 		var usedViews = []
 //		from = 0
 //		to = 1200

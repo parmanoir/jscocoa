@@ -12,11 +12,11 @@
 
 @interface JSCocoaOutArgument : NSObject
 {
-	
+/*	
 	void*		ptr;
 	char		typeEncoding;
 	id			structureTypeEncoding;
-	
+*/	
 	JSCocoaFFIArgument*	arg;
 }
 

@@ -876,6 +876,33 @@ static id JSCocoaSingleton = NULL;
 	return	isVariadic;
 }
 
+#pragma mark Boxed object hash
+
++ (JSObjectRef)boxForObject:(id)o inContext:(JSContextRef)ctx
+{
+//	NSLog(@"Go for BOXING %x", o);
+//	NSLog(@"Go for BOXING retain Count=%d", [o retainCount]);
+//	NSLog(@"BOXING %x of class __%@__", o, [o class]);
+//	NSLog(@"BOXING %@", o);
+
+	JSObjectRef jsObject = [self jsCocoaPrivateObjectInContext:ctx];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
+	private.type = @"@";
+	[private setObject:o];
+//	NSLog(@"==> BOXED retain Count=%d", [o retainCount]);
+	return	jsObject;
+}
+
+
++ (void)downBoxedObjectCount:(id)o
+{
+//	NSLog(@"UNBOXING %x", o);
+//	NSLog(@"UNBOXING class %@", [o class]);
+//	NSLog(@"Go for UNBOXING %x", o);
+//	NSLog(@"Go for UNBOXING retain Count=%d", [o retainCount]);
+//	NSLog(@"UNBOXED %x of class __%@__", o, [o class]);
+//	NSLog(@"UNBOXING %@", o);
+}
 
 #pragma mark Helpers
 - (id)selectorForJSFunction:(JSObjectRef)function
@@ -1232,6 +1259,7 @@ NSLog(@"releaseBoxedObject:%d->%d", [o retainCount], [o retainCount]-1);
 }
 */
 
+/*
 //
 // ##HACK Manual cleanup for retainCount as Instruments' leak template crashes if using a JS method 
 //	(retainCount gets called during GC, asserting in JavascriptCore)
@@ -1249,7 +1277,7 @@ NSLog(@"releaseBoxedObject:%d->%d", [o retainCount], [o retainCount]-1);
 	Method m2 = class_getInstanceMethod([self class], @selector(blankRetainCount));
 	method_setImplementation(m, method_getImplementation(m2));
 }
-
+*/
 
 
 #pragma mark Garbage Collection debug

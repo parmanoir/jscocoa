@@ -920,11 +920,14 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	}
 	
 	// Else, box the object
+/*	
 	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"@";
 	[private setObject:objcObject];
 	*value = jsObject;
+*/
+	*value = [JSCocoaController boxForObject:objcObject inContext:ctx];
 	return	YES;
 }
 

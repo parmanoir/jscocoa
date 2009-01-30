@@ -34,6 +34,7 @@
 {
 	[JSCocoaController downJSCocoaPrivateObjectCount];
 //	if (object)	NSLog(@"GO for release (%@) %x %d", [object class], object, [object retainCount]);
+	if (object)	[JSCocoaController downBoxedObjectCount:object];
 	if (object && retainObject)
 	{
 //		NSLog(@"released !");
@@ -71,6 +72,10 @@
 
 - (void)setObjectNoRetain:(id)o
 {
+	NSLog(@"NORETAIN - THIS NEEDS TO DIE DIE DIE");
+[self setObject:o];
+return;
+
 	object = o;
 	retainObject = NO;
 }

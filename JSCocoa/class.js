@@ -463,3 +463,9 @@
 	{
 		return	JSCocoaOutArgument.instance()
 	}
+	
+	function	memoryBuffer()
+	{
+		return	JSCocoaMemoryBuffer.instance()
+	}
+	

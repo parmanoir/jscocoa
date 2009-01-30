@@ -14,15 +14,16 @@
 - (id)init
 {
 	id o	= [super init];
+/*
 	ptr		= NULL;
 	structureTypeEncoding = nil;
-	
+*/	
 	arg		= nil;
 	return o;
 }
 - (void)cleanUp
 {
-	if (ptr)	free(ptr);
+//	if (ptr)	free(ptr);
 	[arg release];
 }
 - (void)dealloc
@@ -36,7 +37,7 @@
 	[super finalize];
 }
 
-
+/*
 //
 // ffff : 4 floats
 //
@@ -48,7 +49,7 @@
 - (void)addValue:(id)v forType:(char)encoding
 {
 }
-
+*/
 - (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx
 {
 //	JSValueRefAndContextRef ret;

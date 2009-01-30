@@ -36,6 +36,14 @@
 	r = &rect1;	NSLog(@"r1=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
 	r = &rect2;	NSLog(@"r2=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
 */	
+
+
+	CGColorRef color = CGColorCreateGenericRGB(1.0, 0.8, 0.6, 0.2);
+	const CGFloat* colors = CGColorGetComponents(color);
+	NSLog(@"%f %f %f %f %f", colors[0], colors[1], colors[2], colors[3], colors[4]);
+	
+	CGColorRelease(color);
+
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 int runCount = 0;
@@ -54,11 +62,11 @@ int runCount = 0;
 
 - (IBAction)garbageCollect:(id)sender
 {
-	NSLog(@">>>>=>GO FOR GC");
-	[JSCocoa logInstanceStats];
+//	NSLog(@">>>>=>GO FOR GC");
+//	[JSCocoa logInstanceStats];
 	[JSCocoa garbageCollect];
-	NSLog(@">>>>=>DONE GC");
-	[JSCocoa logInstanceStats];
+//	NSLog(@">>>>=>DONE GC");
+//	[JSCocoa logInstanceStats];
 }
 
 
