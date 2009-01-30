@@ -70,18 +70,6 @@
 	return	object;
 }
 
-- (void)setObjectNoRetain:(id)o
-{
-	NSLog(@"NORETAIN - THIS NEEDS TO DIE DIE DIE");
-[self setObject:o];
-return;
-
-	object = o;
-	retainObject = NO;
-}
-
-
-
 - (void)setMethod:(Method)m
 {
 	method = m;

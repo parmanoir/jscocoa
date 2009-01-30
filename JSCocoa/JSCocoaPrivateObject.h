@@ -70,7 +70,4 @@
 - (void*)rawPointer;
 - (void)setRawPointer:(void*)rp;
 
-- (void)setObjectNoRetain:(id)o;
-
-
 @end

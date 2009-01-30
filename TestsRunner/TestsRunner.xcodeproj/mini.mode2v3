@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E780F335AEA00F0F4BA</string>
+						<string>3D316E9E0F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316E0F0F3356B400F0F4BA</string>
@@ -256,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E790F335AEA00F0F4BA</string>
+						<string>3D316E9F0F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316E330F33590700F0F4BA</string>
@@ -296,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7A0F335AEA00F0F4BA</string>
+						<string>3D316EA00F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316E1C0F33586800F0F4BA</string>
@@ -336,7 +336,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7B0F335AEA00F0F4BA</string>
+						<string>3D316EA10F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316C7A0F325D4600F0F4BA</string>
@@ -376,7 +376,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7C0F335AEA00F0F4BA</string>
+						<string>3D316EA20F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316DE90F33566900F0F4BA</string>
@@ -416,7 +416,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7D0F335AEA00F0F4BA</string>
+						<string>3D316EA30F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316D4C0F3321E100F0F4BA</string>
@@ -456,7 +456,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7E0F335AEA00F0F4BA</string>
+						<string>3D316EA40F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316C900F3285D100F0F4BA</string>
@@ -496,7 +496,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E7F0F335AEA00F0F4BA</string>
+						<string>3D316EA50F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316CCE0F331BA900F0F4BA</string>
@@ -536,7 +536,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E800F335AEA00F0F4BA</string>
+						<string>3D316EA60F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316C7C0F325D4600F0F4BA</string>
@@ -576,7 +576,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D316E810F335AEA00F0F4BA</string>
+						<string>3D316EA70F335BC000F0F4BA</string>
 						<key>history</key>
 						<array>
 							<string>3D316C330F31F0FA00F0F4BA</string>
@@ -882,7 +882,6 @@
 		<string>3D316BF10F31CA5500F0F4BA</string>
 		<string>3D316BF20F31CA5500F0F4BA</string>
 		<string>3D316BDD0F31C2D400F0F4BA</string>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3D316C340F31F10C00F0F4BA</string>
 		<string>3DCEC9500F2FE11100B10E96</string>
@@ -892,10 +891,11 @@
 		<string>3D316C820F3285C400F0F4BA</string>
 		<string>3DC4DB300F30C812001F3C87</string>
 		<string>3D316E1A0F33586800F0F4BA</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 		<string>3D316E350F33590A00F0F4BA</string>
-		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>3D316DC90F3325B800F0F4BA</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
 	</array>
 	<key>WindowString</key>
@@ -1052,14 +1052,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>JSCocoaPrivateObject.m</string>
+								<string>JSCocoaFFIArgument.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -1076,6 +1074,8 @@
 							<string>426pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1126,7 +1126,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -1275,14 +1275,14 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>JSCocoaController.m</string>
+										<string>JSCocoaPrivateObject.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{0, 0}, {968, 377}}</string>
+										<string>{{0, 0}, {968, 641}}</string>
 										<key>RubberWindowFrame</key>
 										<string>253 83 968 1012 0 0 1920 1178 </string>
 									</dict>
@@ -1293,7 +1293,7 @@
 								</dict>
 							</array>
 							<key>Proportion</key>
-							<string>377pt</string>
+							<string>641pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -1306,14 +1306,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 382}, {968, 589}}</string>
+								<string>{{0, 646}, {968, 325}}</string>
 								<key>RubberWindowFrame</key>
 								<string>253 83 968 1012 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXProjectFindModule</string>
 							<key>Proportion</key>
-							<string>589pt</string>
+							<string>325pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>

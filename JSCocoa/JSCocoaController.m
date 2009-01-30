@@ -156,7 +156,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsc);
 	private.type = @"@";
 	// If we've overloaded retain, we'll be calling ourselves until the stack dies
-	[private setObjectNoRetain:self];
+	[private setObject:self];
 
 	// Register ourselves
 	JSStringRef jsName = JSStringCreateWithUTF8CString("__jsc__");
@@ -1240,45 +1240,6 @@ static id autoreleasePool;
 	[self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
 	// Everything is now collectable !
 }
-/*
-//
-// Release a boxed objc instance now
-//
-- (BOOL)releaseBoxedObject:(JSValueRefAndContextRef)valueAndContext
-{
-	JSObjectRef jsObject = JSValueToObject(valueAndContext.ctx, valueAndContext.value, NULL);
-	if (!jsObject)	return	NO;
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
-	id o = private.object;
-NSLog(@"releaseBoxedObject:%d->%d", [o retainCount], [o retainCount]-1);
-	[o release];
-	private.type = nil;	
-	[private setObject:nil];
-
-	return	YES;
-}
-*/
-
-/*
-//
-// ##HACK Manual cleanup for retainCount as Instruments' leak template crashes if using a JS method 
-//	(retainCount gets called during GC, asserting in JavascriptCore)
-//
-- (NSUInteger)blankRetainCount
-{
-//	return	[super retainCount];
-	id parentClass = [self parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
-	struct objc_super superData = { self, parentClass };
-	return	(NSUInteger)objc_msgSendSuper(&superData, @selector(retainCount));
-}
-- (void)cleanRetainCount:(id)class
-{
-	Method m = class_getInstanceMethod(class, @selector(retainCount));
-	Method m2 = class_getInstanceMethod([self class], @selector(blankRetainCount));
-	method_setImplementation(m, method_getImplementation(m2));
-}
-*/
-
 
 #pragma mark Garbage Collection debug
 

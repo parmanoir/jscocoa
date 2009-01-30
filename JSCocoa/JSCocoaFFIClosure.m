@@ -176,7 +176,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(jsThis);
 		private.type = @"@";
 		// If we've overloaded retain, we'll be calling ourselves until the stack dies
-		[private setObjectNoRetain:this];
+		[private setObject:this];
 	}
 
 	// Call !
