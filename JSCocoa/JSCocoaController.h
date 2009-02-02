@@ -93,6 +93,13 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (void)deallocAutoreleasePool;
 
 //
+// Global boxer : only one JSValueRef for multiple box requests of one pointer
+//
++ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
++ (void)downBoxedJSObjectCount:(id)o;
+
+
+//
 // Various internals
 //
 + (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx;
@@ -114,6 +121,21 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // JSCocoa shorthand
 //
 @interface JSCocoa : JSCocoaController
+@end
+
+//
+// Boxed object cache : holds one JSObjectRef for each reference to a pointer
+//
+@interface BoxedJSObject : NSObject {
+	int			usageCount;
+	JSObjectRef	jsObject;
+}
+- (void)setJSObject:(JSObjectRef)o;
+- (int)upUsageCount;
+- (int)downUsageCount;
+- (int)usageCount;
+- (JSObjectRef)jsObject;
+
 @end
 
 //

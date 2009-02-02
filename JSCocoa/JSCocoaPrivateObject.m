@@ -16,8 +16,7 @@
 
 - (id)init
 {
-	id r = [super init];
-
+	self = [super init];
 	type = xml = declaredType = methodName = nil;
 	object		= nil;
 	isAutoCall	= NO;
@@ -27,14 +26,14 @@
 	
 	
 	[JSCocoaController upJSCocoaPrivateObjectCount];
-	return	r;
+	return	self;
 }
 
 - (void)dealloc
 {
 	[JSCocoaController downJSCocoaPrivateObjectCount];
-//	if (object)	NSLog(@"GO for release (%@) %x %d", [object class], object, [object retainCount]);
-	if (object)	[JSCocoaController downBoxedObjectCount:object];
+//	if (object)	NSLog(@"GO for JSCocoaPrivateObject release (%@) %x %d", [object class], object, [object retainCount]);
+	if (object)	[JSCocoaController downBoxedJSObjectCount:object];
 	if (object && retainObject)
 	{
 //		NSLog(@"released !");

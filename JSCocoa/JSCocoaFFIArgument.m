@@ -21,7 +21,7 @@
 
 - (id)init
 {
-	id o	= [super init];
+	self	= [super init];
 
 	ptr				= NULL;
 	typeEncoding	= 0;
@@ -36,7 +36,7 @@
 	// Used to store string data while converting JSStrings to char*
 	customData		= nil;
 	
-	return	o;
+	return	self;
 }
 
 - (void)cleanUp
@@ -927,7 +927,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	[private setObject:objcObject];
 	*value = jsObject;
 */
-	*value = [JSCocoaController boxForObject:objcObject inContext:ctx];
+	*value = [JSCocoaController boxedJSObject:objcObject inContext:ctx];
 	return	YES;
 }
 
@@ -1004,7 +1004,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	if (!JSValueIsObject(ctx, value))	
 		return	NO;
 
-	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:value inContext:ctx];
+//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:value inContext:ctx];
 	
 	JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);

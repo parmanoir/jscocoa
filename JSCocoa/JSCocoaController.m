@@ -75,6 +75,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 	// Shared instance stats
 	static	id	sharedInstanceStats	= nil;
+	
+	// Boxed objects
+	static	id	boxedObjects;
 
 
 	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
@@ -90,7 +93,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (id)init
 {
 //	NSLog(@"JSCocoa : %x spawning", self);
-	id o	= [super init];
+	self	= [super init];
 	
 	@synchronized(self)
 	{
@@ -103,6 +106,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 			jsFunctionHash		= [[NSMutableDictionary alloc] init];
 			splitCallCache		= [[NSMutableDictionary alloc] init];
 			jsClassParents		= [[NSMutableDictionary alloc] init];
+			boxedObjects		= [[NSMutableDictionary alloc] init];
 
 			useAutoCall			= YES;
 			isSpeaking			= YES;
@@ -151,7 +155,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	//
 	ctx = JSGlobalContextCreate(OSXObjectClass);
 
+
 	// Create a reference to ourselves
+/*
 	JSObjectRef jsc = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsc);
 	private.type = @"@";
@@ -162,7 +168,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	JSStringRef jsName = JSStringCreateWithUTF8CString("__jsc__");
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, jsc, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
 	JSStringRelease(jsName);
-	
+*/
+	[self setObject:self withName:@"__jsc__"];
 
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
@@ -173,20 +180,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 	// Load class kit
 	[self evalJSFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"]];
-	
-/*
-	// Check out 'o' type_modifier
-	NSLog(@"scanDecimal= %s", [self typeEncodingOfMethod:@"scanDecimal:" class:@"NSScanner"]);
-	NSLog(@"scanDouble= %s", [self typeEncodingOfMethod:@"scanDouble:" class:@"NSScanner"]);
-	NSLog(@"fileExistsAtPath:isDirectory:= %s", [self typeEncodingOfMethod:@"fileExistsAtPath:isDirectory:" class:@"NSFileManager"]);
-	NSLog(@"sortedArrayUsingFunction:context:= %s", [self typeEncodingOfMethod:@"sortedArrayUsingFunction:context:" class:@"NSArray"]);
-	NSLog(@"instantiateNibWithOwner:topLevelObjects:= %s", [self typeEncodingOfMethod:@"instantiateNibWithOwner:topLevelObjects:" class:@"NSNib"]);
-*/
 
-	
-
-
-	return	o;
+	return	self;
 }
 
 //
@@ -317,6 +312,8 @@ static id JSCocoaSingleton = NULL;
 //
 + (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx;
 {
+	NSLog(@"***For zero arg instance, use obj.instance() instead of obj.instance***");
+/*	
 	// It's an instance if it has a property 'thisObject', holding the class name
 	// value is an object holding the method name, 'instance' - its only use is storing 'thisObject'
 	JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
@@ -336,7 +333,7 @@ static id JSCocoaSingleton = NULL;
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(thisObject);
 	if (!thisObject)		return;
 
-//	NSLog(@"Instance autocall on class %@", [privateObject object]);
+	NSLog(@"Instance autocall on class %@", [privateObject object]);
 
 	// Create new instance and patch it into object
 	id newInstance = [[[privateObject object] alloc] init];
@@ -345,6 +342,7 @@ static id JSCocoaSingleton = NULL;
 	[instanceObject setObject:newInstance];
 	// Make JS object sole owner
 	[newInstance release];
+*/	
 }
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
@@ -878,30 +876,71 @@ static id JSCocoaSingleton = NULL;
 
 #pragma mark Boxed object hash
 
-+ (JSObjectRef)boxForObject:(id)o inContext:(JSContextRef)ctx
++ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
 {
-//	NSLog(@"Go for BOXING %x", o);
-//	NSLog(@"Go for BOXING retain Count=%d", [o retainCount]);
-//	NSLog(@"BOXING %x of class __%@__", o, [o class]);
-//	NSLog(@"BOXING %@", o);
+	id key = [NSString stringWithFormat:@"%x", o];
+	id value = [boxedObjects valueForKey:key];
+	// If object is boxed, up its usage count and return it
+	if (value)
+	{
+		[value upUsageCount];
+//		NSLog(@"upusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
+		return	[value jsObject];
+	}
 
+	//
+	// Create a new ObjC box around the JSValueRef boxing the JSObject
+	// , so we need to box
+	// Here's the why of the boxing :
+	// We are returning an ObjC object to Javascript.
+	// That ObjC object is boxed in a Javascript object.
+	// For all boxing requests of the same ObjC object, that Javascript object needs to be unique for object comparisons to work :
+	//		NSApplication.sharedApplication == NSApplication.sharedApplication
+	//		(JavascriptCore has no hook for object to object comparison, that's why objects need to be unique)
+	// To guarantee unicity, we keep a cache of boxed objects. 
+	// As boxed objects are JSObjectRef not derived from NSObject, we box them in an ObjC object.
+	//
+	
+	// Box the ObjC object in a JSObjectRef
 	JSObjectRef jsObject = [self jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"@";
 	[private setObject:o];
-//	NSLog(@"==> BOXED retain Count=%d", [o retainCount]);
+	
+	// Box the JSObjectRef in our ObjC object
+	value = [[BoxedJSObject alloc] init];
+	[value setJSObject:jsObject];
+
+	// Add to dictionary and make it sole owner
+	[boxedObjects setValue:value forKey:key];
+	[value release];
 	return	jsObject;
 }
 
 
-+ (void)downBoxedObjectCount:(id)o
++ (void)downBoxedJSObjectCount:(id)o
 {
-//	NSLog(@"UNBOXING %x", o);
-//	NSLog(@"UNBOXING class %@", [o class]);
-//	NSLog(@"Go for UNBOXING %x", o);
-//	NSLog(@"Go for UNBOXING retain Count=%d", [o retainCount]);
-//	NSLog(@"UNBOXED %x of class __%@__", o, [o class]);
-//	NSLog(@"UNBOXING %@", o);
+	id key = [NSString stringWithFormat:@"%x", o];
+	id value = [boxedObjects valueForKey:key];
+	if (!value)
+	{
+		NSLog(@"downBoxedJSObjectCount: without an up !");
+		NSLog(@"downBoxedJSObjectCount: %@", o);
+		return;
+	}
+	int count = [value downUsageCount];
+//	NSLog(@"downusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
+	if (count == 0)
+	{
+//		NSLog(@"CLEAN %@ (%@ rc=%d)", o, value, [value retainCount]);
+		[boxedObjects removeObjectForKey:key];
+//		NSLog(@"CLEANED ? %x", [boxedObjects valueForKey:key]);
+	}
+}
+
++ (id)boxedObjects
+{
+	return boxedObjects;
 }
 
 #pragma mark Helpers
@@ -1111,10 +1150,13 @@ static id JSCocoaSingleton = NULL;
 //
 - (BOOL)setObject:(id)object withName:(id)name
 {
+/*
 	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 	private.type = @"@";
 	[private setObject:object];
+*/
+	JSObjectRef o = [JSCocoaController boxedJSObject:object inContext:ctx];
 
 	// Set
 	JSValueRef	exception = NULL;
@@ -1318,13 +1360,9 @@ int	liveInstanceCount	= 0;
 {
 	id allKeys = [sharedInstanceStats allKeys];
 	NSLog(@"====instanceStats : %d classes spawned %d live instances (%d since launch, %d dead)====", [allKeys count], liveInstanceCount, fullInstanceCount, fullInstanceCount-liveInstanceCount);
-	BOOL	printedSomething = NO;
 	for (id key in allKeys)		
-	{
 		NSLog(@"%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
-		printedSomething = YES;
-	}
-	if (printedSomething)	NSLog(@"====");
+	if ([allKeys count])	NSLog(@"====");
 }
 
 
@@ -1487,15 +1525,18 @@ int	liveInstanceCount	= 0;
 	// Allocate new instance
 	id newInstance = [self alloc];
 	
+/*	
 	// Set it as new object
 	JSObjectRef thisObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(thisObject);
 	private.type = @"@";
 	[private setObject:newInstance];
+*/
+	JSObjectRef thisObject = [JSCocoaController boxedJSObject:newInstance inContext:ctx];
 	
 	// Create function object boxing our init method
 	JSObjectRef function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	private = JSObjectGetPrivate(function);
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
 	private.type = @"method";
 	private.methodName = methodName;
 
@@ -1543,12 +1584,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 	Class objCClass = NSClassFromString(propertyName);
 	if (objCClass)
 	{
-		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-		private.type = @"@";
-		[private setObject:objCClass];		
-		
-		return	o;
+		return	[JSCocoaController boxedJSObject:objCClass inContext:ctx];
 	}
 
 	id xml;
@@ -1777,11 +1813,12 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// if dealloc is overloaded, releasing now will trigger JS code and fail
 	// As we're being called by GC, KJS might assert() in operationInProgress == NoOperation
 	id private = JSObjectGetPrivate(object);
+//	NSLog(@"FINALIZING JSOBJECTREF %x holding %@", object, private);
 	// Immediate release if dealloc is not overloaded
 	[private release];
 #ifdef __OBJC_GC__
-// Mark internal object as collectable
-[[NSGarbageCollector defaultCollector] enableCollectorForPointer:private];
+	// Mark internal object as collectable
+	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:private];
 #endif
 }
 
@@ -1804,7 +1841,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	
 	// Autocall instance
 	if ([propertyName isEqualToString:@"thisObject"])	return	NULL;
-	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
+//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
@@ -2052,11 +2089,9 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
-	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
-	
-	
-	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
+//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 
+	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
@@ -2248,8 +2283,7 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
 	// Autocall : ensure 'instance' has been called and we've got our new instance
-	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
-	
+//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 
@@ -2739,4 +2773,55 @@ void* malloc_autorelease(size_t size)
 // JSCocoa shorthand
 //
 @implementation JSCocoa
+@end
+
+
+//
+// Boxed object cache
+//
+@implementation BoxedJSObject
+
+- (void)dealloc
+{
+//	JSValueUnprotect(NULL, jsObject);
+//	NSLog(@"dealloc BoxedJSObject %x", self);
+	[super dealloc];
+}
+
+- (void)setJSObject:(JSObjectRef)o
+{
+	jsObject = o;
+	usageCount = 1;
+//	JSValueProtect(NULL, jsObject);
+}
+- (int)upUsageCount
+{
+	return	++usageCount;
+}
+- (int)downUsageCount
+{
+	return	0;
+	return	--usageCount;
+}
+- (int)usageCount
+{
+	return	usageCount;
+}
+- (JSObjectRef)jsObject
+{
+	return	jsObject;
+}
+
+- (id)description
+{
+	id boxedObject = [(JSCocoaPrivateObject*)JSObjectGetPrivate(jsObject) object];
+	return [NSString stringWithFormat:@"<%@: %x holding %@: %x (retainCount=%d, usageCount=%d)>",
+				[self class], 
+				self, 
+				[boxedObject class],
+				boxedObject,
+				[boxedObject retainCount],
+				usageCount];
+}
+
 @end

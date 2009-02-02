@@ -39,7 +39,7 @@
 						
 	})
 	
-	var o = MyTestObjectNewClass.instance
+	var o = MyTestObjectNewClass.instance()
 	
 	// Test class overload
 	MyTestObjectNewClass.instanceMethodSignatureForSelector('respondsToSelector:')
@@ -74,7 +74,7 @@
 	hash['closureTest:'] = ['int', 'int', fn]
 	defineClass('MyTestObjectNewClass2 < NSObject', hash)
 	
-	var o = MyTestObjectNewClass2.instance
+	var o = MyTestObjectNewClass2.instance()
 	var r = o.closureTest(8)
 	
 //	JSCocoaController.log('r=' + r)

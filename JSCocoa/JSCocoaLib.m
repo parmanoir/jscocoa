@@ -13,13 +13,13 @@
 
 - (id)init
 {
-	id o	= [super init];
+	self	= [super init];
 /*
 	ptr		= NULL;
 	structureTypeEncoding = nil;
 */	
 	arg		= nil;
-	return o;
+	return self;
 }
 - (void)cleanUp
 {

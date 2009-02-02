@@ -35,7 +35,7 @@
 	var instance3 = NSString.alloc.ini( { tWithString : 'hello' } )
 	instance3.release
 	var instance4 = NSString.instance( { withString : 'hello' } )
-	var instance5 = NSString.instance
+	var instance5 = NSString.instance()
 
 	var instance6 = NSString.alloc.init
 	var instance7 = NSString.alloc.init
@@ -47,7 +47,6 @@
 	if (instance5 != '' || instance5.length != 0 || instance5['class'] != 'NSCFString')	throw "(5) Invalid string instance"
 	if (instance6 != '' || instance6.length != 0 || instance6['class'] != 'NSCFString')	throw "(6) Invalid string instance"
 	if (instance7 != '' || instance7.length != 0 || instance7['class'] != 'NSCFString')	throw "(7) Invalid string instance"
-	
 
 
 /*

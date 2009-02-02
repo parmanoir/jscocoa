@@ -27,16 +27,19 @@
 		
 //		JSCocoaController.logInstanceStats
 		var count1 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
-//		if (count1 != 3)	throw 'invalid retain count - got '  + count1 + ', expected 3'
+		if (count1 != 3)	throw 'invalid retain count - got '  + count1 + ', expected 3 (1)'
 		
 		o1 = null
 		o2 = null
 		
 		JSCocoaController.garbageCollect
 
+
+log(JSCocoaController.boxedObjects)
+
 //		JSCocoaController.logInstanceStats
 		var count2 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
-		if (count2 != 0)	throw 'invalid retain count - got '  + count2 + ', expected 0'
+		if (count2 != 0)	throw 'invalid retain count - got '  + count2 + ', expected 0 (2)'
 
 //		JSCocoaController.log('***' + count0 + '***' + count1 + '***' + count2 + '***')
 //		JSCocoaController.logInstanceStats

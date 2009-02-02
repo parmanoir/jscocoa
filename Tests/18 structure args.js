@@ -22,7 +22,7 @@
 						}]
 	})
 	
-	var o = StructureArgsTester.instance
+	var o = StructureArgsTester.instance()
 	
 	var r = o.testWith({x:1.23, struct:NSMakePoint(10, 20), y:4.56})
 	

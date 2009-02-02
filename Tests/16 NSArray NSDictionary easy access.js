@@ -20,7 +20,7 @@
 	
 	*/
 
-	var a = NSMutableArray.instance
+	var a = NSMutableArray.instance()
 	
 	
 	
@@ -40,7 +40,7 @@
 			
 			array.length (duplicate of ObjC's array.count)
 	*/
-	var a = NSMutableArray.instance
+	var a = NSMutableArray.instance()
 	
 	a.addObject(6.0)
 	a.addObject('Hello World !')
@@ -69,7 +69,7 @@
 
 		for (key in hash)
 	*/
-	var d = NSMutableDictionary.instance
+	var d = NSMutableDictionary.instance()
 	
 //	d.set({ object : 13.0, forKey : 'key1' })
 //	JSCocoaController.log('d.key1=' + d.objectForKey('key1'))

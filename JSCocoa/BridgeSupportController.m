@@ -26,13 +26,13 @@
 
 - (id)init
 {
-	id r = [super init];
+	self = [super init];
 	
 	paths			= [[NSMutableArray alloc] init];
 	xmlDocuments	= [[NSMutableArray alloc] init];
 	hash			= [[NSMutableDictionary alloc] init];
 	
-	return	r;
+	return	self;
 }
 
 - (void)dealloc
