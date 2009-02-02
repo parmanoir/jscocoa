@@ -30,3 +30,7 @@
 //	log(NSApplication == NSApplication)
 //	log(NSApplication.sharedWorkspace == NSApplication.sharedWorkspace)
 //	log(NSString.stringWithString('j') == NSString.stringWithString('j'))
+
+
+	var v = NSView.alloc.init
+	v.release

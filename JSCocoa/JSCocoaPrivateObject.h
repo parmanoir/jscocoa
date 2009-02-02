@@ -59,6 +59,7 @@
 //- (void*)ptr;
 
 - (void)setObject:(id)o;
+- (void)setObjectNoRetain:(id)o;
 - (id)object;
 
 - (void)setMethod:(Method)m;

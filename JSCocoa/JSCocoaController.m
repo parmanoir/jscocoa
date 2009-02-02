@@ -924,7 +924,7 @@ static id JSCocoaSingleton = NULL;
 	if (!value)
 	{
 		NSLog(@"downBoxedJSObjectCount: without an up !");
-		NSLog(@"downBoxedJSObjectCount: %@", o);
+		NSLog(@"downBoxedJSObjectCount: %@ %x", [o class], o);
 		return;
 	}
 //	NSLog(@"downusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
@@ -1911,6 +1911,17 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			// Go for zero arg call
 			if ([propertyName rangeOfString:@":"].location == NSNotFound && [callee respondsToSelector:sel])
 			{
+				// Special case for alloc : objects 
+				if ([propertyName isEqualToString:@"alloc"])
+				{
+					id allocatedObject = [callee alloc];
+					JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+					JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
+					private.type = @"@";
+					[private setObjectNoRetain:allocatedObject];
+					return	jsObject;
+				}
+			
 				Method method = class_getInstanceMethod([callee class], sel);
 				if (!method)	method = class_getClassMethod([callee class], sel);
 
