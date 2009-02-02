@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DB173210F293874005DEA52</string>
+						<string>3D31751B0F367F1200F0F4BA</string>
 						<key>history</key>
 						<array>
-							<string>3DB172E80F293143005DEA52</string>
+							<string>3D3175190F367E0F00F0F4BA</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>163 259 1124 748 0 0 1920 1178 </string>
+				<string>878 200 1124 748 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -314,13 +314,13 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>10</integer>
-											<integer>1</integer>
+											<integer>19</integer>
+											<integer>17</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {333, 334}}</string>
+									<string>{{0, 29}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -483,8 +483,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3DB172CA0F293074005DEA52</string>
-				<string>3DB172CB0F293074005DEA52</string>
+				<string>3D3175070F367DCA00F0F4BA</string>
+				<string>3D3175080F367DCA00F0F4BA</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -517,12 +517,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>3DB172EA0F29315E005DEA52</string>
-		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/GC ObjC JSCocoa/GC ObjC JSCocoa.xcodeproj</string>
+		<string>3DB172EA0F29315E005DEA52</string>
 	</array>
 	<key>WindowString</key>
 	<string>1227 758 350 420 0 0 1920 1178 </string>
@@ -678,6 +676,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -700,8 +700,6 @@
 							<string>485pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
@@ -743,7 +741,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>3DB172D60F29310A005DEA52</string>
+				<string>3D31750A0F367DCA00F0F4BA</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -863,13 +861,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>3DB172D70F29310A005DEA52</string>
+				<string>3D3175110F367DD600F0F4BA</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>3DB172D80F29310A005DEA52</string>
-				<string>3DB172D90F29310A005DEA52</string>
-				<string>3DB172DA0F29310A005DEA52</string>
-				<string>3DB172DB0F29310A005DEA52</string>
-				<string>3DB172DC0F29310A005DEA52</string>
+				<string>3D3175120F367DD600F0F4BA</string>
+				<string>3D3175130F367DD600F0F4BA</string>
+				<string>3D3175140F367DD600F0F4BA</string>
+				<string>3D3175150F367DD600F0F4BA</string>
+				<string>3D3175160F367DD600F0F4BA</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>

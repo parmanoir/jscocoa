@@ -23,7 +23,7 @@
 
 
 
-	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 //	objc_assignIvar();
 }
 

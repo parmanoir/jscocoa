@@ -883,7 +883,6 @@ static id JSCocoaSingleton = NULL;
 	// If object is boxed, up its usage count and return it
 	if (value)
 	{
-		[value upUsageCount];
 //		NSLog(@"upusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
 		return	[value jsObject];
 	}
@@ -928,9 +927,8 @@ static id JSCocoaSingleton = NULL;
 		NSLog(@"downBoxedJSObjectCount: %@", o);
 		return;
 	}
-	int count = [value downUsageCount];
 //	NSLog(@"downusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
-	if (count == 0)
+//	if (count == 0)
 	{
 //		NSLog(@"CLEAN %@ (%@ rc=%d)", o, value, [value retainCount]);
 		[boxedObjects removeObjectForKey:key];
@@ -2781,31 +2779,9 @@ void* malloc_autorelease(size_t size)
 //
 @implementation BoxedJSObject
 
-- (void)dealloc
-{
-//	JSValueUnprotect(NULL, jsObject);
-//	NSLog(@"dealloc BoxedJSObject %x", self);
-	[super dealloc];
-}
-
 - (void)setJSObject:(JSObjectRef)o
 {
 	jsObject = o;
-	usageCount = 1;
-//	JSValueProtect(NULL, jsObject);
-}
-- (int)upUsageCount
-{
-	return	++usageCount;
-}
-- (int)downUsageCount
-{
-	return	0;
-	return	--usageCount;
-}
-- (int)usageCount
-{
-	return	usageCount;
 }
 - (JSObjectRef)jsObject
 {
@@ -2815,13 +2791,13 @@ void* malloc_autorelease(size_t size)
 - (id)description
 {
 	id boxedObject = [(JSCocoaPrivateObject*)JSObjectGetPrivate(jsObject) object];
-	return [NSString stringWithFormat:@"<%@: %x holding %@: %x (retainCount=%d, usageCount=%d)>",
+	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%d)>",
 				[self class], 
 				self, 
+				(self == [self class]) ? @"Class" : @"",
 				[boxedObject class],
 				boxedObject,
-				[boxedObject retainCount],
-				usageCount];
+				[boxedObject retainCount]];
 }
 
 @end

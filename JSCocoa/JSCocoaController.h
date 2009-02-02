@@ -127,13 +127,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // Boxed object cache : holds one JSObjectRef for each reference to a pointer
 //
 @interface BoxedJSObject : NSObject {
-	int			usageCount;
 	JSObjectRef	jsObject;
 }
 - (void)setJSObject:(JSObjectRef)o;
-- (int)upUsageCount;
-- (int)downUsageCount;
-- (int)usageCount;
 - (JSObjectRef)jsObject;
 
 @end

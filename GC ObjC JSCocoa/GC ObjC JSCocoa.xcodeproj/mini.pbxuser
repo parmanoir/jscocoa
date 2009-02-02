@@ -60,12 +60,12 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 254357616;
-			PBXWorkspaceStateSaveDate = 254357616;
+			PBXPerProjectTemplateStateSaveDate = 255229380;
+			PBXWorkspaceStateSaveDate = 255229380;
 		};
 		perUserProjectItems = {
-			3DB172E80F293143005DEA52 /* PBXBookmark */ = 3DB172E80F293143005DEA52 /* PBXBookmark */;
-			3DB173210F293874005DEA52 /* PBXTextBookmark */ = 3DB173210F293874005DEA52 /* PBXTextBookmark */;
+			3D3175190F367E0F00F0F4BA /* PBXTextBookmark */ = 3D3175190F367E0F00F0F4BA /* PBXTextBookmark */;
+			3D31751B0F367F1200F0F4BA /* PBXTextBookmark */ = 3D31751B0F367F1200F0F4BA /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DD063F80EFF746F007655AD /* Source Control */;
 		userBuildSettings = {
@@ -78,6 +78,26 @@
 			sepNavVisRange = "{0, 265}";
 			sepNavWindowFrame = "{{38, 357}, {1107, 795}}";
 		};
+	};
+	3D3175190F367E0F00F0F4BA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 23";
+		rLen = 0;
+		rLoc = 609;
+		rType = 0;
+		vrLen = 1645;
+		vrLoc = 0;
+	};
+	3D31751B0F367F1200F0F4BA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 26";
+		rLen = 0;
+		rLoc = 614;
+		rType = 0;
+		vrLen = 1647;
+		vrLoc = 0;
 	};
 	3D788F780F01F96300175ADD /* BridgeSupportController.h */ = {
 		uiCtxt = {
@@ -113,9 +133,9 @@
 	};
 	3D788F870F01F96300175ADD /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 29915}}";
-			sepNavSelRange = "{49579, 2}";
-			sepNavVisRange = "{48840, 1469}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 31356}}";
+			sepNavSelRange = "{50134, 2}";
+			sepNavVisRange = "{48846, 1335}";
 			sepNavWindowFrame = "{{607, 318}, {1107, 795}}";
 		};
 	};
@@ -126,20 +146,6 @@
 			sepNavVisRange = "{42, 1211}";
 			sepNavWindowFrame = "{{621, 107}, {1107, 795}}";
 		};
-	};
-	3DB172E80F293143005DEA52 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
-	};
-	3DB173210F293874005DEA52 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
-		name = "ApplicationController.m: 23";
-		rLen = 0;
-		rLoc = 609;
-		rType = 0;
-		vrLen = 1645;
-		vrLoc = 0;
 	};
 	3DD063F00EFF746B007655AD /* GC ObjC JSCocoa */ = {
 		isa = PBXExecutable;
@@ -206,9 +212,9 @@
 	3DD0642B0EFF74D2007655AD /* ApplicationController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1065, 935}}";
-			sepNavSelRange = "{609, 0}";
-			sepNavVisRange = "{0, 1645}";
-			sepNavWindowFrame = "{{163, 203}, {1124, 804}}";
+			sepNavSelRange = "{614, 0}";
+			sepNavVisRange = "{0, 1647}";
+			sepNavWindowFrame = "{{878, 144}, {1124, 804}}";
 		};
 	};
 	3DD0644B0EFF75C7007655AD /* main.js */ = {

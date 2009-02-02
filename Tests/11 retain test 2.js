@@ -35,8 +35,6 @@
 		JSCocoaController.garbageCollect
 
 
-log(JSCocoaController.boxedObjects)
-
 //		JSCocoaController.logInstanceStats
 		var count2 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)
 		if (count2 != 0)	throw 'invalid retain count - got '  + count2 + ', expected 0 (2)'
