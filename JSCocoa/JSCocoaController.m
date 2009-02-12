@@ -1148,6 +1148,15 @@ static id JSCocoaSingleton = NULL;
 	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
 }
 
+//
+// Unbox a JSValueRef
+//
+- (id)unboxJSValueRef:(JSValueRef)jsValue
+{
+	id object = nil;
+	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&object inContext:ctx];
+	return object;
+}
 
 //
 // Add/Remove an ObjC object variable to the global context

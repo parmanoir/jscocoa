@@ -26,6 +26,13 @@
 	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
 */	
 //	[[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:self];
+/*
+	JSValueRef value = [[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:@"myself", nil];
+	id object;
+	id object2 = [[JSCocoaController sharedController] unboxJSValueRef:value];
+	[JSCocoaFFIArgument unboxJSValueRef:value toObject:&object inContext:[[JSCocoaController sharedController] ctx]];
+	NSLog(@"result=*%@*%@*", object, object2);
+*/	
 	
 /*
 	NSRect rect = { 10, 20, 30, 40 };
