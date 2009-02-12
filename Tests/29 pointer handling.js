@@ -79,56 +79,58 @@ NSDeviceRGBColorSpace];
 	//
 	// Test raw buffer
 	//
-/*
-	var buffer = new memoryBuffer('cccccc')
-	buffer[0] = 'h'
-	buffer[1] = 'e'
-	buffer[2] = 0
-	
-	var str = NSString.stringWithUTF8String(buffer)
-	log('str=' + str)
-	
-	if (str != 'hello')				throw 'pointer handling raw buffer failed (9)'
-*/
-
-	var buffer = new memoryBuffer('fff')
-	
 	var path = NSBezierPath.bezierPath
 	path.moveToPoint(new NSPoint(0, 0))
 	path.curve({ toPoint : new NSPoint(10, 20), controlPoint1 : new NSPoint(30, 40), controlPoint2 : new NSPoint(50, 60) })
 	
-	log(path.elementCount)
-	log(path.elementAtIndex(0))
 	
-	buffer = null
-	
-	
+	// Allocate room for 3 points
+	var buffer = new memoryBuffer('ffffff')
+	// Copy points into our buffer
+	path.element({ atIndex : 1, associatedPoints : new outArgument(buffer, 0) })
+
+	// Check points were copied OK (controlPoint1, controlPoint2, toPoint)
+	if (!floatsEq(buffer[0], 30))	throw 'pointer handling raw get failed (9)'
+	if (!floatsEq(buffer[1], 40))	throw 'pointer handling raw get failed (10)'
+	if (!floatsEq(buffer[2], 50))	throw 'pointer handling raw get failed (11)'
+	if (!floatsEq(buffer[3], 60))	throw 'pointer handling raw get failed (12)'
+	if (!floatsEq(buffer[4], 10))	throw 'pointer handling raw get failed (13)'
+	if (!floatsEq(buffer[5], 20))	throw 'pointer handling raw get failed (14)'
+
 /*
-- (NSBezierPathElement)elementAtIndex:(NSInteger)index
-		     associatedPoints:(NSPointArray)points;
-// As above with points == NULL.
-- (NSBezierPathElement)elementAtIndex:(NSInteger)index;
-- (void)setAssociatedPoints:(NSPointArray)points atIndex:(NSInteger)index;
-
-
-
-NSClassFromString	
-*/
-/*
-
-	throw '29 pointer'
-
-//NSString
-//Check stringWithUTF8String vec 'hello' \0
-	throw 'check raw points bezier path'
-	throw 'someFunction(memoryBuffer)'
-	
-	throw 'buffer[0] = ...'
-
 	log(buffer[0])
-	buffer[0] = 4
+	log(buffer[1])
+	log(buffer[2])
+	log(buffer[3])
+	log(buffer[4])
+	log(buffer[5])
+*/
 
-elementAtIndex:associatedPoints
+	// Change point values
+	buffer[0] = 123
+	buffer[1] = 456
+	buffer[2] = 789
+	buffer[3] = 0.123
+	buffer[4] = 0.456
+	buffer[5] = 0.789
+	
+//	path.set({ associatedPoints : buffer, atIndex : 1 })
+	// Overwrite existing points
+	path.setAssociatedPoints_atIndex(buffer, 1)
+
+	// Copy points into a new buffer
+	var buffer2 = new memoryBuffer('ffffff')
+	path.element({ atIndex : 1, associatedPoints : new outArgument(buffer2, 0) })
+
+	if (!floatsEq(buffer2[0], 123))		throw 'pointer handling raw get failed (15)'
+	if (!floatsEq(buffer2[1], 456))		throw 'pointer handling raw get failed (16)'
+	if (!floatsEq(buffer2[2], 789))		throw 'pointer handling raw get failed (17)'
+	if (!floatsEq(buffer2[3], 0.123))	throw 'pointer handling raw get failed (18)'
+	if (!floatsEq(buffer2[4], 0.456))	throw 'pointer handling raw get failed (19)'
+	if (!floatsEq(buffer2[5], 0.789))	throw 'pointer handling raw get failed (20)'
 
 
-*/	
+	buffer = null
+	buffer2 = null
+
+

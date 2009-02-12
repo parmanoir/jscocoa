@@ -2554,6 +2554,8 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 		// Setup arguments, unboxing or converting data
 		for (i=0; i<argumentCount; i++, idx++)
 		{
+//			NSLog(@"calling %@ %c %d/%d", methodName, [arg typeEncoding], i+1, argumentCount);
+
 			// All variadic arguments are treated as ObjC objects (@)
 			JSCocoaFFIArgument*	arg;
 			if (isVariadic && i >= callAddressArgumentCount)
@@ -2568,7 +2570,6 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 
 			// Convert argument
 			JSValueRef			jsValue	= arguments[i];
-
 			BOOL	shouldConvert = YES;
 			// Check type o modifiers
 			if ([arg typeEncoding] == '^')
@@ -2581,6 +2582,12 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
 					{
 						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
+						shouldConvert = NO;
+					}
+					if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
+					{
+						JSCocoaMemoryBuffer* buffer = unboxed;
+						[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:[buffer pointerForIndex:0]];
 						shouldConvert = NO;
 					}
 				}

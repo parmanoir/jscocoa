@@ -119,6 +119,18 @@
 	return	self;
 }
 
+- (void)dealloc	
+{
+	if (buffer)	free(buffer);
+	[typeString release];
+	[super dealloc];
+}
+- (void)finalize
+{
+	if (buffer)	free(buffer);
+	[super finalize];
+}
+
 //
 // Returns pointer for index without any padding
 //

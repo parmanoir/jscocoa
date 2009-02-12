@@ -959,6 +959,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	{
 		JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
 		NSString* resultString = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+		NSLog(@"unboxed=%@", resultString);
 		JSStringRelease(resultStringJS);
 		[NSMakeCollectable(resultString) autorelease];
 		*(id*)o = resultString;
