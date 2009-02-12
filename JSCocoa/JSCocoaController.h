@@ -113,6 +113,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (BOOL)useAutoCall;
 - (void)setUseAutoCall:(BOOL)b;
 
+- (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
+
 
 
 @end

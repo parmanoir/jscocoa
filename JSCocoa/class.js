@@ -461,11 +461,14 @@
 	//
 	function	outArgument()
 	{
-		return	JSCocoaOutArgument.instance()
+		var o = JSCocoaOutArgument.instance()
+		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
+		return	o
 	}
 	
-	function	memoryBuffer()
+	function	memoryBuffer(types)
 	{
-		return	JSCocoaMemoryBuffer.instance()
+//		return	JSCocoaMemoryBuffer.instance()
+		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
 	}
 	

@@ -21,6 +21,7 @@
 		3D3B56CA0F1E9A1100D60188 /* sysv.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C30F1E9A1100D60188 /* sysv.o */; };
 		3D3B56CB0F1E9A1100D60188 /* types.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C40F1E9A1100D60188 /* types.o */; };
 		3D3B56CC0F1E9A1100D60188 /* debug.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C50F1E9A1100D60188 /* debug.o */; };
+		3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */; };
 		3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */; };
 		3D7A818F0EA238D3009DE07C /* hiPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818D0EA238D3009DE07C /* hiPointCount.png */; };
 		3D7A81900EA238D3009DE07C /* lowPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818E0EA238D3009DE07C /* lowPointCount.png */; };
@@ -53,6 +54,8 @@
 		3D3B56C30F1E9A1100D60188 /* sysv.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = sysv.o; path = "../JSCocoa/iPhone/ffi lib/sysv.o"; sourceTree = SOURCE_ROOT; };
 		3D3B56C40F1E9A1100D60188 /* types.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = types.o; path = "../JSCocoa/iPhone/ffi lib/types.o"; sourceTree = SOURCE_ROOT; };
 		3D3B56C50F1E9A1100D60188 /* debug.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; name = debug.o; path = "../JSCocoa/iPhone/ffi lib/debug.o"; sourceTree = SOURCE_ROOT; };
+		3D64C8850F3F1A45004D610C /* JSCocoaLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaLib.m; path = ../JSCocoa/JSCocoaLib.m; sourceTree = SOURCE_ROOT; };
+		3D64C8860F3F1A45004D610C /* JSCocoaLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaLib.h; path = ../JSCocoa/JSCocoaLib.h; sourceTree = SOURCE_ROOT; };
 		3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = iPhone.bridgesupport; sourceTree = "<group>"; };
 		3D7A818D0EA238D3009DE07C /* hiPointCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hiPointCount.png; sourceTree = "<group>"; };
 		3D7A818E0EA238D3009DE07C /* lowPointCount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lowPointCount.png; sourceTree = "<group>"; };
@@ -184,6 +187,8 @@
 				3DA390100EA7523300CB6F74 /* JSCocoaFFIArgument.h */,
 				3DA390110EA7523300CB6F74 /* JSCocoaFFIClosure.m */,
 				3DA390120EA7523300CB6F74 /* JSCocoaFFIClosure.h */,
+				3D64C8850F3F1A45004D610C /* JSCocoaLib.m */,
+				3D64C8860F3F1A45004D610C /* JSCocoaLib.h */,
 				3DA390130EA7523300CB6F74 /* BridgeSupportController.m */,
 				3DA390140EA7523300CB6F74 /* BridgeSupportController.h */,
 				3D9BA7DA0EB10DC9005F9A76 /* class.js */,
@@ -274,6 +279,7 @@
 				3DA390180EA7523300CB6F74 /* JSCocoaFFIClosure.m in Sources */,
 				3DA390190EA7523300CB6F74 /* BridgeSupportController.m in Sources */,
 				3D3B559C0F1D41F300D60188 /* GDataXMLNode.m in Sources */,
+				3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +325,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-lxml2";
+				OTHER_LDFLAGS = (
+					"-lffi",
+					"-lxml2",
+				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.2;
 			};
@@ -334,7 +343,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				OTHER_LDFLAGS = "-lxml2";
+				OTHER_LDFLAGS = (
+					"-lffi",
+					"-lxml2",
+				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.2;
 			};

@@ -44,10 +44,12 @@
 	[super dealloc];
 }
 
+//
+// Load a bridgeSupport file into a hash as { name : xmlTagString } 
+//
 - (BOOL)loadBridgeSupport:(NSString*)path
 {
 	NSError*	error = nil;
-
 	/*
 		Adhoc parser
 			NSXMLDocument is too slow

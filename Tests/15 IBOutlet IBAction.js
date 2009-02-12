@@ -121,13 +121,14 @@
 //		JSCocoaController.log('bindingInfo=' + owner.input1.infoForBinding('value'))
 		owner.input1.unbind('value')
 //		JSCocoaController.log('bindingInfo=' + owner.input1.infoForBinding('value'))
-		
 	}
 	else
 	{
 		JSCocoaController.log('(skipping bindings test)')
 	}
-	bindingsAlreadyTested = true
+//	bindingsAlreadyTested = true
+	// No longer needed as I somehow fixed it ! :)
+	delete this.bindingsAlreadyTested
 	
 	// Hide window
 //	owner.window.orderOut(null)

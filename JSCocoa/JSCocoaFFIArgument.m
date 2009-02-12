@@ -199,7 +199,7 @@
 	return	ptr;
 }
 
-// type o
+// type o : out arguments (eg fn(int* pointerToIntResult))
 - (void*)allocatePointerStorage
 {
 	typeEncoding = [pointerTypeEncoding UTF8String][1];
@@ -927,6 +927,8 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	[private setObject:objcObject];
 	*value = jsObject;
 */
+	// Use a global boxing function to always return the same Javascript object 
+	//	when requesting multiple boxings of the same ObjC object
 	*value = [JSCocoaController boxedJSObject:objcObject inContext:ctx];
 	return	YES;
 }

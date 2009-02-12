@@ -14,17 +14,15 @@
 - (id)init
 {
 	self	= [super init];
-/*
-	ptr		= NULL;
-	structureTypeEncoding = nil;
-*/	
+
 	arg		= nil;
+	buffer	= nil;
 	return self;
 }
 - (void)cleanUp
 {
-//	if (ptr)	free(ptr);
 	[arg release];
+	[buffer release];
 }
 - (void)dealloc
 {
@@ -37,23 +35,12 @@
 	[super finalize];
 }
 
-/*
-//
-// ffff : 4 floats
-//
-- (void)addStorageForEncodings:(id)encodings
-{
 
-}
-
-- (void)addValue:(id)v forType:(char)encoding
-{
-}
-*/
+//
+// convert the out value to a JSValue
+//
 - (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx
 {
-//	JSValueRefAndContextRef ret;
-//	return	ret;
 	JSValueRef jsValue = NULL;
 	[arg toJSValueRef:&jsValue inContext:ctx];
 	return	jsValue;
@@ -65,17 +52,123 @@
 //	
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)_arg
 {
-//	NSLog(@"pointerTypeEncoding=%@=", [_arg pointerTypeEncoding]);
-	if (![_arg allocatePointerStorage])	return	NO;
-//	ptr						= [arg storage];
-//	typeEncoding			= [arg typeEncoding];
-//	structureTypeEncoding	= [arg structureTypeEncoding];
-//	[structureTypeEncoding retain];
+	// If holding a memory buffer, use its pointer
+	if (buffer)
+	{
+		arg	= _arg;
+		[arg retain];
 
+		void* ptr = [buffer pointerForIndex:bufferIndex];
+		if (!ptr)	return	NO;
+//		NSLog(@"mating encoding ***%c***%c***(pointerTypeEncoding=%@) on arg %x", [arg typeEncoding], [buffer typeAtIndex:bufferIndex], [arg pointerTypeEncoding], _arg);
+//		[arg setTypeEncoding:[buffer typeAtIndex:bufferIndex] withCustomStorage:ptr];
+		[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:ptr];
+		return	YES;
+	}
+
+	// Standard pointer
+	if (![_arg allocatePointerStorage])	return	NO;
 
 	arg	= _arg;
 	[arg retain];
 	return	YES;
 }
+
+- (BOOL)mateWithMemoryBuffer:(id)b atIndex:(int)idx
+{
+	if (!b || ![b isKindOfClass:[JSCocoaMemoryBuffer class]])	return	NSLog(@"mateWithMemoryBuffer called without a memory buffer (%@)", b), NO;
+	buffer = b;
+	[buffer retain];
+	bufferIndex = idx;
+	return	YES;
+}
+
+@end
+
+
+
+@implementation JSCocoaMemoryBuffer
+
+- (id)initWithTypes:(id)_types
+{
+	self	= [super init];
+	buffer	= NULL;
+
+	// Copy types string
+	typeString = [NSString stringWithString:_types];
+	[typeString retain];
+
+	// Compute buffer size
+	const char* types = [typeString UTF8String];
+	int l = [typeString length];
+	bufferSize = 0;
+	for (int i=0; i<l; i++)
+	{
+		int size = [JSCocoaFFIArgument sizeOfTypeEncoding:types[i]];
+		if (size == -1)	return	NSLog(@"JSCocoaMemoryBuffer initWithTypes : unknown type %c", types[i]), self;
+		bufferSize += size;
+	}
+
+	// Malloc
+//	NSLog(@"mallocing %d bytes for %@", bufferSize, typeString);
+	buffer = malloc(bufferSize);
+	
+//	float* fb = buffer;
+//	NSLog(@"initial %f %f %f %f", fb[0], fb[1], fb[2], fb[3]);
+	
+	return	self;
+}
+
+//
+// Returns pointer for index without any padding
+//
+- (void*)pointerForIndex:(int)index
+{
+	const char* types = [typeString UTF8String];
+	void* pointedValue = buffer;
+	for (int i=0; i<index; i++)
+	{
+//		NSLog(@"advancing %c", types[i]);
+		[JSCocoaFFIArgument advancePtr:&pointedValue accordingToEncoding:types[i]];
+	}
+	return	pointedValue;
+}
+
+- (char)typeAtIndex:(int)index
+{
+	if (index >= [typeString length])	return '\0';
+	return	[typeString UTF8String][index];
+}
+
+- (int)typeCount
+{
+	return	[typeString length];
+}
+
+
+//
+// Using JSValueRefAndContextRef as input to get the current context in which to create the return value
+//
+- (JSValueRef)valueAtIndex:(int)index inContext:(JSContextRef)ctx
+{
+	char	typeEncoding = [self typeAtIndex:index];
+	void*	pointedValue = [self pointerForIndex:index];
+
+	JSValueRef returnValue;
+	[JSCocoaFFIArgument toJSValueRef:&returnValue inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:nil fromStorage:pointedValue];
+	return	returnValue;
+}
+
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(int)index inContext:(JSContextRef)ctx;
+{
+	char	typeEncoding = [self typeAtIndex:index];
+	void*	pointedValue = [self pointerForIndex:index];
+
+	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:nil fromStorage:pointedValue];
+	return	YES;
+}
+
+
+
 
 @end

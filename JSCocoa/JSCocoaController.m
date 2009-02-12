@@ -178,6 +178,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	[self loadFrameworkWithName:@"CoreGraphics" inPath:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
 #endif	
 
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+#endif
+
 	// Load class kit
 	[self evalJSFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"]];
 
@@ -345,6 +348,9 @@ static id JSCocoaSingleton = NULL;
 */	
 }
 
+//
+// Method signature helper
+//
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
 {
 	id class = objc_getClass([className UTF8String]);
@@ -439,7 +445,7 @@ static id JSCocoaSingleton = NULL;
 	id rootElement = [xmlDocument rootElement];
 	*functionNamePlaceHolder = [[rootElement attributeForName:@"name"] stringValue];
 	
-	// Parse children and return alue
+	// Parse children and return value
 	int i, numChildren	= [rootElement childCount];
 	id	returnValue		= NULL;
 	for (i=0; i<numChildren; i++)
@@ -1593,7 +1599,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 	xml = [[BridgeSupportController sharedController] queryName:propertyName];
 	if (xml)
 	{
-		id error;
+		id error = nil;
 		id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error];
 		if (error)	return	NSLog(@"(OSX_getPropertyCallback) malformed xml while getting property %@ of type %@ : %@", propertyName, type, error), NULL;
 		[xmlDocument autorelease];
@@ -1747,7 +1753,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	// Object
 	if ([thisPrivateObject.type isEqualToString:@"@"])
 	{
-	
 		// Holding an out value ?
 		if ([thisPrivateObject.object isKindOfClass:[JSCocoaOutArgument class]])
 		{
@@ -1881,6 +1886,22 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				return	value;
 			}
 		}
+
+		// Special case for JSCocoaMemoryBuffer get
+		if ([privateObject.object isKindOfClass:[JSCocoaMemoryBuffer class]])
+		{
+			id buffer = privateObject.object;
+			
+			id scan		= [NSScanner scannerWithString:propertyName];
+			NSInteger propertyIndex;
+			// Is asked property an int ?
+			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
+			if (convertedToInt && [scan isAtEnd])
+			{
+				if (propertyIndex < 0 || propertyIndex >= [buffer typeCount])	return	NULL;
+				return	[buffer valueAtIndex:propertyIndex inContext:ctx];
+			}
+		}
 		
 		
 	
@@ -1911,6 +1932,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			// Go for zero arg call
 			if ([propertyName rangeOfString:@":"].location == NSNotFound && [callee respondsToSelector:sel])
 			{
+
 				// Special case for alloc : objects 
 				if ([propertyName isEqualToString:@"alloc"])
 				{
@@ -1981,7 +2003,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		if ([privateObject.object isKindOfClass:[JSCocoaOutArgument class]])
 		{
 			JSValueRef outValue = [(JSCocoaOutArgument*)privateObject.object outJSValueRefInContext:ctx];
-			if (JSValueGetType(ctx, outValue) == kJSTypeObject)
+			if (outValue && JSValueGetType(ctx, outValue) == kJSTypeObject)
 			{
 				JSObjectRef outObject = JSValueToObject(ctx, outValue, NULL);
 				JSValueRef possibleReturnValue = JSObjectGetProperty(ctx, outObject, propertyNameJS, NULL);
@@ -2151,6 +2173,23 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			}
 			else	return false;
 		}
+
+		
+		// Special case for JSCocoaMemoryBuffer get
+		if ([privateObject.object isKindOfClass:[JSCocoaMemoryBuffer class]])
+		{
+			id buffer = privateObject.object;
+			
+			id scan		= [NSScanner scannerWithString:propertyName];
+			NSInteger propertyIndex;
+			// Is asked property an int ?
+			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
+			if (convertedToInt && [scan isAtEnd])
+			{
+				if (propertyIndex < 0 || propertyIndex >= [buffer typeCount])	return	NULL;
+				return	[buffer setValue:jsValue atIndex:propertyIndex inContext:ctx];
+			}
+		}
 		
 		
 		
@@ -2166,7 +2205,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		
 		// Can't use capitalizedString on the whole string as it will transform 
 		//			myValue 
-		// to		Myvalue
+		// to		Myvalue (therby destroying camel letters)
 		// we want	MyValue
 //		NSString*	setterName = [NSString stringWithFormat:@"set%@:", [propertyName capitalizedString]];
 		// Capitalize only first letter
@@ -2314,98 +2353,16 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 
 
 //
-// callAsFunction
-//	enumerate dictionary keys
+// callAsFunction 
+//	done in two methods. 
+//	The first one (_jsCocoaObject_callAsFunction) calls a C function or ObjC method with provided arguments
+//	The second one (jsCocoaObject_callAsFunction) is called first and handles 
+//		* js function call : on an ObjC class, use of pure js functions as methods
+//		* Super call
+//		* toString, valueOf
 //
-static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree);
 
-//
-// This method handles Super by retrieving the method name to call
-//
-static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
-{
-	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
-//	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
-	JSValueRef*	superArguments = NULL;
-	id	superSelector = NULL;
-	id	superSelectorClass = NULL;
-/*
-	// Zero arg autocall
-	if ([privateObject isAutoCall])		
-	{
-		// Non kJSTypeObject return values, converted to a native JS type (number), boxed for auto call
-		if ([privateObject.type isEqualToString:@"jsValueRef"])	
-		{
-			// Returning NULL will crash, return jsNULL
-			if (![privateObject jsValueRef])	return	JSValueMakeNull(ctx);
-			return [privateObject jsValueRef];
-		}
-		// Boxed objects
-		return	function;
-	}
-*/
-
-	// Pure JS functions for derived ObjC classes
-	if ([privateObject jsValueRef] && [privateObject.type isEqualToString:@"jsFunction"])
-	{
-		JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
-		return	JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
-	}
-	// Javascript custom methods
-	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
-	{
-		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
-		if ([privateObject.methodName isEqualToString:@"toString"])	return	JSValueMakeString(ctx, JSValueToStringCopy(ctx, jsValue, NULL));
-		return	jsValue;
-	}
-	
-	// Super handling : get method name and move js arguments to C array
-	if ([privateObject.methodName isEqualToString:@"Super"])
-	{
-		if (argumentCount != 1)	return	throwException(ctx, exception, @"Super wants one argument array"), NULL;
-
-		// Get argument object
-		JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
-		
-		// Get argument count
-		JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
-		JSValueRef	jsLength = JSObjectGetProperty(ctx, argumentObject, jsLengthName, NULL);
-		JSStringRelease(jsLengthName);
-		if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, @"Super has no arguments"), NULL;
-		
-		int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
-		if (superArgumentCount)
-		{
-			superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
-			for (i=0; i<superArgumentCount; i++)
-				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
-		}
-		
-		argumentCount = superArgumentCount;
-		
-		// Get method name and associated class (need class for obj_msgSendSuper)
-		JSStringRef	jsCalleeName = JSStringCreateWithUTF8CString("callee");
-		JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
-		JSStringRelease(jsCalleeName);
-		JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
-		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
-		if (!superSelector)	return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
-		superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
-	}
-
-	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
-	JSValueRef*	argumentsToFree		= NULL;
-	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
-	
-	if (superArguments)		free(superArguments);
-	if (argumentsToFree)	free(argumentsToFree);
-	
-	return	jsReturnValue;
-}
-
-//
 // That's where the actual calling happens.
-//
 static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
@@ -2616,10 +2573,9 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 			// Check type o modifiers
 			if ([arg typeEncoding] == '^')
 			{
-				// Allocate custom storage ?
+				// If holding a JSCocoaOutArgument, allocate custom storage
 				if (JSValueGetType(ctx, jsValue) == kJSTypeObject)
 				{
-//					JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 					id unboxed = nil;
 					[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&unboxed inContext:ctx];
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
@@ -2627,7 +2583,6 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
 						shouldConvert = NO;
 					}
-										
 				}
 				else
 				// Allocate default storage
@@ -2675,6 +2630,74 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 	JSValueRef	jsReturnValue = NULL;
 	BOOL converted = [returnValue toJSValueRef:&jsReturnValue inContext:ctx];
 	if (!converted)	return	throwException(ctx, exception, [NSString stringWithFormat:@"Return value not converted in %@", methodName?methodName:functionName]), NULL;
+	
+	return	jsReturnValue;
+}
+
+//
+// This method handles Super by retrieving the method name to call
+//
+static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
+{
+	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
+	JSValueRef*	superArguments	= NULL;
+	id	superSelector			= NULL;
+	id	superSelectorClass		= NULL;
+
+	// Pure JS functions for derived ObjC classes
+	if ([privateObject jsValueRef] && [privateObject.type isEqualToString:@"jsFunction"])
+	{
+		JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
+		return	JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
+	}
+	// Javascript custom methods
+	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
+	{
+		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
+		if ([privateObject.methodName isEqualToString:@"toString"])	return	JSValueMakeString(ctx, JSValueToStringCopy(ctx, jsValue, NULL));
+		return	jsValue;
+	}
+	
+	// Super handling : get method name and move js arguments to C array
+	if ([privateObject.methodName isEqualToString:@"Super"])
+	{
+		if (argumentCount != 1)	return	throwException(ctx, exception, @"Super wants one argument array"), NULL;
+
+		// Get argument object
+		JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
+		
+		// Get argument count
+		JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
+		JSValueRef	jsLength = JSObjectGetProperty(ctx, argumentObject, jsLengthName, NULL);
+		JSStringRelease(jsLengthName);
+		if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, @"Super has no arguments"), NULL;
+		
+		int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
+		if (superArgumentCount)
+		{
+			superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
+			for (i=0; i<superArgumentCount; i++)
+				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
+		}
+		
+		argumentCount = superArgumentCount;
+		
+		// Get method name and associated class (need class for obj_msgSendSuper)
+		JSStringRef	jsCalleeName = JSStringCreateWithUTF8CString("callee");
+		JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
+		JSStringRelease(jsCalleeName);
+		JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
+		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
+		if (!superSelector)	return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
+		superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
+	}
+
+	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
+	JSValueRef*	argumentsToFree		= NULL;
+	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
+	
+	if (superArguments)		free(superArguments);
+	if (argumentsToFree)	free(argumentsToFree);
 	
 	return	jsReturnValue;
 }
@@ -2805,7 +2828,7 @@ void* malloc_autorelease(size_t size)
 	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%d)>",
 				[self class], 
 				self, 
-				(self == [self class]) ? @"Class" : @"",
+				((id)self == (id)[self class]) ? @"Class" : @"",
 				[boxedObject class],
 				boxedObject,
 				[boxedObject retainCount]];

@@ -7,20 +7,32 @@
 		);
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = 3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */;
-		activeSDKPreference = iphoneos2.2;
+		activeSDKPreference = iphonesimulator2.2;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* iPhoneTest2 */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* iPhoneTest2 */,
+		);
+		breakpoints = (
 		);
 		codeSenseManager = 3DB581EA0EA17C1600EB80D9 /* Code sense */;
 		executables = (
 			3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */,
 		);
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 254053317;
-			PBXWorkspaceStateSaveDate = 254053317;
+			PBXPerProjectTemplateStateSaveDate = 255793563;
+			PBXWorkspaceStateSaveDate = 255793563;
+		};
+		perUserProjectItems = {
+			3D64C88E0F3F1E05004D610C /* PBXBookmark */ = 3D64C88E0F3F1E05004D610C /* PBXBookmark */;
+			3D64C8EE0F3F2A2F004D610C /* PBXBookmark */ = 3D64C8EE0F3F2A2F004D610C /* PBXBookmark */;
+			3D64C9950F3F3B71004D610C /* PBXTextBookmark */ = 3D64C9950F3F3B71004D610C /* PBXTextBookmark */;
+			3D64C9DC0F3F4DC5004D610C /* PBXTextBookmark */ = 3D64C9DC0F3F4DC5004D610C /* PBXTextBookmark */;
+			3D64CA9B0F41BE12004D610C /* PBXTextBookmark */ = 3D64CA9B0F41BE12004D610C /* PBXTextBookmark */;
+			3D64CA9C0F41BE12004D610C /* PBXTextBookmark */ = 3D64CA9C0F41BE12004D610C /* PBXTextBookmark */;
+			3D64CA9D0F41BE12004D610C /* PBXTextBookmark */ = 3D64CA9D0F41BE12004D610C /* PBXTextBookmark */;
+			3D64CA9E0F41BE12004D610C /* PBXTextBookmark */ = 3D64CA9E0F41BE12004D610C /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DB581E90EA17C1600EB80D9 /* Source Control */;
 		userBuildSettings = {
@@ -28,9 +40,9 @@
 	};
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {969, 409}}";
-			sepNavSelRange = "{198, 31}";
-			sepNavVisRange = "{0, 878}";
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 363}}";
+			sepNavSelRange = "{438, 0}";
+			sepNavVisRange = "{77, 915}";
 			sepNavWindowFrame = "{{225, 163}, {1473, 863}}";
 		};
 	};
@@ -65,12 +77,87 @@
 			sepNavWindowFrame = "{{225, 185}, {1140, 804}}";
 		};
 	};
+	3D64C8860F3F1A45004D610C /* JSCocoaLib.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {969, 385}}";
+			sepNavSelRange = "{215, 0}";
+			sepNavVisRange = "{138, 463}";
+		};
+	};
+	3D64C88E0F3F1E05004D610C /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3DB582760EA1814000EB80D9 /* iPhoneMain.js */;
+	};
+	3D64C8EE0F3F2A2F004D610C /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3DA390130EA7523300CB6F74 /* BridgeSupportController.m */;
+	};
+	3D64C9950F3F3B71004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA3900F0EA7523300CB6F74 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 1029";
+		rLen = 0;
+		rLoc = 28874;
+		rType = 0;
+		vrLen = 815;
+		vrLoc = 28301;
+	};
+	3D64C9DC0F3F4DC5004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */;
+		name = "iPhone.bridgesupport: 32";
+		rLen = 4;
+		rLoc = 1288;
+		rType = 0;
+		vrLen = 2134;
+		vrLoc = 0;
+	};
+	3D64CA9B0F41BE12004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA390130EA7523300CB6F74 /* BridgeSupportController.m */;
+		name = "BridgeSupportController.m: 40";
+		rLen = 0;
+		rLoc = 649;
+		rType = 0;
+		vrLen = 1263;
+		vrLoc = 2858;
+	};
+	3D64CA9C0F41BE12004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA3900F0EA7523300CB6F74 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 169";
+		rLen = 0;
+		rLoc = 3407;
+		rType = 0;
+		vrLen = 2500;
+		vrLoc = 27469;
+	};
+	3D64CA9D0F41BE12004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */;
+		name = "iPhone.bridgesupport: 32";
+		rLen = 4;
+		rLoc = 1288;
+		rType = 0;
+		vrLen = 2134;
+		vrLoc = 0;
+	};
+	3D64CA9E0F41BE12004D610C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB582760EA1814000EB80D9 /* iPhoneMain.js */;
+		name = "iPhoneMain.js: 93";
+		rLen = 0;
+		rLoc = 2860;
+		rType = 0;
+		vrLen = 2047;
+		vrLoc = 0;
+	};
 	3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1002, 841}}";
-			sepNavSelRange = "{134, 0}";
+			sepNavSelRange = "{1288, 4}";
 			sepNavVisRange = "{0, 2134}";
-			sepNavWindowFrame = "{{507, 115}, {1061, 954}}";
+			sepNavWindowFrame = "{{486, 73}, {1061, 954}}";
 		};
 	};
 	3D9BA7DA0EB10DC9005F9A76 /* class.js */ = {
@@ -83,9 +170,9 @@
 	};
 	3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {969, 29502}}";
-			sepNavSelRange = "{87111, 6}";
-			sepNavVisRange = "{87825, 877}";
+			sepNavIntBoundsRect = "{{0, 0}, {481, 31471}}";
+			sepNavSelRange = "{90459, 0}";
+			sepNavVisRange = "{90400, 777}";
 			sepNavWindowFrame = "{{910, 187}, {1124, 804}}";
 		};
 	};
@@ -115,10 +202,10 @@
 	};
 	3DA3900F0EA7523300CB6F74 /* JSCocoaFFIArgument.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1056, 11825}}";
-			sepNavSelRange = "{271, 0}";
-			sepNavVisRange = "{40, 550}";
-			sepNavWindowFrame = "{{61, 327}, {1124, 804}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1056, 12122}}";
+			sepNavSelRange = "{13632, 12}";
+			sepNavVisRange = "{13137, 666}";
+			sepNavWindowFrame = "{{647, 164}, {1124, 804}}";
 		};
 	};
 	3DA390100EA7523300CB6F74 /* JSCocoaFFIArgument.h */ = {
@@ -138,18 +225,18 @@
 	};
 	3DA390120EA7523300CB6F74 /* JSCocoaFFIClosure.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {969, 539}}";
-			sepNavSelRange = "{387, 0}";
-			sepNavVisRange = "{0, 569}";
+			sepNavIntBoundsRect = "{{0, 0}, {1081, 691}}";
+			sepNavSelRange = "{149, 50}";
+			sepNavVisRange = "{0, 893}";
 			sepNavWindowFrame = "{{693, 186}, {1140, 804}}";
 		};
 	};
 	3DA390130EA7523300CB6F74 /* BridgeSupportController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 2035}}";
-			sepNavSelRange = "{2776, 0}";
-			sepNavVisRange = "{0, 1258}";
-			sepNavWindowFrame = "{{15, 378}, {1107, 795}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 2068}}";
+			sepNavSelRange = "{649, 0}";
+			sepNavVisRange = "{2858, 1263}";
+			sepNavWindowFrame = "{{655, 135}, {1107, 795}}";
 		};
 	};
 	3DA390140EA7523300CB6F74 /* BridgeSupportController.h */ = {
@@ -167,7 +254,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 0;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -224,9 +311,9 @@
 	};
 	3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {933, 2244}}";
+			sepNavIntBoundsRect = "{{0, 0}, {933, 2321}}";
 			sepNavSelRange = "{2860, 0}";
-			sepNavVisRange = "{3811, 2452}";
+			sepNavVisRange = "{0, 2047}";
 			sepNavWindowFrame = "{{664, 219}, {992, 888}}";
 		};
 	};
