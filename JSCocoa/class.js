@@ -472,3 +472,10 @@
 		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
 	}
 	
+	
+	function	callMe1()
+	{
+		NSApplication.sharedApplication.helloWorld()
+	}
+	
+	callMe1()
