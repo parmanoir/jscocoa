@@ -38,6 +38,7 @@ static	JSClassRef			hashObjectClass		= NULL;
 
 // Convenience method to throw a Javascript exception
 static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason);
+static void throwException2(JSContextRef ctx, JSObjectRef object, JSValueRef* exception, NSString* reason);
 
 
 // iPhone specifics
@@ -1021,7 +1022,7 @@ static id JSCocoaSingleton = NULL;
     JSStringRelease(scriptJS);
     if (exception) 
 	{
-		NSLog(@"JSException in %@ : %@", path, [self formatJSException:exception]);
+		NSLog(@"JSException - %@", [self formatJSException:exception]);
 		return	NO;
     }
 	return	YES;
@@ -2307,7 +2308,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 
 	// Setter fails AND WARNS if propertyName can't be set
 	// This happens of non-JSCocoa ObjC objects, eg NSWorkspace.sharedWorspace.someVariable = value
-	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting", privateObject.object]), false;
+	return	throwException2(ctx, object, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting", privateObject.object]), false;
 }
 
 
@@ -2805,6 +2806,42 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 	JSValueRef jsString = JSValueMakeString(ctx, jsName);
 	JSStringRelease(jsName);
 	*exception	= jsString;
+}
+
+
+static void throwException2(JSContextRef ctx, JSObjectRef object, JSValueRef* exception, NSString* reason)
+{
+	// Don't speak and log here as the exception may be caught
+	if (logAllExceptions)
+	{
+		NSLog(@"JSCocoa exception : %@", reason);
+		if (isSpeaking)	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
+	}
+
+	// Gather call stack
+	JSStringRef scriptJS = JSStringCreateWithUTF8CString("return dumpCallStack()");
+	JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 0, NULL);
+	JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 0, NULL, NULL);
+	JSStringRelease(scriptJS);
+
+	// Convert call stack to string
+	JSStringRef resultStringJS = JSValueToStringCopy(ctx, result, NULL);
+	NSString* callStack = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+	JSStringRelease(resultStringJS);
+	[NSMakeCollectable(callStack) autorelease];
+
+	// Append call stack to exception
+	if ([callStack length])
+		reason = [NSString stringWithFormat:@"%@\n%@", reason, callStack];
+	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
+	JSValueRef jsString = JSValueMakeString(ctx, jsName);
+	JSStringRelease(jsName);
+	
+//	*exception	= jsString;
+	// Convert to object to allow JavascriptCore to add line and sourceURL
+	*exception	= JSValueToObject(ctx, jsString, NULL);
+	
+//CONVERT TO OBJECT TO PUT LINECOUNT	
 }
 /*
 // Can't use in GC as data does not live until the end of the current run loop cycle

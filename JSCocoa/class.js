@@ -471,11 +471,50 @@
 //		return	JSCocoaMemoryBuffer.instance()
 		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
 	}
-	
-	
-	function	callMe1()
+
+
+	//
+	// Dump the call stack with arguments.calle.caller (Called from JSCocoa)
+	//	
+	//	Eric Wendelin's Javascript stacktrace in any browser
+	//	http://eriwen.com/javascript/js-stack-trace/
+	//
+	function	dumpCallStack()
 	{
-		NSApplication.sharedApplication.helloWorld()
+		var maxDumpDepth = 100
+		var dumpDepth = 0
+		var caller = arguments.callee.caller
+		// Skip ourselves
+		caller = caller.caller
+
+		// Build call stack
+		var stack = []
+		while (caller && dumpDepth < maxDumpDepth)
+		{
+			var fn = caller.toString()
+			var fname = fn.substring(fn.indexOf("function") + 9, fn.indexOf("(")) || "anonymous";
+			var str = fname
+			if (caller.arguments.length)
+			{
+				str += ' ('
+				for (var i=0; i<caller.arguments.length; i++)	
+				{
+					str += caller.arguments[i]
+					if (i < caller.arguments.length-1)
+						str += ', '
+				}
+				str += ')'
+			}
+//			if (caller.arguments.length) str += caller.arguments.join(',')
+			stack.push(str)
+			dumpDepth++
+			caller = caller.caller
+		}
+		
+		// Dump call stack
+		var str = ''
+		for (var i=0; i<stack.length; i++)
+			str += '(' + (stack.length-i) + ') ' + stack[i] + '\n'
+		log('\n\n***\n' + str + '\n\n***\n')
+		return str
 	}
-	
-	callMe1()

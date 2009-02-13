@@ -54,8 +54,8 @@
 }
 
 - (id)initWithTypes:(id)types;
-- (id)initWithTypes:(id)types andValues:(id)values;
-- (id)initWithMemoryBuffers:(id)buffers;
+//- (id)initWithTypes:(id)types andValues:(id)values;
+//- (id)initWithMemoryBuffers:(id)buffers;
 
 - (void*)pointerForIndex:(int)index;
 - (char)typeAtIndex:(int)index;
