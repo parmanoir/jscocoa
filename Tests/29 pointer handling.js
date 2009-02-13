@@ -24,8 +24,7 @@ NSDeviceRGBColorSpace];
 		if (Math.abs(a-b) < 0.001)	return	true
 		return	false
 	}
-
-
+	
 	//
 	// Test get : allocate a memory buffer and have Cocoa fill it
 	//

@@ -15,24 +15,12 @@
 
 @interface JSCocoaOutArgument : NSObject
 {
-/*	
-	void*		ptr;
-	char		typeEncoding;
-	id			structureTypeEncoding;
-*/	
 	JSCocoaFFIArgument*		arg;
 	JSCocoaMemoryBuffer*	buffer;
 	int						bufferIndex;
 }
-
-//- (id)init;
-//- (void)dealloc;
-
-//- (BOOL)pushData:(?)data ofType:(char)typeEncoding;
-
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)arg;
 - (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx;
-
 
 @end
 

@@ -8,8 +8,13 @@
 
 #import "JSCocoaLib.h"
 
-@implementation JSCocoaOutArgument
 
+//
+// Handles out arguments of functions and methods.
+//	eg NSOpenGLGetVersion(int*, int*) asks for two pointers to int.
+//	JSCocoaOutArgument will alloc the memory through JSCocoaFFIArgument and get the result back to Javascript (check out value in JSCocoaController)
+//
+@implementation JSCocoaOutArgument
 
 - (id)init
 {
@@ -87,6 +92,14 @@
 
 
 
+//
+// Instead of malloc(sizeof(float)*4), JSCocoaMemoryBuffer expects 'ffff' as an init string.
+//	The buffer can be manipulated like an array (buffer[2] = 0.5) 
+//		* it can be filled, calling methods to copy data in it
+//			- (NSBezierPathElement)elementAtIndex:(NSInteger)index associatedPoints:(NSPointArray)points;
+//		* it can be used as data source, calling methods to copy data from it
+//			- (void)setAssociatedPoints:(NSPointArray)points atIndex:(NSInteger)index;
+//
 @implementation JSCocoaMemoryBuffer
 
 - (id)initWithTypes:(id)_types
@@ -112,9 +125,6 @@
 	// Malloc
 //	NSLog(@"mallocing %d bytes for %@", bufferSize, typeString);
 	buffer = malloc(bufferSize);
-	
-//	float* fb = buffer;
-//	NSLog(@"initial %f %f %f %f", fb[0], fb[1], fb[2], fb[3]);
 	
 	return	self;
 }
