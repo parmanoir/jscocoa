@@ -42,7 +42,6 @@ NSDeviceRGBColorSpace];
 				green : new outArgument(buffer, 3), 
 				blue : new outArgument(buffer, 0),
 				alpha : new outArgument(buffer, 1) })
-
 /*				
 	log('color=' + color)
 	log('buffer[0]=' + buffer[0])

@@ -436,8 +436,12 @@
 	//
 	// Describe struct
 	//
-	function	describeStruct(o)
+	function	describeStruct(o, level)
 	{
+		if (level == undefined)	level = 0
+		// Bail if structure contains a cycle
+		if (level > 100)		return ''
+		
 		var str = ''
 		
 		if (typeof(o) == 'object' || typeof(o) == 'function')
@@ -445,7 +449,7 @@
 			str += '{'
 			var elements = []
 			for (var i in o)
-				elements.push(i + ':' + describeStruct(o[i]))
+				elements.push(i + ':' + describeStruct(o[i], level+1))
 			str += elements.join(', ')
 			str += '}'
 		}

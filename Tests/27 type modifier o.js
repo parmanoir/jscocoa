@@ -48,7 +48,7 @@
 	var rect1 = new outArgument
 	var rect2 = new outArgument
 
-	NSDivideRect(rect, rect1, rect2, 5, NSMinXEdge);
+	NSDivideRect(rect, rect1, rect2, 5, NSMinXEdge)
 //	log('rect1=' + rect1)
 
 	if (rect1.origin.x != 10 || rect1.origin.y != 20 || rect1.size.width != 5 || rect1.size.height != 40)	throw 'type o failed (6)'
