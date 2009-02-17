@@ -25,6 +25,7 @@ static	bool		jsCocoaObject_deleteProperty(JSContextRef, JSObjectRef, JSStringRef
 static	void		jsCocoaObject_getPropertyNames(JSContextRef, JSObjectRef, JSPropertyNameAccumulatorRef);
 static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
+static JSValueRef _jsCocoaObject_callUsingNSInvocation(JSContextRef ctx, id callee, NSString *methodName, size_t argumentCount, JSValueRef arguments[]);
 
 // valueOf() is called by Javascript on objects, eg someObject + ' someString'
 static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
@@ -38,7 +39,6 @@ static	JSClassRef			hashObjectClass		= NULL;
 
 // Convenience method to throw a Javascript exception
 static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* reason);
-static void throwException2(JSContextRef ctx, JSObjectRef object, JSValueRef* exception, NSString* reason);
 
 
 // iPhone specifics
@@ -252,8 +252,255 @@ static id JSCocoaSingleton = NULL;
 }
 
 
+#pragma mark Script evaluation
 
-# pragma mark Unclassed methods
+//
+// Evaluate a file
+// 
+- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
+{
+	NSError*	error;
+	id script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+	// Skip .DS_Store and directories
+	if (script == nil)	return	NSLog(@"evalJSFile could not open %@ (%@) — Check file encoding and file build phase (Should be in \"Copy Bundle Resources\")", path, error), NO;
+	
+	// Expand macros
+	if ([self hasJSFunctionNamed:@"expandJSMacros"])
+	{
+		script = [self unboxJSValueRef:[self callJSFunctionNamed:@"expandJSMacros" withArguments:script, nil]];
+		// Bail if expansion failed
+		if (!script || ![script isKindOfClass:[NSString class]])	return NSLog(@"Macro expansion failed on %@", path), NO;
+	}
+	
+	// Convert script and script URL to js strings
+//	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
+	// Using CreateWithUTF8 yields wrong results on PPC
+    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
+	JSStringRef scriptURLJS		= JSStringCreateWithUTF8CString([path UTF8String]);
+	// Eval !
+	JSValueRef	exception = NULL;
+    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
+	if (returnValue)	*returnValue = result;
+	// Release
+    JSStringRelease(scriptURLJS);
+    JSStringRelease(scriptJS);
+    if (exception) 
+	{
+		NSLog(@"JSException - %@", [self formatJSException:exception]);
+		return	NO;
+    }
+	return	YES;
+}
+
+//
+// Evaluate a file, without caring about return result
+// 
+- (BOOL)evalJSFile:(NSString*)path
+{
+	return	[self evalJSFile:path toJSValueRef:nil];
+}
+
+//
+// Evaluate a string
+// 
+- (JSValueRefAndContextRef)evalJSString:(NSString*)script
+{
+	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
+	if (!script)	return	v;
+    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
+	JSValueRef exception = NULL;
+    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
+    JSStringRelease(scriptJS);
+
+	v.ctx = ctx;
+	v.value = JSValueMakeNull(ctx);
+    if (exception) 
+	{
+		NSLog(@"JSException in %@ : %@", @"js string", [self formatJSException:exception]);
+		return	v;
+    }
+	
+	v.ctx = ctx;
+	v.value = result;
+	return	v;
+}
+
+//
+// Call a Javascript function by function reference (JSValueRef)
+// 
+- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments
+{
+	JSObjectRef	jsFunction = JSValueToObject(ctx, function, NULL);
+	// Return if function is not of function type
+	if (!jsFunction)			return	NSLog(@"callJSFunction : value is not a function"), NULL;
+
+	// Convert arguments
+	JSValueRef* jsArguments = NULL;
+	int	argumentCount = [arguments count];
+	if (argumentCount)
+	{
+		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
+		for (int i=0; i<argumentCount; i++)
+		{
+			char typeEncoding = _C_ID;
+			id argument = [arguments objectAtIndex:i];
+			[JSCocoaFFIArgument toJSValueRef:&jsArguments[i] inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:NULL fromStorage:&argument];
+		}
+	}
+
+	JSValueRef exception = NULL;
+	JSValueRef returnValue = JSObjectCallAsFunction(ctx, jsFunction, NULL, argumentCount, jsArguments, &exception);
+	if (jsArguments) free(jsArguments);
+
+    if (exception) 
+	{
+		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
+		return	NULL;
+    }
+
+	return	returnValue;
+}
+
+//
+// Call a Javascript function by name
+//	Requires nil termination : [[JSCocoa sharedController] callJSFunctionNamed:arg1, arg2, nil]
+// 
+- (JSValueRef)callJSFunctionNamed:(NSString*)name withArguments:(id)firstArg, ... 
+{
+	// Convert args to array
+	id arg, arguments = [NSMutableArray array];
+	if (firstArg)	[arguments addObject:firstArg];
+
+	if (firstArg)
+	{
+		va_list	args;
+		va_start(args, firstArg);
+		while (arg = va_arg(args, id))	[arguments addObject:arg];
+		va_end(args);
+	}
+
+	// Get global object
+	JSObjectRef globalObject	= JSContextGetGlobalObject(ctx);
+	JSValueRef exception		= NULL;
+	
+	// Get function as property of global object
+	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, globalObject, jsFunctionName, &exception);
+	JSStringRelease(jsFunctionName);
+	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NULL;
+	
+	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
+	// Return if function is not of function type
+	if (!jsFunction)			return	NSLog(@"callJSFunctionNamed : %@ is not a function", name), NULL;
+
+	// Call !
+	return	[self callJSFunction:jsFunction withArguments:arguments];
+}
+
+
+//
+// Check if function exists
+//
+- (BOOL)hasJSFunctionNamed:(NSString*)name
+{
+	JSValueRef exception		= NULL;
+	// Get function as property of global object
+	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsFunctionName, &exception);
+	JSStringRelease(jsFunctionName);
+	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NO;
+	
+	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
+}
+
+//
+// Unbox a JSValueRef
+//
+- (id)unboxJSValueRef:(JSValueRef)jsValue
+{
+	id object = nil;
+	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&object inContext:ctx];
+	return object;
+}
+
+//
+// Add/Remove an ObjC object variable to the global context
+//
+- (BOOL)setObject:(id)object withName:(id)name
+{
+/*
+	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+	private.type = @"@";
+	[private setObject:object];
+*/
+	JSObjectRef o = [JSCocoaController boxedJSObject:object inContext:ctx];
+
+	// Set
+	JSValueRef	exception = NULL;
+	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeNone, &exception);
+	JSStringRelease(jsName);
+
+    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	return	YES;
+}
+
+- (BOOL)removeObjectWithName:(id)name
+{
+	JSValueRef	exception = NULL;
+	// Delete
+	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
+	JSStringRelease(jsName);
+
+    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	return	YES;
+}
+
+
+
+
+
+#pragma mark Loading Frameworks
+- (BOOL)loadFrameworkWithName:(NSString*)name
+{
+	// Only check /System/Library/Frameworks for now
+	return	[self loadFrameworkWithName:name inPath:@"/System/Library/Frameworks"];
+}
+
+//
+// Load framework
+//	even if framework has no bridgeSupport, load it anyway - it could contain ObjC classes
+//
+- (BOOL)loadFrameworkWithName:(NSString*)name inPath:(NSString*)inPath
+{
+	id path = [NSString stringWithFormat:@"%@/%@.framework/Resources/BridgeSupport/%@.bridgeSupport", inPath, name, name];
+
+	// Return YES if already loaded
+	if ([[BridgeSupportController sharedController] isBridgeSupportLoaded:path])	return	YES;
+
+	// Load framework
+	id libPath = [NSString stringWithFormat:@"%@/%@.framework/%@", inPath, name, name];
+//	NSLog(@"dylib path=%@", path);
+	void* address = dlopen([libPath UTF8String], RTLD_LAZY);
+	if (!address)	return	NSLog(@"Could not load framework dylib %@", libPath), NO;
+
+	// Try loading .bridgesupport file
+	if (![[BridgeSupportController sharedController] loadBridgeSupport:path])	return	NSLog(@"Could not load framework bridgesupport %@", path), NO;
+
+	// Try loading extra dylib (inline functions made callable and compiled to a .dylib)
+	id extraLibPath = [NSString stringWithFormat:@"%@/%@.framework/Resources/BridgeSupport/%@.dylib", inPath, name, name];
+	address = dlopen([extraLibPath UTF8String], RTLD_LAZY);
+	// Don't fail if we didn't load the extra dylib as it is optional
+//	if (!address)	return	NSLog(@"Did not load extra framework dylib %@", path), NO;
+	
+	return	YES;
+}
+
+
+
+# pragma mark Unsorted methods
 + (void)log:(NSString*)string
 {
 	NSLog(@"%@", string);
@@ -994,244 +1241,6 @@ static id JSCocoaSingleton = NULL;
 	}
 	JSPropertyNameArrayRelease(jsNames);
 	return [NSString stringWithFormat:@"%@ on line %@ of %@", b, line, sourceURL];
-}
-
-
-#pragma mark Script evaluation
-
-//
-// Evaluate a file
-// 
-- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
-{
-	NSError*	error;
-	id script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-	// Skip .DS_Store and directories
-	if (script == nil)	return	NSLog(@"evalJSFile could not open %@ (%@) — Check file encoding and file build phase (Should be in \"Copy Bundle Resources\")", path, error), NO;
-	// Convert script and script URL to js strings
-//	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
-	// Using CreateWithUTF8 yields wrong results on PPC
-    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
-	JSStringRef scriptURLJS		= JSStringCreateWithUTF8CString([path UTF8String]);
-	// Eval !
-	JSValueRef	exception = NULL;
-    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
-	if (returnValue)	*returnValue = result;
-	// Release
-    JSStringRelease(scriptURLJS);
-    JSStringRelease(scriptJS);
-    if (exception) 
-	{
-		NSLog(@"JSException - %@", [self formatJSException:exception]);
-		return	NO;
-    }
-	return	YES;
-}
-
-//
-// Evaluate a file, without caring about return result
-// 
-- (BOOL)evalJSFile:(NSString*)path
-{
-	return	[self evalJSFile:path toJSValueRef:nil];
-}
-
-//
-// Evaluate a string
-// 
-- (JSValueRefAndContextRef)evalJSString:(NSString*)script
-{
-	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
-	if (!script)	return	v;
-    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
-	JSValueRef exception = NULL;
-    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
-    JSStringRelease(scriptJS);
-
-	v.ctx = ctx;
-	v.value = JSValueMakeNull(ctx);
-    if (exception) 
-	{
-		NSLog(@"JSException in %@ : %@", @"js string", [self formatJSException:exception]);
-		return	v;
-    }
-	
-	v.ctx = ctx;
-	v.value = result;
-	return	v;
-}
-
-//
-// Call a Javascript function by function reference (JSValueRef)
-// 
-- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments
-{
-	JSObjectRef	jsFunction = JSValueToObject(ctx, function, NULL);
-	// Return if function is not of function type
-	if (!jsFunction)			return	NSLog(@"callJSFunction : value is not a function"), NULL;
-
-	// Convert arguments
-	JSValueRef* jsArguments = NULL;
-	int	argumentCount = [arguments count];
-	if (argumentCount)
-	{
-		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
-		for (int i=0; i<argumentCount; i++)
-		{
-			char typeEncoding = _C_ID;
-			id argument = [arguments objectAtIndex:i];
-			[JSCocoaFFIArgument toJSValueRef:&jsArguments[i] inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:NULL fromStorage:&argument];
-		}
-	}
-
-	JSValueRef exception = NULL;
-	JSValueRef returnValue = JSObjectCallAsFunction(ctx, jsFunction, NULL, argumentCount, jsArguments, &exception);
-	if (jsArguments) free(jsArguments);
-
-    if (exception) 
-	{
-		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
-		return	NULL;
-    }
-
-	return	returnValue;
-}
-
-//
-// Call a Javascript function by name
-//	Requires nil termination : [[JSCocoa sharedController] callJSFunctionNamed:arg1, arg2, nil]
-// 
-- (JSValueRef)callJSFunctionNamed:(NSString*)name withArguments:(id)firstArg, ... 
-{
-	// Convert args to array
-	id arg, arguments = [NSMutableArray array];
-	if (firstArg)	[arguments addObject:firstArg];
-
-	if (firstArg)
-	{
-		va_list	args;
-		va_start(args, firstArg);
-		while (arg = va_arg(args, id))	[arguments addObject:arg];
-		va_end(args);
-	}
-
-	// Get global object
-	JSObjectRef globalObject	= JSContextGetGlobalObject(ctx);
-	JSValueRef exception		= NULL;
-	
-	// Get function as property of global object
-	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
-	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, globalObject, jsFunctionName, &exception);
-	JSStringRelease(jsFunctionName);
-	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NULL;
-	
-	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
-	// Return if function is not of function type
-	if (!jsFunction)			return	NSLog(@"callJSFunctionNamed : %@ is not a function", name), NULL;
-
-	// Call !
-	return	[self callJSFunction:jsFunction withArguments:arguments];
-}
-
-
-//
-// Check if function exists
-//
-- (BOOL)hasJSFunctionNamed:(NSString*)name
-{
-	JSValueRef exception		= NULL;
-	// Get function as property of global object
-	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
-	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsFunctionName, &exception);
-	JSStringRelease(jsFunctionName);
-	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NO;
-	
-	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
-}
-
-//
-// Unbox a JSValueRef
-//
-- (id)unboxJSValueRef:(JSValueRef)jsValue
-{
-	id object = nil;
-	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&object inContext:ctx];
-	return object;
-}
-
-//
-// Add/Remove an ObjC object variable to the global context
-//
-- (BOOL)setObject:(id)object withName:(id)name
-{
-/*
-	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-	private.type = @"@";
-	[private setObject:object];
-*/
-	JSObjectRef o = [JSCocoaController boxedJSObject:object inContext:ctx];
-
-	// Set
-	JSValueRef	exception = NULL;
-	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeNone, &exception);
-	JSStringRelease(jsName);
-
-    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
-	return	YES;
-}
-
-- (BOOL)removeObjectWithName:(id)name
-{
-	JSValueRef	exception = NULL;
-	// Delete
-	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-	JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
-	JSStringRelease(jsName);
-
-    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
-	return	YES;
-}
-
-
-
-
-
-#pragma mark Loading Frameworks
-- (BOOL)loadFrameworkWithName:(NSString*)name
-{
-	// Only check /System/Library/Frameworks for now
-	return	[self loadFrameworkWithName:name inPath:@"/System/Library/Frameworks"];
-}
-
-//
-// Load framework
-//	even if framework has no bridgeSupport, load it anyway - it could contain ObjC classes
-//
-- (BOOL)loadFrameworkWithName:(NSString*)name inPath:(NSString*)inPath
-{
-	id path = [NSString stringWithFormat:@"%@/%@.framework/Resources/BridgeSupport/%@.bridgeSupport", inPath, name, name];
-
-	// Return YES if already loaded
-	if ([[BridgeSupportController sharedController] isBridgeSupportLoaded:path])	return	YES;
-
-	// Load framework
-	id libPath = [NSString stringWithFormat:@"%@/%@.framework/%@", inPath, name, name];
-//	NSLog(@"dylib path=%@", path);
-	void* address = dlopen([libPath UTF8String], RTLD_LAZY);
-	if (!address)	return	NSLog(@"Could not load framework dylib %@", libPath), NO;
-
-	// Try loading .bridgesupport file
-	if (![[BridgeSupportController sharedController] loadBridgeSupport:path])	return	NSLog(@"Could not load framework bridgesupport %@", path), NO;
-
-	// Try loading extra dylib (inline functions made callable and compiled to a .dylib)
-	id extraLibPath = [NSString stringWithFormat:@"%@/%@.framework/Resources/BridgeSupport/%@.dylib", inPath, name, name];
-	address = dlopen([extraLibPath UTF8String], RTLD_LAZY);
-	// Don't fail if we didn't load the extra dylib as it is optional
-//	if (!address)	return	NSLog(@"Did not load extra framework dylib %@", path), NO;
-	
-	return	YES;
 }
 
 
@@ -2235,6 +2244,11 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			Method method = class_getInstanceMethod([callee class], sel);
 			if (!method)	method = class_getClassMethod([callee class], sel);
 
+			// NSDistantObject
+            if (!method && [callee methodSignatureForSelector:NSSelectorFromString(setterName)]) {
+                return _jsCocoaObject_callUsingNSInvocation(ctx, callee, setterName, 0, nil);
+            }			
+
 			// Extract arguments
 			const char* typeEncoding = method_getTypeEncoding(method);
 			id argumentEncodings = [JSCocoaController parseObjCMethodEncoding:typeEncoding];
@@ -2308,7 +2322,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 
 	// Setter fails AND WARNS if propertyName can't be set
 	// This happens of non-JSCocoa ObjC objects, eg NSWorkspace.sharedWorspace.someVariable = value
-	return	throwException2(ctx, object, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting", privateObject.object]), false;
+	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) object %@ does not support setting — Derive from that class to make it able to host any Javascript object ", privateObject.object]), false;
 }
 
 
@@ -2438,8 +2452,20 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 				}
 			}
 		}
+
+		// NSDistantObject
+        if ([callee class] == [NSDistantObject class]) {
+            return _jsCocoaObject_callUsingNSInvocation(ctx, callee, methodName, argumentCount, arguments);
+        }
+		
+		// Get method pointer
 		Method method = class_getInstanceMethod([callee class], NSSelectorFromString(methodName));
 		if (!method)	method = class_getClassMethod([callee class], NSSelectorFromString(methodName));
+
+        // NSDistantObject : maybe it's a property?
+        if (!method && [callee methodSignatureForSelector:NSSelectorFromString(methodName)]) {
+            return _jsCocoaObject_callUsingNSInvocation(ctx, callee, methodName, argumentCount, arguments);
+        }
 
 		// Bail if we can't find a suitable method
 		if (!method)	
@@ -2719,6 +2745,50 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	return	jsReturnValue;
 }
 
+//
+// NSDistantObject call, courtesy of Gus Mueller
+//
+static JSValueRef _jsCocoaObject_callUsingNSInvocation(JSContextRef ctx, id callee, NSString *methodName, size_t argumentCount, JSValueRef arguments[]) {
+    
+    SEL selector = NSSelectorFromString(methodName);
+    NSMethodSignature *signature = [callee methodSignatureForSelector:selector];
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+    [invocation setSelector:selector];
+    
+    NSUInteger argIndex = 0;
+    while (argIndex < argumentCount) {
+        
+        id arg = 0x00;
+        
+        [JSCocoaFFIArgument unboxJSValueRef:arguments[argIndex] toObject:&arg inContext:ctx];
+        
+        [invocation setArgument:&arg atIndex:argIndex + 2];
+        
+        argIndex++;
+    }
+    
+    
+    [invocation invokeWithTarget:callee];
+    
+    id result = 0x00;
+    
+    const char *type = [signature methodReturnType];
+    
+    if (strcmp(type, @encode(id)) == 0) {
+        [invocation getReturnValue:&result];
+    }
+    
+    if (!result) {
+        return JSValueMakeNull(ctx);
+    }
+    
+    JSValueRef	jsReturnValue = NULL;
+    
+    [JSCocoaFFIArgument boxObject:result toJSValueRef:&jsReturnValue inContext:ctx];
+    
+    return	jsReturnValue;
+}
+
 
 
 //
@@ -2802,22 +2872,6 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 		if (isSpeaking)	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
 	}
 
-	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
-	JSValueRef jsString = JSValueMakeString(ctx, jsName);
-	JSStringRelease(jsName);
-	*exception	= jsString;
-}
-
-
-static void throwException2(JSContextRef ctx, JSObjectRef object, JSValueRef* exception, NSString* reason)
-{
-	// Don't speak and log here as the exception may be caught
-	if (logAllExceptions)
-	{
-		NSLog(@"JSCocoa exception : %@", reason);
-		if (isSpeaking)	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
-	}
-
 	// Gather call stack
 	JSStringRef scriptJS = JSStringCreateWithUTF8CString("return dumpCallStack()");
 	JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 0, NULL);
@@ -2840,8 +2894,6 @@ static void throwException2(JSContextRef ctx, JSObjectRef object, JSValueRef* ex
 //	*exception	= jsString;
 	// Convert to object to allow JavascriptCore to add line and sourceURL
 	*exception	= JSValueToObject(ctx, jsString, NULL);
-	
-//CONVERT TO OBJECT TO PUT LINECOUNT	
 }
 /*
 // Can't use in GC as data does not live until the end of the current run loop cycle

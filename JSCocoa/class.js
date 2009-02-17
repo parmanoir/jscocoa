@@ -1,5 +1,7 @@
 
 	function	log(str)	{	JSCocoaController.log('' + str)	}
+	
+	function	dumpHash(o)	{	var str = ''; for (var i in o) str += i + '=' + o[i] + '\n'; return str }
 
 	// A global variable named __jsc__ set by JSCocoaController in each context
 //	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
@@ -60,7 +62,17 @@
 		}
 		else
 		{
-			if (!(encoding in encodings))	throw	'invalid encoding : ' + encoding
+			if (!(encoding in encodings))	
+			{
+				// Do we have a pointer to a class ?
+				var match = encoding.match(/^(\w+)\s*\*$/)
+				if (match)
+				{
+					var className = match[1]
+					if (className in this && this[className]['class'] == this[className])	return '@'
+				}
+				throw	'invalid encoding : "' + encoding + '"'
+			}
 			return encodings[encoding]
 		}
 	}
@@ -132,7 +144,7 @@
 			if (isOverload)
 			{
 				var fn = methods[method]
-				if (!fn || (typeof fn) != 'function')	throw 'Method ' + method + ' not a function'
+				if (!fn || (typeof fn) != 'function')	throw '(overloading) Method ' + method + ' not a function'
 
 				if (isInstanceMethod)	JSCocoa.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
 				else					JSCocoa.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
@@ -262,12 +274,13 @@
 
 	
 	
-	/*
-
-		Second kind of class definitions
-		http://code.google.com/p/jscocoa/issues/detail?id=19
-
-	*/
+	//
+	//
+	//	Second kind of class definitions
+	//	http://code.google.com/p/jscocoa/issues/detail?id=19
+	//
+	//
+	
 	// React on set
 	function	class_set_definition(definition)
 	{
@@ -298,7 +311,16 @@
 		//
 		for (var method in h.methods)
 		{
+/*		
+			if (h.methods[method].type == 'class method')
+			{
+				log('skipping class method ' + method)
+				continue
+			}
+*/			
+//			log('method.type=' + h.methods[method].type + ' ' + method)
 			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
+//			var isInstanceMethod = h.methods[method].type == 'method'
 			var isOverload = parentClass.respondsToSelector(method) || isInstanceMethod
 //			JSCocoaController.log('adding method *' + method + '* to ' + className + ' isOverload=' + isOverload + ' isInstanceMethod=' + isInstanceMethod)
 			
@@ -314,9 +336,17 @@
 			{
 				// Extract method
 				var fn = h.methods[method].fn
-				if (!fn || (typeof fn) != 'function')	throw 'New method ' + method + ' not a function'
+				if (!fn || (typeof fn) != 'function')	
+				{
+					log('*****' + method + '***' + fn)
+					log('+++' + dumpHash(h.methods[method]))
+					throw 'New method ' + method + ' not a function'
+				}
+
+//				log('encoding='  + encoding + ' class=' + newClass + ' method=' + method)
 					
-				var encodings = h.methods[method].encoding.split(' ')
+				var encodings = h.methods[method].encodingArray || h.methods[method].encoding.split(' ')
+//				log('encodings=' + encodings)
 				var encoding = objc_encoding.apply(null, encodings)
 				class_add_method(newClass, method, fn, encoding)				
 			}
@@ -351,6 +381,11 @@
 		__classHelper__.methods[__classHelper__.name].encoding = encoding
 		return	__classHelper__
 	}
+	function	class_set_encoding_array(encodingArray)
+	{
+		__classHelper__.methods[__classHelper__.name].encodingArray = encodingArray
+		return	__classHelper__
+	}
 	function	class_set_function(fn)
 	{
 		// Method
@@ -383,7 +418,14 @@
 	{
 		__classHelper__.type 	= 'method'
 		__classHelper__.name	= name
-		__classHelper__.methods[__classHelper__.name] = {}
+		__classHelper__.methods[__classHelper__.name] = { type : 'method' }
+		return	__classHelper__
+	}
+	function	ClassMethod(name)
+	{
+		__classHelper__.type 	= 'method'
+		__classHelper__.name	= name
+		__classHelper__.methods[__classHelper__.name] = { type : 'class method' }
 		return	__classHelper__
 	}
 	function	JSFunction(name)
@@ -415,7 +457,7 @@
 
 
 	// Shadow object collecting class definition data
-	var __classHelper__ = { encoding : class_set_encoding }
+	var __classHelper__ = { encoding : class_set_encoding, encodingArray : class_set_encoding_array }
 	__classHelper__.__defineSetter__('definition',	class_set_definition)
 	__classHelper__.__defineSetter__('fn', 			class_set_function)
 	__classHelper__.__defineSetter__('getter',		class_set_getter)
@@ -519,6 +561,84 @@
 		var str = ''
 		for (var i=0; i<stack.length; i++)
 			str += '(' + (stack.length-i) + ') ' + stack[i] + '\n'
-		log('\n\n***\n' + str + '\n\n***\n')
 		return str
 	}
+	
+	
+	//
+	// expandJSMacros
+	//	convert ObjC-like class syntax to Javascript
+	//
+	function	expandJSMacros(script)
+	{
+		if (script.match(/^\s*class\s+\w+\s+<\s+\w+\s*$/m))
+		{
+			// Replace classes (m modifier to treat as multiple lines)
+			script = script.replace(/^\s*(class)\s+(\w+)\s+(<)\s+(\w+)\s*$/gm, 'Class(\'$2 < $4\').definition = function ()')
+			// Replace methods
+			script = script.replace(/^\s*(\-|\+)\s\(.*$/gm, expandJSMacros_ReplaceMethods)
+			
+			// Replace outlets
+			script = script.replace(/^\s*IBOutlet\s+(\w+)/gm, function (r) { dumpHash('***' + r); return '+++' + r[1] } )
+			
+			// Replace actions
+			
+			log('****************')
+			log('\n' + script)
+			log('****************')
+		}
+		return	script
+	}
+	function	expandJSMacros_ReplaceMethods(r)
+	{
+		var name
+		var type
+		var args = []
+		var names = []
+
+		// Parse method
+		var s = String(r)
+		// extract class or instance method marker
+		s = s.replace(/(\+|\-)/, function (r) { type = r == '-' ? 'Method' : 'ClassMethod'; return '' } )
+		// extract arguments
+		s = s.replace(/\([^)]+\)/g, function (r) { r = String(r); r= r.substr(1, r.length-2); args.push(r); return '' } )
+		// extract argument names
+		s = s.replace(/\w+(\s|$)/gm, function (r) { names.push(r.replace(/\s/g, '')); return '' } )
+		// extract method name
+		var name = s.replace(/\s/g, '')
+		
+		// fixup : if no name and one argument, we have a zero arg method
+		if (args.length == 1 && names.length == 1) name = names[0], names = []
+		
+		// Bail if no return value
+		if (args.length < 1)	throw 'Need at least one return value in ' + r
+		
+//		log('name=*' + name + '* type=' + type + ' args=' + args + ' names=' + names)
+		
+		
+
+//		log('(2) s=' + s)
+//		var r = 
+//		log(r.replace(/\([^)]+\)/g, ''))
+/*		
+		var parts0 = r.split('(')
+		var parts1 = []
+		var parts2 = []
+		parts0.forEach(function (part) { parts.push(part.split(')')) } )
+		log(parts)
+*/		
+//		var idx = r.indexOf('(')
+//		while (idx != -1)
+		{
+		}
+var str = ''
+		var encoding = args.map(function (r) { return "'" + r + "'" })
+		var str = type + "('" + name + "').encodingArray([" + encoding + "]).fn = function (" + names.join(', ') + ")"
+		return str
+	}
+	
+	function	expandJSMacros_ReplaceOutlets(r)
+	{
+		
+	}
+

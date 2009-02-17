@@ -38,6 +38,26 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSGlobalContextRef)ctx;
 
 //
+// Evaluation
+//
+- (BOOL)evalJSFile:(NSString*)path;
+- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
+- (JSValueRefAndContextRef)evalJSString:(NSString*)script;
++ (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
+- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
+- (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
+- (id)unboxJSValueRef:(JSValueRef)jsValue;
+- (BOOL)hasJSFunctionNamed:(NSString*)functionName;
+- (BOOL)setObject:(id)object withName:(id)name;
+- (BOOL)removeObjectWithName:(id)name;
+
+//
+// Framework
+//
+- (BOOL)loadFrameworkWithName:(NSString*)name;
+- (BOOL)loadFrameworkWithName:(NSString*)frameworkName inPath:(NSString*)path;
+
+//
 // Garbage collection
 //
 + (void)garbageCollect;
@@ -53,26 +73,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 + (void)logInstanceStats;
 - (id)instanceStats;
-
-//
-// Evaluation
-//
-- (BOOL)evalJSFile:(NSString*)path;
-- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
-- (JSValueRefAndContextRef)evalJSString:(NSString*)script;
-+ (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
-- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
-- (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
-- (BOOL)hasJSFunctionNamed:(NSString*)functionName;
-- (BOOL)setObject:(id)object withName:(id)name;
-- (BOOL)removeObjectWithName:(id)name;
-
-
-//
-// Framework
-//
-- (BOOL)loadFrameworkWithName:(NSString*)name;
-- (BOOL)loadFrameworkWithName:(NSString*)frameworkName inPath:(NSString*)path;
 
 //
 // Class handling
