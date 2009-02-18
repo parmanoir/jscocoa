@@ -142,6 +142,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 //void* malloc_autorelease(size_t size);
 
+id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATION;
+
 
 //
 // From PyObjC : when to call objc_msgSendStret, for structure return

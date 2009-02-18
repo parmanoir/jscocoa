@@ -634,28 +634,4 @@
 		paramName = paramName || 'sender'
 		return	'IBAction(\'' + actionName + '\').fn = function (' + paramName + ')'
 	}
-	
-	//
-	// Localization
-	//
-	var			localizedStrings = {}
-	function	localizedString(stringName)
-	{
-		var r = localizedStrings[stringName]
-		if (!r)
-		{
-			var str = '*** Localization for \'' + stringName + '\' not found ***'
-			log(str)
-			return str
-		}
-		if (typeof r != 'function')	return	r
-
-		// Arguments are function arguments minus the first one (stringName)
-		var args = [];		for (var i=1; i<arguments.length; i++) /*log(i + '=' + arguments[i]),*/ args.push(arguments[i])
-		return	r.apply(null, args)
-	}
-	function	registerLocalizedStrings(strings)
-	{
-		for (var i in strings)	__localizedStrings[i] = strings[i]
-	}
 

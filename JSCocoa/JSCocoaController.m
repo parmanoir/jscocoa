@@ -262,7 +262,7 @@ static id JSCocoaSingleton = NULL;
 	NSError*	error;
 	id script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
 	// Skip .DS_Store and directories
-	if (script == nil)	return	NSLog(@"evalJSFile could not open %@ (%@) — Check file encoding and file build phase (Should be in \"Copy Bundle Resources\")", path, error), NO;
+	if (script == nil)	return	NSLog(@"evalJSFile could not open %@ (%@) — Check file encoding (should be UTF8) and file build phase (should be in \"Copy Bundle Resources\")", path, error), NO;
 	
 	// Expand macros
 	if ([self hasJSFunctionNamed:@"expandJSMacros"])
@@ -2913,6 +2913,48 @@ void* malloc_autorelease(size_t size)
 	return	p;
 }
 */
+
+//
+// JSLocalizedString
+//
+id	JSLocalizedString(id stringName, id firstArg, ...)
+{
+	// Convert args to array
+	id arg, arguments = [NSMutableArray array];
+	[arguments addObject:stringName];
+	if (firstArg)	[arguments addObject:firstArg];
+
+	if (firstArg)
+	{
+		va_list	args;
+		va_start(args, firstArg);
+		while (arg = va_arg(args, id))	[arguments addObject:arg];
+		va_end(args);
+	}
+	
+	// Get global object
+	id				jsc			= [JSCocoaController sharedController];
+	JSContextRef	ctx			= [jsc ctx];
+	JSObjectRef		globalObject= JSContextGetGlobalObject(ctx);
+	JSValueRef		exception	= NULL;
+	
+	// Get function as property of global object
+	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([@"localizedString" UTF8String]);
+	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, globalObject, jsFunctionName, &exception);
+	JSStringRelease(jsFunctionName);
+	if (exception)				return	NSLog(@"localizedString failed"), NULL;
+	
+	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
+	// Return if function is not of function type
+	if (!jsFunction)			return	NSLog(@"localizedString is not a function"), NULL;
+
+	// Call !
+	JSValueRef jsRes = [jsc callJSFunction:jsFunction withArguments:arguments];
+	id res = [jsc unboxJSValueRef:jsRes];
+
+	return	res;
+}
+
 
 
 //
