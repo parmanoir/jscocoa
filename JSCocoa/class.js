@@ -64,13 +64,16 @@
 		{
 			if (!(encoding in encodings))	
 			{
-				// Do we have a pointer to a class ?
+				// Pointer to an ObjC object ?
 				var match = encoding.match(/^(\w+)\s*\*$/)
 				if (match)
 				{
 					var className = match[1]
 					if (className in this && this[className]['class'] == this[className])	return '@'
 				}
+				// Structure ?
+				var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(encoding)
+				if (structureEncoding)	return	String(String(structureEncoding).replace(/"[^"]+"/gi, ""))
 				throw	'invalid encoding : "' + encoding + '"'
 			}
 			return encodings[encoding]
@@ -338,15 +341,12 @@
 				var fn = h.methods[method].fn
 				if (!fn || (typeof fn) != 'function')	
 				{
-					log('*****' + method + '***' + fn)
-					log('+++' + dumpHash(h.methods[method]))
 					throw 'New method ' + method + ' not a function'
 				}
 
 //				log('encoding='  + encoding + ' class=' + newClass + ' method=' + method)
 					
 				var encodings = h.methods[method].encodingArray || h.methods[method].encoding.split(' ')
-//				log('encodings=' + encodings)
 				var encoding = objc_encoding.apply(null, encodings)
 				class_add_method(newClass, method, fn, encoding)				
 			}
@@ -579,13 +579,14 @@
 			script = script.replace(/^\s*(\-|\+)\s\(.*$/gm, expandJSMacros_ReplaceMethods)
 			
 			// Replace outlets
-			script = script.replace(/^\s*IBOutlet\s+(\w+)/gm, function (r) { dumpHash('***' + r); return '+++' + r[1] } )
+			script = script.replace(/^\s*IBOutlet\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceOutlets)
 			
 			// Replace actions
+			script = script.replace(/^\s*IBAction\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceActions)
 			
-			log('****************')
-			log('\n' + script)
-			log('****************')
+//			log('****************')
+//			log('\n' + script)
+//			log('****************')
 		}
 		return	script
 	}
@@ -612,33 +613,21 @@
 		
 		// Bail if no return value
 		if (args.length < 1)	throw 'Need at least one return value in ' + r
-		
-//		log('name=*' + name + '* type=' + type + ' args=' + args + ' names=' + names)
-		
-		
 
-//		log('(2) s=' + s)
-//		var r = 
-//		log(r.replace(/\([^)]+\)/g, ''))
-/*		
-		var parts0 = r.split('(')
-		var parts1 = []
-		var parts2 = []
-		parts0.forEach(function (part) { parts.push(part.split(')')) } )
-		log(parts)
-*/		
-//		var idx = r.indexOf('(')
-//		while (idx != -1)
-		{
-		}
-var str = ''
 		var encoding = args.map(function (r) { return "'" + r + "'" })
 		var str = type + "('" + name + "').encodingArray([" + encoding + "]).fn = function (" + names.join(', ') + ")"
 		return str
 	}
-	
-	function	expandJSMacros_ReplaceOutlets(r)
+	function	expandJSMacros_ReplaceOutlets(r, outletName, skippedParen, paramName)
 	{
-		
+		var r = 'IBOutlet(\'' + outletName + '\')'
+		if (paramName) r += '.setter = function (' + paramName + ')'
+		return	r
+	}
+
+	function	expandJSMacros_ReplaceActions(r, actionName, skippedParen, paramName)
+	{
+		paramName = paramName || 'sender'
+		return	'IBAction(\'' + actionName + '\').fn = function (' + paramName + ')'
 	}
 

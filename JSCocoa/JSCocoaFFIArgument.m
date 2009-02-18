@@ -222,8 +222,6 @@
 		int address = (int)ptr;
 		if ((address % alignOnSize) != 0)
 			address = (address+alignOnSize) & ~(alignOnSize-1);
-			
-		if (pointerTypeEncoding)	NSLog(@"THERE");
 */		
 		if (pointerTypeEncoding)	return &ptr;
 //		return (void**)address;
@@ -848,11 +846,18 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		if (*c == '}')
 		{
 			closedBracesCount++;
+			
+			// If we parsed something (c>c0) and have an equal amount of opened and closed braces, we're done
+			if (c0 != c && openedBracesCount == closedBracesCount)	
+			{
+				c++;
+				break;
+			}
 			continue;
 		}
 		if (*c == '=')	continue;
 	
-		if (c0 != c && closedBracesCount == openedBracesCount)	break;
+//		if (c0 != c && closedBracesCount == openedBracesCount)	break;
 
 		[types addObject:[NSString stringWithFormat:@"%c", *c]];
 
@@ -877,10 +882,12 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 			}
 			else c++;
 		}
+/*		
 		if (openedBracesCount == closedBracesCount)	
 		{
 			break;
 		}
+*/
 	}
 	if (count) *count = c-c0;
 	if (closedBracesCount != openedBracesCount)		return NSLog(@"Could not parse structure type encodings for %@", structureTypeEncoding), nil;

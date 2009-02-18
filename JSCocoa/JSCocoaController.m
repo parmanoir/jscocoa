@@ -300,6 +300,11 @@ static id JSCocoaSingleton = NULL;
 	return	[self evalJSFile:path toJSValueRef:nil];
 }
 
+- (NSRect)add:(NSRect)r and:(NSRect)r2
+{
+	return r;
+}
+
 //
 // Evaluate a string
 // 
@@ -1091,6 +1096,7 @@ static id JSCocoaSingleton = NULL;
 {
 	id className = [class description];
 	id xml = [[BridgeSupportController sharedController] queryName:className];
+	if (!xml)	return NSLog(@"isMethodVariadic for %@ called on unknown BridgeSupport class %@", methodName, class), NO;
 
 	// Get XML definition
 	id error;
@@ -2525,8 +2531,11 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 		callAddressArgumentCount = [argumentEncodings count]-1;
 	}
 	
-	// If argument count doesn't match, check if it's a variadic call
-	// If it's not variadic, bail
+	//
+	// Variadic call ?
+	//	If argument count doesn't match descripted argument count, 
+	//	we may have a variadic call
+	//
 	BOOL isVariadic = NO;
 	if (callAddressArgumentCount != argumentCount)	
 	{
