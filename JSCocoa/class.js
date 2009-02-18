@@ -122,9 +122,6 @@
 
 	*/
 
-
-
-
 	function	defineClass(inherit, methods)
 	{
 		var s = inherit.split('<')
@@ -184,7 +181,7 @@
 					if (!fn || (typeof fn) != 'function')	throw 'New method ' + method + ' not a function'
 					
 					var encoding = objc_encoding.apply(null, encodings)
-					class_add_method(newClass, method, fn, encoding)
+					class_add_instance_method(newClass, method, fn, encoding)
 				}
 			}
 		}
@@ -259,9 +256,16 @@
 	//
 	// Vanilla instance method add. Wrapper for JSCocoaController's addInstanceMethod
 	// 
-	function	class_add_method(newClass, name, fn, encoding)
+	function	class_add_instance_method(newClass, name, fn, encoding)
 	{
 		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
+	}
+	//
+	// Vanilla class method add. Wrapper for JSCocoaController's addClassMethod
+	// 
+	function	class_add_class_method(newClass, name, fn, encoding)
+	{
+		JSCocoa.add({ classMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
 	}
 	
 	//
@@ -323,7 +327,6 @@
 */			
 //			log('method.type=' + h.methods[method].type + ' ' + method)
 			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
-//			var isInstanceMethod = h.methods[method].type == 'method'
 			var isOverload = parentClass.respondsToSelector(method) || isInstanceMethod
 //			JSCocoaController.log('adding method *' + method + '* to ' + className + ' isOverload=' + isOverload + ' isInstanceMethod=' + isInstanceMethod)
 			
@@ -348,7 +351,8 @@
 					
 				var encodings = h.methods[method].encodingArray || h.methods[method].encoding.split(' ')
 				var encoding = objc_encoding.apply(null, encodings)
-				class_add_method(newClass, method, fn, encoding)				
+				if (h.methods[method].type == 'class method')	class_add_class_method(newClass, method, fn, encoding)
+				else											class_add_instance_method(newClass, method, fn, encoding)
 			}
 		}
 		

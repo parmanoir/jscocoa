@@ -9,14 +9,15 @@
 			return x + y
 		}
 		
-		- (NSString*)hi
+		+ (float)addFloatX:(float)x andFloatY:(float)y
 		{
-			log(this)
-			return	'lk'
+			return x + y
 		}
+		
 		+ (NSString*)hello
 		{
-			log(this)
+//			log(this)
+			passedClassMethod1 = true
 			return 'hello'
 		}
 		
@@ -59,10 +60,17 @@
 			passedAdd2 = true
 			return this.Super(arguments)
 		}
+
+		+ (float)addFloatX:(float)x andFloatY:(float)y
+		{
+			passedFloatAdd2 = true
+			return this.Super(arguments)
+		}
 	}
 	
-	
-	// Test add
+	//
+	// Test instance methods
+	//
 	var o1 = ObjCClassTest.instance()
 	
 	var r = o1.add({ x : 3, andY : 5 })
@@ -76,7 +84,9 @@
 	if (!passedAdd2)	throw 'new class syntax : add failed (2)'
 	if (r != 8)			throw 'new class syntax : add failed (3)'
 	
+	//
 	// Test outlets
+	//
 	var obj = NSWorkspace.sharedWorkspace
 	o1['setOutlet1:'](obj)
 	if (o1.outlet1 != NSWorkspace.sharedWorkspace)			throw 'new class syntax : outlet failed (1)'
@@ -85,7 +95,9 @@
 	o1['setOutlet2:'](obj)
 	if (!passedOutlet2)										throw 'new class syntax : outlet failed (2)'
 	
+	//
 	// Test actions
+	//
 	o1.clickMe(obj)
 	if (o1.passedAction1 != NSWorkspace.sharedWorkspace)	throw 'new class syntax : action failed (1)'
 
@@ -93,7 +105,9 @@
 	if (o1.passedAction2 != NSWorkspace.sharedWorkspace)	throw 'new class syntax : action failed (2)'
 	
 
+	//
 	// Test structures
+	//
 	NSMakeRect(5, 6, 7, 8)
 	NSMakeRect(1, 2, 3, 4), NSMakeRect(5, 6, 7, 8)
 	var r = o1.add({ rect : NSMakeRect(1, 2, 3, 4), andRect: NSMakeRect(5, 6, 7, 8) })
@@ -108,16 +122,21 @@
 	if (s1 != s2)				throw 'new class syntax : method signatures not equal'
 
 
+	//
+	// Test class methods
+	//
+	var passedClassMethod1 = false
+	
+	var r = ObjCClassTest.add({ floatX : 3.5, andFloatY : 5.5 })
+	if (r != 9)					throw 'new class syntax : class method add failed (1)'
+	
+	// Test derived class method add
+	var passedFloatAdd2 = false
+	var r = ObjCClassTest2.add({ floatX : 3.5, andFloatY : 5.5 })
+	if (r != 9)					throw 'new class syntax : class method add failed (2)'
+	if (!passedFloatAdd2)		throw 'new class syntax : class method add failed (3)'
 
-	
-//	o.hi
-	
-//	ObjCClassTest.hello
-	
-	o1 = null
-	o2 = null
-	obj = null
-	
-//- (void)drawRect:(NSRect)rect
-//	test w/ 
-//	- (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
+
+
+
+
