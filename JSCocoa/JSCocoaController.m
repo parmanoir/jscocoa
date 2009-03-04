@@ -25,7 +25,7 @@ static	bool		jsCocoaObject_deleteProperty(JSContextRef, JSObjectRef, JSStringRef
 static	void		jsCocoaObject_getPropertyNames(JSContextRef, JSObjectRef, JSPropertyNameAccumulatorRef);
 static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
-static JSValueRef _jsCocoaObject_callUsingNSInvocation(JSContextRef ctx, id callee, NSString *methodName, size_t argumentCount, JSValueRef arguments[]);
+static	JSValueRef	_jsCocoaObject_callUsingNSInvocation(JSContextRef ctx, id callee, NSString *methodName, size_t argumentCount, JSValueRef arguments[]);
 
 // valueOf() is called by Javascript on objects, eg someObject + ' someString'
 static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
@@ -196,7 +196,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //	NSLog(@"JSCocoa : %x dying", self);
 	
 	[self unlinkAllReferences];
-	JSGarbageCollect(NULL);
+	JSGarbageCollect(ctx);
 	JSGlobalContextRelease(ctx);
 }
 - (void)dealloc
@@ -1275,7 +1275,7 @@ static id JSCocoaSingleton = NULL;
 			[JSCocoaController logAndSay:error];
 			return NO;
 		}
-		[JSCocoaController garbageCollect];
+		[self garbageCollect];
 	}
 #endif	
 	return	YES;
@@ -1298,8 +1298,8 @@ static id autoreleasePool;
 //
 // Collect on top of the run loop, not in some JS function
 //
-+ (void)garbageCollect	{	JSGarbageCollect(NULL); }
-- (void)garbageCollect	{	JSGarbageCollect(NULL); }
++ (void)garbageCollect	{	NSLog(@"***Call garbageCollect on an instance***"); JSGarbageCollect(NULL); }
+- (void)garbageCollect	{	JSGarbageCollect(ctx); }
 
 //
 // Make all root Javascript variables point to null

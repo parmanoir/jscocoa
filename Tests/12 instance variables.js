@@ -66,7 +66,7 @@
 	if (!hasObjCGC)
 		if (count1 != (count0+2))	throw 'invalid hash count — got ' + count1 + ', expected ' + (count0+2)
 
-	JSCocoaController.garbageCollect
+	__jsc__.garbageCollect
 
 	var count2 = JSCocoaController.JSCocoaHashCount
 //	JSCocoaController.log('********' + count0 + '****' + count1 + '*******' + count2)

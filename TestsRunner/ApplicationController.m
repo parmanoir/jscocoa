@@ -71,7 +71,7 @@ int runCount = 0;
 {
 //	NSLog(@">>>>=>GO FOR GC");
 //	[JSCocoa logInstanceStats];
-	[JSCocoa garbageCollect];
+	[[JSCocoaController sharedController] garbageCollect];
 //	NSLog(@">>>>=>DONE GC");
 //	[JSCocoa logInstanceStats];
 }

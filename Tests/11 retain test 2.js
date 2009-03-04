@@ -32,7 +32,7 @@
 		o1 = null
 		o2 = null
 		
-		JSCocoaController.garbageCollect
+		__jsc__.garbageCollect
 
 
 //		JSCocoaController.logInstanceStats

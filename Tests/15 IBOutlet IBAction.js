@@ -156,6 +156,6 @@
 	path = null
 
 	nib = null
-	JSCocoaController.garbageCollect
+	__jsc__.garbageCollect
 
 
