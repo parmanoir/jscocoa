@@ -20,8 +20,30 @@
 	// Allocate a class, set instance variables on it
 	//
 	var newClass = JSCocoaController.createClass_parentClass("InstanceVariableTester", "NSObject")
+
+/*
+//	var container = InstanceVariableTester.alloc.init
+//	var container = InstanceVariableTester.instance()
+	InstanceVariableTester.instance()
+	InstanceVariableTester.instance()
+	InstanceVariableTester.instance()
+	InstanceVariableTester.instance()
+	InstanceVariableTester.instance()
+	JSCocoaController.logInstanceStats
+//	container.release
+	container = null
+	__jsc__.garbageCollect
+	log('?????????and now ?')
+	JSCocoaController.logInstanceStats
+	log('>>>>>>>>>so ?')
+	__jsc__.garbageCollect
+	log('?????????and now ?')
+	JSCocoaController.logInstanceStats
+	log('>>>>>>>>>so ?')
+*/
 	
 	var container = InstanceVariableTester.alloc.init
+//	JSCocoaController.logInstanceStats
 	
 	container.myValue1 = 3.14
 	container.myValue2 = 'Hello world !'
@@ -41,7 +63,8 @@
 	// One more test with a derived class
 	//
 	var newClass2 = JSCocoaController.createClass_parentClass("InstanceVariableTester2", "InstanceVariableTester")
-	var container2 = InstanceVariableTester.alloc.init
+	var container2 = InstanceVariableTester2.alloc.init
+//	JSCocoaController.logInstanceStats
 	container2.myValue1 = 7.89
 
 //	JSCocoaController.log('container2.myValue1=' + container2.myValue1)
@@ -56,23 +79,31 @@
 	
 //	JSCocoaController.log('JSCocoaHashCount=' + JSCocoaController.JSCocoaHashCount)
 
+
+	var count1 = JSCocoaController.JSCocoaHashCount
+	if (!hasObjCGC)
+		if (count1 != (count0+2))	throw 'invalid hash count — got ' + count1 + ', expected ' + (count0+2) + ' (1)'
+
 	// Release instances
 	container.release
 	container2.release
 	container = null
 	container2 = null
 
-	var count1 = JSCocoaController.JSCocoaHashCount
-	if (!hasObjCGC)
-		if (count1 != (count0+2))	throw 'invalid hash count — got ' + count1 + ', expected ' + (count0+2)
-
+	// The following line is useless but throws off garbage collection. 
+	// Without it, one instance of InstanceVariableTester sticks around until the next test run.
+	var instanceCount1 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+	
+	// Collect
 	__jsc__.garbageCollect
+	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+
 
 	var count2 = JSCocoaController.JSCocoaHashCount
 //	JSCocoaController.log('********' + count0 + '****' + count1 + '*******' + count2)
 //	JSCocoaController.logInstanceStats
 	if (!hasObjCGC)
-		if (Number(count2) != Number(count0))	throw 'invalid hash count after GC — got ' + count2 + ', expected ' + count0
+		if (Number(count2) != Number(count0))	throw 'invalid hash count after GC — got ' + count2 + ', expected ' + count0 + ' (2)'
 	
 	
 	

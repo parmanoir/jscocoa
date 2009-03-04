@@ -2385,11 +2385,13 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 //
 // callAsFunction 
 //	done in two methods. 
-//	The first one (_jsCocoaObject_callAsFunction) calls a C function or ObjC method with provided arguments
-//	The second one (jsCocoaObject_callAsFunction) is called first and handles 
+//	jsCocoaObject_callAsFunction is called first and handles 
 //		* js function call : on an ObjC class, use of pure js functions as methods
 //		* Super call
 //		* toString, valueOf
+//	_jsCocoaObject_callAsFunction calls a C function or ObjC method with provided arguments
+//
+//	jsCocoaObject_callAsFunction calls _jsCocoaObject_callAsFunction.
 //
 
 // That's where the actual calling happens.

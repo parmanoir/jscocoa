@@ -14,8 +14,11 @@
 - (void)awakeFromNib
 {
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");
-	[JSCocoaController deallocAutoreleasePool];
-	[[NSAutoreleasePool alloc] init];
+//	[JSCocoaController deallocAutoreleasePool];
+//	[[NSAutoreleasePool alloc] init];
+
+	[JSCocoaController sharedController];
+
 
 //	[[JSCocoaController sharedController] evalJSFile:[[NSBundle mainBundle] pathForResource:@"class" ofType:@"js"]];
 /*	
