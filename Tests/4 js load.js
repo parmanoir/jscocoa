@@ -3,7 +3,7 @@
 	// Load file
 	var file = NSBundle.mainBundle.bundlePath + '/Contents/Resources/Tests/Resources/externalFileTest.js'
 //	JSCocoaController.log(file)
-	JSCocoaController.sharedController.evalJSFile(file)
+	__jsc__.evalJSFile(file)
 
 	// Test var
 	if (externalVariable != 'Hello !')	throw "external variable not found"

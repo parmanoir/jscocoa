@@ -11,13 +11,16 @@
 
 @implementation ApplicationController
 
+id jsc;
+
 - (void)awakeFromNib
 {
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");
 //	[JSCocoaController deallocAutoreleasePool];
 //	[[NSAutoreleasePool alloc] init];
 
-	[JSCocoaController sharedController];
+//	[JSCocoaController sharedController];
+	jsc = [JSCocoa new];
 
 
 //	[[JSCocoaController sharedController] evalJSFile:[[NSBundle mainBundle] pathForResource:@"class" ofType:@"js"]];
@@ -62,7 +65,8 @@ int runCount = 0;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-	BOOL b = [[JSCocoaController sharedController] runTests:path];
+//	BOOL b = [[JSCocoaController sharedController] runTests:path];
+	BOOL b = [jsc runTests:path];
 	[self garbageCollect:nil];
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	else	NSLog(@"All tests ran OK !");
@@ -74,7 +78,8 @@ int runCount = 0;
 {
 //	NSLog(@">>>>=>GO FOR GC");
 //	[JSCocoa logInstanceStats];
-	[[JSCocoaController sharedController] garbageCollect];
+//	[[JSCocoaController sharedController] garbageCollect];
+	[jsc garbageCollect];
 //	NSLog(@">>>>=>DONE GC");
 //	[JSCocoa logInstanceStats];
 }
@@ -89,7 +94,8 @@ int runCount = 0;
 
 
 	[JSCocoaController garbageCollect];
-	JSValueRefAndContextRef v = [[JSCocoaController sharedController] evalJSString:js];
+//	JSValueRefAndContextRef v = [[JSCocoaController sharedController] evalJSString:js];
+	JSValueRefAndContextRef v = [jsc evalJSString:js];
 	[JSCocoaController garbageCollect];
 	
 	JSStringRef resultStringJS = JSValueToStringCopy(v.ctx, v.value, NULL);
@@ -103,7 +109,8 @@ int runCount = 0;
 - (IBAction)unlinkAllReferences:(id)sender
 {
 //	[JSCocoa logInstanceStats];
-	[[JSCocoaController sharedController] unlinkAllReferences];
+//	[[JSCocoaController sharedController] unlinkAllReferences];
+	[jsc unlinkAllReferences];
 //	[self garbageCollect:nil];
 //	[JSCocoa logInstanceStats];
 }

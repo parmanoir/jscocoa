@@ -1,7 +1,14 @@
 
+	log('*********fix 3 derivation*************')
+
 
 	// Define a new class
 	var newClass = JSCocoaController.createClass_parentClass("NSDerivedObjectTest", "NSObject")
+	
+	var o = NSDerivedObjectTest.alloc.init
+	o.release
+	o = null
+	
 
 	// Allocate instance
 	var o = NSDerivedObjectTest.alloc.init

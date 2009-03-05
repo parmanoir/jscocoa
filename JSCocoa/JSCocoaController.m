@@ -93,7 +93,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)init
 {
-//	NSLog(@"JSCocoa : %x spawning", self);
+	NSLog(@"JSCocoa : %x spawning", self);
 	self	= [super init];
 	
 	@synchronized(self)
@@ -229,7 +229,7 @@ static id JSCocoaSingleton = NULL;
 			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
 			//
 			JSCocoaSingleton = [self alloc];
-//			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
 			[JSCocoaSingleton init];
 		}
 	}
@@ -312,10 +312,10 @@ static id JSCocoaSingleton = NULL;
 {
 	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
 	if (!script)	return	v;
-    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
+	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef exception = NULL;
-    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
-    JSStringRelease(scriptJS);
+	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
+	JSStringRelease(scriptJS);
 
 	v.ctx = ctx;
 	v.value = JSValueMakeNull(ctx);
@@ -617,7 +617,7 @@ static id JSCocoaSingleton = NULL;
 }
 
 
-- (id)parentObjCClassOfClassName:(NSString*)className
++ (id)parentObjCClassOfClassName:(NSString*)className
 {
 	return	[jsClassParents objectForKey:className];
 }
@@ -775,11 +775,16 @@ static id JSCocoaSingleton = NULL;
 	IMP deallocJSImp = method_getImplementation(deallocJS);
 	if (!hasHash)
 	{
+	
+		// Alloc debug
+		Method m = class_getClassMethod(JSCocoaMethodHolderClass, @selector(allocWithZone:));
+		class_addMethod(objc_getMetaClass(className), @selector(allocWithZone:), method_getImplementation(m), method_getTypeEncoding(m));	
+
 		// Add dealloc
 		class_addMethod(class, @selector(dealloc), deallocJSImp, method_getTypeEncoding(deallocJS));
 		
 		// Add js hash get / set /delete
-		Method m = class_getInstanceMethod(JSCocoaMethodHolderClass, @selector(setJSValue:forJSName:));
+		m = class_getInstanceMethod(JSCocoaMethodHolderClass, @selector(setJSValue:forJSName:));
 		class_addMethod(class, @selector(setJSValue:forJSName:), method_getImplementation(m), method_getTypeEncoding(m));
 
 		m = class_getInstanceMethod(JSCocoaMethodHolderClass, @selector(JSValueForJSName:));
@@ -787,10 +792,6 @@ static id JSCocoaSingleton = NULL;
 
 		m = class_getInstanceMethod(JSCocoaMethodHolderClass, @selector(deleteJSValueForJSName:));
 		class_addMethod(class, @selector(deleteJSValueForJSName:), method_getImplementation(m), method_getTypeEncoding(m));		
-
-		// Alloc debug
-		m = class_getClassMethod(JSCocoaMethodHolderClass, @selector(allocWithZone:));
-		class_addMethod(objc_getMetaClass(className), @selector(allocWithZone:), method_getImplementation(m), method_getTypeEncoding(m));	
 
 #ifdef __OBJC_GC__
 		// GC finalize
@@ -1214,6 +1215,9 @@ static id JSCocoaSingleton = NULL;
 
 //
 // Given an exception, get its line number, source URL, error message and return them in a NSString
+//	When throwing an exception from Javascript, throw an object instead of a string. 
+//	This way, JavascriptCore will add line and sourceURL.
+//	(throw new String('error') instead of throw 'error')
 //
 - (NSString*)formatJSException:(JSValueRef)exception
 {
@@ -1414,7 +1418,7 @@ int	liveInstanceCount	= 0;
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
 		JSContextRef c = valueAndContext.ctx;
-        JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
+		JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
@@ -1429,7 +1433,7 @@ int	liveInstanceCount	= 0;
 	
 //		NSLog(@"SET JS VALUE %x %@", valueAndContext.value, [(id)JSStringCopyCFString(kCFAllocatorDefault, name) autorelease]);
 		JSObjectSetProperty(c, hash, name, valueAndContext.value, kJSPropertyAttributeNone, NULL);
-        JSStringRelease(name);
+		JSStringRelease(name);
 		return	YES;
 	}
 	return	NO;
@@ -1440,16 +1444,20 @@ int	liveInstanceCount	= 0;
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
 		JSContextRef c = nameAndContext.ctx;
-        JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
+		JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
-		if (!hash)	return	valueAndContext;
+		if (!hash)	
+		{
+			JSStringRelease(name);
+			return	valueAndContext;
+		}
 		if (!JSObjectHasProperty(c, hash, name))	return	valueAndContext;
 
 		valueAndContext.ctx		= c;
 		valueAndContext.value	= JSObjectGetProperty(c, hash, name, NULL);
-        JSStringRelease(name);
+		JSStringRelease(name);
 		return	valueAndContext;
 	}
 	return	valueAndContext;
@@ -1460,14 +1468,14 @@ int	liveInstanceCount	= 0;
 	if (class_getInstanceVariable([self class], "__jsHash"))
 	{
 		JSContextRef c = nameAndContext.ctx;
-        JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
+		JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
 	
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
 		if (!hash)										return	JSStringRelease(name), NO;
 		if (!JSObjectHasProperty(c, hash, name))		return	JSStringRelease(name), NO;
 		bool r =	JSObjectDeleteProperty(c, hash, name, NULL);
-        JSStringRelease(name);
+		JSStringRelease(name);
 		return	r;
 	}
 	return	NO;
@@ -1478,7 +1486,7 @@ int	liveInstanceCount	= 0;
 + (id)allocWithZone:(NSZone*)zone
 {
 	// Dynamic super call
-	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName(self)]];
+	id parentClass = [JSCocoaController parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName(self)]];
 	id supermetaclass = objc_getMetaClass(class_getName(parentClass));
 	struct objc_super superData = { self, supermetaclass };
 	id o = objc_msgSendSuper(&superData, @selector(allocWithZone:), zone);
@@ -1494,13 +1502,15 @@ int	liveInstanceCount	= 0;
 	object_getInstanceVariable(self, "__jsHash", (void**)&hash);
 	if (hash)	
 	{
+		NSLog(@">>deallocandcleanup — CHECK FINALIZE TOO");
 		JSValueUnprotect([[JSCocoaController sharedController] ctx], hash);
+		NSLog(@"<<deallocandcleanup — CHECK FINALIZE TOO");
 		[JSCocoaController downJSCocoaHashCount];
 	}
 	[JSCocoaController downInstanceCount:self];
 
 	// Dynamic super call
-	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
+	id parentClass = [JSCocoaController parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
 	struct objc_super superData = { self, parentClass };
 	objc_msgSendSuper(&superData, @selector(dealloc));
 }
@@ -1518,7 +1528,7 @@ int	liveInstanceCount	= 0;
 	[JSCocoaController downInstanceCount:self];
 
 	// Dynamic super call
-	id parentClass = [[JSCocoaController sharedController] parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
+	id parentClass = [JSCocoaController parentObjCClassOfClassName:[NSString stringWithUTF8String:class_getName([self class])]];
 	struct objc_super superData = { self, parentClass };
 	objc_msgSendSuper(&superData, @selector(finalize));
 	
@@ -1928,8 +1938,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			}
 		}
 		
-		
-	
 		// Check object's internal property in its jsHash
 		id callee	= [privateObject object];
 		if ([callee respondsToSelector:@selector(JSValueForJSName:)])
@@ -1938,6 +1946,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 
 			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), ctx } ;
 			name.value = JSValueMakeString(ctx, propertyNameJS);
+
 			JSValueRef hashProperty = [callee JSValueForJSName:name].value;
 			if (hashProperty && !JSValueIsNull(ctx, hashProperty))	
 			{
