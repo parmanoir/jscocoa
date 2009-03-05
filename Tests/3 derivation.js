@@ -1,6 +1,4 @@
 
-	log('*********fix 3 derivation*************')
-
 
 	// Define a new class
 	var newClass = JSCocoaController.createClass_parentClass("NSDerivedObjectTest", "NSObject")

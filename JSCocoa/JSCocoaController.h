@@ -49,6 +49,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
 - (BOOL)setObject:(id)object withName:(id)name;
+- (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
 - (BOOL)removeObjectWithName:(id)name;
 
 //

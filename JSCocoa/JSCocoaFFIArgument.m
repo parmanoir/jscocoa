@@ -363,7 +363,6 @@
 		case	_C_CHARPTR:
 		{
 			id str = NSStringFromJSValue(value, ctx);
-//TAG BAD CONVERSION NOT ALIVE LONG ENOUGH
 			*(char**)ptr = (char*)[str UTF8String];
 			return	YES;
 		}

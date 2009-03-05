@@ -1,6 +1,5 @@
 
 
-
 	/*
 
 		A class created with JSCocoaController.createClass holds a javascript hash as an instance variable.
@@ -10,9 +9,6 @@
 
 	var count0 = JSCocoaController.JSCocoaHashCount
 
-//	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
-
-
 	// Count of instances hosting a js hash
 	var initialHashCount = JSCocoaController.JSCocoaHashCount
 
@@ -21,27 +17,6 @@
 	//
 	var newClass = JSCocoaController.createClass_parentClass("InstanceVariableTester", "NSObject")
 
-/*
-//	var container = InstanceVariableTester.alloc.init
-//	var container = InstanceVariableTester.instance()
-	InstanceVariableTester.instance()
-	InstanceVariableTester.instance()
-	InstanceVariableTester.instance()
-	InstanceVariableTester.instance()
-	InstanceVariableTester.instance()
-	JSCocoaController.logInstanceStats
-//	container.release
-	container = null
-	__jsc__.garbageCollect
-	log('?????????and now ?')
-	JSCocoaController.logInstanceStats
-	log('>>>>>>>>>so ?')
-	__jsc__.garbageCollect
-	log('?????????and now ?')
-	JSCocoaController.logInstanceStats
-	log('>>>>>>>>>so ?')
-*/
-	
 	var container = InstanceVariableTester.alloc.init
 //	JSCocoaController.logInstanceStats
 	
@@ -49,7 +24,6 @@
 	container.myValue2 = 'Hello world !'
 	
 	container.jsTest = function (a, b) { return a+b }
-	
 
 //	JSCocoaController.log('container.myValue1=' + container.myValue1)
 //	JSCocoaController.log('container.myValue2=' + container.myValue2)
@@ -76,10 +50,9 @@
 	delete container.myValue1
 	if (('myValue1' in container) != false)		throw "(5) Couldn't delete instance variable"
 
-	
 //	JSCocoaController.log('JSCocoaHashCount=' + JSCocoaController.JSCocoaHashCount)
 
-
+	// Test if we have two hash counts more
 	var count1 = JSCocoaController.JSCocoaHashCount
 	if (!hasObjCGC)
 		if (count1 != (count0+2))	throw 'invalid hash count — got ' + count1 + ', expected ' + (count0+2) + ' (1)'
@@ -92,45 +65,15 @@
 
 	// The following line is useless but throws off garbage collection. 
 	// Without it, one instance of InstanceVariableTester sticks around until the next test run.
-	var instanceCount1 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+//	var instanceCount1 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
 	
 	// Collect
 	__jsc__.garbageCollect
-	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+//	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
 
-
+	// Test that objects and their hashes were deleted by expecting initial hash count
 	var count2 = JSCocoaController.JSCocoaHashCount
 //	JSCocoaController.log('********' + count0 + '****' + count1 + '*******' + count2)
 //	JSCocoaController.logInstanceStats
 	if (!hasObjCGC)
 		if (Number(count2) != Number(count0))	throw 'invalid hash count after GC — got ' + count2 + ', expected ' + count0 + ' (2)'
-	
-	
-	
-	
-	
-/*	
-	function	performSelectorTarget()
-	{
-		JSCocoaController.garbageCollect
-		o.perform( { selector : 'callMe2:', withObject : null, afterDelay : 0.1 } )
-	}
-	
-	function	performSelectorTarget2()
-	{
-		if (JSCocoaController.JSCocoaHashCount != initialHashCount)	throw "invalid hash count"
-		JSCocoaController.log('new JSCocoaHashCount=' + JSCocoaController.JSCocoaHashCount + ', initial JSCocoaHashCount=' + initialHashCount)
-	}
-
-	//
-	// Test that hashes were released : schedule a collection and check that hash count is back to its initial value
-	//
-	var newClass = JSCocoaController.sharedController().createClass_parentClass("PerformSelectorTester2", "NSObject")
-//	JSCocoaController.log('encoding=' + objc_encoding('void', 'id'))
-	var added = JSCocoaController.sharedController().addInstanceMethod_class_jsFunction_encoding('callMe:', objc_getClass("PerformSelectorTester2"), performSelectorTarget, objc_encoding('void', 'id'))
-	var added = JSCocoaController.sharedController().addInstanceMethod_class_jsFunction_encoding('callMe2:', objc_getClass("PerformSelectorTester2"), performSelectorTarget2, objc_encoding('void', 'id'))
-	
-	var o = PerformSelectorTester2.alloc.init
-	o.perform( { selector : 'callMe:', withObject : null, afterDelay : 0 } )
-
-*/

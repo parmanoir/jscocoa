@@ -11,16 +11,22 @@
 
 @implementation ApplicationController
 
-id jsc;
+id jsc = nil;
 
-- (void)awakeFromNib
+//- (void)awakeFromNib
+- (void)applicationDidFinishLaunching:(id)notif
 {
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");
 //	[JSCocoaController deallocAutoreleasePool];
 //	[[NSAutoreleasePool alloc] init];
 
-//	[JSCocoaController sharedController];
+
+
+
+//	jsc = [JSCocoaController sharedController];
 	jsc = [JSCocoa new];
+
+
 
 
 //	[[JSCocoaController sharedController] evalJSFile:[[NSBundle mainBundle] pathForResource:@"class" ofType:@"js"]];
@@ -57,8 +63,20 @@ id jsc;
 	
 	CGColorRelease(color);
 */
+	[[NSApplication sharedApplication] setDelegate:self];
+	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
+
+- (void)applicationWillTerminate:(id)notif
+{
+	[jsc unlinkAllReferences];
+	[jsc garbageCollect];
+	NSLog(@"willTerminate %@ %d", jsc, [jsc retainCount]);
+	[jsc release];
+}
+
+
 int runCount = 0;
 - (IBAction)runJSTests:(id)sender
 {

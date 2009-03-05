@@ -1,4 +1,6 @@
 
+log('this leaks four')
+
 
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 

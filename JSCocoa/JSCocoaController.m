@@ -87,15 +87,19 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	static	BOOL	logAllExceptions;
 	// Is speaking when throwing exceptions
 	static	BOOL	isSpeaking;
+	
+	// Controller count
+	static	int		controllerCount = 0;
 
 //
 // Init
 //
 - (id)init
 {
-	NSLog(@"JSCocoa : %x spawning", self);
+//	NSLog(@"JSCocoa : %x spawning", self);
 	self	= [super init];
-	
+	controllerCount++;
+
 	@synchronized(self)
 	{
 		if (!sharedInstanceStats)	
@@ -150,27 +154,13 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	if (!hashObjectClass)
 		hashObjectClass = JSClassCreate(&jsCocoaHashObjectDefinition);
 
-
 	//
 	// Start context
 	//
 	ctx = JSGlobalContextCreate(OSXObjectClass);
 
-
-	// Create a reference to ourselves
-/*
-	JSObjectRef jsc = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsc);
-	private.type = @"@";
-	// If we've overloaded retain, we'll be calling ourselves until the stack dies
-	[private setObject:self];
-
-	// Register ourselves
-	JSStringRef jsName = JSStringCreateWithUTF8CString("__jsc__");
-	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, jsc, kJSPropertyAttributeReadOnly+kJSPropertyAttributeDontEnum+kJSPropertyAttributeDontDelete, NULL);
-	JSStringRelease(jsName);
-*/
-	[self setObject:self withName:@"__jsc__"];
+	// Create a reference to ourselves, and make it read only, don't enum, don't delete
+	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
 
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
@@ -194,6 +184,22 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (void)cleanUp
 {
 //	NSLog(@"JSCocoa : %x dying", self);
+	controllerCount--;
+	if (controllerCount == 0)
+	{
+		JSClassRelease(OSXObjectClass);
+		JSClassRelease(jsCocoaObjectClass);
+		JSClassRelease(hashObjectClass);
+
+		[sharedInstanceStats release];
+		[closureHash release];
+		[jsFunctionSelectors release];
+		[jsFunctionClasses release];
+		[jsFunctionHash release];
+		[splitCallCache release];
+		[jsClassParents release];
+		[boxedObjects release];
+	}
 	
 	[self unlinkAllReferences];
 	JSGarbageCollect(ctx);
@@ -431,24 +437,23 @@ static id JSCocoaSingleton = NULL;
 //
 // Add/Remove an ObjC object variable to the global context
 //
-- (BOOL)setObject:(id)object withName:(id)name
+- (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes
 {
-/*
-	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-	private.type = @"@";
-	[private setObject:object];
-*/
 	JSObjectRef o = [JSCocoaController boxedJSObject:object inContext:ctx];
 
 	// Set
 	JSValueRef	exception = NULL;
 	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeNone, &exception);
+	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, attributes, &exception);
 	JSStringRelease(jsName);
 
     if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
 	return	YES;
+}
+
+- (BOOL)setObject:(id)object withName:(id)name
+{
+	return [self setObject:object withName:name attributes:kJSPropertyAttributeNone];
 }
 
 - (BOOL)removeObjectWithName:(id)name
@@ -765,7 +770,12 @@ static id JSCocoaSingleton = NULL;
 	class = objc_allocateClassPair(objc_getClass(parentClass), className, 0);
 	// Only add on classes that don't have the js data
 	BOOL hasHash = !!class_getInstanceVariable(objc_getClass(parentClass), "__jsHash");
-	if (!hasHash)	class_addIvar(class, "__jsHash", sizeof(void*), log2(sizeof(void*)), "^");
+	if (!hasHash)	
+	{
+		// Add hash and context
+		class_addIvar(class, "__jsHash", sizeof(void*), log2(sizeof(void*)), "^");
+		class_addIvar(class, "__jsCocoaController", sizeof(void*), log2(sizeof(void*)), "^");
+	}
 	// Finish creating class
 	objc_registerClassPair(class);
 
@@ -1419,13 +1429,18 @@ int	liveInstanceCount	= 0;
 	{
 		JSContextRef c = valueAndContext.ctx;
 		JSStringRef name = JSValueToStringCopy(c, nameAndContext.value, NULL);
-	
+
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
 		if (!hash)
 		{
+			// Retrieve controller
+			id jsc = [JSCocoaController controllerFromContext:c];
+			c = [jsc ctx];
+
 			hash = JSObjectMake(c, hashObjectClass, NULL);
 			object_setInstanceVariable(self, "__jsHash", (void*)hash);
+			object_setInstanceVariable(self, "__jsCocoaController", (void*)jsc);
 			JSValueProtect(c, hash);
 			[JSCocoaController upJSValueProtectCount];
 			[JSCocoaController upJSCocoaHashCount];
@@ -1448,12 +1463,11 @@ int	liveInstanceCount	= 0;
 	
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
-		if (!hash)	
+		if (!hash || !JSObjectHasProperty(c, hash, name))	
 		{
 			JSStringRelease(name);
 			return	valueAndContext;
 		}
-		if (!JSObjectHasProperty(c, hash, name))	return	valueAndContext;
 
 		valueAndContext.ctx		= c;
 		valueAndContext.value	= JSObjectGetProperty(c, hash, name, NULL);
@@ -1472,10 +1486,14 @@ int	liveInstanceCount	= 0;
 	
 		JSObjectRef hash = NULL;
 		object_getInstanceVariable(self, "__jsHash", (void**)&hash);
-		if (!hash)										return	JSStringRelease(name), NO;
-		if (!JSObjectHasProperty(c, hash, name))		return	JSStringRelease(name), NO;
+		if (!hash || !JSObjectHasProperty(c, hash, name))	
+		{
+			JSStringRelease(name);
+			return	NO;
+		}
 		bool r =	JSObjectDeleteProperty(c, hash, name, NULL);
 		JSStringRelease(name);
+
 		return	r;
 	}
 	return	NO;
@@ -1502,9 +1520,12 @@ int	liveInstanceCount	= 0;
 	object_getInstanceVariable(self, "__jsHash", (void**)&hash);
 	if (hash)	
 	{
-		NSLog(@">>deallocandcleanup — CHECK FINALIZE TOO");
-		JSValueUnprotect([[JSCocoaController sharedController] ctx], hash);
-		NSLog(@"<<deallocandcleanup — CHECK FINALIZE TOO");
+		id jsc = NULL;
+		object_getInstanceVariable(self, "__jsCocoaController", (void**)&jsc);
+//JSContextRef context;
+//		object_getInstanceVariable(self, "__jsCocoaController", (void**)&context);
+		JSValueUnprotect([jsc ctx], hash);
+//		JSValueUnprotect(context, hash);
 		[JSCocoaController downJSCocoaHashCount];
 	}
 	[JSCocoaController downInstanceCount:self];
@@ -1522,7 +1543,9 @@ int	liveInstanceCount	= 0;
 	object_getInstanceVariable(self, "__jsHash", (void**)&hash);
 	if (hash)	
 	{
-		JSValueUnprotect([[JSCocoaController sharedController] ctx], hash);
+		id jsc = NULL;
+		object_getInstanceVariable(self, "__jsCocoaController", (void**)&jsc);
+		JSValueUnprotect([jsc ctx], hash);
 		[JSCocoaController downJSCocoaHashCount];
 	}
 	[JSCocoaController downInstanceCount:self];
@@ -1883,6 +1906,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
+	
 
 	if ([privateObject.type isEqualToString:@"@"])
 	{
@@ -1942,16 +1966,10 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		id callee	= [privateObject object];
 		if ([callee respondsToSelector:@selector(JSValueForJSName:)])
 		{
-//			JSValueRef hashProperty = [callee JSValueForJSName:propertyNameJS];
-
-			JSValueRefAndContextRef	name = { JSValueMakeNull(ctx), ctx } ;
-			name.value = JSValueMakeString(ctx, propertyNameJS);
-
-			JSValueRef hashProperty = [callee JSValueForJSName:name].value;
+			JSValueRefAndContextRef	name	= { JSValueMakeString(ctx, propertyNameJS), ctx } ;
+			JSValueRef hashProperty			= [callee JSValueForJSName:name].value;
 			if (hashProperty && !JSValueIsNull(ctx, hashProperty))	
-			{
 				return	hashProperty;
-			}
 		}
 
 		
@@ -2076,7 +2094,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// This may be a JS function
 				//
 				Class class = [callee class];
-				JSValueRef result;
+				JSValueRef result = NULL;
 				while (class)
 				{
 					id script = [NSString stringWithFormat:@"__globalJSFunctionRepository__.%@.%@", class, propertyName];
@@ -2085,6 +2103,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					JSStringRelease(jsScript);
 					// Found ? Break
 					if (result && JSValueGetType(ctx, result) == kJSTypeObject)	break;
+					
 					// Go up parent class
 					class = [class superclass];
 				}
@@ -2099,6 +2118,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				}
 
 				methodName = propertyName;
+
 				// Get the meta class if callee is a class
 				class = [callee class];
 				if (callee == class)
@@ -2118,7 +2138,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"method";
 		private.methodName = methodName;
-		
+
 		// Special case for instance : setup a valueOf callback calling instance
 		if ([callee class] == callee && [propertyName isEqualToString:@"instance"])
 		{
@@ -2126,7 +2146,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			JSObjectSetProperty(ctx, o, jsName, object, JSCocoaInternalAttribute, NULL);
 			JSStringRelease(jsName);
 		}
-
 		return	o;
 	}
 
@@ -2451,7 +2470,7 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 		{
 			//
 			// Split call
-			//	set( { Value : '5', forKey : 'hello' } )
+			//	set( { value : '5', forKey : 'hello' } )
 			//	-> setValue:forKey:
 			//
 			if (![callee respondsToSelector:NSSelectorFromString(methodName)])
@@ -2610,8 +2629,6 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 		// Setup arguments, unboxing or converting data
 		for (i=0; i<argumentCount; i++, idx++)
 		{
-//			NSLog(@"calling %@ %c %d/%d", methodName, [arg typeEncoding], i+1, argumentCount);
-
 			// All variadic arguments are treated as ObjC objects (@)
 			JSCocoaFFIArgument*	arg;
 			if (isVariadic && i >= callAddressArgumentCount)
@@ -2717,7 +2734,13 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
 	{
 		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
-		if ([privateObject.methodName isEqualToString:@"toString"])	return	JSValueMakeString(ctx, JSValueToStringCopy(ctx, jsValue, NULL));
+		if ([privateObject.methodName isEqualToString:@"toString"])	
+		{
+			JSStringRef str = JSValueToStringCopy(ctx, jsValue, NULL);
+			JSValueRef ret = JSValueMakeString(ctx, str);
+			JSStringRelease(str);
+			return ret;
+		}
 		return	jsValue;
 	}
 	
