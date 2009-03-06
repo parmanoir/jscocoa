@@ -1,5 +1,5 @@
 
-log('this leaks four')
+//log('this leaks four')
 
 
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
@@ -83,3 +83,4 @@ log('this leaks four')
 	if (r != 13)	throw 'using a closure as instance method failed'
 
 	o = null
+	

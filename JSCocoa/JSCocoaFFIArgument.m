@@ -856,8 +856,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		}
 		if (*c == '=')	continue;
 	
-//		if (c0 != c && closedBracesCount == openedBracesCount)	break;
-
 		[types addObject:[NSString stringWithFormat:@"%c", *c]];
 
 		// Special case for pointers
@@ -881,12 +879,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 			}
 			else c++;
 		}
-/*		
-		if (openedBracesCount == closedBracesCount)	
-		{
-			break;
-		}
-*/
 	}
 	if (count) *count = c-c0;
 	if (closedBracesCount != openedBracesCount)		return NSLog(@"Could not parse structure type encodings for %@", structureTypeEncoding), nil;
@@ -924,15 +916,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		*value = JSValueMakeNull(ctx);
 		return	YES;
 	}
-	
-	// Else, box the object
-/*	
-	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
-	private.type = @"@";
-	[private setObject:objcObject];
-	*value = jsObject;
-*/
 	// Use a global boxing function to always return the same Javascript object 
 	//	when requesting multiple boxings of the same ObjC object
 	*value = [JSCocoaController boxedJSObject:objcObject inContext:ctx];

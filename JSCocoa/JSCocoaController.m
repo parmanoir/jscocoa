@@ -184,6 +184,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (void)cleanUp
 {
 //	NSLog(@"JSCocoa : %x dying", self);
+	
+	[self unlinkAllReferences];
+	JSGarbageCollect(ctx);
+
 	controllerCount--;
 	if (controllerCount == 0)
 	{
@@ -200,9 +204,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		[jsClassParents release];
 		[boxedObjects release];
 	}
-	
-	[self unlinkAllReferences];
-	JSGarbageCollect(ctx);
+
 	JSGlobalContextRelease(ctx);
 }
 - (void)dealloc
@@ -281,20 +283,20 @@ static id JSCocoaSingleton = NULL;
 	// Convert script and script URL to js strings
 //	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
 	// Using CreateWithUTF8 yields wrong results on PPC
-    JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
+	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
 	JSStringRef scriptURLJS		= JSStringCreateWithUTF8CString([path UTF8String]);
 	// Eval !
 	JSValueRef	exception = NULL;
-    JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
+	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
 	if (returnValue)	*returnValue = result;
 	// Release
-    JSStringRelease(scriptURLJS);
-    JSStringRelease(scriptJS);
-    if (exception) 
+	JSStringRelease(scriptURLJS);
+	JSStringRelease(scriptJS);
+	if (exception) 
 	{
 		NSLog(@"JSException - %@", [self formatJSException:exception]);
 		return	NO;
-    }
+	}
 	return	YES;
 }
 
@@ -325,11 +327,11 @@ static id JSCocoaSingleton = NULL;
 
 	v.ctx = ctx;
 	v.value = JSValueMakeNull(ctx);
-    if (exception) 
+	if (exception) 
 	{
 		NSLog(@"JSException in %@ : %@", @"js string", [self formatJSException:exception]);
 		return	v;
-    }
+	}
 	
 	v.ctx = ctx;
 	v.value = result;
@@ -363,11 +365,11 @@ static id JSCocoaSingleton = NULL;
 	JSValueRef returnValue = JSObjectCallAsFunction(ctx, jsFunction, NULL, argumentCount, jsArguments, &exception);
 	if (jsArguments) free(jsArguments);
 
-    if (exception) 
+	if (exception) 
 	{
 		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
 		return	NULL;
-    }
+	}
 
 	return	returnValue;
 }
@@ -447,7 +449,7 @@ static id JSCocoaSingleton = NULL;
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, attributes, &exception);
 	JSStringRelease(jsName);
 
-    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
 	return	YES;
 }
 
@@ -464,7 +466,7 @@ static id JSCocoaSingleton = NULL;
 	JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
 	JSStringRelease(jsName);
 
-    if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
 	return	YES;
 }
 
@@ -579,11 +581,11 @@ static id JSCocoaSingleton = NULL;
 	// value is an object holding the method name, 'instance' - its only use is storing 'thisObject'
 	JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
 
-    JSStringRef name = JSStringCreateWithUTF8CString("thisObject");
+	JSStringRef name = JSStringCreateWithUTF8CString("thisObject");
 	BOOL hasProperty =  JSObjectHasProperty(ctx, jsObject, name);
 	JSValueRef thisObjectValue = JSObjectGetProperty(ctx, jsObject, name, NULL);
 	if (hasProperty)	JSObjectDeleteProperty(ctx, jsObject, name, NULL);
-    JSStringRelease(name);
+	JSStringRelease(name);
 	
 	if (!hasProperty)	return;
 
@@ -1849,7 +1851,7 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	}
 
 	// Convert to string and return
-    JSStringRef jsToString = JSStringCreateWithCFString((CFStringRef)toString);
+	JSStringRef jsToString = JSStringCreateWithCFString((CFStringRef)toString);
 	JSValueRef jsValueToString = JSValueMakeString(ctx, jsToString);
 	JSStringRelease(jsToString);
 	return	jsValueToString;

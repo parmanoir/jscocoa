@@ -86,7 +86,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		JSCocoaFFIArgument*	arg	= [argumentEncodings objectAtIndex:i+1];
 		argTypes[i]				= [arg ffi_type];
 	}
-//closure = malloc(sizeof(ffi_closure));	
 	if ((closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == (void*)-1)
 	{
 		NSLog(@"ffi closure mmap failed");
@@ -170,17 +169,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	
 	// Create 'this'
 	if (isObjC)
-	{
-/*	
-		jsThis = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-		id this = *(void**)closureArgs[0];
-		JSCocoaPrivateObject* private = JSObjectGetPrivate(jsThis);
-		private.type = @"@";
-		// If we've overloaded retain, we'll be calling ourselves until the stack dies
-		[private setObject:this];
-*/
 		jsThis = [JSCocoaController boxedJSObject:*(void**)closureArgs[0] inContext:ctx];
-	}
 
 	// Call !
 	JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);

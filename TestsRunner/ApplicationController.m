@@ -65,7 +65,7 @@ id jsc = nil;
 */
 	[[NSApplication sharedApplication] setDelegate:self];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
-	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(id)notif
