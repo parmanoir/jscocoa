@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeExecutable = 3D8915750EA8F4B200BE4E70 /* TestsRunner */;
 		activeTarget = 8D1107260486CEB800E47090 /* TestsRunner */;
 		addToTargets = (
@@ -774,6 +774,26 @@
 			3DC3EF510F613808003F0D84 /* PBXTextBookmark */ = 3DC3EF510F613808003F0D84 /* PBXTextBookmark */;
 			3DC3EF520F613808003F0D84 /* PBXTextBookmark */ = 3DC3EF520F613808003F0D84 /* PBXTextBookmark */;
 			3DC3EF530F613808003F0D84 /* PBXTextBookmark */ = 3DC3EF530F613808003F0D84 /* PBXTextBookmark */;
+			3DC3EF570F6138EE003F0D84 /* PBXBookmark */ = 3DC3EF570F6138EE003F0D84 /* PBXBookmark */;
+			3DC3EF5B0F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF5B0F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF5C0F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF5C0F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF5F0F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF5F0F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF600F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF600F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF610F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF610F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF620F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF620F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF630F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF630F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF640F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF640F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF650F613910003F0D84 /* PBXTextBookmark */ = 3DC3EF650F613910003F0D84 /* PBXTextBookmark */;
+			3DC3EF790F61395D003F0D84 /* PBXBookmark */ = 3DC3EF790F61395D003F0D84 /* PBXBookmark */;
+			3DC3EF7D0F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF7D0F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF7E0F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF7E0F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF7F0F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF7F0F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF800F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF800F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF810F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF810F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF820F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF820F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF830F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF830F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF840F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF840F613968003F0D84 /* PBXTextBookmark */;
+			3DC3EF850F613968003F0D84 /* PBXTextBookmark */ = 3DC3EF850F613968003F0D84 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D89158A0EA8F4BA00BE4E70 /* Source Control */;
 		userBuildSettings = {
@@ -908,9 +928,9 @@
 	};
 	3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1266, 1474}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 1518}}";
 			sepNavSelRange = "{2245, 0}";
-			sepNavVisRange = "{1311, 2079}";
+			sepNavVisRange = "{2323, 1786}";
 			sepNavWindowFrame = "{{488, 101}, {1325, 863}}";
 		};
 	};
@@ -970,9 +990,9 @@
 	};
 	3DB065A80F28D7A60043C238 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {950, 33638}}";
+			sepNavIntBoundsRect = "{{0, 0}, {950, 33737}}";
 			sepNavSelRange = "{75929, 12}";
-			sepNavVisRange = "{101884, 1588}";
+			sepNavVisRange = "{3607, 2478}";
 			sepNavWindowFrame = "{{724, 42}, {1009, 871}}";
 		};
 	};
@@ -986,7 +1006,7 @@
 	};
 	3DB065AA0F28D7A60043C238 /* JSCocoaFFIArgument.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1009, 12518}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1009, 11979}}";
 			sepNavSelRange = "{3505, 50}";
 			sepNavVisRange = "{9615, 1904}";
 			sepNavWindowFrame = "{{338, 163}, {1068, 890}}";
@@ -1957,7 +1977,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 81";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2360;
 		vrLoc = 238;
@@ -1970,8 +1990,8 @@
 		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {950, 880}}";
-			sepNavSelRange = "{2448, 0}";
-			sepNavVisRange = "{196, 2651}";
+			sepNavSelRange = "{2241, 0}";
+			sepNavVisRange = "{197, 2520}";
 			sepNavWindowFrame = "{{674, 262}, {1009, 871}}";
 		};
 	};
@@ -2000,7 +2020,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 35";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2402;
 		vrLoc = 196;
@@ -2040,7 +2060,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 43";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2402;
 		vrLoc = 196;
@@ -2080,7 +2100,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2402;
 		vrLoc = 196;
@@ -2120,7 +2140,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 48";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2402;
 		vrLoc = 196;
@@ -2160,7 +2180,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2386;
 		vrLoc = 196;
@@ -2200,7 +2220,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2263;
 		vrLoc = 196;
@@ -2250,7 +2270,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2263;
 		vrLoc = 196;
@@ -2290,7 +2310,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2347,7 +2367,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2404,7 +2424,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -2434,7 +2454,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2484,7 +2504,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2524,7 +2544,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2591,7 +2611,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2425;
 		vrLoc = 302;
@@ -2621,7 +2641,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2425;
 		vrLoc = 302;
@@ -2651,7 +2671,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2425;
 		vrLoc = 302;
@@ -2681,7 +2701,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2718,7 +2738,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -2748,7 +2768,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -2778,7 +2798,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -2808,7 +2828,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2838,7 +2858,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2868,7 +2888,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2898,7 +2918,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2928,7 +2948,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2958,7 +2978,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -2988,7 +3008,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3018,7 +3038,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3048,7 +3068,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3078,7 +3098,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3108,7 +3128,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3138,7 +3158,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3168,7 +3188,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3198,7 +3218,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -3218,7 +3238,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 297;
@@ -3238,7 +3258,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3258,7 +3278,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3315,7 +3335,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3345,7 +3365,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3365,7 +3385,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3395,7 +3415,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 51";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 297;
@@ -3415,7 +3435,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2373;
 		vrLoc = 297;
@@ -3445,7 +3465,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 53";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2476;
 		vrLoc = 197;
@@ -3475,7 +3495,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2373;
 		vrLoc = 197;
@@ -3515,7 +3535,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -3615,7 +3635,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3655,7 +3675,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -3685,7 +3705,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3725,7 +3745,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3765,7 +3785,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3805,7 +3825,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3845,7 +3865,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3885,7 +3905,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3925,7 +3945,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -3965,7 +3985,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -4005,7 +4025,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -4045,7 +4065,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2481;
 		vrLoc = 357;
@@ -4085,7 +4105,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -4125,7 +4145,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -4165,7 +4185,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 52";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 357;
@@ -4222,7 +4242,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 84";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2424;
 		vrLoc = 302;
@@ -4282,7 +4302,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 84";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2298;
 		vrLoc = 302;
@@ -4322,7 +4342,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 84";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 2424;
 		vrLoc = 302;
@@ -4332,7 +4352,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 1";
 		rLen = 0;
-		rLoc = 2847;
+		rLoc = 2843;
 		rType = 0;
 		vrLen = 0;
 		vrLoc = 0;
@@ -4371,7 +4391,7 @@
 		isa = PBXTextBookmark;
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 1";
-		rLen = 2847;
+		rLen = 2843;
 		rLoc = 0;
 		rType = 0;
 		vrLen = 2043;
@@ -4986,7 +5006,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 76";
 		rLen = 0;
-		rLoc = 2365;
+		rLoc = 2361;
 		rType = 0;
 		vrLen = 2302;
 		vrLoc = 302;
@@ -5026,7 +5046,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 74";
 		rLen = 0;
-		rLoc = 2448;
+		rLoc = 2444;
 		rType = 0;
 		vrLen = 2508;
 		vrLoc = 196;
@@ -5086,7 +5106,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 74";
 		rLen = 0;
-		rLoc = 2448;
+		rLoc = 2444;
 		rType = 0;
 		vrLen = 2508;
 		vrLoc = 196;
@@ -5153,7 +5173,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 74";
 		rLen = 0;
-		rLoc = 2448;
+		rLoc = 2444;
 		rType = 0;
 		vrLen = 2651;
 		vrLoc = 196;
@@ -5203,7 +5223,7 @@
 		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
 		name = "12 instance variables.js: 74";
 		rLen = 0;
-		rLoc = 2448;
+		rLoc = 2444;
 		rType = 0;
 		vrLen = 2508;
 		vrLoc = 196;
@@ -8163,6 +8183,194 @@
 		vrLoc = 0;
 	};
 	3DC3EF530F613808003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EE4B0F609AAB003F0D84 /* 3 derivation.js */;
+		name = "3 derivation.js: 63";
+		rLen = 0;
+		rLoc = 1486;
+		rType = 0;
+		vrLen = 1832;
+		vrLoc = 181;
+	};
+	3DC3EF570F6138EE003F0D84 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+	};
+	3DC3EF5B0F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2284";
+		rLen = 12;
+		rLoc = 75929;
+		rType = 0;
+		vrLen = 1593;
+		vrLoc = 101884;
+	};
+	3DC3EF5C0F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2284";
+		rLen = 12;
+		rLoc = 75929;
+		rType = 0;
+		vrLen = 2572;
+		vrLoc = 3607;
+	};
+	3DC3EF5F0F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 68";
+		rLen = 0;
+		rLoc = 2245;
+		rType = 0;
+		vrLen = 1791;
+		vrLoc = 2323;
+	};
+	3DC3EF600F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065AA0F28D7A60043C238 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 176";
+		rLen = 50;
+		rLoc = 3505;
+		rType = 0;
+		vrLen = 2009;
+		vrLoc = 9615;
+	};
+	3DC3EF610F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065AC0F28D7A60043C238 /* JSCocoaFFIClosure.m */;
+		name = "JSCocoaFFIClosure.m: 89";
+		rLen = 0;
+		rLoc = 1768;
+		rType = 0;
+		vrLen = 2154;
+		vrLoc = 2855;
+	};
+	3DC3EF620F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EEFB0F613646003F0D84 /* 17 struct instance.js */;
+		name = "17 struct instance.js: 29";
+		rLen = 0;
+		rLoc = 659;
+		rType = 0;
+		vrLen = 2243;
+		vrLoc = 0;
+	};
+	3DC3EF630F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A40F28D7A60043C238 /* class.js */;
+		name = "class.js: 125";
+		rLen = 11;
+		rLoc = 3025;
+		rType = 0;
+		vrLen = 2267;
+		vrLoc = 3010;
+	};
+	3DC3EF640F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EE540F609AB6003F0D84 /* 14 class.js */;
+		name = "14 class.js: 2";
+		rLen = 0;
+		rLoc = 3;
+		rType = 0;
+		vrLen = 1502;
+		vrLoc = 0;
+	};
+	3DC3EF650F613910003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EE4B0F609AAB003F0D84 /* 3 derivation.js */;
+		name = "3 derivation.js: 63";
+		rLen = 0;
+		rLoc = 1486;
+		rType = 0;
+		vrLen = 1843;
+		vrLoc = 181;
+	};
+	3DC3EF790F61395D003F0D84 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3DC3EA280F6040F0003F0D84 /* 12 instance variables.js */;
+	};
+	3DC3EF7D0F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EAFB0F605AB7003F0D84 /* 12 instance variables.js */;
+		name = "12 instance variables.js: 68";
+		rLen = 0;
+		rLoc = 2241;
+		rType = 0;
+		vrLen = 2520;
+		vrLoc = 197;
+	};
+	3DC3EF7E0F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 68";
+		rLen = 0;
+		rLoc = 2245;
+		rType = 0;
+		vrLen = 1786;
+		vrLoc = 2323;
+	};
+	3DC3EF7F0F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2284";
+		rLen = 12;
+		rLoc = 75929;
+		rType = 0;
+		vrLen = 2478;
+		vrLoc = 3607;
+	};
+	3DC3EF800F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065AA0F28D7A60043C238 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 176";
+		rLen = 50;
+		rLoc = 3505;
+		rType = 0;
+		vrLen = 1904;
+		vrLoc = 9615;
+	};
+	3DC3EF810F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065AC0F28D7A60043C238 /* JSCocoaFFIClosure.m */;
+		name = "JSCocoaFFIClosure.m: 89";
+		rLen = 0;
+		rLoc = 1768;
+		rType = 0;
+		vrLen = 2149;
+		vrLoc = 2855;
+	};
+	3DC3EF820F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EEFB0F613646003F0D84 /* 17 struct instance.js */;
+		name = "17 struct instance.js: 29";
+		rLen = 0;
+		rLoc = 659;
+		rType = 0;
+		vrLen = 2223;
+		vrLoc = 0;
+	};
+	3DC3EF830F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A40F28D7A60043C238 /* class.js */;
+		name = "class.js: 125";
+		rLen = 11;
+		rLoc = 3025;
+		rType = 0;
+		vrLen = 2261;
+		vrLoc = 3010;
+	};
+	3DC3EF840F613968003F0D84 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC3EE540F609AB6003F0D84 /* 14 class.js */;
+		name = "14 class.js: 2";
+		rLen = 0;
+		rLoc = 3;
+		rType = 0;
+		vrLen = 1480;
+		vrLoc = 0;
+	};
+	3DC3EF850F613968003F0D84 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3DC3EE4B0F609AAB003F0D84 /* 3 derivation.js */;
 		name = "3 derivation.js: 63";

@@ -65,11 +65,11 @@
 
 	// The following line is useless but throws off garbage collection. 
 	// Without it, one instance of InstanceVariableTester sticks around until the next test run.
-//	var instanceCount1 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+	var instanceCount1 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
 	
 	// Collect
 	__jsc__.garbageCollect
-//	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
+	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
 
 	// Test that objects and their hashes were deleted by expecting initial hash count
 	var count2 = JSCocoaController.JSCocoaHashCount
