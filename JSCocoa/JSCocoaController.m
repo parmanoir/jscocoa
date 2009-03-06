@@ -1646,7 +1646,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 	// ObjC class
 	//
 	Class objCClass = NSClassFromString(propertyName);
-	if (objCClass)
+	if (objCClass && ![propertyName isEqualToString:@"Object"])
 	{
 		return	[JSCocoaController boxedJSObject:objCClass inContext:ctx];
 	}
@@ -2416,16 +2416,16 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 // callAsFunction 
 //	done in two methods. 
 //	jsCocoaObject_callAsFunction is called first and handles 
-//		* js function call : on an ObjC class, use of pure js functions as methods
-//		* Super call
+//		* C and ObjC calls : calls jsCocoaObject_callAsFunction_ffi
+//		* Super call : in a derived ObjC class method, call this.Super(arguments) to call the parent method with jsCocoaObject_callAsFunction_ffi
+//		* js function calls : on an ObjC class, use of pure js functions as methods
 //		* toString, valueOf
-//	_jsCocoaObject_callAsFunction calls a C function or ObjC method with provided arguments
 //
-//	jsCocoaObject_callAsFunction calls _jsCocoaObject_callAsFunction.
+//	jsCocoaObject_callAsFunction_ffi calls a C function or an ObjC method with provided arguments.
 //
 
-// That's where the actual calling happens.
-static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree)
+// This uses libffi to call C and ObjC.
+static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
@@ -2717,7 +2717,11 @@ static JSValueRef _jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fu
 }
 
 //
-// This method handles Super by retrieving the method name to call
+// This method handles
+//		* C and ObjC calls
+//		* Super call : retrieves the method name to call, thereby giving new arguments to jsCocoaObject_callAsFunction_ffi
+//		* js function calls : on an ObjC class, use of pure js functions as methods
+//		* toString, valueOf
 //
 static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
@@ -2782,7 +2786,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
 	JSValueRef*	argumentsToFree		= NULL;
-	JSValueRef jsReturnValue = _jsCocoaObject_callAsFunction(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
+	JSValueRef jsReturnValue = jsCocoaObject_callAsFunction_ffi(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
 	
 	if (superArguments)		free(superArguments);
 	if (argumentsToFree)	free(argumentsToFree);
