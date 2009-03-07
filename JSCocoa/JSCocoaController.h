@@ -30,7 +30,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
+    id _delegate;
 }
+
+@property (assign) id delegate;
+
 
 + (id)sharedController;
 + (id)controllerFromContext:(JSContextRef)ctx;
@@ -119,6 +123,13 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 
 @end
+
+
+
+@interface NSObject (JSCocoaControllerDelegateMethods)
+- (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber;
+@end
+
 
 //
 // JSCocoa shorthand

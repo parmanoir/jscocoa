@@ -57,7 +57,13 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 #pragma mark JSCocoaController
 
+@interface JSCocoaController (Private)
+- (void) callDelegateForException:(JSValueRef)exception;
+@end
+
 @implementation JSCocoaController
+
+@synthesize delegate=_delegate;
 
 	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
 	static	id	closureHash;
@@ -329,7 +335,7 @@ static id JSCocoaSingleton = NULL;
 	v.value = JSValueMakeNull(ctx);
 	if (exception) 
 	{
-		NSLog(@"JSException in %@ : %@", @"js string", [self formatJSException:exception]);
+        [self callDelegateForException:exception];
 		return	v;
 	}
 	
@@ -1263,6 +1269,49 @@ static id JSCocoaSingleton = NULL;
 	}
 	JSPropertyNameArrayRelease(jsNames);
 	return [NSString stringWithFormat:@"%@ on line %@ of %@", b, line, sourceURL];
+}
+
+- (void) callDelegateForException:(JSValueRef)exception {
+    if (!_delegate || ![_delegate respondsToSelector:@selector(JSCocoa:hadError:onLineNumber:)]) {
+        
+		NSLog(@"JSException: %@", [self formatJSException:exception]);
+        
+        return;
+    }
+    
+    JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
+	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+	JSStringRelease(resultStringJS);
+	[NSMakeCollectable(b) autorelease];
+    
+	if (JSValueGetType(ctx, exception) != kJSTypeObject) {
+        [_delegate JSCocoa:self hadError:b onLineNumber:0];
+    }
+    
+	// Iterate over all properties of the exception
+	JSObjectRef jsObject = JSValueToObject(ctx, exception, NULL);
+	JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(ctx, jsObject);
+	int i, nameCount = JSPropertyNameArrayGetCount(jsNames);
+	id line = nil, sourceURL = nil;
+	for (i=0; i<nameCount; i++)
+	{
+		JSStringRef jsName = JSPropertyNameArrayGetNameAtIndex(jsNames, i);
+		id name = (id)JSStringCopyCFString(kCFAllocatorDefault, jsName);
+        
+		JSValueRef	jsValueRef = JSObjectGetProperty(ctx, jsObject, jsName, NULL);
+		JSStringRef	valueJS = JSValueToStringCopy(ctx, jsValueRef, NULL);
+		NSString* value = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, valueJS);
+		JSStringRelease(valueJS);
+		
+		if ([name isEqualToString:@"line"])			line = value;
+		if ([name isEqualToString:@"sourceURL"])	sourceURL = value;
+		[NSMakeCollectable(name) release];
+		// Autorelease because we assigned it to line / sourceURL
+		[NSMakeCollectable(value) autorelease];
+	}
+	JSPropertyNameArrayRelease(jsNames);
+    
+    [_delegate JSCocoa:self hadError:b onLineNumber:[line intValue]];
 }
 
 
