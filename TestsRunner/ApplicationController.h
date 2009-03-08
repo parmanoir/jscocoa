@@ -19,5 +19,7 @@
 - (IBAction)runSimpleTestFile:(id)sender;
 - (IBAction)unlinkAllReferences:(id)sender;
 
+- (id)testDelegate;
+
 
 @end

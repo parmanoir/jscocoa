@@ -11,7 +11,7 @@
 
 @implementation ApplicationController
 
-id jsc = nil;
+JSCocoaController* jsc = nil;
 
 //- (void)awakeFromNib
 - (void)applicationDidFinishLaunching:(id)notif
@@ -77,29 +77,40 @@ id jsc = nil;
 }
 
 
+//
+// Run unit tests + delegate tests
+//
 int runCount = 0;
+
 - (IBAction)runJSTests:(id)sender
 {
+	runCount++;
+
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-//	BOOL b = [[JSCocoaController sharedController] runTests:path];
 	BOOL b = [jsc runTests:path];
 	[self garbageCollect:nil];
+
+	// Test delegate
+	id error = [self testDelegate];
+	if (error)
+	{
+		b = NO;
+		path = error;
+	}
+	jsc.delegate = nil;
+	
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	else	NSLog(@"All tests ran OK !");
-//	NSLog(@"===========OK ! Ran %d from %@", runCount, path);
-	runCount++;
 }
 
+//
+// GC
+//
 - (IBAction)garbageCollect:(id)sender
 {
-//	NSLog(@">>>>=>GO FOR GC");
-//	[JSCocoa logInstanceStats];
-//	[[JSCocoaController sharedController] garbageCollect];
 	[jsc garbageCollect];
-//	NSLog(@">>>>=>DONE GC");
-//	[JSCocoa logInstanceStats];
 }
 
 
@@ -113,10 +124,12 @@ int runCount = 0;
 
 	[JSCocoaController garbageCollect];
 //	JSValueRefAndContextRef v = [[JSCocoaController sharedController] evalJSString:js];
-	JSValueRefAndContextRef v = [jsc evalJSString:js];
+//	JSValueRefAndContextRef v = [jsc evalJSString:js];
+	JSValueRef ret = [jsc evalJSString:js];
 	[JSCocoaController garbageCollect];
 	
-	JSStringRef resultStringJS = JSValueToStringCopy(v.ctx, v.value, NULL);
+//	JSStringRef resultStringJS = JSValueToStringCopy(v.ctx, v.value, NULL);
+	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret, NULL);
 	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
 	
@@ -132,6 +145,89 @@ int runCount = 0;
 //	[self garbageCollect:nil];
 //	[JSCocoa logInstanceStats];
 }
+
+
+
+//
+// Delegate testing
+//
+BOOL	hadError;
+
+BOOL	canGet;
+id		object;
+id		propertyName;
+
+JSValueRef	customValue;
+
+- (id)testDelegate
+{
+	jsc.delegate = self;
+
+	JSValueRef ret;
+
+	//
+	// Test disallowed getting
+	//
+	canGet		= NO;
+	hadError	= NO;
+	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
+	if (!hadError)		return	@"delegate canGetProperty failed (1)";
+	
+	//
+	// Test allowed getting
+	//
+	canGet		= YES;
+	customValue	= NULL;
+	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
+	if (object != [NSWorkspace class])						return	@"delegate canGetProperty failed (2)";
+	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate canGetProperty failed (3)";
+
+	//
+	// Test getting
+	//
+	customValue = NULL;
+	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
+	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (1)";
+	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (2)";
+	
+	id o = [jsc unboxJSValueRef:ret];
+	if (o != [NSWorkspace sharedWorkspace])					return	@"delegate getProperty failed (3)";
+	
+	//
+	// Test custom getting
+	//
+	customValue = JSValueMakeNumber([jsc ctx], 123);
+	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
+	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (4)";
+	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (5)";
+	if (JSValueToNumber([jsc ctx], ret, NULL) != 123)		return	@"delegate getProperty failed (6)";
+	
+	return	nil;
+}
+
+- (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url
+{
+//	NSLog(@"had error");
+	hadError = YES;
+}
+
+
+- (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+{
+//	NSLog(@"delegate canGet %@(%@).%@", _object, [_object class], _propertyName);
+	object			= _object;
+	propertyName	= _propertyName;
+	return	canGet;
+}
+
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+{
+//	NSLog(@"delegate get");
+	object			= _object;
+	propertyName	= _propertyName;
+	return	customValue;
+}
+
 
 
 @end

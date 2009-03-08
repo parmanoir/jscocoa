@@ -23,10 +23,11 @@ struct	JSValueRefAndContextRef
 	JSValueRef		value;
 	JSContextRef	ctx;
 };
-
-
 typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
+//
+// JSCocoaController
+//
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
@@ -34,7 +35,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 }
 
 @property (assign) id delegate;
-
 
 + (id)sharedController;
 + (id)controllerFromContext:(JSContextRef)ctx;
@@ -46,7 +46,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
-- (JSValueRefAndContextRef)evalJSString:(NSString*)script;
+- (JSValueRef)evalJSString:(NSString*)script;
 + (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
@@ -125,9 +125,70 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @end
 
 
+//
+// JSCocoa delegate methods
+//
 
+//
+// Error reporting
+//
 @interface NSObject (JSCocoaControllerDelegateMethods)
-- (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber;
+- (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url;
+
+//
+// Getting
+//
+// Check if getting property is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Custom handler for getting properties
+//	Bypass JSCocoa and return a custom JSValueRef
+//	Return NULL to let JSCocoa handle getProperty
+//	Return JSValueMakeNull() to return a Javascript null
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+
+//
+// Setting
+//
+// Check if setting property is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Custom handler for setting properties
+//	Return YES to indicate you handled setting
+//	Return NO to let JSCocoa handle setProperty
+- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+
+//
+// Calling
+//
+// Check if calling an ObjC method is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)methodName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Check if calling a C function is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)functionName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Custom handler for calling
+//	Return YES to indicate you handled calling
+//	Return NO to let JSCocoa handle calling
+- (BOOL) JSCocoa:(JSCocoaController*)controller callFunction:(NSString*) arguments:(JSValueRef*)arguments argumentCount:(int)argumentCount inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+
+//
+// Returning values to Javascript
+//
+// Called before returning any value to Javascript
+//	Return a custom value
+//	Return NULL to let the value through
+//	Return JSValueMakeNull() to return a Javascript null
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller willReturnValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+
+//
+// Evaling
+//
+// Check if file can be loaded
+- (NSString*)JSCocoa:(JSCocoaController*)controller canLoadJSFile:(NSString*)script;
+// Check if script can be evaluated
+- (NSString*)JSCocoa:(JSCocoaController*)controller canEvaluateScript:(NSString*)script;
+// Called before evalJSString
+//	Return a custom NSString (eg a macro expanded version of the source)
+//	Return NULL to let JSCocoa handle evaluation
+- (NSString*)JSCocoa:(JSCocoaController*)controller willEvaluateScript:(NSString*)script;
+
 @end
 
 

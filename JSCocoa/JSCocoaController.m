@@ -300,7 +300,8 @@ static id JSCocoaSingleton = NULL;
 	JSStringRelease(scriptJS);
 	if (exception) 
 	{
-		NSLog(@"JSException - %@", [self formatJSException:exception]);
+//		NSLog(@"JSException - %@", [self formatJSException:exception]);
+        [self callDelegateForException:exception];
 		return	NO;
 	}
 	return	YES;
@@ -314,34 +315,30 @@ static id JSCocoaSingleton = NULL;
 	return	[self evalJSFile:path toJSValueRef:nil];
 }
 
-- (NSRect)add:(NSRect)r and:(NSRect)r2
-{
-	return r;
-}
-
 //
 // Evaluate a string
 // 
-- (JSValueRefAndContextRef)evalJSString:(NSString*)script
+- (JSValueRef)evalJSString:(NSString*)script
 {
-	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
-	if (!script)	return	v;
+//	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
+	if (!script)	return	NULL;
 	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef exception = NULL;
 	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
 	JSStringRelease(scriptJS);
 
-	v.ctx = ctx;
-	v.value = JSValueMakeNull(ctx);
+//	v.ctx = ctx;
+//	v.value = JSValueMakeNull(ctx);
 	if (exception) 
 	{
         [self callDelegateForException:exception];
-		return	v;
+		return	NULL;
 	}
-	
-	v.ctx = ctx;
-	v.value = result;
-	return	v;
+
+	return	result;
+//	v.ctx = ctx;
+//	v.value = result;
+//	return	v;
 }
 
 //
@@ -373,7 +370,8 @@ static id JSCocoaSingleton = NULL;
 
 	if (exception) 
 	{
-		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
+//		NSLog(@"JSException in callJSFunction : %@", [self formatJSException:exception]);
+        [self callDelegateForException:exception];
 		return	NULL;
 	}
 
@@ -406,7 +404,12 @@ static id JSCocoaSingleton = NULL;
 	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
 	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, globalObject, jsFunctionName, &exception);
 	JSStringRelease(jsFunctionName);
-	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NULL;
+	if (exception)				
+	{
+//		return	NSLog(@"%@", [self formatJSException:exception]), NULL;
+        [self callDelegateForException:exception];
+		return	NULL;
+	}
 	
 	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
 	// Return if function is not of function type
@@ -427,7 +430,12 @@ static id JSCocoaSingleton = NULL;
 	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
 	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsFunctionName, &exception);
 	JSStringRelease(jsFunctionName);
-	if (exception)				return	NSLog(@"%@", [self formatJSException:exception]), NO;
+	if (exception)				
+	{
+//		return	NSLog(@"%@", [self formatJSException:exception]), NO;
+        [self callDelegateForException:exception];
+		return	NO;
+	}
 	
 	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
 }
@@ -455,7 +463,13 @@ static id JSCocoaSingleton = NULL;
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, attributes, &exception);
 	JSStringRelease(jsName);
 
-	if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	if (exception)	
+	{
+//		return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+        [self callDelegateForException:exception];
+		return	NO;
+	}
+
 	return	YES;
 }
 
@@ -472,7 +486,13 @@ static id JSCocoaSingleton = NULL;
 	JSObjectDeleteProperty(ctx, JSContextGetGlobalObject(ctx), jsName, &exception);
 	JSStringRelease(jsName);
 
-	if (exception)	return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+	if (exception)	
+	{
+//		return	NSLog(@"JSException in setObject:withName : %@", [self formatJSException:exception]), NO;
+        [self callDelegateForException:exception];
+		return	NO;
+	}
+
 	return	YES;
 }
 
@@ -1239,11 +1259,13 @@ static id JSCocoaSingleton = NULL;
 //
 - (NSString*)formatJSException:(JSValueRef)exception
 {
+	// Convert exception to string
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
 	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
 	[NSMakeCollectable(b) autorelease];
 
+	// Only objects contain line and source URL
 	if (JSValueGetType(ctx, exception) != kJSTypeObject)	return	b;
 
 	// Iterate over all properties of the exception
@@ -1271,8 +1293,11 @@ static id JSCocoaSingleton = NULL;
 	return [NSString stringWithFormat:@"%@ on line %@ of %@", b, line, sourceURL];
 }
 
+//
+// Error reporting
+//
 - (void) callDelegateForException:(JSValueRef)exception {
-    if (!_delegate || ![_delegate respondsToSelector:@selector(JSCocoa:hadError:onLineNumber:)]) {
+    if (!_delegate || ![_delegate respondsToSelector:@selector(JSCocoa:hadError:onLineNumber:atSourceURL:)]) {
         
 		NSLog(@"JSException: %@", [self formatJSException:exception]);
         
@@ -1285,7 +1310,7 @@ static id JSCocoaSingleton = NULL;
 	[NSMakeCollectable(b) autorelease];
     
 	if (JSValueGetType(ctx, exception) != kJSTypeObject) {
-        [_delegate JSCocoa:self hadError:b onLineNumber:0];
+        [_delegate JSCocoa:self hadError:b onLineNumber:0 atSourceURL:nil];
     }
     
 	// Iterate over all properties of the exception
@@ -1311,7 +1336,7 @@ static id JSCocoaSingleton = NULL;
 	}
 	JSPropertyNameArrayRelease(jsNames);
     
-    [_delegate JSCocoa:self hadError:b onLineNumber:[line intValue]];
+    [_delegate JSCocoa:self hadError:b onLineNumber:[line intValue] atSourceURL:sourceURL];
 }
 
 
@@ -1958,9 +1983,32 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
 	
-
 	if ([privateObject.type isEqualToString:@"@"])
 	{
+		//
+		// Delegate
+		//
+		JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
+		if (jsc.delegate)
+		{
+			// Check if getting is allowed
+			if ([jsc.delegate respondsToSelector:@selector(JSCocoa:canGetProperty:ofObject:inContext:exception:)])
+			{
+				BOOL canGet = [jsc.delegate JSCocoa:jsc canGetProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
+				if (!canGet)
+				{
+					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow getting %@.%@", privateObject.object, propertyName]);
+					return	NULL;
+				}
+			}
+			// Check if delegate handles getting
+			if ([jsc.delegate respondsToSelector:@selector(JSCocoa:getProperty:ofObject:inContext:exception:)])
+			{
+				JSValueRef delegateGet = [jsc.delegate JSCocoa:jsc getProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
+				if (delegateGet)	return	delegateGet;
+			}
+		}
+
 		// Special case for NSMutableArray get
 		if ([privateObject.object isKindOfClass:[NSArray class]])
 		{
