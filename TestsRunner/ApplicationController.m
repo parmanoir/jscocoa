@@ -7,7 +7,7 @@
 //
 
 #import "ApplicationController.h"
-#import <JSCocoa/JSCocoa.h>
+#import "JSCocoa.h"
 
 @implementation ApplicationController
 
