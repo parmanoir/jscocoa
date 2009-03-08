@@ -85,7 +85,7 @@ int runCount = 0;
 - (IBAction)runJSTests:(id)sender
 {
 	runCount++;
-
+	jsc.delegate = nil;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
@@ -153,17 +153,16 @@ int runCount = 0;
 //
 BOOL	hadError;
 
-BOOL	canGet;
+BOOL	canGet, canSet, didSet;
 id		object;
 id		propertyName;
+BOOL	equalsButtonCell, equalsBezelStyle;
 
-JSValueRef	customValue;
+JSValueRef	customValue, jsValue, ret;
 
 - (id)testDelegate
 {
 	jsc.delegate = self;
-
-	JSValueRef ret;
 
 	//
 	// Test disallowed getting
@@ -171,13 +170,12 @@ JSValueRef	customValue;
 	canGet		= NO;
 	hadError	= NO;
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
-	if (!hadError)		return	@"delegate canGetProperty failed (1)";
+	if (!hadError)											return	@"delegate canGetProperty failed (1)";
 	
 	//
 	// Test allowed getting
 	//
 	canGet		= YES;
-	customValue	= NULL;
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
 	if (object != [NSWorkspace class])						return	@"delegate canGetProperty failed (2)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate canGetProperty failed (3)";
@@ -201,13 +199,50 @@ JSValueRef	customValue;
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (4)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (5)";
 	if (JSValueToNumber([jsc ctx], ret, NULL) != 123)		return	@"delegate getProperty failed (6)";
+	customValue = NULL;
+
+
+	//
+	// Test disallowed setting
+	//
+	canSet		= NO;
+	hadError	= NO;
+	didSet		= NO;
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o = null"];
+	if (!hadError)				return	@"delegate canSetProperty failed (1)";
+
+	//
+	// Test allowed setting
+	//
+	canSet		= YES;
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	if (!equalsButtonCell)		return	@"delegate canSetProperty failed (2)";
+	if (!equalsBezelStyle)		return	@"delegate canSetProperty failed (3)";
+
+	//
+	// Test setting
+	//
+	customValue = NULL;
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	int bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
+	if (bezelStyle != 3)		return	@"delegate setProperty failed (1)";
+	
+
+	//
+	// Test custom setting
+	//
+	didSet		= YES;
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
+//	NSLog(@"bezelStyle=%d", bezelStyle);
+	if (bezelStyle != 6)		return	@"delegate setProperty failed (2)";
 	
 	return	nil;
 }
 
 - (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url
 {
-//	NSLog(@"had error");
+//	NSLog(@"had error %@", error);
 	hadError = YES;
 }
 
@@ -226,6 +261,39 @@ JSValueRef	customValue;
 	object			= _object;
 	propertyName	= _propertyName;
 	return	customValue;
+}
+
+- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+{
+//	NSLog(@"delegate canSet %@(%@).%@", _object, [_object class], _propertyName);
+	object			= _object;
+	propertyName	= _propertyName;
+	jsValue			= _jsValue;
+
+	// Test here. Delaying after evalJSString returned could mean GC was triggered and we'd have invalid data.
+	equalsButtonCell	= [_object class] == [NSButtonCell class];
+	equalsBezelStyle	= [_propertyName isEqualToString:@"bezelStyle"];
+	return	canSet;
+}
+
+- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+{
+	NSLog(@"delegate set");
+	object			= _object;
+	propertyName	= _propertyName;
+	jsValue			= _jsValue;
+	
+	// Test here. Delaying after evalJSString returned could mean GC was triggered and we'd have invalid data.
+	equalsButtonCell	= [_object class] == [NSButtonCell class];
+	equalsBezelStyle	= [_propertyName isEqualToString:@"bezelStyle"];
+	
+	if (didSet)
+	{
+		[_object setBezelStyle:6];
+//		NSLog(@"%@ %d", _object, [_object bezelStyle]);
+	}
+	
+	return	didSet;
 }
 
 

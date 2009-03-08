@@ -1982,19 +1982,22 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
-	
+
+	// Get delegate
+	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
+	id delegate = jsc.delegate;
+
 	if ([privateObject.type isEqualToString:@"@"])
 	{
 		//
-		// Delegate
+		// Delegate canGetProperty, getProperty
 		//
-		JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
-		if (jsc.delegate)
+		if (delegate)
 		{
 			// Check if getting is allowed
-			if ([jsc.delegate respondsToSelector:@selector(JSCocoa:canGetProperty:ofObject:inContext:exception:)])
+			if ([delegate respondsToSelector:@selector(JSCocoa:canGetProperty:ofObject:inContext:exception:)])
 			{
-				BOOL canGet = [jsc.delegate JSCocoa:jsc canGetProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
+				BOOL canGet = [delegate JSCocoa:jsc canGetProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
 				if (!canGet)
 				{
 					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow getting %@.%@", privateObject.object, propertyName]);
@@ -2002,9 +2005,9 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				}
 			}
 			// Check if delegate handles getting
-			if ([jsc.delegate respondsToSelector:@selector(JSCocoa:getProperty:ofObject:inContext:exception:)])
+			if ([delegate respondsToSelector:@selector(JSCocoa:getProperty:ofObject:inContext:exception:)])
 			{
-				JSValueRef delegateGet = [jsc.delegate JSCocoa:jsc getProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
+				JSValueRef delegateGet = [delegate JSCocoa:jsc getProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
 				if (delegateGet)	return	delegateGet;
 			}
 		}
@@ -2271,21 +2274,41 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 //
 static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef jsValue, JSValueRef* exception)
 {
-	// Autocall : ensure 'instance' has been called and we've got our new instance
-//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
-
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
-//	if ([privateObject.type  isEqualToString:@"struct"])
-//	{
-//		NSLog(@"****SET %@ in ctx %x on object %x (type=%@) method=%@", propertyName, ctx, object, privateObject.type, privateObject.methodName);
-//	}
-	
 //	NSLog(@"****SET %@ in ctx %x on object %x (type=%@) method=%@", propertyName, ctx, object, privateObject.type, privateObject.methodName);
+
+
+	// Get delegate
+	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
+	id delegate = jsc.delegate;
+
 	if ([privateObject.type isEqualToString:@"@"])
 	{
+		//
+		// Delegate canSetProperty, setProperty
+		//
+		if (delegate)
+		{
+			// Check if setting is allowed
+			if ([delegate respondsToSelector:@selector(JSCocoa:canSetProperty:ofObject:toValue:inContext:exception:)])
+			{
+				BOOL canSet = [delegate JSCocoa:jsc canSetProperty:propertyName ofObject:privateObject.object toValue:jsValue inContext:ctx exception:exception];
+				if (!canSet)
+				{
+					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow setting %@.%@", privateObject.object, propertyName]);
+					return	NULL;
+				}
+			}
+			// Check if delegate handles getting
+			if ([delegate respondsToSelector:@selector(JSCocoa:setProperty:ofObject:toValue:inContext:exception:)])
+			{
+				BOOL delegateSet = [delegate JSCocoa:jsc setProperty:propertyName ofObject:privateObject.object toValue:jsValue inContext:ctx exception:exception];
+				if (delegateSet)	return	true;
+			}
+		}
 
 		// Special case for NSMutableArray set
 		if ([privateObject.object isKindOfClass:[NSArray class]])

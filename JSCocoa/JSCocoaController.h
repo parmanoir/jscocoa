@@ -150,11 +150,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // Setting
 //
 // Check if setting property is allowed
-- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 // Custom handler for setting properties
 //	Return YES to indicate you handled setting
 //	Return NO to let JSCocoa handle setProperty
-- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 
 //
 // Calling
@@ -171,10 +171,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Returning values to Javascript
 //
-// Called before returning any value to Javascript
-//	Return a custom value
-//	Return NULL to let the value through
-//	Return JSValueMakeNull() to return a Javascript null
+// Called before returning any value to Javascript : return a new value or the original one
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller willReturnValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 
 //
