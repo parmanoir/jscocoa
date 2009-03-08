@@ -1978,7 +1978,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	
 	// Autocall instance
 	if ([propertyName isEqualToString:@"thisObject"])	return	NULL;
-//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:object inContext:ctx];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
@@ -2086,6 +2085,28 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			// Go for zero arg call
 			if ([propertyName rangeOfString:@":"].location == NSNotFound && [callee respondsToSelector:sel])
 			{
+				//
+				// Delegate canCallMethod, callMethod
+				//
+				if (delegate)
+				{
+					// Check if calling is allowed
+					if ([delegate respondsToSelector:@selector(JSCocoa:canCallMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+					{
+						BOOL canCall = [delegate JSCocoa:jsc canCallMethod:propertyName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+						if (!canCall)
+						{
+							if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling [%@ %@]", callee, propertyName]);
+							return	NULL;
+						}
+					}
+					// Check if delegate handles calling
+					if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+					{
+						JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:propertyName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+						if (delegateCall)	return	delegateCall;
+					}
+				}
 
 				// Special case for alloc : objects 
 				if ([propertyName isEqualToString:@"alloc"])
@@ -2397,6 +2418,29 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		SEL sel		= NSSelectorFromString(setterName);
 		if ([callee respondsToSelector:sel])
 		{
+			//
+			// Delegate canCallMethod, callMethod
+			//
+			if (delegate)
+			{
+				// Check if calling is allowed
+				if ([delegate respondsToSelector:@selector(JSCocoa:canCallMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+				{
+					BOOL canCall = [delegate JSCocoa:jsc canCallMethod:setterName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+					if (!canCall)
+					{
+						if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling [%@ %@]", callee, setterName]);
+						return	NULL;
+					}
+				}
+				// Check if delegate handles calling
+				if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+				{
+					JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:setterName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+					if (delegateCall)	return	delegateCall;
+				}
+			}
+
 			Method method = class_getInstanceMethod([callee class], sel);
 			if (!method)	method = class_getClassMethod([callee class], sel);
 
@@ -2569,6 +2613,11 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Structure return (objc_msgSend_stret)
 	BOOL	usingStret	= NO;
 
+
+	// Get delegate
+	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
+	id delegate = jsc.delegate;
+
 	//
 	// ObjC setup
 	//
@@ -2579,6 +2628,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		callee		= [thisPrivateObject object];
 		methodName	= superSelector ? superSelector : [NSMutableString stringWithString:privateObject.methodName];
 //		NSLog(@"calling %@.%@", callee, methodName);
+
 
 		// Instance call
 		if ([callee class] == callee && [methodName isEqualToString:@"instance"])
@@ -2608,6 +2658,29 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 					// trySplitCall returned new arguments that we'll need to free later on
 					*argumentsToFree = arguments;
 				}
+			}
+		}
+
+		//
+		// Delegate canCallMethod, callMethod
+		//
+		if (delegate)
+		{
+			// Check if calling is allowed
+			if ([delegate respondsToSelector:@selector(JSCocoa:canCallMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+			{
+				BOOL canCall = [delegate JSCocoa:jsc canCallMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (!canCall)
+				{
+					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling [%@ %@]", callee, methodName]);
+					return	NULL;
+				}
+			}
+			// Check if delegate handles calling
+			if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+			{
+				JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (delegateCall)	return	delegateCall;
 			}
 		}
 
@@ -2681,6 +2754,23 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if (!callAddress)	return	throwException(ctx, exception, [NSString stringWithFormat:@"Function %@ not found", functionName]), NULL;
 		// Function arguments is all arguments minus return value
 		callAddressArgumentCount = [argumentEncodings count]-1;
+
+		//
+		// Delegate canCallFunction
+		//
+		if (delegate)
+		{
+			// Check if calling is allowed
+			if ([delegate respondsToSelector:@selector(JSCocoa:canCallFunction:argumentCount:arguments:inContext:exception:)])
+			{
+				BOOL canCall = [delegate JSCocoa:jsc canCallFunction:functionName argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (!canCall)
+				{
+					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling function %@", functionName]);
+					return	NULL;
+				}
+			}
+		}
 	}
 	
 	//

@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <JSCocoa/JSCocoa.h>
+#import "JSCocoa.h"
 
 int main(int argc, char *argv[])
 {

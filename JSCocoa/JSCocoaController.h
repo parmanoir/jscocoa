@@ -141,7 +141,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // Check if getting property is allowed
 - (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 // Custom handler for getting properties
-//	Bypass JSCocoa and return a custom JSValueRef
+//	Return a custom JSValueRef to bypass JSCocoa
 //	Return NULL to let JSCocoa handle getProperty
 //	Return JSValueMakeNull() to return a Javascript null
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)propertyName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
@@ -159,14 +159,14 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Calling
 //
-// Check if calling an ObjC method is allowed
-- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)methodName ofObject:(id)object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 // Check if calling a C function is allowed
-- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)functionName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)functionName argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Check if calling an ObjC method is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)methodName ofObject:(id)object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 // Custom handler for calling
 //	Return YES to indicate you handled calling
 //	Return NO to let JSCocoa handle calling
-- (BOOL) JSCocoa:(JSCocoaController*)controller callFunction:(NSString*) arguments:(JSValueRef*)arguments argumentCount:(int)argumentCount inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 
 //
 // Returning values to Javascript

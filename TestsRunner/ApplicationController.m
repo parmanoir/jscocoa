@@ -157,13 +157,30 @@ BOOL	canGet, canSet, didSet;
 id		object;
 id		propertyName;
 BOOL	equalsButtonCell, equalsBezelStyle;
+id		functionName;
+id		methodName;
+BOOL	canCallC, canCallObjC;
 
-JSValueRef	customValue, jsValue, ret;
+JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
 
 - (id)testDelegate
 {
 	jsc.delegate = self;
-
+	
+	hadError	= NO;
+	canCallC	= YES;
+	canCallObjC	= YES;
+	canSet		= YES;
+	canGet		= YES;
+	didSet		= YES;
+	customValueGet	= NULL;
+	customValueSet	= NULL;
+	customValueCall	= NULL;
+	
+	
+	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
+//	[jsc evalJSString:@"log(applicationController)"];
+	
 	//
 	// Test disallowed getting
 	//
@@ -183,7 +200,7 @@ JSValueRef	customValue, jsValue, ret;
 	//
 	// Test getting
 	//
-	customValue = NULL;
+	customValueGet = NULL;
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (1)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (2)";
@@ -194,12 +211,13 @@ JSValueRef	customValue, jsValue, ret;
 	//
 	// Test custom getting
 	//
-	customValue = JSValueMakeNumber([jsc ctx], 123);
+	customValueGet = JSValueMakeNumber([jsc ctx], 123);
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (4)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (5)";
 	if (JSValueToNumber([jsc ctx], ret, NULL) != 123)		return	@"delegate getProperty failed (6)";
-	customValue = NULL;
+	customValueGet = NULL;
+
 
 
 	//
@@ -222,7 +240,7 @@ JSValueRef	customValue, jsValue, ret;
 	//
 	// Test setting
 	//
-	customValue = NULL;
+	customValueSet = NULL;
 	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
 	int bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
 	if (bezelStyle != 3)		return	@"delegate setProperty failed (1)";
@@ -237,30 +255,123 @@ JSValueRef	customValue, jsValue, ret;
 //	NSLog(@"bezelStyle=%d", bezelStyle);
 	if (bezelStyle != 6)		return	@"delegate setProperty failed (2)";
 	
+
+	//
+	// Test disallowed function
+	//
+	hadError	= NO;
+	canCallC	= NO;
+	ret = [jsc evalJSString:@"var p = NSMakePoint(1, 2); p.x+p.y"];
+	if (!hadError)				return	@"delegate canCallC failed (1)";
+
+	canCallC	= YES;
+	ret = [jsc evalJSString:@"var p = NSMakePoint(15, 100); p.x+p.y"];
+	int addResult = JSValueToNumber([jsc ctx], ret, NULL);
+	if (addResult != 115)		return	@"delegate canCallC failed (2)";
+	
+	
+	
+	
+	//
+	// Test disallowed calling
+	//
+	hadError	= NO;
+	canCallObjC	= NO;
+	canSet		= YES;
+	canGet		= YES;
+	didSet		= NO;
+	ret = [jsc evalJSString:@"applicationController.add1(5)"];
+	if (!hadError)				return	@"delegate canCallMethod failed (1)";
+
+	hadError	= NO;
+	ret = [jsc evalJSString:@"applicationController.get5"];
+	if (!hadError)				return	@"delegate canCallMethod failed (2)";
+
+	hadError	= NO;
+	ret = [jsc evalJSString:@"applicationController.dummyValue = 8"];
+	if (!hadError)				return	@"delegate canCallMethod failed (3)";
+
+
+	//
+	// Test allowed calling
+	//
+	hadError	= NO;
+	canCallObjC	= YES;
+	customValueCall	= NULL;
+	ret = [jsc evalJSString:@"applicationController.add1(5)"];
+	int add1Result1 = JSValueToNumber([jsc ctx], ret, NULL);
+	if (add1Result1 != 6)								return	@"delegate callMethod failed (1)";
+	if (object != self)									return	@"delegate callMethod failed (2)";
+	if (![methodName isEqualToString:@"add1:"])			return	@"delegate callMethod failed (3)";
+	
+	ret = [jsc evalJSString:@"applicationController.get5"];
+	int get5Result1 = JSValueToNumber([jsc ctx], ret, NULL);
+	if (get5Result1 != 5)								return	@"delegate callMethod failed (4)";
+	if (object != self)									return	@"delegate callMethod failed (5)";
+	if (![methodName isEqualToString:@"get5"])			return	@"delegate callMethod failed (6)";
+
+	ret = [jsc evalJSString:@"applicationController.dummyValue = 8"];
+	if ([self dummyValue] != 8)							return	@"delegate callMethod failed (7)";
+	if (object != self)									return	@"delegate callMethod failed (8)";
+	if (![methodName isEqualToString:@"setDummyValue:"])return	@"delegate callMethod failed (9)";
+
+	//
+	// Test custom calling 
+	//
+	hadError	= NO;
+	customValueCall	= JSValueMakeNumber([jsc ctx], 789);
+	ret = [jsc evalJSString:@"applicationController.add1(5)"];
+	int add1Result2 = JSValueToNumber([jsc ctx], ret, NULL);
+	if (add1Result2 != 789)								return	@"delegate callMethod failed (10)";
+	
+	ret = [jsc evalJSString:@"applicationController.get5"];
+	int get5Result2 = JSValueToNumber([jsc ctx], ret, NULL);
+	if (get5Result2 != 789)								return	@"delegate callMethod failed (11)";
+	
+	
 	return	nil;
 }
 
+- (int)add1:(int)a
+{
+	return	a+1;
+}
+
+int dummyValue;
+- (void)setDummyValue:(int)value
+{
+	dummyValue = value;
+}
+- (int)dummyValue
+{
+	return	dummyValue;
+}
+- (int)get5
+{
+	return	5;
+}
+
+
 - (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url
 {
-//	NSLog(@"had error %@", error);
+	NSLog(@"had error %@", error);
 	hadError = YES;
 }
 
 
 - (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 {
-//	NSLog(@"delegate canGet %@(%@).%@", _object, [_object class], _propertyName);
+//	NSLog(@"delegate canGet %@(%@).%@ canGet=%d", _object, [_object class], _propertyName, canGet);
 	object			= _object;
 	propertyName	= _propertyName;
 	return	canGet;
 }
-
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 {
-//	NSLog(@"delegate get");
+//	NSLog(@"delegate get %@(%@).%@ customValueGet=%x", _object, [_object class], _propertyName, customValueGet);
 	object			= _object;
 	propertyName	= _propertyName;
-	return	customValue;
+	return	customValueGet;
 }
 
 - (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
@@ -275,10 +386,9 @@ JSValueRef	customValue, jsValue, ret;
 	equalsBezelStyle	= [_propertyName isEqualToString:@"bezelStyle"];
 	return	canSet;
 }
-
 - (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 {
-	NSLog(@"delegate set");
+//	NSLog(@"delegate set");
 	object			= _object;
 	propertyName	= _propertyName;
 	jsValue			= _jsValue;
@@ -295,6 +405,29 @@ JSValueRef	customValue, jsValue, ret;
 	
 	return	didSet;
 }
+
+
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)_functionName argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+//	NSLog(@"can call function %@", _functionName);
+	functionName = _functionName;
+	return	canCallC;
+}
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)_methodName ofObject:(id)_object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+//	NSLog(@"can call method %@.%@", _object, _methodName);
+	object		= _object;
+	methodName	= _methodName;
+	return	canCallObjC;
+}
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+//	NSLog(@"custom method call %@.%@", _object, _methodName);
+	object		= _object;
+	methodName	= _methodName;
+	return	customValueCall;
+}
+
 
 
 

@@ -20,6 +20,7 @@
 - (IBAction)unlinkAllReferences:(id)sender;
 
 - (id)testDelegate;
+- (int)dummyValue;
 
 
 @end
