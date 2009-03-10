@@ -179,7 +179,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif
 
 	// Load class kit
-	[self evalJSFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"]];
+	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
 
 	return	self;
 }
@@ -243,7 +244,7 @@ static id JSCocoaSingleton = NULL;
 			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
 			//
 			JSCocoaSingleton = [self alloc];
-			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+//			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
 			[JSCocoaSingleton init];
 		}
 	}

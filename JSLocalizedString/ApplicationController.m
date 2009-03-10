@@ -23,6 +23,7 @@
 {
 	id str = JSLocalizedString(@"BookCount", [NSNumber numberWithInt:bookCount], nil);
 	NSLog(@"init %d %@", bookCount, str);
+	if (!str)	str = @"***Localization not found***";
 	[label setStringValue:str];
 }
 
@@ -31,6 +32,7 @@
 	bookCount++;
 	id str = JSLocalizedString(@"BookCount", [NSNumber numberWithInt:bookCount], nil);
 	NSLog(@"add %d %@", bookCount, str);
+	if (!str)	str = @"***Localization not found***";
 	[label setStringValue:str];
 }
 - (IBAction)remove:(id)sender
@@ -38,6 +40,7 @@
 	if (bookCount > 0)	bookCount--;
 	id str = JSLocalizedString(@"BookCount", [NSNumber numberWithInt:bookCount], nil);
 	NSLog(@"remove %d", bookCount);
+	if (!str)	str = @"***Localization not found***";
 	[label setStringValue:str];
 }
 

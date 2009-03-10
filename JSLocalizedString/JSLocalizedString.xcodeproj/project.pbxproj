@@ -11,13 +11,13 @@
 		3D4BC69C0F4BB21300C09AFC /* strings.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D4BC69B0F4BB21300C09AFC /* strings.js */; };
 		3D4BC6B80F4BB27500C09AFC /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D4BC6B70F4BB27500C09AFC /* ApplicationController.m */; };
 		3DAB54AE0F4BACE10005FABC /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54870F4BACE10005FABC /* BridgeSupportController.m */; };
-		3DAB54AF0F4BACE10005FABC /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB54880F4BACE10005FABC /* class.js */; };
 		3DAB54BA0F4BACE10005FABC /* JSCocoaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54A50F4BACE10005FABC /* JSCocoaController.m */; };
 		3DAB54BB0F4BACE10005FABC /* JSCocoaFFIArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54A70F4BACE10005FABC /* JSCocoaFFIArgument.m */; };
 		3DAB54BC0F4BACE10005FABC /* JSCocoaFFIClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54A90F4BACE10005FABC /* JSCocoaFFIClosure.m */; };
 		3DAB54BD0F4BACE10005FABC /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54AB0F4BACE10005FABC /* JSCocoaLib.m */; };
 		3DAB54BE0F4BACE10005FABC /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DAB54AD0F4BACE10005FABC /* JSCocoaPrivateObject.m */; };
 		3DAB54D70F4BB0130005FABC /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAB54D60F4BB0130005FABC /* JavaScriptCore.framework */; };
+		3DD12CB50F66CF9800C523B7 /* class.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DAB54880F4BACE10005FABC /* class.js */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -213,8 +213,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DD12CB50F66CF9800C523B7 /* class.js in Resources */,
 				3D4BC69C0F4BB21300C09AFC /* strings.js in Resources */,
-				3DAB54AF0F4BACE10005FABC /* class.js in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 			);
