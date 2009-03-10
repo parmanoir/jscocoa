@@ -262,6 +262,8 @@ static id JSCocoaSingleton = NULL;
 	JSStringRelease(jsName);
 	id jsc = nil;
 	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&jsc inContext:ctx];
+	// Commented as it falsely reports failure when controller is cleaning up while being deallocated
+//	if (!jsc)	NSLog(@"controllerFromContext couldn't find found the JSCocoaController in ctx %x", ctx);
 	return	jsc;
 }
 
@@ -278,12 +280,30 @@ static id JSCocoaSingleton = NULL;
 	// Skip .DS_Store and directories
 	if (script == nil)	return	NSLog(@"evalJSFile could not open %@ (%@) — Check file encoding (should be UTF8) and file build phase (should be in \"Copy Bundle Resources\")", path, error), NO;
 	
+	//
+	// Delegate canLoadJSFile
+	//
+	if (_delegate && [_delegate respondsToSelector:@selector(JSCocoa:canLoadJSFile:)] && ![_delegate JSCocoa:self canLoadJSFile:path])	return	NO;
+	
 	// Expand macros
 	if ([self hasJSFunctionNamed:@"expandJSMacros"])
 	{
-		script = [self unboxJSValueRef:[self callJSFunctionNamed:@"expandJSMacros" withArguments:script, nil]];
+		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:@"expandJSMacros" withArguments:script, nil]];
 		// Bail if expansion failed
-		if (!script || ![script isKindOfClass:[NSString class]])	return NSLog(@"Macro expansion failed on %@", path), NO;
+		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
+		{
+			return NSLog(@"Macro expansion failed on %@ (%@)", path, expandedScript), NO;
+		}
+		script = expandedScript;
+	}
+
+	//
+	// Delegate canEvaluateScript, willEvaluateScript
+	//
+	if (_delegate)
+	{
+		if ([_delegate respondsToSelector:@selector(JSCocoa:canEvaluateScript:)] && ![_delegate JSCocoa:self canEvaluateScript:script])	return	NO;
+		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
 	}
 	
 	// Convert script and script URL to js strings
@@ -320,15 +340,22 @@ static id JSCocoaSingleton = NULL;
 // 
 - (JSValueRef)evalJSString:(NSString*)script
 {
-//	JSValueRefAndContextRef	v = { JSValueMakeNull(ctx), NULL };
 	if (!script)	return	NULL;
+	
+	//
+	// Delegate canEvaluateScript, willEvaluateScript
+	//
+	if (_delegate)
+	{
+		if ([_delegate respondsToSelector:@selector(JSCocoa:canEvaluateScript:)] && ![_delegate JSCocoa:self canEvaluateScript:script])	return	NULL;
+		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
+	}
+	
 	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef exception = NULL;
 	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
 	JSStringRelease(scriptJS);
 
-//	v.ctx = ctx;
-//	v.value = JSValueMakeNull(ctx);
 	if (exception) 
 	{
         [self callDelegateForException:exception];
@@ -336,9 +363,6 @@ static id JSCocoaSingleton = NULL;
 	}
 
 	return	result;
-//	v.ctx = ctx;
-//	v.value = result;
-//	return	v;
 }
 
 //
@@ -1704,17 +1728,46 @@ int	liveInstanceCount	= 0;
 
 #pragma mark JS OSX object
 
-/*
+//
+//
+//	Global resolver
+//
+//
 
-	Global resolver
 
-*/
+
 JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
+	if ([propertyName isEqualToString:@"__jsc__"])	return	NULL;
+	
 //	NSLog(@"Asking for global property %@", propertyName);
+	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
+	id delegate = jsc.delegate;
+	//
+	// Delegate canGetGlobalProperty, getGlobalProperty
+	//
+	if (delegate)
+	{
+		// Check if getting is allowed
+		if ([delegate respondsToSelector:@selector(JSCocoa:canGetGlobalProperty:inContext:exception:)])
+		{
+			BOOL canGetGlobal = [delegate JSCocoa:jsc canGetGlobalProperty:propertyName inContext:ctx exception:exception];
+			if (!canGetGlobal)
+			{
+				if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow getting global property %@", propertyName]);
+				return	NULL;
+			}
+		}
+		// Check if delegate handles getting
+		if ([delegate respondsToSelector:@selector(JSCocoa:getGlobalProperty:inContext:exception:)])
+		{
+			JSValueRef delegateGetGlobal = [delegate JSCocoa:jsc getGlobalProperty:propertyName inContext:ctx exception:exception];
+			if (delegateGetGlobal)		return	delegateGetGlobal;
+		}
+	}
 	
 	//
 	// ObjC class
@@ -1722,7 +1775,8 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 	Class objCClass = NSClassFromString(propertyName);
 	if (objCClass && ![propertyName isEqualToString:@"Object"])
 	{
-		return	[JSCocoaController boxedJSObject:objCClass inContext:ctx];
+		JSValueRef ret = [JSCocoaController boxedJSObject:objCClass inContext:ctx];
+		return	ret;
 	}
 
 	id xml;
@@ -1806,7 +1860,6 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 			double doubleValue = 0;
 			value = [value stringValue];
 			if (![[NSScanner scannerWithString:value] scanDouble:&doubleValue]) return	NSLog(@"(OSX_getPropertyCallback) scanning %@ enum failed", propertyName), NULL;
-
 			return	JSValueMakeNumber(ctx, doubleValue);
 		}
 	}
@@ -1960,7 +2013,6 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 }
 
 
-
 //
 // getProperty
 //	Return property in object's internal Javascript hash if its contains propertyName
@@ -2007,7 +2059,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			if ([delegate respondsToSelector:@selector(JSCocoa:getProperty:ofObject:inContext:exception:)])
 			{
 				JSValueRef delegateGet = [delegate JSCocoa:jsc getProperty:propertyName ofObject:privateObject.object inContext:ctx exception:exception];
-				if (delegateGet)	return	delegateGet;
+				if (delegateGet)		return	delegateGet;
 			}
 		}
 
@@ -2069,8 +2121,10 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		{
 			JSValueRefAndContextRef	name	= { JSValueMakeString(ctx, propertyNameJS), ctx } ;
 			JSValueRef hashProperty			= [callee JSValueForJSName:name].value;
-			if (hashProperty && !JSValueIsNull(ctx, hashProperty))	
+			if (hashProperty && !JSValueIsNull(ctx, hashProperty))
+			{
 				return	hashProperty;
+			}
 		}
 
 		
@@ -2104,7 +2158,8 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
 					{
 						JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:propertyName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
-						if (delegateCall)	return	delegateCall;
+						if (delegateCall)	
+							return	delegateCall;
 					}
 				}
 
@@ -2437,7 +2492,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 				if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
 				{
 					JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:setterName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
-					if (delegateCall)	return	delegateCall;
+					if (delegateCall)	return	!!delegateCall;
 				}
 			}
 
@@ -2629,6 +2684,29 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		methodName	= superSelector ? superSelector : [NSMutableString stringWithString:privateObject.methodName];
 //		NSLog(@"calling %@.%@", callee, methodName);
 
+		//
+		// Delegate canCallMethod, callMethod
+		//	Called first so it gets a chance to do handle custom messages
+		//
+		if (delegate)
+		{
+			// Check if calling is allowed
+			if ([delegate respondsToSelector:@selector(JSCocoa:canCallMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+			{
+				BOOL canCall = [delegate JSCocoa:jsc canCallMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (!canCall)
+				{
+					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling [%@ %@]", callee, methodName]);
+					return	NULL;
+				}
+			}
+			// Check if delegate handles calling
+			if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+			{
+				JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (delegateCall)	return	delegateCall;
+			}
+		}
 
 		// Instance call
 		if ([callee class] == callee && [methodName isEqualToString:@"instance"])
@@ -2661,28 +2739,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			}
 		}
 
-		//
-		// Delegate canCallMethod, callMethod
-		//
-		if (delegate)
-		{
-			// Check if calling is allowed
-			if ([delegate respondsToSelector:@selector(JSCocoa:canCallMethod:ofObject:argumentCount:arguments:inContext:exception:)])
-			{
-				BOOL canCall = [delegate JSCocoa:jsc canCallMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
-				if (!canCall)
-				{
-					if (!*exception)	throwException(ctx, exception, [NSString stringWithFormat:@"Delegate does not allow calling [%@ %@]", callee, methodName]);
-					return	NULL;
-				}
-			}
-			// Check if delegate handles calling
-			if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
-			{
-				JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
-				if (delegateCall)	return	delegateCall;
-			}
-		}
 
 		// NSDistantObject
         if ([callee class] == [NSDistantObject class]) {
@@ -2944,7 +3000,8 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	if ([privateObject jsValueRef] && [privateObject.type isEqualToString:@"jsFunction"])
 	{
 		JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
-		return	JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
+		JSValueRef ret = JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
+		return	ret;
 	}
 	// Javascript custom methods
 	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])

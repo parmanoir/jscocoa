@@ -169,19 +169,30 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 
 //
+// Getting global properties (classes, structures, C function names, enums via OSXObject_getProperty)
+//
+// Check if getting property is allowed
+- (BOOL) JSCocoa:(JSCocoaController*)controller canGetGlobalProperty:(NSString*)propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+// Custom handler for getting properties
+//	Return a custom JSValueRef to bypass JSCocoa
+//	Return NULL to let JSCocoa handle getProperty
+//	Return JSValueMakeNull() to return a Javascript null
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller getGlobalProperty:(NSString*)propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+
+//
 // Returning values to Javascript
 //
 // Called before returning any value to Javascript : return a new value or the original one
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller willReturnValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+//- (JSValueRef) JSCocoa:(JSCocoaController*)controller willReturnValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
 
 //
 // Evaling
 //
 // Check if file can be loaded
-- (NSString*)JSCocoa:(JSCocoaController*)controller canLoadJSFile:(NSString*)script;
+- (BOOL)JSCocoa:(JSCocoaController*)controller canLoadJSFile:(NSString*)path;
 // Check if script can be evaluated
-- (NSString*)JSCocoa:(JSCocoaController*)controller canEvaluateScript:(NSString*)script;
-// Called before evalJSString
+- (BOOL)JSCocoa:(JSCocoaController*)controller canEvaluateScript:(NSString*)script;
+// Called before evalJSString, used to modify script about to be evaluated
 //	Return a custom NSString (eg a macro expanded version of the source)
 //	Return NULL to let JSCocoa handle evaluation
 - (NSString*)JSCocoa:(JSCocoaController*)controller willEvaluateScript:(NSString*)script;

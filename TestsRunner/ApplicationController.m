@@ -16,6 +16,14 @@ JSCocoaController* jsc = nil;
 //- (void)awakeFromNib
 - (void)applicationDidFinishLaunching:(id)notif
 {
+	Dl_info info;
+	// Get info about a JavascriptCore symbol
+	dladdr(dlsym(RTLD_DEFAULT, "JSClassCreate"), &info);
+	
+	BOOL runningFromSystemLibrary = [[NSString stringWithUTF8String:info.dli_fname] hasPrefix:@"/System"];
+	if (!runningFromSystemLibrary)	NSLog(@"***Running a nightly JavascriptCore***");
+
+	
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");
 //	[JSCocoaController deallocAutoreleasePool];
 //	[[NSAutoreleasePool alloc] init];
@@ -153,15 +161,20 @@ int runCount = 0;
 //
 BOOL	hadError;
 
-BOOL	canGet, canSet, didSet;
+BOOL	canGet, canSet, didSet, canGetGlobal, canLoad, canEval;
 id		object;
 id		propertyName;
 BOOL	equalsButtonCell, equalsBezelStyle;
 id		functionName;
 id		methodName;
 BOOL	canCallC, canCallObjC;
+id		pathtoJSFile;
+id		customScript;
+id		scriptToEval;
+id		o;
 
-JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
+
+JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willReturn, customValueReturn, customValueGetGlobal;
 
 - (id)testDelegate
 {
@@ -173,13 +186,18 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
 	canSet		= YES;
 	canGet		= YES;
 	didSet		= YES;
-	customValueGet	= NULL;
-	customValueSet	= NULL;
-	customValueCall	= NULL;
+	canGetGlobal= YES;
+	canLoad		= YES;
+	canEval		= YES;
+	customValueGet		= NULL;
+	customValueSet		= NULL;
+	customValueCall		= NULL;
+	customValueReturn	= NULL;
+	customValueGetGlobal= NULL;
 	
-	
+	// Add ourselves in the JS context
 	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
-//	[jsc evalJSString:@"log(applicationController)"];
+	
 	
 	//
 	// Test disallowed getting
@@ -194,8 +212,9 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
 	//
 	canGet		= YES;
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
-	if (object != [NSWorkspace class])						return	@"delegate canGetProperty failed (2)";
-	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate canGetProperty failed (3)";
+	if (!ret)												return	@"delegate canGetProperty failed (2)";
+	if (object != [NSWorkspace class])						return	@"delegate canGetProperty failed (3)";
+	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate canGetProperty failed (4)";
 
 	//
 	// Test getting
@@ -205,7 +224,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (1)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (2)";
 	
-	id o = [jsc unboxJSValueRef:ret];
+	o = [jsc unboxJSValueRef:ret];
 	if (o != [NSWorkspace sharedWorkspace])					return	@"delegate getProperty failed (3)";
 	
 	//
@@ -327,8 +346,104 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret;
 	ret = [jsc evalJSString:@"applicationController.get5"];
 	int get5Result2 = JSValueToNumber([jsc ctx], ret, NULL);
 	if (get5Result2 != 789)								return	@"delegate callMethod failed (11)";
+	customValueCall	= NULL;
+	
+
+
+	//
+	// Test disallowed global getting
+	//
+	canCallObjC	= YES;
+	canCallC	= YES;
+	canGet		= YES;
+	canSet		= YES;
+	canGetGlobal= NO;
+	ret = [jsc evalJSString:@"NSWorkspace"];
+//	NSLog(@"ret=%x %x", ret, JSValueIsNull([jsc ctx], ret));
+	if (ret)												return	@"delegate canGetGlobalProperty failed (1)";
+	
+	//
+	// Test allowed global getting
+	//
+	canGetGlobal= YES;
+	ret = [jsc evalJSString:@"NSWorkspace"];
+	if (![propertyName isEqualToString:@"NSWorkspace"])		return	@"delegate canGetGlobalProperty failed (3)";
 	
 	
+	//
+	// Test global getting
+	//
+	customValueGetGlobal = NULL;
+	ret = [jsc evalJSString:@"NSWorkspace"];
+	if (![propertyName isEqualToString:@"NSWorkspace"])		return	@"delegate getGlobalProperty failed (1)";
+
+	o = [jsc unboxJSValueRef:ret];
+	if (o != [NSWorkspace class])							return	@"delegate getGlobalProperty failed (2)";
+	
+	//
+	// Test custom global getting
+	//
+	customValueGetGlobal = JSValueMakeNumber([jsc ctx], 7599);
+	ret = [jsc evalJSString:@"NSWorkspace"];
+	if (![propertyName isEqualToString:@"NSWorkspace"])		return	@"delegate getGlobalProperty failed (3)";
+	if (JSValueToNumber([jsc ctx], ret, NULL) != 7599)		return	@"delegate getGlobalProperty failed (4)";
+	customValueGetGlobal = NULL;
+
+	canGetGlobal= YES;
+
+
+	//
+	// Test script loading
+	//
+	id path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/0 blank.js", [[NSBundle mainBundle] bundlePath]];
+//	NSLog(@"path=%@", path);
+	
+	canLoad = NO;
+	BOOL evaled = [jsc evalJSFile:path];
+	if (evaled)										return	@"delegate canLoad failed (1)";
+	if (![pathtoJSFile isEqualToString:path])		return	@"delegate canLoad failed (2)";
+
+	canLoad = YES;
+	evaled = [jsc evalJSFile:path];
+	if (!evaled)									return	@"delegate canLoad failed (3)";
+	if (![pathtoJSFile isEqualToString:path])		return	@"delegate canLoad failed (4)";
+
+
+
+	//
+	// Test disallowed script evaling
+	//
+	canEval = NO;
+	evaled = [jsc evalJSFile:path];
+	if (evaled)										return	@"delegate canEval failed (1)";
+
+	evaled = !![jsc evalJSString:@"2+2"];
+	if (evaled)										return	@"delegate canEval failed (2)";
+
+
+	//
+	// Test allowed script evaling
+	//
+	canEval = YES;
+	evaled = [jsc evalJSFile:path];
+	if (!evaled)									return	@"delegate canEval failed (3)";
+
+	evaled = !![jsc evalJSString:@"2+2"];
+	if (!evaled)									return	@"delegate canEval failed (4)";
+
+	//
+	// Test custom script evaling
+	//
+	customScript = @"100+12";
+	evaled = [jsc evalJSFile:path toJSValueRef:&ret];
+	if (!evaled)											return	@"delegate custom eval failed (1)";
+	if (JSValueToNumber([jsc ctx], ret, NULL) != 112)		return	@"delegate custom eval failed (2)";
+
+	ret = [jsc evalJSString:@"2+2"];
+	if (JSValueToNumber([jsc ctx], ret, NULL) != 112)		return	@"delegate custom eval failed (3)";
+	if (![scriptToEval isEqualToString:@"2+2"])				return	@"delegate custom eval failed (4)";
+	customScript = nil;
+
 	return	nil;
 }
 
@@ -354,7 +469,7 @@ int dummyValue;
 
 - (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url
 {
-	NSLog(@"had error %@", error);
+//	NSLog(@"delegate exception handler : %@", error);
 	hadError = YES;
 }
 
@@ -428,6 +543,52 @@ int dummyValue;
 	return	customValueCall;
 }
 
+/*
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller willReturnValue:(JSValueRef)value inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+	NSLog(@"willReturn");
+	willReturn	= value;
+	if (customValueReturn)	return	customValueReturn;
+	return	value;
+}
+*/
+- (BOOL) JSCocoa:(JSCocoaController*)controller canGetGlobalProperty:(NSString*)_propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+//	NSLog(@"canGetGlobalProperty %@ %d", _propertyName, canGetGlobal);
+	propertyName	= _propertyName;
+	return	canGetGlobal;
+}
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller getGlobalProperty:(NSString*)_propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+{
+//	NSLog(@"getGlobalProperty %@ %x", _propertyName, customValueGetGlobal);
+	propertyName	= _propertyName;
+	return	customValueGetGlobal;
+}
+
+
+- (BOOL)JSCocoa:(JSCocoaController*)controller canLoadJSFile:(NSString*)path
+{
+//	NSLog(@"canLoadJSFile=%@ canLoad=%d", path, canLoad);
+	pathtoJSFile = path;
+	return	canLoad;
+}
+// Check if script can be evaluated
+- (BOOL)JSCocoa:(JSCocoaController*)controller canEvaluateScript:(NSString*)script
+{
+//	NSLog(@"canEvaluateScript=%@ canEval=%d", script, canEval);
+	scriptToEval = script;
+	return	canEval;
+}
+// Called before evalJSString, used to modify script about to be evaluated
+//	Return a custom NSString (eg a macro expanded version of the source)
+//	Return NULL to let JSCocoa handle evaluation
+- (NSString*)JSCocoa:(JSCocoaController*)controller willEvaluateScript:(NSString*)script
+{
+//	NSLog(@"willEvaluateScript=%@ customScript=%@", script, customScript);
+	scriptToEval = script;
+	if (customScript)	return	customScript;
+	return	script;
+}
 
 
 
