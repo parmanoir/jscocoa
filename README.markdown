@@ -95,7 +95,7 @@ Going the framework route :
 
 * Build JSCocoa/JSCocoa.xcodeproj
 * Add built JSCocoa.framework to your project
-* #import <JSCocoa/JSCocoa.h>
+* import <JSCocoa/JSCocoa.h>
 
 No framework, adding JSCocoa files into your project :
 
@@ -103,6 +103,7 @@ No framework, adding JSCocoa files into your project :
 * Delete irrelevant files (Info.plist, JSCocoa_Prefix.pch, English.lproj, project files)
 * Add the JavascriptCore framework
 * In 'Build' project settings, add -lffi to 'Other linker flags'
+* import "JSCocoa.h"
 
 Using JSCocoa
 --
