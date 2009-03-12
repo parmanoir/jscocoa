@@ -2499,12 +2499,12 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 
 			Method method = class_getInstanceMethod([callee class], sel);
 			if (!method)	method = class_getClassMethod([callee class], sel);
-
+/*
 			// NSDistantObject
             if (!method && [callee methodSignatureForSelector:NSSelectorFromString(setterName)]) {
                 return _jsCocoaObject_callUsingNSInvocation(ctx, callee, setterName, 0, nil);
             }			
-
+*/
 			// Extract arguments
 			const char* typeEncoding = method_getTypeEncoding(method);
 			id argumentEncodings = [JSCocoaController parseObjCMethodEncoding:typeEncoding];
@@ -2740,21 +2740,21 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			}
 		}
 
-
+/*
 		// NSDistantObject
         if ([callee class] == [NSDistantObject class]) {
             return _jsCocoaObject_callUsingNSInvocation(ctx, callee, methodName, argumentCount, arguments);
         }
-		
+*/		
 		// Get method pointer
 		Method method = class_getInstanceMethod([callee class], NSSelectorFromString(methodName));
 		if (!method)	method = class_getClassMethod([callee class], NSSelectorFromString(methodName));
-
+/*
         // NSDistantObject : maybe it's a property?
         if (!method && [callee methodSignatureForSelector:NSSelectorFromString(methodName)]) {
             return _jsCocoaObject_callUsingNSInvocation(ctx, callee, methodName, argumentCount, arguments);
         }
-
+*/
 		// Bail if we can't find a suitable method
 		if (!method)	
 		{
@@ -3061,7 +3061,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	
 	return	jsReturnValue;
 }
-
+/*
 //
 // NSDistantObject call, courtesy of Gus Mueller
 //
@@ -3105,7 +3105,7 @@ static JSValueRef _jsCocoaObject_callUsingNSInvocation(JSContextRef ctx, id call
     
     return	jsReturnValue;
 }
-
+*/
 
 
 //
