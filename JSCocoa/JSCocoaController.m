@@ -339,7 +339,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Evaluate a string
 // 
-- (JSValueRef)evalJSString:(NSString*)script
+- (JSValueRef)evalJSString:(NSString*)script withScriptURL:(NSString*)url
 {
 	if (!script)	return	NULL;
 	
@@ -352,10 +352,12 @@ static id JSCocoaSingleton = NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
 	}
 	
-	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
-	JSValueRef exception = NULL;
-	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptJS, 1, &exception);
+	JSStringRef		scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
+	JSValueRef		exception	= NULL;
+	JSStringRef		scriptURLJS = url ? JSStringCreateWithUTF8CString([url UTF8String]) : NULL;
+	JSValueRef		result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
 	JSStringRelease(scriptJS);
+	if (url)		JSStringRelease(scriptURLJS);
 
 	if (exception) 
 	{
@@ -365,6 +367,12 @@ static id JSCocoaSingleton = NULL;
 
 	return	result;
 }
+
+- (JSValueRef)evalJSString:(NSString*)script
+{
+	return [self evalJSString:script withScriptURL:nil];
+}
+
 
 //
 // Call a Javascript function by function reference (JSValueRef)
