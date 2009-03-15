@@ -66,6 +66,8 @@
 	char* originalC = c;
 	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:originalC];
 #endif
+
+//	double t0 = CFAbsoluteTimeGetCurrent();
 	// Start parsing
 	for (; *c; c++)
 	{
@@ -125,6 +127,8 @@
 			}
 		}
 	}
+//	double t1 = CFAbsoluteTimeGetCurrent();
+//	NSLog(@"%f %@", t1-t0, [path lastPathComponent]);
 #ifdef __OBJC_GC__
 	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:originalC];
 #endif

@@ -47,7 +47,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
 - (JSValueRef)evalJSString:(NSString*)script;
-- (JSValueRef)evalJSString:(NSString*)script withScriptURL:(NSString*)url
+- (JSValueRef)evalJSString:(NSString*)script withScriptURL:(NSString*)url;
 + (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
