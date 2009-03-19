@@ -112,7 +112,7 @@ NSDeviceRGBColorSpace];
 	buffer[4] = 0.456
 	buffer[5] = 0.789
 	
-//	path.set({ associatedPoints : buffer, atIndex : 1 })
+	path.set({ associatedPoints : buffer, atIndex : 1 })
 	// Overwrite existing points
 	path.setAssociatedPoints_atIndex(buffer, 1)
 

@@ -1048,12 +1048,12 @@ static id JSCocoaSingleton = NULL;
 	JSPropertyNameArrayRelease(jsNames);
 
 	// We'll save the matching selector in this key
-	id key = [NSMutableString stringWithFormat:@"%@-", class];
+	id key = [NSMutableString stringWithFormat:@"%@-%@", class, methodName];
 	id sortedNames = [names sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 	for (id n in sortedNames)	[key appendString:n];
 	key = [key lowercaseString];
 	
-	// ##todo : actually cache the sel !
+	// Check if this selector already has a match
 	id existingSelector = [splitCallCache objectForKey:key];
 	if (existingSelector)
 	{
@@ -1078,7 +1078,6 @@ static id JSCocoaSingleton = NULL;
 		{
 			Method m = methods[i];
 			id name = [NSStringFromSelector(method_getName(m)) lowercaseString];
-
 			// Is this selector's length the same as the one we're searching ?
 			if ([name length] == targetSelectorLength)
 			{
@@ -1105,6 +1104,7 @@ static id JSCocoaSingleton = NULL;
 //						NSLog(@"split call found %s", method_getName(m));
 
 						// Store in split call cache
+//						NSLog(@"caching selector=%@ for key=%@", selector, key);
 						[splitCallCache setObject:selector forKey:key];
 
 						free(methods);
