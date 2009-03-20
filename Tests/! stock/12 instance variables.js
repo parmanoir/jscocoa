@@ -6,7 +6,6 @@
 		check get / set, hash count
 		
 	*/
-
 	var count0 = JSCocoaController.JSCocoaHashCount
 
 	// Count of instances hosting a js hash
@@ -16,7 +15,6 @@
 	// Allocate a class, set instance variables on it
 	//
 	var newClass = JSCocoaController.createClass_parentClass("InstanceVariableTester", "NSObject")
-
 	var container = InstanceVariableTester.alloc.init
 //	JSCocoaController.logInstanceStats
 	

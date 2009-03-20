@@ -7,12 +7,12 @@
 //	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
 	var jsc = __jsc__
 
-	/*
-		
-		Pretty print of ObjC type encodings
-		http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_13_section_9.html#//apple_ref/doc/uid/TP30001163-CH9-113054
-		
-	*/
+	//
+	//	
+	//	Pretty print of ObjC type encodings
+	//	http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_13_section_9.html#//apple_ref/doc/uid/TP30001163-CH9-113054
+	//	
+	//
 
 
 	var encodings = { 	
@@ -66,10 +66,22 @@
 			{
 				// Pointer to an ObjC object ?
 				var match = encoding.match(/^(\w+)\s*\*$/)
+			log('encoding=' + encoding + ' match=' + match + '!')
 				if (match)
 				{
 					var className = match[1]
-					if (className in this && this[className]['class'] == this[className])	return '@'
+					log('CLASSNAME=' + className + 'inThis=' + (className in this) + '!!className=' + this[className]['class'] + '!')
+					
+					//
+					// this[className]['class'] == this[className]
+					//	can only work if each object is boxed only once : 
+					//	both expressions will return the same object, comparing one object to itself
+					//	-> true
+					//
+					//	BUT if both expressions each use their own box, comparison will come negative
+					//
+					// ##########
+					if (className in this && String(this[className]['class']) == String(this[className]))	return '@'
 				}
 				// Structure ?
 				var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(encoding)
@@ -94,33 +106,33 @@
 
 
 
-	/*
-		
-		Define a class deriving from an ObjC class
-		
-		defineClass('ChildClass < ParentClass', 
-			,'overloadedMethod:' :
-							function (sel)
-							{
-								var r = this.Super(arguments)
-								testClassOverload = true
-								return	r
-							}
-			,'newMethod:' :
-							['id', 'id', function (o)  // encoding + function
-							{
-								testAdd = true
-								return o
-							}]
-			,'myOutlet' : 'IBOutlet'
-			,'myAction' : ['IBAction', 
-							function (sender)
-							{
-							}]
-						
-		})
-
-	*/
+	//
+	//	
+	//	Define a class deriving from an ObjC class
+	//	
+	//	defineClass('ChildClass < ParentClass', 
+	//		,'overloadedMethod:' :
+	//						function (sel)
+	//						{
+	//							var r = this.Super(arguments)
+	//							testClassOverload = true
+	//							return	r
+	//						}
+	//		,'newMethod:' :
+	//						['id', 'id', function (o)  // encoding + function
+	//						{
+	//							testAdd = true
+	//							return o
+	//						}]
+	//		,'myOutlet' : 'IBOutlet'
+	//		,'myAction' : ['IBAction', 
+	//						function (sender)
+	//						{
+	//						}]
+	//					
+	//	})
+	//
+	//
 
 	function	defineClass(inherit, methods)
 	{
@@ -318,13 +330,6 @@
 		//
 		for (var method in h.methods)
 		{
-/*		
-			if (h.methods[method].type == 'class method')
-			{
-				log('skipping class method ' + method)
-				continue
-			}
-*/			
 //			log('method.type=' + h.methods[method].type + ' ' + method)
 			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
 			var isOverload = parentClass.respondsToSelector(method) || isInstanceMethod
@@ -651,7 +656,7 @@
 		if (typeof r != 'function')	return	r
 
 		// Arguments are function arguments minus the first one (stringName)
-		var args = [];		for (var i=1; i<arguments.length; i++) /*log(i + '=' + arguments[i]),*/ args.push(arguments[i])
+		var args = [];		for (var i=1; i<arguments.length; i++) args.push(arguments[i])
 		return	r.apply(null, args)
 	}
 	function	registerLocalizedStrings(strings)

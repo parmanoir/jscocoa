@@ -22,7 +22,8 @@ JSCocoaController* jsc = nil;
 	
 	BOOL runningFromSystemLibrary = [[NSString stringWithUTF8String:info.dli_fname] hasPrefix:@"/System"];
 	if (!runningFromSystemLibrary)	NSLog(@"***Running a nightly JavascriptCore***");
-
+	if ([NSGarbageCollector defaultCollector])	NSLog(@"***Running with ObjC Garbage Collection***");
+//[[NSGarbageCollector defaultCollector] disable];
 	
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");
 //	[JSCocoaController deallocAutoreleasePool];
@@ -80,8 +81,13 @@ JSCocoaController* jsc = nil;
 {
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
-	NSLog(@"willTerminate %@ %d", jsc, [jsc retainCount]);
+	NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
+	if ([jsc retainCount] != 1)	NSLog(@"***Invalid JSCocoa retainCount***");
 	[jsc release];
+	
+	id path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/! stock", [[NSBundle mainBundle] bundlePath]];
+	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+	if ([files count])	NSLog(@"***warning, skipping tests***"), NSLog(@"%@", files);
 }
 
 
@@ -97,11 +103,23 @@ int runCount = 0;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-	BOOL b = [jsc runTests:path];
+	int count = [jsc runTests:path];
+	BOOL b = !!count;
 	[self garbageCollect:nil];
 
 	// Test delegate
-	id error = [self testDelegate];
+	id error = nil;
+	error = [self testDelegate];
+/*
+//	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
+//[[NSGarbageCollector defaultCollector] collectExhaustively];
+JSValueRef res;
+	res = [jsc evalJSString:@"NSApplication.sharedApplication"];
+	NSLog(@"res=%@", [jsc unboxJSValueRef:res]);
+	[self garbageCollect:nil];
+	res = [jsc evalJSString:@"NSApplication.sharedApplication"];
+	NSLog(@"res=%@", [jsc unboxJSValueRef:res]);
+*/
 	if (error)
 	{
 		b = NO;
@@ -110,7 +128,7 @@ int runCount = 0;
 	jsc.delegate = nil;
 	
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
-	else	NSLog(@"All tests ran OK !");
+	else	NSLog(@"All %d tests ran OK !", count);
 }
 
 //

@@ -14,16 +14,16 @@
 - (void)applicationDidFinishLaunching:(id)notif
 {
 	NSLog(@"DONE");
-
+/*
 	id c = [JSCocoaController sharedController];
 [[JSCocoa sharedController] setUseAutoCall:NO];
 	id mainJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/main.js", [[NSBundle mainBundle] bundlePath]];
 	[c evalJSFile:mainJSFile];
 [[JSCocoa sharedController] setUseAutoCall:YES];
+*/
 
 
-
-//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 //	objc_assignIvar();
 }
 
@@ -35,13 +35,13 @@
 int	runCount;
 - (IBAction)runJSTests:(id)sender
 {
-
+[[NSGarbageCollector defaultCollector] disable];
 	NSLog(@"RUN TESTS");
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
 	BOOL b = [[JSCocoaController sharedController] runTests:path];
-	[JSCocoaController garbageCollect];
+	[[JSCocoaController sharedController] garbageCollect];
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
 	runCount++;
 	NSLog(@">>>>Ran %d", runCount);
@@ -58,7 +58,8 @@ NSLog(@"GC enabled=%d", [[NSGarbageCollector defaultCollector] isEnabled]);
 
 - (IBAction)collect:(id)sender
 {
-	[JSCocoaController garbageCollect];
+//	[JSCocoaController garbageCollect];
+	[[JSCocoaController sharedController] garbageCollect];
 	[[NSGarbageCollector defaultCollector] collectExhaustively];
 	objc_collect(OBJC_FULL_COLLECTION);
 	objc_collect(OBJC_EXHAUSTIVE_COLLECTION);

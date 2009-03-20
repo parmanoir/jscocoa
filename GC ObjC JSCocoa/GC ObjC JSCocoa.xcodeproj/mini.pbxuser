@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = 3DD063F00EFF746B007655AD /* GC ObjC JSCocoa */;
 		activeTarget = 8D1107260486CEB800E47090 /* GC ObjC JSCocoa */;
 		addToTargets = (
@@ -60,12 +60,20 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 255229380;
-			PBXWorkspaceStateSaveDate = 255229380;
+			PBXPerProjectTemplateStateSaveDate = 259171104;
+			PBXWorkspaceStateSaveDate = 259171104;
 		};
 		perUserProjectItems = {
-			3D3175190F367E0F00F0F4BA /* PBXTextBookmark */ = 3D3175190F367E0F00F0F4BA /* PBXTextBookmark */;
-			3D31751B0F367F1200F0F4BA /* PBXTextBookmark */ = 3D31751B0F367F1200F0F4BA /* PBXTextBookmark */;
+			3D688F420F72A31C0026CECE /* PBXTextBookmark */ = 3D688F420F72A31C0026CECE /* PBXTextBookmark */;
+			3D688F440F72A31C0026CECE /* PBXTextBookmark */ = 3D688F440F72A31C0026CECE /* PBXTextBookmark */;
+			3DB35F3C0F72A36F00289A0B /* PBXBookmark */ = 3DB35F3C0F72A36F00289A0B /* PBXBookmark */;
+			3DB35F670F72A40200289A0B /* PBXTextBookmark */ = 3DB35F670F72A40200289A0B /* PBXTextBookmark */;
+			3DB35FB20F72A82C00289A0B /* PBXTextBookmark */ = 3DB35FB20F72A82C00289A0B /* PBXTextBookmark */;
+			3DB3604A0F72AA6B00289A0B /* PBXTextBookmark */ = 3DB3604A0F72AA6B00289A0B /* PBXTextBookmark */;
+			3DB3604B0F72AA6B00289A0B /* PBXTextBookmark */ = 3DB3604B0F72AA6B00289A0B /* PBXTextBookmark */;
+			3DB3604D0F72AA6B00289A0B /* PBXTextBookmark */ = 3DB3604D0F72AA6B00289A0B /* PBXTextBookmark */;
+			3DB3604E0F72AA6B00289A0B /* PBXTextBookmark */ = 3DB3604E0F72AA6B00289A0B /* PBXTextBookmark */;
+			3DB3604F0F72AA6B00289A0B /* PBXTextBookmark */ = 3DB3604F0F72AA6B00289A0B /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DD063F80EFF746F007655AD /* Source Control */;
 		userBuildSettings = {
@@ -79,25 +87,44 @@
 			sepNavWindowFrame = "{{38, 357}, {1107, 795}}";
 		};
 	};
-	3D3175190F367E0F00F0F4BA /* PBXTextBookmark */ = {
+	3D688F420F72A31C0026CECE /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
-		name = "ApplicationController.m: 23";
+		fRef = 3D688F430F72A31C0026CECE /* 14 class.js */;
+		name = "14 class.js: 6";
 		rLen = 0;
-		rLoc = 609;
+		rLoc = 1863;
 		rType = 0;
-		vrLen = 1645;
+		vrLen = 1723;
+		vrLoc = 1;
+	};
+	3D688F430F72A31C0026CECE /* 14 class.js */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.javascript;
+		name = "14 class.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/14 class.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1053, 913}}";
+			sepNavSelRange = "{903, 0}";
+			sepNavVisRange = "{0, 1682}";
+		};
+	};
+	3D688F440F72A31C0026CECE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D688F450F72A31C0026CECE /* 12 instance variables.js */;
+		name = "12 instance variables.js: 9";
+		rLen = 0;
+		rLoc = 146;
+		rType = 0;
+		vrLen = 2698;
 		vrLoc = 0;
 	};
-	3D31751B0F367F1200F0F4BA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
-		name = "ApplicationController.m: 26";
-		rLen = 0;
-		rLoc = 614;
-		rType = 0;
-		vrLen = 1647;
-		vrLoc = 0;
+	3D688F450F72A31C0026CECE /* 12 instance variables.js */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.javascript;
+		name = "12 instance variables.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/12 instance variables.js";
+		sourceTree = "<absolute>";
 	};
 	3D788F780F01F96300175ADD /* BridgeSupportController.h */ = {
 		uiCtxt = {
@@ -117,10 +144,10 @@
 	};
 	3D788F7A0F01F96300175ADD /* class.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 4631}}";
-			sepNavSelRange = "{12234, 0}";
-			sepNavVisRange = "{10629, 1605}";
-			sepNavWindowFrame = "{{77, 234}, {1107, 795}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 7260}}";
+			sepNavSelRange = "{3058, 0}";
+			sepNavVisRange = "{2506, 1900}";
+			sepNavWindowFrame = "{{375, 220}, {1107, 795}}";
 		};
 	};
 	3D788F860F01F96300175ADD /* JSCocoaController.h */ = {
@@ -133,9 +160,9 @@
 	};
 	3D788F870F01F96300175ADD /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 31356}}";
-			sepNavSelRange = "{50134, 2}";
-			sepNavVisRange = "{48846, 1335}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 37191}}";
+			sepNavSelRange = "{18110, 4}";
+			sepNavVisRange = "{18899, 2075}";
 			sepNavWindowFrame = "{{607, 318}, {1107, 795}}";
 		};
 	};
@@ -145,6 +172,104 @@
 			sepNavSelRange = "{1914, 8}";
 			sepNavVisRange = "{42, 1211}";
 			sepNavWindowFrame = "{{621, 107}, {1107, 795}}";
+		};
+	};
+	3DB35F3C0F72A36F00289A0B /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D788F7A0F01F96300175ADD /* class.js */;
+	};
+	3DB35F670F72A40200289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D788F870F01F96300175ADD /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1389";
+		rLen = 0;
+		rLoc = 46933;
+		rType = 0;
+		vrLen = 2072;
+		vrLoc = 45337;
+	};
+	3DB35FB20F72A82C00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 44";
+		rLen = 0;
+		rLoc = 1141;
+		rType = 0;
+		vrLen = 1667;
+		vrLoc = 195;
+	};
+	3DB3604A0F72AA6B00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DD0642B0EFF74D2007655AD /* ApplicationController.m */;
+		name = "ApplicationController.m: 38";
+		rLen = 0;
+		rLoc = 802;
+		rType = 0;
+		vrLen = 1810;
+		vrLoc = 195;
+	};
+	3DB3604B0F72AA6B00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB3604C0F72AA6B00289A0B /* 14 class.js */;
+		name = "14 class.js: 39";
+		rLen = 0;
+		rLoc = 903;
+		rType = 0;
+		vrLen = 1682;
+		vrLoc = 0;
+	};
+	3DB3604C0F72AA6B00289A0B /* 14 class.js */ = {
+		isa = PBXFileReference;
+		name = "14 class.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/14 class.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1053, 913}}";
+			sepNavSelRange = "{903, 0}";
+			sepNavVisRange = "{0, 1682}";
+			sepNavWindowFrame = "{{38, 221}, {1112, 934}}";
+		};
+	};
+	3DB3604D0F72AA6B00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D788F7A0F01F96300175ADD /* class.js */;
+		name = "class.js: 127";
+		rLen = 0;
+		rLoc = 3058;
+		rType = 0;
+		vrLen = 1900;
+		vrLoc = 2506;
+	};
+	3DB3604E0F72AA6B00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D788F870F01F96300175ADD /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 575";
+		rLen = 4;
+		rLoc = 18110;
+		rType = 0;
+		vrLen = 2075;
+		vrLoc = 18899;
+	};
+	3DB3604F0F72AA6B00289A0B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB360500F72AA6B00289A0B /* 12 instance variables.js */;
+		name = "12 instance variables.js: 9";
+		rLen = 0;
+		rLoc = 146;
+		rType = 0;
+		vrLen = 2698;
+		vrLoc = 0;
+	};
+	3DB360500F72AA6B00289A0B /* 12 instance variables.js */ = {
+		isa = PBXFileReference;
+		name = "12 instance variables.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/12 instance variables.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1053, 891}}";
+			sepNavSelRange = "{146, 0}";
+			sepNavVisRange = "{0, 2698}";
+			sepNavWindowFrame = "{{51, 190}, {1112, 934}}";
 		};
 	};
 	3DD063F00EFF746B007655AD /* GC ObjC JSCocoa */ = {
@@ -211,17 +336,17 @@
 	};
 	3DD0642B0EFF74D2007655AD /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 935}}";
-			sepNavSelRange = "{614, 0}";
-			sepNavVisRange = "{0, 1647}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 957}}";
+			sepNavSelRange = "{802, 0}";
+			sepNavVisRange = "{195, 1810}";
 			sepNavWindowFrame = "{{878, 144}, {1124, 804}}";
 		};
 	};
 	3DD0644B0EFF75C7007655AD /* main.js */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1065, 691}}";
-			sepNavSelRange = "{132, 0}";
-			sepNavVisRange = "{0, 214}";
+			sepNavSelRange = "{61, 0}";
+			sepNavVisRange = "{0, 216}";
 			sepNavWindowFrame = "{{654, 70}, {1124, 804}}";
 		};
 	};

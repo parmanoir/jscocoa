@@ -4,9 +4,6 @@
 
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
-
-
-
 	var testInstanceOverload	= false
 	var testClassOverload		= false
 	var testAdd					= false

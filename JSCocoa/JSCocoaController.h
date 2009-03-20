@@ -90,7 +90,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding;
 
 // Tests
-- (BOOL)runTests:(NSString*)path;
+- (int)runTests:(NSString*)path;
 
 //
 // Autorelease pool

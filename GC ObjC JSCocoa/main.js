@@ -1,6 +1,6 @@
 
 
-	log('>>Collector=' + NSGarbageCollector.defaultCollector)
+	log('>>Collector=' + NSGarbageCollector.defaultCollector())
 	log('>>ActiveApp=' + NSWorkspace.sharedWorkspace().activeApplication())
 //	NSGarbageCollector.defaultCollector.collectExhaustively
 	
