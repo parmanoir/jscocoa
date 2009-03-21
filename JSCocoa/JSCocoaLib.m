@@ -46,8 +46,10 @@
 //
 - (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx
 {
+//	[[NSGarbageCollector defaultCollector] disable];
 	JSValueRef jsValue = NULL;
 	[arg toJSValueRef:&jsValue inContext:ctx];
+//	[[NSGarbageCollector defaultCollector] enable];
 	return	jsValue;
 }
 
@@ -57,6 +59,7 @@
 //	
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)_arg
 {
+//	NSLog(@"outArgument %x starting up encoding=%c(%@)", self, [_arg typeEncoding], [_arg pointerTypeEncoding]);
 	// If holding a memory buffer, use its pointer
 	if (buffer)
 	{
@@ -73,6 +76,7 @@
 
 	// Standard pointer
 	if (![_arg allocatePointerStorage])	return	NO;
+
 
 	arg	= _arg;
 	[arg retain];

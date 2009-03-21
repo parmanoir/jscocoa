@@ -45,7 +45,11 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		JSValueUnprotect(ctx, jsFunction);
 		[JSCocoaController downJSValueProtectCount];
 	}
-	
+
+//	NSLog(@"killing closure %x", self);
+	//
+	// A strange crash reporting ??? as the source address is a deleted closure being called (happens with the bindings mechanism)
+	//
 	if (munmap(closure, sizeof(closure)) == -1)	NSLog(@"ffi closure munmap failed");
 }
 - (void)dealloc

@@ -69,6 +69,11 @@
 	retainObject	= NO;
 }
 
+- (BOOL)retainObject
+{
+	return	retainObject;
+}
+
 
 - (id)object
 {

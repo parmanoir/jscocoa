@@ -54,7 +54,7 @@
 	// loadNibNamed does not allow path data, load with NSNib
 	var nib = NSNib.instance({withContentsOfURL:NSURL.fileURLWithPath(path)})
 	
-	var nibObjects = new outArgument
+	var nibObjects = hasObjCGC ? null : new outArgument
 	if (!nib.instantiateNibWithOwner_topLevelObjects(owner, nibObjects))	throw 'NIB not loaded ' + path
 
 	// Check if outlets are connected
@@ -121,9 +121,21 @@
 	{
 		JSCocoaController.log('(skipping bindings test)')
 	}
-//	bindingsAlreadyTested = true
+	bindingsAlreadyTested = true
+	//
 	// No longer needed as I somehow fixed it ! :)
-	delete this.bindingsAlreadyTested
+	//	20090321 : HA ! YOU WISH - added one time check back.
+	//	For a class with className, Cocoa create a shadow class named NSKVONotifying_className 
+	//	and hardcodes original get / set method implementations into it. 
+	//	Upon a next test run, defineClass() will have defined new methods BUT the binding mechanism will use the previous implementations.
+	//	eg for a key named myValue, NSKVONotifying will call the old implementations of these :
+	//
+	//		- (void)setMyValue
+	//		- (id)myValue
+	//	
+	//	and crash. If the closure was deleted via munmap, GDB will show the top of the stack trace as ???.
+	//
+//	delete this.bindingsAlreadyTested
 	
 	// Hide window
 //	owner.window.orderOut(null)
@@ -141,14 +153,23 @@
 	//	... manually releasing the window works.
 	//
 	
-	
-//	log('nibObjects.length=' + nibObjects.length)
-	for (var i=0; i<nibObjects.length; i++)		
+//	log('nibObjects=' + nibObjects)
+	if (nibObjects)
 	{
-//		log('killing=' + nibObjects[i] + ' retainCount=' + nibObjects[i].retainCount)
-		nibObjects[i].release
+//		log('asking for nibObjects')
+//		log('nibObjects=' + nibObjects)
+//		log('nibObjects.length=' + nibObjects.length)
+		for (var i=0; i<nibObjects.length; i++)		
+		{
+//			log('killing=' + nibObjects[i] + ' retainCount=' + nibObjects[i].retainCount)
+			nibObjects[i].release
+		}
+		nibObjects = null
 	}
-	nibObjects = null
+	else
+	{
+		log('ObjC GC enabled : skipping outArgument 15 — window will stick around')
+	}
 
 
 	owner = null

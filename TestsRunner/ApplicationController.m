@@ -82,12 +82,20 @@ JSCocoaController* jsc = nil;
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
 	NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
-	if ([jsc retainCount] != 1)	NSLog(@"***Invalid JSCocoa retainCount***");
+
+	// Check if JSCocoa can be released (retainCount got down to 1)
+	// Won't work under ObjC GC
+#ifndef __OBJC_GC__
+	if ([jsc retainCount] != 1)									NSLog(@"***Invalid JSCocoa retainCount***");
+#endif
 	[jsc release];
 	
 	id path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/! stock", [[NSBundle mainBundle] bundlePath]];
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-	if ([files count])	NSLog(@"***warning, skipping tests***"), NSLog(@"%@", files);
+	if ([files count])											NSLog(@"***warning, skipping tests***"), NSLog(@"%@", files);
+#ifdef __OBJC_GC__
+	if (![[NSGarbageCollector defaultCollector] isEnabled])		NSLog(@"***GC running but disabled***");
+#endif	
 }
 
 

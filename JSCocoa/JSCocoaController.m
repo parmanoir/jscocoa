@@ -63,6 +63,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 @implementation JSCocoaController
 
+
+
 @synthesize delegate=_delegate;
 
 	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
@@ -1209,7 +1211,7 @@ static id JSCocoaSingleton = NULL;
 
 + (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
 {
-/*	id key = [NSString stringWithFormat:@"%x", o];
+	id key = [NSString stringWithFormat:@"%x", o];
 	id value = [boxedObjects valueForKey:key];
 	// If object is boxed, up its usage count and return it
 	if (value)
@@ -1217,7 +1219,7 @@ static id JSCocoaSingleton = NULL;
 //		NSLog(@"upusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
 		return	[value jsObject];
 	}
-*/
+
 	//
 	// Create a new ObjC box around the JSValueRef boxing the JSObject
 	// , so we need to box
@@ -1231,15 +1233,15 @@ static id JSCocoaSingleton = NULL;
 	// As boxed objects are JSObjectRef not derived from NSObject, we box them in an ObjC object.
 	//
 	
+//	NSLog(@"boxing %x", o);
+//	NSLog(@"boxing %@", o);
+	
 	// Box the ObjC object in a JSObjectRef
 	JSObjectRef jsObject = [self jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"@";
 	[private setObject:o];
-JSValueProtect(ctx, jsObject);
-return		jsObject;
-
-/*	
+	
 	// Box the JSObjectRef in our ObjC object
 	value = [[BoxedJSObject alloc] init];
 	[value setJSObject:jsObject];
@@ -1248,7 +1250,7 @@ return		jsObject;
 	[boxedObjects setValue:value forKey:key];
 	[value release];
 	return	jsObject;
-*/
+
 }
 
 
@@ -1258,8 +1260,10 @@ return		jsObject;
 	id value = [boxedObjects valueForKey:key];
 	if (!value)
 	{
-		NSLog(@"downBoxedJSObjectCount: without an up !");
-		NSLog(@"downBoxedJSObjectCount: %@ %x", [o class], o);
+		// Now done is finalize
+//		NSLog(@"downBoxedJSObjectCount: without an up ! non inserted in boxedObjects");
+//		NSLog(@"downBoxedJSObjectCount: %@ %@ %x", [o class], o == [o class] ? @"ISCLASS" : @"", o);
+//		NSLog(@"downBoxedJSObjectCount: %@", o);
 		return;
 	}
 //	NSLog(@"downusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
@@ -2022,21 +2026,33 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	//
 	// If a boxed object is being destroyed, remove it from the cache
 	//
-/*
 	id boxedObject = [private object]; 
 	if (boxedObject)
 	{
+		id key = [NSString stringWithFormat:@"%x", boxedObject];
+		id existingBoxedObject = [boxedObjects objectForKey:key];
+//		NSLog(@"EXISTING %@", existingBoxedObject);
+		if (existingBoxedObject)
+		{
+//		NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //		NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //		NSLog(@"%@", boxedObjects);
-		id key = [NSString stringWithFormat:@"%x", boxedObject];
-		NSLog(@"existing boxed object=%x forKey %@", [boxedObjects objectForKey:key], key);
 //		NSLog(@"----------------------------------------------------");
-		[boxedObjects removeObjectForKey:key];
-		NSLog(@"REMOVED %@", [boxedObjects objectForKey:key]);
+//		NSLog(@"----------------------------------------------------");
+			[boxedObjects removeObjectForKey:key];
 //		NSLog(@"%@", boxedObjects);
 //		NSLog(@"****************************************************");
+//		NSLog(@"****************************************************");
+		}
+		else
+		{
+//			BOOL retainObject = [private retainObject];
+//			NSLog(@"finalizing an UNBOXED object (retain=%d)", retainObject);
+			// This will crash if object is not retained
+//			if (retainObject) NSLog(@"finalizing an UNBOXED %@", [boxedObject class]);
+		}
 	}
-*/	
+	
 //	NSLog(@"FINALIZING JSOBJECTREF %x holding %@", object, private);
 	// Immediate release if dealloc is not overloaded
 	[private release];
@@ -2893,6 +2909,10 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	struct		objc_super _super;
 	void*		superPointer;
 	
+	
+//	id	outArguments = NULL;
+	
+	
 	// Total number of arguments to ffi_call
 	int	effectiveArgumentCount = argumentCount + (callingObjC ? 2 : 0);
 	if (effectiveArgumentCount > 0)
@@ -2959,6 +2979,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 					{
 						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
 						shouldConvert = NO;
+//						if (outArguments == nil) outArguments = [NSMutableArray new];
+//						[outArguments addObject:unboxed];
 					}
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
 					{
@@ -2981,6 +3003,9 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			values[idx]		= [arg storage];
 		}
 	}
+	
+//	if (outArguments)
+//		[[NSGarbageCollector defaultCollector] disable];
 
 	// Get return value holder
 	id returnValue = [argumentEncodings objectAtIndex:0];
@@ -2996,6 +3021,13 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 //		log_ffi_call(&cif, values, callAddress);
 		ffi_call(&cif, callAddress, storage, values);
+	}
+
+//	if (outArguments)
+	{
+//		for (id arg in outArguments)			[arg outJSValueRefInContext:ctx];
+//		[[NSGarbageCollector defaultCollector] enable];
+//		[[NSGarbageCollector defaultCollector] collectExhaustively];
 	}
 	
 	if (effectiveArgumentCount > 0)	
@@ -3328,13 +3360,14 @@ id	JSLocalizedString(id stringName, id firstArg, ...)
 - (id)description
 {
 	id boxedObject = [(JSCocoaPrivateObject*)JSObjectGetPrivate(jsObject) object];
-	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%d)>",
+	id retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%@)>",
 				[self class], 
 				self, 
 				((id)self == (id)[self class]) ? @"Class" : @"",
 				[boxedObject class],
 				boxedObject,
-				[boxedObject retainCount]];
+				retainCount];
 }
 
 @end

@@ -66,11 +66,9 @@
 			{
 				// Pointer to an ObjC object ?
 				var match = encoding.match(/^(\w+)\s*\*$/)
-			log('encoding=' + encoding + ' match=' + match + '!')
 				if (match)
 				{
 					var className = match[1]
-					log('CLASSNAME=' + className + 'inThis=' + (className in this) + '!!className=' + this[className]['class'] + '!')
 					
 					//
 					// this[className]['class'] == this[className]
@@ -80,8 +78,7 @@
 					//
 					//	BUT if both expressions each use their own box, comparison will come negative
 					//
-					// ##########
-					if (className in this && String(this[className]['class']) == String(this[className]))	return '@'
+					if (className in this && this[className]['class'] == this[className])	return '@'
 				}
 				// Structure ?
 				var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(encoding)

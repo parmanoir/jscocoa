@@ -50,6 +50,7 @@
 
 //	JSCocoaController.log('JSCocoaHashCount=' + JSCocoaController.JSCocoaHashCount)
 
+
 	// Test if we have two hash counts more
 	var count1 = JSCocoaController.JSCocoaHashCount
 	if (!hasObjCGC)
@@ -60,6 +61,7 @@
 	container2.release
 	container = null
 	container2 = null
+
 
 	// The following line is useless but throws off garbage collection. 
 	// Without it, one instance of InstanceVariableTester sticks around until the next test run.

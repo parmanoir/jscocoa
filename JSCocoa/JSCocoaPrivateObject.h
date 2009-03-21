@@ -60,6 +60,7 @@
 
 - (void)setObject:(id)o;
 - (void)setObjectNoRetain:(id)o;
+- (BOOL)retainObject;
 - (id)object;
 
 - (void)setMethod:(Method)m;
