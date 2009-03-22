@@ -8,7 +8,7 @@
 
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
-#import <JavascriptCore/JavascriptCore.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 #endif
 #import <mach-o/dyld.h>
 #import <dlfcn.h>

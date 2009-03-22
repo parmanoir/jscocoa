@@ -7,7 +7,7 @@
 //
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 #import <Cocoa/Cocoa.h>
-#import <JavascriptCore/JavascriptCore.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 #define MACOSX
 #import <ffi/ffi.h>
 #endif
