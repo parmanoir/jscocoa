@@ -58,12 +58,12 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 257966302;
-			PBXWorkspaceStateSaveDate = 257966302;
+			PBXPerProjectTemplateStateSaveDate = 259452318;
+			PBXWorkspaceStateSaveDate = 259452318;
 		};
 		perUserProjectItems = {
-			3D3B55600F1CD26E00D60188 /* PBXTextBookmark */ = 3D3B55600F1CD26E00D60188 /* PBXTextBookmark */;
 			3D792EB40F6040E6008688D2 /* PBXTextBookmark */ = 3D792EB40F6040E6008688D2 /* PBXTextBookmark */;
+			3D9CDF6A0F76F058004EB118 /* PBXTextBookmark */ = 3D9CDF6A0F76F058004EB118 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D9D7F5E0EF819CB00D71763 /* Source Control */;
 		userBuildSettings = {
@@ -77,16 +77,6 @@
 			sepNavWindowFrame = "{{438, 138}, {1124, 804}}";
 		};
 	};
-	3D3B55600F1CD26E00D60188 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 2243";
-		rLen = 19;
-		rLoc = 76853;
-		rType = 0;
-		vrLen = 2267;
-		vrLoc = 75628;
-	};
 	3D792EB40F6040E6008688D2 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
@@ -96,6 +86,16 @@
 		rType = 0;
 		vrLen = 2354;
 		vrLoc = 75578;
+	};
+	3D9CDF6A0F76F058004EB118 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2309";
+		rLen = 19;
+		rLoc = 76853;
+		rType = 0;
+		vrLen = 2526;
+		vrLoc = 75484;
 	};
 	3D9D7F5E0EF819CB00D71763 /* Source Control */ = {
 		isa = PBXSourceControlManager;
@@ -134,9 +134,9 @@
 	};
 	3D9D7F730EF81A0100D71763 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 33275}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 37488}}";
 			sepNavSelRange = "{76853, 19}";
-			sepNavVisRange = "{75578, 2354}";
+			sepNavVisRange = "{75484, 2526}";
 			sepNavWindowFrame = "{{593, 157}, {1124, 804}}";
 		};
 	};
@@ -162,6 +162,13 @@
 			sepNavSelRange = "{2488, 38}";
 			sepNavVisRange = "{1617, 1905}";
 			sepNavWindowFrame = "{{684, 249}, {1124, 804}}";
+		};
+	};
+	3D9D7F780EF81A0100D71763 /* JSCocoaPrivateObject.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {923, 825}}";
+			sepNavSelRange = "{235, 14}";
+			sepNavVisRange = "{0, 694}";
 		};
 	};
 	3D9D7F790EF81A0100D71763 /* JSCocoaPrivateObject.m */ = {

@@ -55,6 +55,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 // JSCocoaController
 //
+#pragma mark -
 #pragma mark JSCocoaController
 
 @interface JSCocoaController (Private)
@@ -1745,6 +1746,7 @@ int	liveInstanceCount	= 0;
 
 
 
+#pragma mark -
 #pragma mark JS OSX object
 
 //
