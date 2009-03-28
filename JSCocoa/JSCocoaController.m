@@ -32,7 +32,7 @@ static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObje
 // Set on valueOf callback property of objects
 #define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
 
-// These will always stay alive, even after last JSCocoa has died
+// These will be destroyed when the last JSCocoa instance dies
 static	JSClassRef			OSXObjectClass		= NULL;
 static	JSClassRef			jsCocoaObjectClass	= NULL;
 static	JSClassRef			hashObjectClass		= NULL;

@@ -31,6 +31,7 @@ Contribute and discuss
 Who uses JSCocoa ?
 --
 
+* [JSTalk](http://github.com/ccgus/jstalk/tree/master) Gus Mueller uses JSCocoa to let Cocoa applications be scripted in Javascript
 * [PluginManager](http://github.com/Grayson/pluginmanager/tree/master) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
 * [Elysium](http://lucidmac.com/products/elysium/) Matt Mower uses JSCocoa for scripting
 * [Acorn Plugins](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) Gus Mueller uses JSCocoa to let Acorn users write [Acorn](http://flyingmeat.com/acorn/) plugins in Javascript

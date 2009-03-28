@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF490F76EC66004EB118</string>
+						<string>3D9CE2870F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3D9CDF480F76EC66004EB118</string>
+							<string>3D9CDF490F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -256,10 +256,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF4A0F76EC66004EB118</string>
+						<string>3D9CE2880F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF000940F753A10002CB63A</string>
+							<string>3D9CDF4A0F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -296,10 +296,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF4C0F76EC66004EB118</string>
+						<string>3D9CE28A0F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF000960F753A10002CB63A</string>
+							<string>3D9CDF4C0F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -336,10 +336,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF4D0F76EC66004EB118</string>
+						<string>3D9CE28B0F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF000980F753A10002CB63A</string>
+							<string>3D9CDF4D0F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -376,10 +376,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF4E0F76EC66004EB118</string>
+						<string>3D9CE28C0F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF000990F753A10002CB63A</string>
+							<string>3D9CDF4E0F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -416,10 +416,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF4F0F76EC66004EB118</string>
+						<string>3D9CE28D0F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF0009A0F753A10002CB63A</string>
+							<string>3D9CDF4F0F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -456,10 +456,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D9CDF500F76EC66004EB118</string>
+						<string>3D9CE28E0F794949004EB118</string>
 						<key>history</key>
 						<array>
-							<string>3DF0009B0F753A10002CB63A</string>
+							<string>3D9CDF500F76EC66004EB118</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -511,8 +511,6 @@
 					<key>Tabs</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -725,8 +723,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3D9CDF460F76EC66004EB118</string>
-				<string>3D9CDF470F76EC66004EB118</string>
+				<string>3D9CE27E0F7946B0004EB118</string>
+				<string>3D9CE27F0F7946B0004EB118</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -759,6 +757,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>3D3911AD0F73DB94000EED3B</string>
 		<string>3D19B8F70F72D45000138111</string>
 		<string>3D39118F0F73DADB000EED3B</string>
@@ -1136,14 +1135,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>15 IBOutlet IBAction.js</string>
+										<string></string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -1164,6 +1161,8 @@
 							<string>715pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1199,8 +1198,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>3DF0FFEF0F747408002CB63A</string>
-				<string>3DF0FFF00F747408002CB63A</string>
+				<string>3D9CE27C0F7946AF004EB118</string>
+				<string>3D9CE27D0F7946AF004EB118</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
