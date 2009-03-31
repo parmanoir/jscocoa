@@ -564,7 +564,7 @@ static id JSCocoaSingleton = NULL;
 
 	// Try loading extra dylib (inline functions made callable and compiled to a .dylib)
 	id extraLibPath = [NSString stringWithFormat:@"%@/%@.framework/Resources/BridgeSupport/%@.dylib", inPath, name, name];
-	address = dlopen([extraLibPath UTF8String], RTLD_LAZY);
+	/*address = */dlopen([extraLibPath UTF8String], RTLD_LAZY);
 	// Don't fail if we didn't load the extra dylib as it is optional
 //	if (!address)	return	NSLog(@"Did not load extra framework dylib %@", path), NO;
 	
@@ -1174,6 +1174,7 @@ static id JSCocoaSingleton = NULL;
 
 	// Get XML definition
 	id error;
+	// Clang will report a leak here, but NSXMLDocument auto releases itself if it fails loading
 	id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error];
 	if (error)	return	NSLog(@"(isMethodVariadic:class:) malformed xml while getting method %@ of class %@ : %@", methodName, class, error), NO;
 		
