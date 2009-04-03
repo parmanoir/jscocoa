@@ -67,12 +67,14 @@
 - (void*)allocateStorage;
 - (void*)allocatePointerStorage;
 - (void**)storage;
+- (void**)rawStoragePointer;
 - (char)typeEncoding;
 - (NSString*)structureTypeEncoding;
 - (id)pointerTypeEncoding;
 
 
 - (void)setIsReturnValue:(BOOL)v;
+- (BOOL)isReturnValue;
 //- (void)setCustomData:(id)data;
 
 - (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx;

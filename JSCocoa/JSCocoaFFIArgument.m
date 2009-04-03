@@ -61,7 +61,10 @@
 	[super finalize];
 }
 
-
+- (NSString*)description
+{
+	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %x typeEncoding=%c isReturnValue=%d storage=%x", self, typeEncoding, isReturnValue, ptr];
+}
 
 #pragma mark Getters / Setters
 
@@ -71,6 +74,10 @@
 - (void)setIsReturnValue:(BOOL)v
 {
 	isReturnValue = v;
+}
+- (BOOL)isReturnValue
+{
+	return	isReturnValue;
 }
 
 - (char)typeEncoding
@@ -235,6 +242,12 @@
 
 	return ptr;
 }
+
+- (void**)rawStoragePointer
+{
+	return	ptr;
+}
+
 
 
 + (void)alignPtr:(void**)ptr accordingToEncoding:(char)encoding
@@ -927,6 +940,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 //
 + (BOOL)unboxJSValueRef:(JSValueRef)value toObject:(id*)o inContext:(JSContextRef)ctx
 {
+//	if (!o)	return NSLog(@"unboxJSValueRef called with null"), NO;
 	/*
 		Boxing
 		
