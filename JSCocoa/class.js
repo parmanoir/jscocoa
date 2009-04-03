@@ -1,4 +1,9 @@
 
+	// ObjC
+	var nil = null
+	var	YES	= true
+	var NO	= false
+	
 	function	log(str)	{	JSCocoaController.log('' + str)	}
 	
 	function	dumpHash(o)	{	var str = ''; for (var i in o) str += i + '=' + o[i] + '\n'; return str }
@@ -32,6 +37,7 @@
 		,'float'		: 'f'
 		,'double'		: 'd'
 		,'bool'			: 'B'
+		,'BOOL'			: 'B'
 		,'void'			: 'v'
 		,'undef'		: '?'
 		,'pointer'		: '^'

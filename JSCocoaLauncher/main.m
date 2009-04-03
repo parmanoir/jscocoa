@@ -2,22 +2,19 @@
 //  main.m
 //  JSCocoaLauncher
 //
-//  Created by Patrick Geiller on 25/10/08.
-//  Copyright __MyCompanyName__ 2008. All rights reserved.
+//  Created by Patrick Geiller on 01/04/09.
+//  Copyright __MyCompanyName__ 2009. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "JSCocoaController.h"
+#import "JSCocoa.h"
 
 int main(int argc, char *argv[])
 {
-	[JSCocoaController allocAutoreleasePool];
+	[JSCocoa allocAutoreleasePool];
+	[NSAutoreleasePool new];
+	id jsc = [JSCocoa sharedController];
+	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"launcher" ofType:@"js"]];
 
-	// Load jscocoa list
-	id mainJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/JSCocoaLauncher.js", [[NSBundle mainBundle] bundlePath]];
-	[[JSCocoaController sharedController] evalJSFile:mainJSFile];
-
-    int r = NSApplicationMain(argc,  (const char **) argv);
-	
-	return	r;
+    return NSApplicationMain(argc,  (const char **) argv);
 }

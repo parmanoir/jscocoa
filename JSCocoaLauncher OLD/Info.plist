@@ -24,5 +24,24 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>NSDocumentClass</key>
+			<string>JSCocoaDocument</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>jscocoa</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>text/jscocoa</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>JSCocoa standalone file</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
 </dict>
 </plist>
