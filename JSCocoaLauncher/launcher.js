@@ -26,7 +26,7 @@ log('hello world')
 			return	item.representedObject.isGroupItem
 		}
 		
-		- (BOOL)outlineView:(NSOutlineView*)outlineView shouldSelectItem:(id)item
+		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 		{
 			log('select ' + item.representedObject)
 			return	true

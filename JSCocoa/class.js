@@ -50,7 +50,7 @@
 	function	objc_unary_encoding(encoding)
 	{
 		// Structure arg
-		if (encoding.indexOf(' ') != -1)
+		if (encoding.indexOf(' ') != -1 && encoding.indexOf(' *') == -1)
 		{
 			var structureName = encoding.split(' ')[1]
 			var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(structureName)
