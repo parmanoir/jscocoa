@@ -65,11 +65,11 @@
 			var screenFrame = NSScreen.mainScreen.visibleFrame
 			this.window.setFrameOrigin(new NSPoint((screenFrame.size.width-windowFrame.size.width)/2, (screenFrame.size.height-windowFrame.size.height)*2/3))
 			
-			
-			var view = WebView.instance({ withFrame : NSMakeRect(200, 0, 400, 400), frameName : 'blah', groupName : 'null' })
-//			var view = WebView.alloc.initWithFrame(NSMakeRect(200, 0, 400, 400) )
-			this.window.contentView.addSubview(view)
-			view.mainFrameURL = 'http://yahoo.com'
+
+			//
+			// Hash of views, holding name : NSView
+			//
+			this.views = {}
 		}
 		
 		- (id)sidebarItems
@@ -103,11 +103,45 @@
 			cell.object = item.representedObject
 		}
 		
-		js function switchToView(view)
+		js function switchToView(viewName)
 		{
-			log('NEW VIEW ' + view)
+			log('NEW VIEW ' + viewName)
 //			log('DEBUG CHECK ' + this.sidebarItems)
 //			__jsc__.garbageCollect
+
+			var view = this.views[viewName]
+			if (!view)
+			{
+				log('asking to build ' + viewName)
+				if (viewName == 'source')
+				{
+					var view = WebView.instance({ withFrame : NSMakeRect(200, 0, 400, 400) })
+					this.window.contentView.addSubview(view)
+					view.mainFrameURL = 'http://yahoo.com'
+					log('built ' + view)
+				}
+				if (viewName == 'home')
+				{
+					var view = WebView.instance({ withFrame : NSMakeRect(250, 50, 400, 400) })
+					this.window.contentView.addSubview(view)
+					view.mainFrameURL = 'http://google.com'
+					log('built ' + view)
+				}
+				
+				if (view)	this.views[viewName] = view
+			}
+			
+			if (this.currentView)
+				this.currentView.hidden = YES
+			
+			if (!view)	return
+			
+			view.hidden = NO
+			this.currentView = view
+			
+			
+			
+
 		}
 
 		IBOutlet	sourceList

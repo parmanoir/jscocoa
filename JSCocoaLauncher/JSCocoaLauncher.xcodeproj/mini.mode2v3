@@ -202,6 +202,46 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>3D9CEBBD0F86420F004EB118</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>launcher.js</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>3D9CEBBE0F86420F004EB118</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>launcher.js</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3DF6AA7F0F87A2B30011A48D</string>
+						<key>history</key>
+						<array>
+							<string>3DF6AA740F87A25A0011A48D</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1130, 798}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>533 138 1130 839 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>3DF6AA3E0F879CD10011A48D</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>JSCocoaController.m</string>
@@ -216,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DF6AA6D0F879E3E0011A48D</string>
+						<string>3DF6AA800F87A2B30011A48D</string>
 						<key>history</key>
 						<array>
 							<string>3DF6AA670F879E160011A48D</string>
@@ -242,46 +282,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>3D9CEBBD0F86420F004EB118</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>launcher.js</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D9CEBBE0F86420F004EB118</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>launcher.js</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>3DF6AA6E0F879E3E0011A48D</string>
-						<key>history</key>
-						<array>
-							<string>3DF6AA3C0F879CD10011A48D</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1130, 798}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>593 60 1130 839 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>3DF6AA070F8799410011A48D</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>WebView.h</string>
@@ -296,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DF6AA6F0F879E3E0011A48D</string>
+						<string>3DF6AA810F87A2B30011A48D</string>
 						<key>history</key>
 						<array>
 							<string>3DF6AA030F87991E0011A48D</string>
@@ -336,7 +336,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DF6AA700F879E3E0011A48D</string>
+						<string>3DF6AA820F87A2B30011A48D</string>
 						<key>history</key>
 						<array>
 							<string>3DF6A8480F878C2D0011A48D</string>
@@ -425,7 +425,6 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>29B97314FDCFA39411CA2CEA</string>
-										<string>3D9CEAF90F862115004EB118</string>
 										<string>29B97317FDCFA39411CA2CEA</string>
 										<string>29B97323FDCFA39411CA2CEA</string>
 										<string>3DF6A9580F8798E00011A48D</string>
@@ -434,13 +433,13 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
-											<integer>1</integer>
+											<integer>4</integer>
+											<integer>3</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 75}, {333, 334}}</string>
+									<string>{{0, 0}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -643,10 +642,10 @@
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3DF6A8460F878C2D0011A48D</string>
 		<string>3DF6AA070F8799410011A48D</string>
-		<string>3D9CEBBD0F86420F004EB118</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/JSCocoaLauncher/JSCocoaLauncher.xcodeproj</string>
 		<string>3DF6AA3E0F879CD10011A48D</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/JSCocoaLauncher/JSCocoaLauncher.xcodeproj</string>
+		<string>3D9CEBBD0F86420F004EB118</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
 	</array>
 	<key>WindowString</key>
