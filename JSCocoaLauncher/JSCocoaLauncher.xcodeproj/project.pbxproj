@@ -17,6 +17,10 @@
 		3D9CEB310F862115004EB118 /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CEB1F0F862115004EB118 /* JSCocoaLib.m */; };
 		3D9CEB320F862115004EB118 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CEB210F862115004EB118 /* JSCocoaPrivateObject.m */; };
 		3D9CEB440F86216A004EB118 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9CEB430F86216A004EB118 /* JavaScriptCore.framework */; };
+		3DF6A5F10F86ECB40011A48D /* Console.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A5F00F86ECB40011A48D /* Console.tiff */; };
+		3DF6A5F50F86ED530011A48D /* iPhoneSimulator.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A5F40F86ED530011A48D /* iPhoneSimulator.tiff */; };
+		3DF6A5FF0F86EDD50011A48D /* GoogleGroups.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A5FE0F86EDD50011A48D /* GoogleGroups.tiff */; };
+		3DF6A6340F86EF660011A48D /* URL.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A6330F86EF660011A48D /* URL.tiff */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -47,6 +51,10 @@
 		3D9CEB200F862115004EB118 /* JSCocoaPrivateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaPrivateObject.h; sourceTree = "<group>"; };
 		3D9CEB210F862115004EB118 /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaPrivateObject.m; sourceTree = "<group>"; };
 		3D9CEB430F86216A004EB118 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
+		3DF6A5F00F86ECB40011A48D /* Console.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Console.tiff; sourceTree = "<group>"; };
+		3DF6A5F40F86ED530011A48D /* iPhoneSimulator.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = iPhoneSimulator.tiff; sourceTree = "<group>"; };
+		3DF6A5FE0F86EDD50011A48D /* GoogleGroups.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = GoogleGroups.tiff; sourceTree = "<group>"; };
+		3DF6A6330F86EF660011A48D /* URL.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = URL.tiff; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* JSCocoaLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSCocoaLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -115,6 +123,10 @@
 			isa = PBXGroup;
 			children = (
 				3D9CEAB00F8620E2004EB118 /* launcher.js */,
+				3DF6A6330F86EF660011A48D /* URL.tiff */,
+				3DF6A5FE0F86EDD50011A48D /* GoogleGroups.tiff */,
+				3DF6A5F00F86ECB40011A48D /* Console.tiff */,
+				3DF6A5F40F86ED530011A48D /* iPhoneSimulator.tiff */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -201,6 +213,10 @@
 				3D9CEAB10F8620E2004EB118 /* launcher.js in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				3DF6A5F10F86ECB40011A48D /* Console.tiff in Resources */,
+				3DF6A5F50F86ED530011A48D /* iPhoneSimulator.tiff in Resources */,
+				3DF6A5FF0F86EDD50011A48D /* GoogleGroups.tiff in Resources */,
+				3DF6A6340F86EF660011A48D /* URL.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

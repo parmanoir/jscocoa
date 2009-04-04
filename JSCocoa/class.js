@@ -37,11 +37,13 @@
 		,'float'		: 'f'
 		,'double'		: 'd'
 		,'bool'			: 'B'
-		,'BOOL'			: 'B'
 		,'void'			: 'v'
 		,'undef'		: '?'
 		,'pointer'		: '^'
 		,'charpointer'	: '*'
+		
+		,'BOOL'			: 'B'
+		,'NSInteger'	: 'i'
 	}
 	var reverseEncodings = {}
 	for (var e in encodings) reverseEncodings[encodings[e]] = e
@@ -595,6 +597,9 @@
 			
 			// Replace actions
 			script = script.replace(/^\s*IBAction\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceActions)
+
+			// Replace js functions
+			script = script.replace(/^\s*js\s+function\s+(\w+)(.*)$/gm, expandJSMacros_ReplaceJSFunctions)
 			
 //			log('****************')
 //			log('\n' + script)
@@ -641,6 +646,11 @@
 	{
 		paramName = paramName || 'sender'
 		return	'IBAction(\'' + actionName + '\').fn = function (' + paramName + ')'
+	}
+
+	function	expandJSMacros_ReplaceJSFunctions(r, functionName, arguments)
+	{
+		return	'JSFunction(\'' + functionName + '\').fn = function ' + arguments
 	}
 	
 	//
