@@ -183,7 +183,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Load class kit
 	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
-
+	
 	return	self;
 }
 
@@ -270,6 +270,17 @@ static id JSCocoaSingleton = NULL;
 	return	jsc;
 }
 
+// Report if we're running a nightly JavascriptCore, with GC
++ (void)hazardReport
+{
+	Dl_info info;
+	// Get info about a JavascriptCore symbol
+	dladdr(dlsym(RTLD_DEFAULT, "JSClassCreate"), &info);
+	
+	BOOL runningFromSystemLibrary = [[NSString stringWithUTF8String:info.dli_fname] hasPrefix:@"/System"];
+	if (!runningFromSystemLibrary)	NSLog(@"***Running a nightly JavascriptCore***");
+	if ([NSGarbageCollector defaultCollector])	NSLog(@"***Running with ObjC Garbage Collection***");
+}
 
 #pragma mark Script evaluation
 
@@ -1275,7 +1286,7 @@ static id JSCocoaSingleton = NULL;
 //	if (count == 0)
 	{
 //		NSLog(@"CLEAN %@ (%@ rc=%d)", o, value, [value retainCount]);
-NSLog(@"cleaned remove");
+//NSLog(@"cleaned remove");
 		[boxedObjects removeObjectForKey:key];
 //		NSLog(@"CLEANED ? %x", [boxedObjects valueForKey:key]);
 	}
@@ -1645,7 +1656,6 @@ int	liveInstanceCount	= 0;
 	struct objc_super superData = { self, parentClass };
 	id o = objc_msgSendSuper(&superData, @selector(copyWithZone:), zone);
 	
-	
 	//
 	// Copy hash by making a new copy
 	//
@@ -1700,10 +1710,7 @@ int	liveInstanceCount	= 0;
 	{
 		id jsc = NULL;
 		object_getInstanceVariable(self, "__jsCocoaController", (void**)&jsc);
-//JSContextRef context;
-//		object_getInstanceVariable(self, "__jsCocoaController", (void**)&context);
 		JSValueUnprotect([jsc ctx], hash);
-//		JSValueUnprotect(context, hash);
 		[JSCocoaController downJSCocoaHashCount];
 	}
 	[JSCocoaController downInstanceCount:self];
@@ -2091,29 +2098,18 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	{
 		id key = [NSString stringWithFormat:@"%x", boxedObject];
 		id existingBoxedObject = [boxedObjects objectForKey:key];
-//		NSLog(@"EXISTING %@", existingBoxedObject);
 		if (existingBoxedObject)
 		{
-//		NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//		NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//		NSLog(@"%@", boxedObjects);
-//		NSLog(@"----------------------------------------------------");
-//		NSLog(@"----------------------------------------------------");
 			[boxedObjects removeObjectForKey:key];
-//		NSLog(@"%@", boxedObjects);
-//		NSLog(@"****************************************************");
-//		NSLog(@"****************************************************");
 		}
 		else
 		{
 //			BOOL retainObject = [private retainObject];
 //			NSLog(@"finalizing an UNBOXED object (retain=%d)", retainObject);
-			// This will crash if object is not retained
-//			if (retainObject) NSLog(@"finalizing an UNBOXED %@", [boxedObject class]);
 		}
 	}
+
 	
-//	NSLog(@"FINALIZING JSOBJECTREF %x holding %@", object, private);
 	// Immediate release if dealloc is not overloaded
 	[private release];
 #ifdef __OBJC_GC__
@@ -3030,39 +3026,33 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			// Check type o modifiers
 			if ([arg typeEncoding] == '^')
 			{
-				NSLog(@"1");
 				// If holding a JSCocoaOutArgument, allocate custom storage
 				if (JSValueGetType(ctx, jsValue) == kJSTypeObject)
 				{
-				NSLog(@"2");
 					id unboxed = nil;
 					[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&unboxed inContext:ctx];
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
 					{
 						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
-				NSLog(@"3");
 						shouldConvert = NO;
 //						if (outArguments == nil) outArguments = [NSMutableArray new];
 //						[outArguments addObject:unboxed];
 					}
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
 					{
-				NSLog(@"4");
 						JSCocoaMemoryBuffer* buffer = unboxed;
 						[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:[buffer pointerForIndex:0]];
 						shouldConvert = NO;
 					}
 				}
-//				else
+
 				if (shouldConvert)
 				{
-				// Allocate default storage
+					// Allocate default storage
 					[arg allocateStorage];
-				NSLog(@"5");
 				}
 					
 			}
-			if ([arg typeEncoding] == '^' && [arg rawStoragePointer] == 0)	NSLog(@"KKKKKKKKKKKKKKKKKK");
 
 			args[idx]		= [arg ffi_type];
 			if (shouldConvert)

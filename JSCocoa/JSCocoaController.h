@@ -40,6 +40,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (id)controllerFromContext:(JSContextRef)ctx;
 + (BOOL)hasSharedController;
 - (JSGlobalContextRef)ctx;
++ (void)hazardReport;
 
 //
 // Evaluation

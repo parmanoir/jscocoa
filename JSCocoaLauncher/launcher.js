@@ -1,4 +1,7 @@
 
+
+	JSCocoa.hazardReport
+
 	class ApplicationController < NSObject
 	{
 	
@@ -31,12 +34,15 @@
 										,{ name : 'Console', image : images['Console'] } ] }
 						,{ name : 'DISCUSS', isGroupItem : true
 							,children : [ { name : 'Report Bug' }, { name : 'Request Feature' }, { name : 'Google Group', image : images['GoogleGroups'] } ] }
+						,{ name : 'TRADE', isGroupItem : true
+							,children : [ { name : 'Download new samples' }, { name : 'Upload a sample' } ] }
 						,{ name : 'VISIT', isGroupItem : true
 							,children : [ { name : 'Source', image : images['URL'], id : 'source' }, { name : 'Homepage', image : images['URL'], id : 'home' } ] }
 					]
 			this.didChangeValueForKey('sidebarItems')
 
 			// Expand
+			this.sourceList.expandItem(this.sourceList.itemAtRow(3))
 			this.sourceList.expandItem(this.sourceList.itemAtRow(2))
 			this.sourceList.expandItem(this.sourceList.itemAtRow(1))
 			this.sourceList.expandItem(this.sourceList.itemAtRow(0))
@@ -88,6 +94,8 @@
 		js function drawNewView(view)
 		{
 			log('NEW VIEW ' + view)
+//			log('DEBUG CHECK ' + this.sidebarItems)
+//			__jsc__.garbageCollect
 		}
 
 		IBOutlet	sourceList

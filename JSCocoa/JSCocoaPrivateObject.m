@@ -23,13 +23,14 @@
 	jsValue		= NULL;
 	retainObject	= YES;
 	rawPointer	= NULL;
+	ctx			= NULL;
 	
 	
 	[JSCocoaController upJSCocoaPrivateObjectCount];
 	return	self;
 }
 
-- (void)dealloc
+- (void)cleanUp
 {
 	[JSCocoaController downJSCocoaPrivateObjectCount];
 //	if (object)	NSLog(@"GO for JSCocoaPrivateObject release (%@) %x %d", [object class], object, [object retainCount]);
@@ -52,8 +53,17 @@
 	[methodName release];
 	[structureName release];
 	[declaredType release];
-	
+}
+
+- (void)dealloc
+{
+	[self cleanUp];
 	[super dealloc];
+}
+- (void)finalize
+{
+	[self cleanUp];
+	[super finalize];
 }
 
 - (void)setObject:(id)o
@@ -99,7 +109,9 @@
 		return;
 	}
 	jsValue = v;
-	ctx		= c;
+//	ctx		= c;
+	// Register global context (this would crash the launcher as JSValueUnprotect was called on a destroyed context)
+	ctx		= [[JSCocoaController controllerFromContext:c] ctx];
 	JSValueProtect(ctx, jsValue);
 	[JSCocoaController upJSValueProtectCount];
 }
