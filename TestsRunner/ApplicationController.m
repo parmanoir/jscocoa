@@ -16,13 +16,9 @@ JSCocoaController* jsc = nil;
 //- (void)awakeFromNib
 - (void)applicationDidFinishLaunching:(id)notif
 {
-	Dl_info info;
-	// Get info about a JavascriptCore symbol
-	dladdr(dlsym(RTLD_DEFAULT, "JSClassCreate"), &info);
-	
-	BOOL runningFromSystemLibrary = [[NSString stringWithUTF8String:info.dli_fname] hasPrefix:@"/System"];
-	if (!runningFromSystemLibrary)	NSLog(@"***Running a nightly JavascriptCore***");
-	if ([NSGarbageCollector defaultCollector])	NSLog(@"***Running with ObjC Garbage Collection***");
+
+	[JSCocoaController hazardReport];
+
 //[[NSGarbageCollector defaultCollector] disable];
 	
 //	NSLog(@"DEALLOC AUTORELEASEPOOL");

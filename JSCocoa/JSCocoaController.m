@@ -1772,18 +1772,17 @@ int	liveInstanceCount	= 0;
 	// Allocate new instance
 	id newInstance = [self alloc];
 	
-/*	
 	// Set it as new object
 	JSObjectRef thisObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(thisObject);
 	private.type = @"@";
-	[private setObject:newInstance];
-*/
-	JSObjectRef thisObject = [JSCocoaController boxedJSObject:newInstance inContext:ctx];
+	[private setObjectNoRetain:newInstance];
+	// No — will retain allocated object and trigger "did you forget to call init" warning
+//	JSObjectRef thisObject = [JSCocoaController boxedJSObject:newInstance inContext:ctx];
 	
 	// Create function object boxing our init method
 	JSObjectRef function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
+	private = JSObjectGetPrivate(function);
 	private.type = @"method";
 	private.methodName = methodName;
 

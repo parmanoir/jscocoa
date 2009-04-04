@@ -1,5 +1,13 @@
 
 
+/*
+
+	forum : includ possibilité de run JSCocoa code
+
+
+*/
+
+
 	JSCocoa.hazardReport
 
 	class ApplicationController < NSObject
@@ -32,10 +40,10 @@
 							,children : [ { name : 'Mac OS', image : images['Mac'] }
 										,{ name : 'iPhone Simulator', image : images['iPhoneSimulator'] }
 										,{ name : 'Console', image : images['Console'] } ] }
+						,{ name : 'TRADE', isGroupItem : true
+							,children : [ { name : 'Download samples' }, { name : 'Upload a sample' } ] }
 						,{ name : 'DISCUSS', isGroupItem : true
 							,children : [ { name : 'Report Bug' }, { name : 'Request Feature' }, { name : 'Google Group', image : images['GoogleGroups'] } ] }
-						,{ name : 'TRADE', isGroupItem : true
-							,children : [ { name : 'Download new samples' }, { name : 'Upload a sample' } ] }
 						,{ name : 'VISIT', isGroupItem : true
 							,children : [ { name : 'Source', image : images['URL'], id : 'source' }, { name : 'Homepage', image : images['URL'], id : 'home' } ] }
 					]
@@ -56,6 +64,12 @@
 			var windowFrame = this.window.frame
 			var screenFrame = NSScreen.mainScreen.visibleFrame
 			this.window.setFrameOrigin(new NSPoint((screenFrame.size.width-windowFrame.size.width)/2, (screenFrame.size.height-windowFrame.size.height)*2/3))
+			
+			
+			var view = WebView.instance({ withFrame : NSMakeRect(200, 0, 400, 400), frameName : 'blah', groupName : 'null' })
+//			var view = WebView.alloc.initWithFrame(NSMakeRect(200, 0, 400, 400) )
+			this.window.contentView.addSubview(view)
+			view.mainFrameURL = 'http://yahoo.com'
 		}
 		
 		- (id)sidebarItems
@@ -71,7 +85,7 @@
 		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 		{
 			var canSelect =	!item.representedObject.isGroupItem
-			if (canSelect)	this.drawNewView(item.representedObject.id)
+			if (canSelect)	this.switchToView(item.representedObject.id)
 			return	canSelect
 		}
 		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldCollapseItem:(id)item
@@ -89,9 +103,7 @@
 			cell.object = item.representedObject
 		}
 		
-//		- (void)drawNewView:(id)view
-
-		js function drawNewView(view)
+		js function switchToView(view)
 		{
 			log('NEW VIEW ' + view)
 //			log('DEBUG CHECK ' + this.sidebarItems)
