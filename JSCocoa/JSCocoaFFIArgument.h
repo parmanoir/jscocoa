@@ -23,11 +23,12 @@
 
 	void*		ptr;
 
-	BOOL		isReturnValue;
 	ffi_type	structureType;
 	
 	id			customData;
+	BOOL		isReturnValue;
 	BOOL		ownsStorage;
+	BOOL		isOutArgument;
 }
 
 - (void)setTypeEncoding:(char)encoding;
@@ -75,7 +76,8 @@
 
 - (void)setIsReturnValue:(BOOL)v;
 - (BOOL)isReturnValue;
-//- (void)setCustomData:(id)data;
+- (void)setIsOutArgument:(BOOL)v;
+- (BOOL)isOutArgument;
 
 - (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (BOOL)toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx;

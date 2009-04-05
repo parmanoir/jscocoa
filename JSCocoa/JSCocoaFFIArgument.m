@@ -27,6 +27,7 @@
 	typeEncoding	= 0;
 	isReturnValue	= NO;
 	ownsStorage		= YES;
+	isOutArgument	= NO;
 	
 	structureTypeEncoding	= nil;
 	structureType.elements	= NULL;
@@ -78,6 +79,15 @@
 - (BOOL)isReturnValue
 {
 	return	isReturnValue;
+}
+
+- (void)setIsOutArgument:(BOOL)v
+{
+	isOutArgument = v;
+}
+- (BOOL)isOutArgument
+{
+	return	isOutArgument;
 }
 
 - (char)typeEncoding
@@ -173,7 +183,7 @@
 
 - (void*)allocateStorage
 {
-	if (!typeEncoding)	return	NULL;
+	if (!typeEncoding)	return	NSLog(@"No type encoding set in %@", self), NULL;
 
 	// NO ! will destroy structureTypeEncoding
 //	[self cleanUp];
@@ -202,7 +212,8 @@
 		if (isReturnValue && size < minimalReturnSize)	size = minimalReturnSize;
 		ptr = malloc(size);
 	}
-//	NSLog(@"Allocated size=%d %x for object %@", size, ptr, self);
+//	NSLog(@"Allocated size=%d (%x) for object %@", size, ptr, self);
+	
 	return	ptr;
 }
 
@@ -235,7 +246,8 @@
 	}
 	
 	// Type o : return writable address
-	if (pointerTypeEncoding)
+//	if (pointerTypeEncoding)
+	if (isOutArgument)
 	{
 		return &ptr;
 	}

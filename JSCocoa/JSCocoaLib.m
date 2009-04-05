@@ -65,7 +65,6 @@
 	{
 		arg	= _arg;
 		[arg retain];
-
 		void* ptr = [buffer pointerForIndex:bufferIndex];
 		if (!ptr)	return	NO;
 //		NSLog(@"mating encoding ***%c***%c***(pointerTypeEncoding=%@) on arg %x", [arg typeEncoding], [buffer typeAtIndex:bufferIndex], [arg pointerTypeEncoding], _arg);
@@ -76,7 +75,6 @@
 
 	// Standard pointer
 	if (![_arg allocatePointerStorage])	return	NO;
-
 
 	arg	= _arg;
 	[arg retain];
@@ -105,6 +103,12 @@
 //			- (void)setAssociatedPoints:(NSPointArray)points atIndex:(NSInteger)index;
 //
 @implementation JSCocoaMemoryBuffer
+
++ (id)bufferWithTypes:(id)types
+{
+	return [[[JSCocoaMemoryBuffer alloc] initWithTypes:types] autorelease];
+}
+
 
 - (id)initWithTypes:(id)_types
 {

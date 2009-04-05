@@ -40,7 +40,7 @@
 	//	size('fcf') = 4 + 4(align) + 4 = 12
 	BOOL	alignTypes;
 }
-
++ (id)bufferWithTypes:(id)types;
 - (id)initWithTypes:(id)types;
 //- (id)initWithTypes:(id)types andValues:(id)values;
 //- (id)initWithMemoryBuffers:(id)buffers;

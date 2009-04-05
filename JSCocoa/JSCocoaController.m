@@ -792,14 +792,16 @@ static id JSCocoaSingleton = NULL;
 			char typeEncodingChar = [typeEncoding UTF8String][0];
 		
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
-			// Set return value
-			if ([argumentEncodings count] == 0)		[argumentEncoding setIsReturnValue:YES];
+			// Set return value — NO, as return value might not be the first element. Use retval to decide.
+//			if ([argumentEncodings count] == 0)		[argumentEncoding setIsReturnValue:YES];
 					if (typeEncodingChar == '{')	[argumentEncoding setStructureTypeEncoding:typeEncoding];
 			else	if (typeEncodingChar == '^')
 			{
-				[argumentEncoding setPointerTypeEncoding:typeEncoding];
+				// Special case for functions like CGColorSpaceCreateWithName
+				if ([typeEncoding isEqualToString:@"^{__CFString=}"])	[argumentEncoding setTypeEncoding:_C_ID];
+				else													[argumentEncoding setPointerTypeEncoding:typeEncoding];
 			}
-			else									[argumentEncoding setTypeEncoding:typeEncodingChar];
+			else														[argumentEncoding setTypeEncoding:typeEncodingChar];
 
 			// Add argument
 			if (!isReturnValue)
@@ -808,7 +810,11 @@ static id JSCocoaSingleton = NULL;
 				[argumentEncoding release];
 			}
 			// Keep return value on the side
-			else	returnValue = argumentEncoding;
+			else	
+			{
+				returnValue = argumentEncoding;
+				[argumentEncoding setIsReturnValue:YES];
+			}
 		}
 	}
 	
@@ -2310,7 +2316,12 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				
 				// Get return value holder
 				id returnValue = [argumentEncodings objectAtIndex:0];
-
+				
+				
+				// Allocate return value storage if it's a pointer
+				if ([returnValue typeEncoding] == '^')
+					[returnValue allocateStorage];
+				
 				// Setup ffi
 				ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, [returnValue ffi_type], args);
 				//
@@ -2910,6 +2921,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	if (!callingObjC)
 	{
 		if (!privateObject.xml)	return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : no xml in object = nothing to call") , NULL;
+//		NSLog(@"C encoding=%@", privateObject.xml);
 		argumentEncodings = [JSCocoaController parseCFunctionEncoding:privateObject.xml functionName:&functionName];
 		// Grab symbol
 		callAddress = dlsym(RTLD_DEFAULT, [functionName UTF8String]);
@@ -2964,10 +2976,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	struct		objc_super _super;
 	void*		superPointer;
 	
-	
-//	id	outArguments = NULL;
-	
-	
 	// Total number of arguments to ffi_call
 	int	effectiveArgumentCount = argumentCount + (callingObjC ? 2 : 0);
 	if (effectiveArgumentCount > 0)
@@ -3003,7 +3011,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 //				NSLog(@"superClass=%@ (old=%@) (%@) function=%x", superSelectorClass, [callee superclass], [callee class], function);
 			}
 		}
-		
+	
 		// Setup arguments, unboxing or converting data
 		for (i=0; i<argumentCount; i++, idx++)
 		{
@@ -3017,7 +3025,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			}
 			else
 				arg		= [argumentEncodings objectAtIndex:idx+1];
-
 
 			// Convert argument
 			JSValueRef			jsValue	= arguments[i];
@@ -3034,14 +3041,14 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 					{
 						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
 						shouldConvert = NO;
-//						if (outArguments == nil) outArguments = [NSMutableArray new];
-//						[outArguments addObject:unboxed];
+						[arg setIsOutArgument:YES];
 					}
 					if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
 					{
 						JSCocoaMemoryBuffer* buffer = unboxed;
 						[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:[buffer pointerForIndex:0]];
 						shouldConvert = NO;
+						[arg setIsOutArgument:YES];
 					}
 				}
 
@@ -3063,14 +3070,17 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		}
 	}
 	
-//	if (outArguments)
-//		[[NSGarbageCollector defaultCollector] disable];
-
 	// Get return value holder
 	id returnValue = [argumentEncodings objectAtIndex:0];
+	
+	
+	// Allocate return value storage if it's a pointer
+	if ([returnValue typeEncoding] == '^')
+		[returnValue allocateStorage];
 
 	// Setup ffi
 	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, effectiveArgumentCount, [returnValue ffi_type], args);
+
 	//
 	// Call !
 	//
@@ -3080,13 +3090,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 //		log_ffi_call(&cif, values, callAddress);
 		ffi_call(&cif, callAddress, storage, values);
-	}
-
-//	if (outArguments)
-	{
-//		for (id arg in outArguments)			[arg outJSValueRefInContext:ctx];
-//		[[NSGarbageCollector defaultCollector] enable];
-//		[[NSGarbageCollector defaultCollector] collectExhaustively];
 	}
 	
 	if (effectiveArgumentCount > 0)	

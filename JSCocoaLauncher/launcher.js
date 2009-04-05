@@ -8,6 +8,9 @@
 */
 
 
+	log('tap un letr dans la outline first responder pars TOUT les selexion !')
+
+
 	JSCocoa.hazardReport
 
 	class ApplicationController < NSObject
@@ -85,6 +88,7 @@
 		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 		{
 			var canSelect =	!item.representedObject.isGroupItem
+			log('canSelect ' + item.representedObject.name)
 			if (canSelect)	this.switchToView(item.representedObject.id)
 			return	canSelect
 		}
@@ -138,10 +142,6 @@
 			
 			view.hidden = NO
 			this.currentView = view
-			
-			
-			
-
 		}
 
 		IBOutlet	sourceList
@@ -179,6 +179,101 @@
 
 			arguments[0] = new NSRect(cellFrame.origin.x+x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height)
 			this.Super(arguments)
+		}
+	}
+	
+	
+	
+	//
+	// Custom Split View
+	//
+	class SplitView < NSSplitView
+	{
+		- (void)drawDividerInRect:(NSRect)rect
+		{
+
+
+
+
+
+			var ctx = NSGraphicsContext.currentContext.graphicsPort
+//			log('ctx=' + ctx)
+//return
+
+
+//			log(rect)
+//			log('colorSpace name=' + kCGColorSpaceGenericRGB)
+			var colorSpace = CGColorSpaceCreateWithName('kCGColorSpaceGenericRGB')
+//			var colorSpace = CGColorSpaceCreateWithName(nil)
+//			log('colorSpace=' + colorSpace)
+//return
+
+//			NSBezierPath.bezierPathWithRect(rect).fill
+
+//			var buffer = JSCocoaMemoryBuffer.bufferWithTypes('ffffffff')
+			var components = new memoryBuffer('ffffffff')
+			components[0] = 1
+			components[1] = 0
+			components[2] = 0
+			components[3] = 0.9
+			components[4] = 0
+			components[5] = 1
+			components[6] = 0
+			components[7] = 1
+
+			var locations = new memoryBuffer('ff')
+			locations[0] = 0
+			locations[1] = 1
+			
+			var backgroundGradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 2)
+//			log('backgroundGradient=' + backgroundGradient)
+
+			var ctx = NSGraphicsContext.currentContext.graphicsPort
+//			log('ctx=' + ctx)
+
+
+var options = kCGGradientDrawsBeforeStartLocation + kCGGradientDrawsAfterEndLocation
+
+	CGContextDrawRadialGradient(ctx, backgroundGradient, 
+								CGPointMake(0, 0), 200,
+								CGPointMake(100, 100), 100,
+								0);
+//CGContextDrawLinearGradient(ctx, backgroundGradient, new CGPoint(0, 0), new CGPoint(200, 200), options)
+/*
+	CGFloat components[8] = {	[c1 redComponent], [c1 greenComponent], [c1 blueComponent], 1.0,
+								[c2 redComponent], [c2 greenComponent], [c2 blueComponent], 1.0,
+								};
+	CGColorSpaceRef colorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+	CGGradientRef backgroundGradient = CGGradientCreateWithColorComponents(colorspace, components, locations, num_locations);
+	CGColorSpaceRelease(colorspace);
+
+	[[NSColor whiteColor] setFill];
+	NSBezierPath* path = [NSBezierPath bezierPathWithRect:rect];
+	[path fill];
+
+	float width = [self frame].size.width;
+	float height = [self frame].size.height;
+
+	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort]; 	
+	CGContextScaleCTM(ctx, 1, roundness);
+
+	float w = width/2;
+	float y1 = height/roundness;
+	float y2 = 	y2 = 0-w;
+
+	CGContextDrawRadialGradient(ctx, backgroundGradient, 
+								CGPointMake(width/2, y1), w,
+								CGPointMake(width/2, y2), w,
+								0);
+
+	CGGradientRelease(backgroundGradient);
+*/
+
+			this.Super(arguments)
+
+	CGGradientRelease(backgroundGradient)
+
+
 		}
 	}
 	
