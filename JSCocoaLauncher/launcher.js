@@ -191,89 +191,16 @@
 	{
 		- (void)drawDividerInRect:(NSRect)rect
 		{
-
-
-
-
-
-			var ctx = NSGraphicsContext.currentContext.graphicsPort
-//			log('ctx=' + ctx)
-//return
-
-
-//			log(rect)
-//			log('colorSpace name=' + kCGColorSpaceGenericRGB)
-			var colorSpace = CGColorSpaceCreateWithName('kCGColorSpaceGenericRGB')
-//			var colorSpace = CGColorSpaceCreateWithName(nil)
-//			log('colorSpace=' + colorSpace)
-//return
-
-//			NSBezierPath.bezierPathWithRect(rect).fill
-
-//			var buffer = JSCocoaMemoryBuffer.bufferWithTypes('ffffffff')
-			var components = new memoryBuffer('ffffffff')
-			components[0] = 1
-			components[1] = 0
-			components[2] = 0
-			components[3] = 0.9
-			components[4] = 0
-			components[5] = 1
-			components[6] = 0
-			components[7] = 1
-
-			var locations = new memoryBuffer('ff')
-			locations[0] = 0
-			locations[1] = 1
+			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
+			var color2 = NSColor.colorWithDevice({ white : 0.8, alpha : 1 })
+			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
+			gradient.drawIn({rect:rect, angle:90})
 			
-			var backgroundGradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, 2)
-//			log('backgroundGradient=' + backgroundGradient)
-
-			var ctx = NSGraphicsContext.currentContext.graphicsPort
-//			log('ctx=' + ctx)
-
-
-var options = kCGGradientDrawsBeforeStartLocation + kCGGradientDrawsAfterEndLocation
-
-	CGContextDrawRadialGradient(ctx, backgroundGradient, 
-								CGPointMake(0, 0), 200,
-								CGPointMake(100, 100), 100,
-								0);
-//CGContextDrawLinearGradient(ctx, backgroundGradient, new CGPoint(0, 0), new CGPoint(200, 200), options)
-/*
-	CGFloat components[8] = {	[c1 redComponent], [c1 greenComponent], [c1 blueComponent], 1.0,
-								[c2 redComponent], [c2 greenComponent], [c2 blueComponent], 1.0,
-								};
-	CGColorSpaceRef colorspace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
-	CGGradientRef backgroundGradient = CGGradientCreateWithColorComponents(colorspace, components, locations, num_locations);
-	CGColorSpaceRelease(colorspace);
-
-	[[NSColor whiteColor] setFill];
-	NSBezierPath* path = [NSBezierPath bezierPathWithRect:rect];
-	[path fill];
-
-	float width = [self frame].size.width;
-	float height = [self frame].size.height;
-
-	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort]; 	
-	CGContextScaleCTM(ctx, 1, roundness);
-
-	float w = width/2;
-	float y1 = height/roundness;
-	float y2 = 	y2 = 0-w;
-
-	CGContextDrawRadialGradient(ctx, backgroundGradient, 
-								CGPointMake(width/2, y1), w,
-								CGPointMake(width/2, y2), w,
-								0);
-
-	CGGradientRelease(backgroundGradient);
-*/
-
+			NSColor.colorWithDevice({ red : 0, green : 0, blue : 0, alpha : 0.4 }).set
+			NSBezierPath.bezierPathWithRect(new NSRect(rect.origin.x, rect.origin.y, rect.size.width, 1)).fill
+			NSBezierPath.bezierPathWithRect(new NSRect(rect.origin.x, rect.origin.y+rect.size.height-1, rect.size.width, 1)).fill
+			
 			this.Super(arguments)
-
-	CGGradientRelease(backgroundGradient)
-
-
 		}
 	}
 	
