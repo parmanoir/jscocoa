@@ -21,6 +21,7 @@
 		3DF6A5F50F86ED530011A48D /* iPhoneSimulator.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A5F40F86ED530011A48D /* iPhoneSimulator.tiff */; };
 		3DF6A5FF0F86EDD50011A48D /* GoogleGroups.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A5FE0F86EDD50011A48D /* GoogleGroups.tiff */; };
 		3DF6A6340F86EF660011A48D /* URL.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF6A6330F86EF660011A48D /* URL.tiff */; };
+		3DF6B2E60F895A9D0011A48D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DF6B2E50F895A9D0011A48D /* WebKit.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -55,6 +56,7 @@
 		3DF6A5F40F86ED530011A48D /* iPhoneSimulator.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = iPhoneSimulator.tiff; sourceTree = "<group>"; };
 		3DF6A5FE0F86EDD50011A48D /* GoogleGroups.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = GoogleGroups.tiff; sourceTree = "<group>"; };
 		3DF6A6330F86EF660011A48D /* URL.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = URL.tiff; sourceTree = "<group>"; };
+		3DF6B2E50F895A9D0011A48D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* JSCocoaLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSCocoaLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -66,6 +68,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				3D9CEB440F86216A004EB118 /* JavaScriptCore.framework in Frameworks */,
+				3DF6B2E60F895A9D0011A48D /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +140,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3DF6B2E50F895A9D0011A48D /* WebKit.framework */,
 				3D9CEB430F86216A004EB118 /* JavaScriptCore.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,

@@ -18,10 +18,10 @@
 	
 		- (void)awakeFromNib
 		{
-			this.sourceList.delegate = this
+			this.sidebarItemsList.delegate = this
 			
 			var cell = ImageAndTextCell.instance()
-			this.sourceList.tableColumns[0].dataCell = cell
+			this.sidebarItemsList.tableColumns[0].dataCell = cell
 			
 			//
 			// Icons
@@ -53,12 +53,12 @@
 			this.didChangeValueForKey('sidebarItems')
 
 			// Expand
-			this.sourceList.expandItem(this.sourceList.itemAtRow(3))
-			this.sourceList.expandItem(this.sourceList.itemAtRow(2))
-			this.sourceList.expandItem(this.sourceList.itemAtRow(1))
-			this.sourceList.expandItem(this.sourceList.itemAtRow(0))
+			this.sidebarItemsList.expandItem(this.sidebarItemsList.itemAtRow(3))
+			this.sidebarItemsList.expandItem(this.sidebarItemsList.itemAtRow(2))
+			this.sidebarItemsList.expandItem(this.sidebarItemsList.itemAtRow(1))
+			this.sidebarItemsList.expandItem(this.sidebarItemsList.itemAtRow(0))
 			// Select
-			this.sourceList.select({rowIndexes:NSIndexSet.indexSetWithIndex(1), byExtendingSelection:NO })
+			this.sidebarItemsList.select({rowIndexes:NSIndexSet.indexSetWithIndex(1), byExtendingSelection:NO })
 			
 			
 			//
@@ -73,11 +73,57 @@
 			// Hash of views, holding name : NSView
 			//
 			this.views = {}
+			
+			//
+			// Gradient header
+			//
+/*			
+			var headerCell = GradientTableHeaderCell.instance()
+//			header
+			var columns = this.jscocoaItemsList.tableColumns
+//			for (var i=0; i<columns.length; i++)	columns[i].headerCell = headerCell
+			columns[0].headerCell = headerCell
+			columns[1].headerCell = headerCell
+*/			
+
+				var query = NSMetadataQuery.instance()
+//				var descriptors = NSArray.arrayWithObject(NSSortDescriptor.instance({withKey:'kMDItemFSName', ascending:true}))
+//				query.setSortDescriptors(descriptors)
+				
+				
+				NSNotificationCenter.defaultCenter.add({observer:this, selector:'notified:', name:null, object:query})
+				
+				
+//				mdfind "(kMDItemDisplayName = 'jscocoa*'cdw) && (kMDItemFSName = '*.jscocoa'c)"
+//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like [cd]'*\.jscocoa')"))
+				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
+//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
+//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*')"))
+				query.startQuery
+				this.query = query
+				log('QUERY========' + query)
+
 		}
+		- (void)notified:(id)n
+		{
+			log('NOTIFIED' + n.object.results.length)
+			if (n.object.results.length)	log(n.object.results[0].attributes)
+			this.willChangeValueForKey('jscocoaItems')
+			this.jscocoaItemsFromSpotlight = n.object.results
+			this.didChangeValueForKey('jscocoaItems')
+		}
+		
+//		valueForUndefinedKey
+//		NSMetadataItem
 		
 		- (id)sidebarItems
 		{
 			return	this.items
+		}
+		- (id)jscocoaItems
+		{
+			return	this.jscocoaItemsFromSpotlight
+//			return [ { name : 'Blah.jscocoa' }, { name : 'Hopla yougla' } ]
 		}
 		
 		- (BOOL)outlineView:(NSOutlineView*)outlineView isGroupItem:(id)item
@@ -121,7 +167,9 @@
 				{
 					var view = WebView.instance({ withFrame : NSMakeRect(200, 0, 400, 400) })
 					this.window.contentView.addSubview(view)
+					// Breaks on Debugger() — adobe 10 ?
 					view.mainFrameURL = 'http://yahoo.com'
+					view.mainFrameURL = 'http://reddit.com'
 					log('built ' + view)
 				}
 				if (viewName == 'home')
@@ -144,13 +192,20 @@
 			this.currentView = view
 		}
 
-		IBOutlet	sourceList
+		IBOutlet	sidebarItemsList
+		IBOutlet	jscocoaItemsList
 		IBOutlet	window
 	}
 	
 	
+	
+
+	//
+	// Sidebar items source list
+	//
 	class SourceList < NSOutlineView
 	{
+		// Don't display disclosure triangle
 		- (NSRect)frameOfOutlineCellAtRow:(NSInteger)row
 		{
 			return	new NSRect(0, 0, 0, 0)
@@ -158,7 +213,8 @@
 	}
 
 	//
-	// From Apple's SourceView
+	// Sidebar items source list cell
+	//	From Apple's SourceView
 	//
 	class ImageAndTextCell < NSTextFieldCell
 	{
@@ -182,6 +238,36 @@
 		}
 	}
 	
+	class GradientTableHeaderCell < NSTableHeaderCell
+	{
+		- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
+		{
+//			log('DRAW ' + this.stringValue)
+			this.Super(arguments)
+//return
+			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
+			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
+			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
+			gradient.drawIn({rect : cellFrame, angle : 90})
+		}
+	}
+	
+	class GradientTableColumn < NSTableColumn
+	{
+		- (void)setHeaderCell:(NSCell *)cell
+		{
+			log('HELLO********************')
+		}
+		- (id)headerCell
+		{
+			var r = this.Super(arguments)
+			log('CELL=' + r)
+			log('CELL NAME=' + r.stringValue)
+			log('JUST SET IT AT START')
+//			return r
+			return	NSTableHeaderCell.alloc.init
+		}
+	}
 	
 	
 	//
@@ -192,9 +278,9 @@
 		- (void)drawDividerInRect:(NSRect)rect
 		{
 			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
-			var color2 = NSColor.colorWithDevice({ white : 0.8, alpha : 1 })
+			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
 			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
-			gradient.drawIn({rect:rect, angle:90})
+			gradient.drawIn({rect : rect, angle : 90})
 			
 			NSColor.colorWithDevice({ red : 0, green : 0, blue : 0, alpha : 0.4 }).set
 			NSBezierPath.bezierPathWithRect(new NSRect(rect.origin.x, rect.origin.y, rect.size.width, 1)).fill
@@ -204,4 +290,12 @@
 		}
 	}
 	
+	
+	//
+	// 
+	//
+	log('un custom drawing.js, ou un list de tout les methods custom draw')
+	log('reload this file at runtime to change appearance')
+
+	log('swizzle les method vec orig prefix')
 	
