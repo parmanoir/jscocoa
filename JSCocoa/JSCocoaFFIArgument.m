@@ -555,6 +555,9 @@
 /*
 
 	*value MUST be NULL to be receive allocated JSValue
+
+	The given pointer is advanced in place : its value will change after the call.
+	Pass a writeable pointer whose original value you don't care about.
 	
 */
 + (int)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr
