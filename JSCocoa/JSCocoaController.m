@@ -960,6 +960,8 @@ static id JSCocoaSingleton = NULL;
 */
 + (BOOL)addMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
+	if (!encoding)	return	NSLog(@"addMethod called with null encoding"), NO;
+	
 	SEL selector = NSSelectorFromString(methodName);
 
 	id keyForClassAndMethod = [NSString stringWithFormat:@"%@ %@", class, methodName];
@@ -3532,6 +3534,7 @@ static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef obje
 
 id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx)
 {
+	if (JSValueIsNull(ctx, value))	return	nil;
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
 	NSString* resultString = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);

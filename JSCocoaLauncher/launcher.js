@@ -363,7 +363,8 @@
 	
 	
 	var encoding = __jsc__.typeEncodingOfMethod_class(sel, 'WebView')
-	log('typeEncoding=' + encoding)
+	log('typeEncoding=' + encoding + '================')
+	alert(encoding == null)
 
 	var newsel = 'original' + sel
 	var b = JSCocoa.add({ instanceMethod : newsel, 'class' : c, jsFunction : md, encoding : encoding })
