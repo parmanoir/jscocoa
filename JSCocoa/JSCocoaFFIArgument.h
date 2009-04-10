@@ -31,8 +31,8 @@
 	BOOL		isOutArgument;
 }
 
-- (void)setTypeEncoding:(char)encoding;
-- (void)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr;
+- (BOOL)setTypeEncoding:(char)encoding;
+- (BOOL)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr;
 - (void)setStructureTypeEncoding:(NSString*)encoding;
 - (void)setStructureTypeEncoding:(NSString*)encoding withCustomStorage:(void*)storagePtr;
 - (void)setPointerTypeEncoding:(NSString*)encoding;

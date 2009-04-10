@@ -95,19 +95,25 @@
 	return	typeEncoding;
 }
 
-- (void)setTypeEncoding:(char)encoding
+- (BOOL)setTypeEncoding:(char)encoding
 {
-	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{ NSLog(@"Bad type encoding %c", encoding); return; };
+	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{ NSLog(@"Bad type encoding %c", encoding); return NO; };
 
 	typeEncoding = encoding;
-	[self allocateStorage];	
+	[self allocateStorage];
+	
+	return	YES;	
 }
 
-- (void)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr
+- (BOOL)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr
 {
+	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{ NSLog(@"Bad type encoding %c", encoding); return NO; };
+
 	typeEncoding	= encoding;
 	ownsStorage		= NO;
 	ptr				= storagePtr;
+	
+	return	YES;
 }
 
 - (NSString*)structureTypeEncoding
@@ -530,8 +536,15 @@
 		}
 		case	_C_CHARPTR:
 		{
-//			JSStringRef jsName = JSStringCreateWithUTF8CString(*(char**)ptr);
-			NSString* name = [NSString stringWithUTF8String:*(char**)ptr];
+			// Rturn Javascript null if char* is null
+			char* charPtr = *(char**)ptr;
+			if (!charPtr)	
+			{
+				*value = JSValueMakeNull(ctx);
+				return	YES;
+			}
+			// Convert to NSString and then to Javascript string
+			NSString* name = [NSString stringWithUTF8String:charPtr];
 			JSStringRef	jsName = JSStringCreateWithCFString((CFStringRef)name);
 			*value = JSValueMakeString(ctx, jsName);
 			JSStringRelease(jsName);

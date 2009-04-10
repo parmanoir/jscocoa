@@ -754,7 +754,14 @@ static id JSCocoaSingleton = NULL;
 				[encoding release];
 			}
 			else
-				[argumentEncoding setTypeEncoding:*typeStart];
+			{
+				BOOL didSet = [argumentEncoding setTypeEncoding:*typeStart];
+				if (!didSet)
+				{
+					[argumentEncoding release];
+					return	nil;
+				}
+			}
 			
 			[argumentEncodings addObject:argumentEncoding];
 			[argumentEncoding release];
@@ -800,7 +807,15 @@ static id JSCocoaSingleton = NULL;
 				if ([typeEncoding isEqualToString:@"^{__CFString=}"])	[argumentEncoding setTypeEncoding:_C_ID];
 				else													[argumentEncoding setPointerTypeEncoding:typeEncoding];
 			}
-			else														[argumentEncoding setTypeEncoding:typeEncodingChar];
+			else														
+			{
+				BOOL didSet = [argumentEncoding setTypeEncoding:typeEncodingChar];
+				if (!didSet)
+				{
+					[argumentEncoding release];
+					return	nil;
+				}
+			}
 
 			// Add argument
 			if (!isReturnValue)
@@ -987,6 +1002,7 @@ static id JSCocoaSingleton = NULL;
 
 	// Make a FFI closure, a function pointer callable with the argument encodings we provide)
 	id typeEncodings = [JSCocoaController parseObjCMethodEncoding:encoding];
+	if (!typeEncodings)	return NSLog(@"addMethod : Invalid encoding %s for %@.%@", encoding, class, methodName), NO;
 	IMP fn = [closure setJSFunction:valueAndContext.value inContext:ctx argumentEncodings:typeEncodings objC:YES];
 
 	// If successful, set it as method

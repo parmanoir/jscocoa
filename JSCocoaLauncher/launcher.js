@@ -96,13 +96,18 @@
 				
 //				mdfind "(kMDItemDisplayName = 'jscocoa*'cdw) && (kMDItemFSName = '*.jscocoa'c)"
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like [cd]'*\.jscocoa')"))
-				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
+//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
-//				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*')"))
+				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like '*\.jscocoa')"))
 				query.startQuery
 				this.query = query
 				log('QUERY========' + query)
+				
 
+			//
+			// Set ourselves as jscocoa items list delegate
+			//
+			this.jscocoaItemsList.delegate = this
 		}
 		- (void)notified:(id)n
 		{
@@ -153,6 +158,32 @@
 			cell.object = item.representedObject
 		}
 		
+- (void)tableViewSelectionDidChange:(NSNotification *)notification
+{
+	log('tableViewSelectionDidChange + ' + notification.object)
+	var row = notification.object.selectedRow
+	log('selectedIndex=' + row)
+	log('selectedObject=' + this.jscocoaItemsFromSpotlight[row].valueForKey('kMDItemFSName'))
+}
+- (BOOL)selectionShouldChangeInTableView:(NSTableView *)tableView
+{
+	log('selectionShouldChangeInTableView')
+	return	YES
+}
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
+{
+	log('tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row')
+	return	YES
+}
+- (BOOL)tableView:(NSTableView *)tableView shouldSelectTableColumn:(NSTableColumn *)tableColumn
+{
+	log('tableView:(NSTableView *)tableView shouldSelectTableColumn:(NSTableColumn *)tableColumn')
+	return	YES;
+}
+
+
+		
+		
 		js function switchToView(viewName)
 		{
 			log('NEW VIEW ' + viewName)
@@ -195,9 +226,20 @@
 		IBOutlet	sidebarItemsList
 		IBOutlet	jscocoaItemsList
 		IBOutlet	window
+		
+		IBOutlet	listSelection1
 	}
 	
-	
+	class	DetailSourceView < NSView
+	{
+		- (void)setDetail:(id)detail
+		{
+			log('detail=' + detail)
+		}
+		- (id)detail
+		{
+		}
+	}
 	
 
 	//
@@ -299,3 +341,40 @@
 
 	log('swizzle les method vec orig prefix')
 	
+	log('swizzle scrollbar draw')
+	
+	
+	function	md()
+	{
+		log('MOUSEDOWN')
+	}
+	
+	
+	function	swizzleClassMethod(c, sel, jsFunction)
+	{
+		
+	}
+	
+	
+	var c = 'WebView'
+	var c = 'ApplicationController'
+	var sel = 'mouseDown:'
+	swizzleClassMethod(c, sel, md)
+	
+	
+	var encoding = __jsc__.typeEncodingOfMethod_class(sel, 'WebView')
+	log('typeEncoding=' + encoding)
+
+	var newsel = 'original' + sel
+	var b = JSCocoa.add({ instanceMethod : newsel, 'class' : c, jsFunction : md, encoding : encoding })
+	log('***********' + b + '**' + newsel + ' class=' + c + ' encoding=' + encoding)
+	
+	
+	
+	class WebView < NSView
+	{
+		- (BOOL)myMouseDown:(id)hop
+		{
+			log('HELLLOOOO')
+		}
+	}
