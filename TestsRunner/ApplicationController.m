@@ -88,7 +88,7 @@ JSCocoaController* jsc = nil;
 	
 	id path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/! stock", [[NSBundle mainBundle] bundlePath]];
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-	if ([files count])											NSLog(@"***warning, skipping tests***"), NSLog(@"%@", files);
+	if ([files count])											NSLog(@"***warning, skipping tests in ./!stock***"), NSLog(@"%@", files);
 #ifdef __OBJC_GC__
 	if (![[NSGarbageCollector defaultCollector] isEnabled])		NSLog(@"***GC running but disabled***");
 #endif	

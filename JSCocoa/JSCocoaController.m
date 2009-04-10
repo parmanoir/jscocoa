@@ -682,7 +682,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Method signature helper
 //
-- (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
++ (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
 {
 	id class = objc_getClass([className UTF8String]);
 	if (!class)	return	nil;
@@ -692,6 +692,10 @@ static id JSCocoaSingleton = NULL;
 	if (!m)		return	nil;
 	
 	return	method_getTypeEncoding(m);	
+}
+- (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className
+{
+	return [JSCocoa typeEncodingOfMethod:methodName class:className];
 }
 
 
@@ -1037,6 +1041,41 @@ static id JSCocoaSingleton = NULL;
 {
 	return [self addMethod:methodName class:objc_getMetaClass(class_getName(class)) jsFunction:valueAndContext encoding:encoding];
 }
+//
+// Swizzlers !
+//
++ (BOOL)swizzleInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
+{
+	const char*	encoding = [self typeEncodingOfMethod:methodName class:[NSString stringWithUTF8String:class_getName(class)]];
+	if (!encoding)	return	NO;
+	
+	id originalMethodName = [NSString stringWithFormat:@"original%@", methodName];
+	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
+	if (!b)	return NO;
+	
+	Method m1 = class_getInstanceMethod(class, NSSelectorFromString(methodName));
+	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
+	method_exchangeImplementations(m1, m2);
+	
+	return	YES;
+}
++ (BOOL)swizzleClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
+{
+	class = objc_getMetaClass(class_getName(class));
+	const char*	encoding = [self typeEncodingOfMethod:methodName class:[NSString stringWithUTF8String:class_getName(class)]];
+	if (!encoding)	return	NO;
+	
+	id originalMethodName = [NSString stringWithFormat:@"original%@", methodName];
+	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
+	if (!b)	return NO;
+	
+	Method m1 = class_getInstanceMethod(class, NSSelectorFromString(methodName));
+	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
+	method_exchangeImplementations(m1, m2);
+	
+	return	YES;
+}
+
 
 #pragma mark Split call
 
@@ -3085,6 +3124,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		callee		= [thisPrivateObject object];
 		methodName	= superSelector ? superSelector : [NSMutableString stringWithString:privateObject.methodName];
 //		NSLog(@"calling %@.%@", callee, methodName);
+//		NSLog(@"calling %@.%@", [callee class], methodName);
 
 		//
 		// Delegate canCallMethod, callMethod
@@ -3342,7 +3382,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			if (shouldConvert)
 			{
 				BOOL	converted = [arg fromJSValueRef:jsValue inContext:ctx];
-				if (!converted)		return	throwException(ctx, exception, [NSString stringWithFormat:@"Argument %c not converted", [arg typeEncoding]]), NULL;
+				if (!converted)		
+					return	throwException(ctx, exception, [NSString stringWithFormat:@"Argument %c not converted", [arg typeEncoding]]), NULL;
 			}
 			values[idx]		= [arg storage];
 		}
@@ -3424,10 +3465,17 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		return	jsValue;
 	}
 	
-	// Super handling : get method name and move js arguments to C array
-	if ([privateObject.methodName isEqualToString:@"Super"])
+	//
+	// Super/Swizzled handling : get method name and move js arguments to C array
+	//
+	//	call this.Super(arguments) to call parent method
+	//	call this.Original(arguments) to call swizzled method
+	//
+	if ([privateObject.methodName isEqualToString:@"Super"] || [privateObject.methodName isEqualToString:@"Original"])
 	{
-		if (argumentCount != 1)	return	throwException(ctx, exception, @"Super wants one argument array"), NULL;
+		id methodName = privateObject.methodName;
+		BOOL callingSwizzled = [methodName isEqualToString:@"Original"];
+		if (argumentCount != 1)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants one argument array", methodName]), NULL;
 
 		// Get argument object
 		JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
@@ -3436,7 +3484,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
 		JSValueRef	jsLength = JSObjectGetProperty(ctx, argumentObject, jsLengthName, NULL);
 		JSStringRelease(jsLengthName);
-		if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, @"Super has no arguments"), NULL;
+		if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ has no arguments", methodName]), NULL;
 		
 		int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
 		if (superArgumentCount)
@@ -3445,7 +3493,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			for (i=0; i<superArgumentCount; i++)
 				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
 		}
-		
+
 		argumentCount = superArgumentCount;
 		
 		// Get method name and associated class (need class for obj_msgSendSuper)
@@ -3454,8 +3502,24 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		JSStringRelease(jsCalleeName);
 		JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
 		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
-		if (!superSelector)	return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
+		if (!superSelector)	
+		{
+			if (callingSwizzled)	return	throwException(ctx, exception, @"Original couldn't find swizzled method"), NULL;
+			return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
+		}
 		superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
+		
+		// Swizzled handling : we're just changing the selector
+		if (callingSwizzled)
+		{
+			function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
+			private.type = @"method";
+			private.methodName = superSelector;
+
+			superSelector		= NULL;
+			superSelectorClass	= NULL;
+		}
 	}
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;

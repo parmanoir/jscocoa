@@ -379,7 +379,6 @@
 
 			if (!JSValueIsObject(ctx, value))	return	NO;
 			JSObjectRef object = JSValueToObject(ctx, value, NULL);
-
 			void* p = ptr;
 			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:structureTypeEncoding];
 			int numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:object inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[type UTF8String] fromStorage:&p];

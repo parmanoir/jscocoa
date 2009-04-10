@@ -99,9 +99,9 @@
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
 				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like '*\.jscocoa')"))
-				query.startQuery
+//				query.startQuery
 				this.query = query
-				log('QUERY========' + query)
+//				log('QUERY========' + query)
 				
 
 			//
@@ -138,10 +138,19 @@
 		
 		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 		{
+			this.selectedItem = null
 			var canSelect =	!item.representedObject.isGroupItem
-			log('canSelect ' + item.representedObject.name)
-			if (canSelect)	this.switchToView(item.representedObject.id)
+			if (canSelect) this.selectedItem = item
+//			log('canSelect ' + item.representedObject.name)
+//			if (canSelect)	this.switchToView(item.representedObject.id)
 			return	canSelect
+		}
+		- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+		{
+//			log(notification.object + '!!!!!!!!!!')
+//			return
+			if (!this.selectedItem)	return
+			this.switchToView(this.selectedItem.representedObject.id)
 		}
 		- (BOOL)outlineView:(NSOutlineView *)outlineView shouldCollapseItem:(id)item
 		{
@@ -279,7 +288,7 @@
 			this.Super(arguments)
 		}
 	}
-	
+/*	
 	class GradientTableHeaderCell < NSTableHeaderCell
 	{
 		- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
@@ -310,7 +319,22 @@
 			return	NSTableHeaderCell.alloc.init
 		}
 	}
-	
+*/	
+
+	class	NSTableHeaderCell
+	{
+		- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
+		{
+//			log('DRAW ' + this.stringValue)
+			this.Super(arguments)
+return
+			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
+			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
+			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
+			gradient.drawIn({rect : cellFrame, angle : 90})
+			
+		}
+	}
 	
 	//
 	// Custom Split View
@@ -344,38 +368,20 @@
 	log('swizzle scrollbar draw')
 	
 	
-	function	md()
+	function	mouseDown(event)
 	{
-		log('MOUSEDOWN')
+		log('HELLLO')
+		return this.Original(arguments)
 	}
 	
-	
-	function	swizzleClassMethod(c, sel, jsFunction)
-	{
-		
-	}
-	
-	
-	var c = 'WebView'
-	var c = 'ApplicationController'
-	var sel = 'mouseDown:'
-	swizzleClassMethod(c, sel, md)
-	
-	
-	var encoding = __jsc__.typeEncodingOfMethod_class(sel, 'WebView')
-	log('typeEncoding=' + encoding + '================')
-	alert(encoding == null)
 
-	var newsel = 'original' + sel
-	var b = JSCocoa.add({ instanceMethod : newsel, 'class' : c, jsFunction : md, encoding : encoding })
-	log('***********' + b + '**' + newsel + ' class=' + c + ' encoding=' + encoding)
-	
-	
-	
-	class WebView < NSView
+
+	class NSButtonCell
 	{
-		- (BOOL)myMouseDown:(id)hop
+		Swizzle- (void)drawBezelWithFrame:(NSRect)frame inView:(NSView*)controlView
 		{
-			log('HELLLOOOO')
+			this.Original(arguments)
+			NSBezierPath.bezierPathWithOvalInRect(frame).stroke
 		}
 	}
+	

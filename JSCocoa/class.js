@@ -6,7 +6,7 @@
 	
 	function	log(str)	{	JSCocoaController.log('' + str)	}
 	// This one is because I can't bring myself to not typing alert. 
-	function	alert(str)	{	log('********USE log*********'), log(str) }
+	function	alert(str)	{	log('********USE log(), not alert()*********'), log(str) }
 	
 	function	dumpHash(o)	{	var str = ''; for (var i in o) str += i + '=' + o[i] + '\n'; return str }
 
@@ -288,6 +288,18 @@
 	}
 	
 	//
+	// Swizzlers !
+	//
+	function	class_swizzle_instance_method(newClass, name, fn)
+	{
+		JSCocoa.swizzle({ instanceMethod : name, 'class' : newClass, jsFunction : fn })
+	}
+	function	class_swizzle_class_method(newClass, name, fn)
+	{
+		JSCocoa.swizzle({ classMethod : name, 'class' : newClass, jsFunction : fn })
+	}
+	
+	//
 	// Add raw javascript method
 	//	__globalJSFunctionRepository__ holds [className][jsFunctionName] = fn
 	if (!this.__globalJSFunctionRepository__)	var __globalJSFunctionRepository__ = {}
@@ -322,6 +334,7 @@
 	{
 		var inherit = h.className
 		var s = inherit.split('<')
+/*
 		if (s.length != 2)	throw 'New class must specify parent class name'
 		var className = s[0].replace(/ /gi, '')
 		var parentClassName = s[1].replace(/ /gi, '')
@@ -331,6 +344,29 @@
 		var parentClass = this[parentClassName]
 		if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
 		var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
+*/
+
+		// Adding methods to an existing class
+		if (s.length == 1)
+		{
+			var className = s[0].replace(/ /gi, '')
+			var newClass = this[className]
+			if (!newClass)	throw 'Adding methods to unknown class (' + inherit + ')'
+		}
+		else
+		// 
+		{
+			if (s.length != 2)	throw 'New class must specify parent class name (' + inherit + ')'
+			var className = s[0].replace(/ /gi, '')
+			var parentClassName = s[1].replace(/ /gi, '')
+			if (className.length == 0 || parentClassName.length == 0)	throw 'Invalid class definition : ' + inherit
+
+			// Get parent class
+			var parentClass = this[parentClassName]
+			if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
+			var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
+		}
+
 
 		//
 		// Overloaded and new methods
@@ -338,10 +374,19 @@
 		for (var method in h.methods)
 		{
 //			log('method.type=' + h.methods[method].type + ' ' + method)
-			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
-			var isOverload = parentClass.respondsToSelector(method) || isInstanceMethod
+			var isInstanceMethod = parentClass ? parentClass.instancesRespondToSelector(method) : false
+			var isOverload = parentClass ? parentClass.respondsToSelector(method) || isInstanceMethod : false
 //			JSCocoaController.log('adding method *' + method + '* to ' + className + ' isOverload=' + isOverload + ' isInstanceMethod=' + isInstanceMethod)
 			
+			// Swizzling cancels overloading
+			if (h.swizzle)
+			{
+				var fn = h.methods[method].fn
+				if (!fn || (typeof fn) != 'function')	throw 'Swizzled method ' + method + ' not a function'
+				if (h.methods[method].type == 'class method')	class_swizzle_class_method(newClass, method, fn)
+				else											class_swizzle_instance_method(newClass, method, fn)
+			}
+			else			
 			if (isOverload)
 			{
 				var fn = h.methods[method].fn
@@ -354,10 +399,7 @@
 			{
 				// Extract method
 				var fn = h.methods[method].fn
-				if (!fn || (typeof fn) != 'function')	
-				{
-					throw 'New method ' + method + ' not a function'
-				}
+				if (!fn || (typeof fn) != 'function')	throw 'New method ' + method + ' not a function'
 
 //				log('encoding='  + encoding + ' class=' + newClass + ' method=' + method)
 					
@@ -433,6 +475,7 @@
 	function	Method(name)
 	{
 		__classHelper__.type 	= 'method'
+		__classHelper__.swizzle	= false
 		__classHelper__.name	= name
 		__classHelper__.methods[__classHelper__.name] = { type : 'method' }
 		return	__classHelper__
@@ -440,6 +483,23 @@
 	function	ClassMethod(name)
 	{
 		__classHelper__.type 	= 'method'
+		__classHelper__.swizzle	= false
+		__classHelper__.name	= name
+		__classHelper__.methods[__classHelper__.name] = { type : 'class method' }
+		return	__classHelper__
+	}
+	function	SwizzleMethod(name)
+	{
+		__classHelper__.type 	= 'method'
+		__classHelper__.swizzle	= true
+		__classHelper__.name	= name
+		__classHelper__.methods[__classHelper__.name] = { type : 'method' }
+		return	__classHelper__
+	}
+	function	SwizzleClassMethod(name)
+	{
+		__classHelper__.type 	= 'method'
+		__classHelper__.swizzle	= true
 		__classHelper__.name	= name
 		__classHelper__.methods[__classHelper__.name] = { type : 'class method' }
 		return	__classHelper__
@@ -591,8 +651,10 @@
 		{
 			// Replace classes (m modifier to treat as multiple lines)
 			script = script.replace(/^\s*(class)\s+(\w+)\s+(<)\s+(\w+)\s*$/gm, 'Class(\'$2 < $4\').definition = function ()')
+			// Replace class method (re)definition
+			script = script.replace(/^\s*(class)\s+(\w+)\s*$/gm, 'Class(\'$2\').definition = function ()')
 			// Replace methods
-			script = script.replace(/^\s*(\-|\+)\s\(.*$/gm, expandJSMacros_ReplaceMethods)
+			script = script.replace(/^\s*(Swizzle)?\s*(\-|\+)\s\(.*$/gm, expandJSMacros_ReplaceMethods)
 			
 			// Replace outlets
 			script = script.replace(/^\s*IBOutlet\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceOutlets)
@@ -618,6 +680,8 @@
 
 		// Parse method
 		var s = String(r)
+		var isSwizzle = s.match(/^\s*Swizzle/)
+		if (isSwizzle) s = s.replace(/^\s*Swizzle/, '')
 		// extract class or instance method marker
 		s = s.replace(/(\+|\-)/, function (r) { type = r == '-' ? 'Method' : 'ClassMethod'; return '' } )
 		// extract arguments
@@ -634,7 +698,7 @@
 		if (args.length < 1)	throw 'Need at least one return value in ' + r
 
 		var encoding = args.map(function (r) { return "'" + r + "'" })
-		var str = type + "('" + name + "').encodingArray([" + encoding + "]).fn = function (" + names.join(', ') + ")"
+		var str = (isSwizzle ? 'Swizzle' : '') + type + "('" + name + "').encodingArray([" + encoding + "]).fn = function (" + names.join(', ') + ")"
 		return str
 	}
 	function	expandJSMacros_ReplaceOutlets(r, outletName, skippedParen, paramName)
