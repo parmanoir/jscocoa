@@ -1081,8 +1081,8 @@ static id JSCocoaSingleton = NULL;
 	Method m1 = class_getClassMethod(class, NSSelectorFromString(methodName));
 	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(m1));
 	
-	m1 = class_getInstanceMethod(class, origSel_);
-	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
+	m1 = class_getClassMethod(class, origSel_);
+	Method m2 = class_getClassMethod(class, NSSelectorFromString(originalMethodName));
 	method_exchangeImplementations(m1, m2);
 	
 	return	YES;
