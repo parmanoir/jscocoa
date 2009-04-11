@@ -379,7 +379,7 @@
 //			JSCocoaController.log('adding method *' + method + '* to ' + className + ' isOverload=' + isOverload + ' isInstanceMethod=' + isInstanceMethod)
 			
 			// Swizzling cancels overloading
-			if (h.swizzle)
+			if (h.methods[method].swizzle)
 			{
 				var fn = h.methods[method].fn
 				if (!fn || (typeof fn) != 'function')	throw 'Swizzled method ' + method + ' not a function'
@@ -475,7 +475,6 @@
 	function	Method(name)
 	{
 		__classHelper__.type 	= 'method'
-		__classHelper__.swizzle	= false
 		__classHelper__.name	= name
 		__classHelper__.methods[__classHelper__.name] = { type : 'method' }
 		return	__classHelper__
@@ -483,7 +482,6 @@
 	function	ClassMethod(name)
 	{
 		__classHelper__.type 	= 'method'
-		__classHelper__.swizzle	= false
 		__classHelper__.name	= name
 		__classHelper__.methods[__classHelper__.name] = { type : 'class method' }
 		return	__classHelper__
@@ -491,17 +489,15 @@
 	function	SwizzleMethod(name)
 	{
 		__classHelper__.type 	= 'method'
-		__classHelper__.swizzle	= true
 		__classHelper__.name	= name
-		__classHelper__.methods[__classHelper__.name] = { type : 'method' }
+		__classHelper__.methods[__classHelper__.name] = { type : 'method', swizzle : true }
 		return	__classHelper__
 	}
 	function	SwizzleClassMethod(name)
 	{
 		__classHelper__.type 	= 'method'
-		__classHelper__.swizzle	= true
 		__classHelper__.name	= name
-		__classHelper__.methods[__classHelper__.name] = { type : 'class method' }
+		__classHelper__.methods[__classHelper__.name] = { type : 'class method', swizzle : true }
 		return	__classHelper__
 	}
 	function	JSFunction(name)

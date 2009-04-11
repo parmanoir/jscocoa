@@ -1,9 +1,7 @@
 JSCocoa, a bridge from Javascript to Cocoa
 ==
-Written by [Patrick Geiller](mailto:parmanoir@gmail.com)
 
-
-About JSCocoa
+About
 --
 JSCocoa lets you use Cocoa in Javascript. You can write Cocoa applications (almost) entirely in Javascript, or use it as a Plugin engine, like [Acorn does](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html).
 JSCocoa uses WebKit's Javascript framework, [JavascriptCore](http://webkit.org/projects/javascript/).
@@ -28,21 +26,23 @@ Contribute and discuss
 * [Github](http://github.com/parmanoir/jscocoa/tree/master) fork JSCocoa from Github, add changes, and notify me with a pull request
 * [Documentation](http://code.google.com/p/jscocoa/w/list) on Google Code
 
-Who uses JSCocoa ?
+Who uses it ?
 --
 
-* [JSTalk](http://github.com/ccgus/jstalk/tree/master) Gus Mueller uses JSCocoa to let Cocoa applications be scripted in Javascript
+* [JSTalk](http://github.com/ccgus/jstalk/tree/master) Gus Mueller, to let Cocoa applications be scripted in Javascript
 * [PluginManager](http://github.com/Grayson/pluginmanager/tree/master) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
-* [Elysium](http://lucidmac.com/products/elysium/) Matt Mower uses JSCocoa for scripting
-* [Acorn Plugins](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) Gus Mueller uses JSCocoa to let Acorn users write [Acorn](http://flyingmeat.com/acorn/) plugins in Javascript
+* [Elysium](http://lucidmac.com/products/elysium/) Matt Mower, to script Elysium, a MIDI sequencer
+* [Acorn Plugins](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) Gus Mueller, to let Acorn users write [Acorn](http://flyingmeat.com/acorn/) plugins in Javascript
 * [Interactive console for iPhone](http://ido.nu/kuma/2008/11/22/jscocoa-interactive-console-for-iphone/) Kumagai Kentaro wrote a console to interact with the iPhone simulator from a web page !
 * [JSCocoaCodaLoader](http://gusmueller.com/blog/archives/2008/11/jscocoacodaloader.html) write Javascript plugins that work in [Coda](http://www.panic.com/coda/)
-* [REPL console](http://tlrobinson.net/blog/2008/10/10/command-line-interpreter-and-repl-for-jscocoa/) Tom Robinson's command line interface to JSCocoa
+* [REPL console](http://tlrobinson.net/blog/2008/10/10/command-line-interpreter-and-repl-for-jscocoa/) Tom Robinson's command line interface
 
 Are you missing on that list ? [Send me a mail !](mailto:parmanoir@gmail.com)
 
-Syntax
+
+What does it look like ?
 --
+Use straight Javascript syntax to call Cocoa.
 <pre>
 // Get current application name
 var appName = NSWorkspace.sharedWorkspace.activeApplication.NSApplicationName
@@ -69,45 +69,50 @@ function	追加する(最初の, 次の)	{	return 最初の+ 次の }
 var 結果 = 追加する('こんにちは', '世界')
 NSApplication.sharedApplication.keyWindow.title = 結果
 
-// Define Javascript classes usable by Cocoa (inspired by Cappucino)
-	// Define a new class
-	class MyClass < NSObject
+// Define a new Javascript class usable by Cocoa (inspired by Cappucino)
+class MyClass < NSObject
+{
+	// Custom drawing, calling parent method
+	- (void)drawRect:(NSRect)rect
 	{
-		// Custom drawing, calling parent method
-		- (void)drawRect:(NSRect)rect
-		{
-			// do some drawing here
-			...
-			// Call parent method
-			this.Super(arguments)			
-		}
-		// Class method
-		+ (float)addFloatX:(float)x andFloatY:(float)y
-		{
-			return x + y
-		}
+		// do some drawing here
+		...
+		// Call parent method
+		this.Super(arguments)			
+	}
+	// Class method
+	+ (float)addFloatX:(float)x andFloatY:(float)y
+	{
+		return x + y
+	}
+}
+
+// Manipulate an existing class
+class NSButton
+{
+	// Add a method to an existing class
+	- (void)someNewMethod:(NSString*)name
+	{
+		...
 	}
 
+	// Swizzle an instance method of an existing class
+	Swizzle- (void)drawRect:(NSRect)rect
+	{
+		// Draw something behind the button
+		...
+		// Call original swizzled method
+		this.Original(arguments)
+		// Draw something in front of the button
+		NSBezierPath.bezierPathWithOvalInRect(rect).stroke
+	}
+}
 </pre>
 
-Add JSCocoa to your project
+
+Starting up
 --
-Going the framework route :
-
-* Build JSCocoa/JSCocoa.xcodeproj
-* Add built JSCocoa.framework to your project
-* import <JSCocoa/JSCocoa.h>
-
-No framework, adding JSCocoa files into your project :
-
-* Drag the JSCocoa folder in your project
-* Delete irrelevant files (Info.plist, JSCocoa_Prefix.pch, English.lproj, project files)
-* Add the JavascriptCore framework
-* In 'Build' project settings, add -lffi to 'Other linker flags'
-* import "JSCocoa.h"
-
-Using JSCocoa
---
+This will start a controller, eval a file, call a Javascript method and get an ObjC object out of it. You can start multiple interpreters, e.g. one for each document.
 <pre>
 	// Start
 	JSCocoaController* jsc = [JSCocoa new];
@@ -133,4 +138,33 @@ Using JSCocoa
 	// Destroy
 	[jsc release];
 </pre>
+
+
+Add it to your project
+--
+Going the framework route :
+
+* Build JSCocoa/JSCocoa.xcodeproj
+* Add built JSCocoa.framework to your project
+* import <JSCocoa/JSCocoa.h>
+
+No framework, adding JSCocoa files into your project :
+
+* Drag the JSCocoa folder in your project
+* Delete irrelevant files (Info.plist, JSCocoa_Prefix.pch, English.lproj, project files)
+* Add the JavascriptCore framework
+* In 'Build' project settings, add -lffi to 'Other linker flags'
+* import "JSCocoa.h"
+
+
+Thanks !
+--
+* Gus Mueller — Distant Object code
+* Jonathan 'Wolf' Rentzsch — JRSwizzle
+
+Questions, comments, patches
+--
+Send me a mail !
+
+Patrick Geiller<br/> [parmanoir@gmail.com](mailto:parmanoir@gmail.com)
 

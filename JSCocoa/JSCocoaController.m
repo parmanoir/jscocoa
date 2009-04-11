@@ -1052,8 +1052,14 @@ static id JSCocoaSingleton = NULL;
 	id originalMethodName = [NSString stringWithFormat:@"original%@", methodName];
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
 	if (!b)	return NO;
-	
+
+	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
+	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
+	SEL origSel_ = NSSelectorFromString(methodName);
 	Method m1 = class_getInstanceMethod(class, NSSelectorFromString(methodName));
+	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(m1));
+	
+	m1 = class_getInstanceMethod(class, origSel_);
 	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
 	method_exchangeImplementations(m1, m2);
 	
@@ -1069,7 +1075,13 @@ static id JSCocoaSingleton = NULL;
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
 	if (!b)	return NO;
 	
-	Method m1 = class_getInstanceMethod(class, NSSelectorFromString(methodName));
+	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
+	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
+	SEL origSel_ = NSSelectorFromString(methodName);
+	Method m1 = class_getClassMethod(class, NSSelectorFromString(methodName));
+	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(m1));
+	
+	m1 = class_getInstanceMethod(class, origSel_);
 	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
 	method_exchangeImplementations(m1, m2);
 	
@@ -2693,6 +2705,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			// non ObjC methods
 			&& ![methodName isEqualToString:@"valueOf"] 
 			&& ![methodName isEqualToString:@"Super"]
+			&& ![methodName isEqualToString:@"Original"]
 			&& ![methodName isEqualToString:@"instance"])
 		{
 			if ([methodName rangeOfString:@"_"].location != NSNotFound)
@@ -3514,8 +3527,8 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		{
 			function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
-			private.type = @"method";
-			private.methodName = superSelector;
+			private.type		= @"method";
+			private.methodName	= superSelector;
 
 			superSelector		= NULL;
 			superSelectorClass	= NULL;

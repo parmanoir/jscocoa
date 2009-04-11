@@ -169,11 +169,13 @@
 		
 - (void)tableViewSelectionDidChange:(NSNotification *)notification
 {
-	log('tableViewSelectionDidChange + ' + notification.object)
+//	log('tableViewSelectionDidChange + ' + notification.object)
+	if (!this.jscocoaItemsFromSpotlight)	return
 	var row = notification.object.selectedRow
-	log('selectedIndex=' + row)
-	log('selectedObject=' + this.jscocoaItemsFromSpotlight[row].valueForKey('kMDItemFSName'))
+//	log('selectedIndex=' + row)
+//	log('selectedObject=' + this.jscocoaItemsFromSpotlight[row].valueForKey('kMDItemFSName'))
 }
+/*
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)tableView
 {
 	log('selectionShouldChangeInTableView')
@@ -189,7 +191,7 @@
 	log('tableView:(NSTableView *)tableView shouldSelectTableColumn:(NSTableColumn *)tableColumn')
 	return	YES;
 }
-
+*/
 
 		
 		
@@ -323,17 +325,60 @@
 
 	class	NSTableHeaderCell
 	{
-		- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
+		Swizzle- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 		{
+			log('this=' + this)
+//			this.Original(arguments)
+			log('draw')
+			return
+		
+//			this.drawsBackground = NO
+//			this.Original(arguments)
 //			log('DRAW ' + this.stringValue)
-			this.Super(arguments)
-return
+//			this.Super(arguments)
+//			NSColor.redColor.set
+//			NSBezierPath.bezierPathWithRect(cellFrame).fill
+//return
 			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
 			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
 			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
 			gradient.drawIn({rect : cellFrame, angle : 90})
 			
+			if (!this.stringValue)	return
+			cellFrame.origin.y = 1
+			cellFrame.origin.x = cellFrame.origin.x+2
+			this.stringValue.draw({ inRect : cellFrame, withAttributes : { NSFont : this.font } })
 		}
+/*
+		Swizzle- (NSImage *)image
+		{
+		}
+*/		
+/*		
+		- (void)drawSortIndicatorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView ascending:(BOOL)ascending priority:(NSInteger)priority
+		{
+			log('HEP ' + ascending + ' p=' + priority)
+			return
+		}
+*/
+/*		
+		- (NSColor *)ahighlightColorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+		{
+			return
+		}
+- (void)adrawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+{
+}
+*/
+Swizzle- (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView
+{
+	log('highlight=' + flag)
+	log('background color=' + this.backgroundColor)
+	log('font=' + this.font)
+	log('isHighlighted=' + this.isHighlighted)
+//	this.Original(arguments)
+}
+
 	}
 	
 	//
@@ -362,8 +407,6 @@ return
 	//
 	log('un custom drawing.js, ou un list de tout les methods custom draw')
 	log('reload this file at runtime to change appearance')
-
-	log('swizzle les method vec orig prefix')
 	
 	log('swizzle scrollbar draw')
 	
@@ -385,3 +428,7 @@ return
 		}
 	}
 	
+
+
+//breaking lines by truncation
+//http://gemma.apple.com/documentation/Cocoa/Conceptual/Rulers/Tasks/TruncatingStrings.html
