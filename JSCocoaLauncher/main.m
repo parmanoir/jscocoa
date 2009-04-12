@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "JSCocoa.h"
 
+
 int main(int argc, char *argv[])
 {
 	[JSCocoa allocAutoreleasePool];

@@ -3517,6 +3517,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
 		if (!superSelector)	
 		{
+			if (superArguments)		free(superArguments);
 			if (callingSwizzled)	return	throwException(ctx, exception, @"Original couldn't find swizzled method"), NULL;
 			return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
 		}
@@ -3525,11 +3526,16 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		// Swizzled handling : we're just changing the selector
 		if (callingSwizzled)
 		{
+			if (![superSelector hasPrefix:@"original"])
+			{
+				if (superArguments)		free(superArguments);
+				return	throwException(ctx, exception, [NSString stringWithFormat:@"Original called on a non swizzled method (%@)", superSelector]), NULL;
+			}
 			function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
 			private.type		= @"method";
 			private.methodName	= superSelector;
-
+			
 			superSelector		= NULL;
 			superSelectorClass	= NULL;
 		}

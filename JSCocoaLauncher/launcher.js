@@ -8,9 +8,6 @@
 */
 
 
-	log('tap un letr dans la outline first responder pars TOUT les selexion !')
-
-
 	JSCocoa.hazardReport
 
 	class ApplicationController < NSObject
@@ -325,11 +322,29 @@
 
 	class	NSTableHeaderCell
 	{
-		Swizzle- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
+		Swizzle- (void)adrawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 		{
 			log('this=' + this)
+			log('target=' + this.target)
+			log('representedObject=' + this.representedObject)
+			log('objectValue=' + this.objectValue)
 //			this.Original(arguments)
 			log('draw')
+			log('column=' + controlView)
+			if (controlView.isKindOfClass(NSTableHeaderView))
+			{
+				var columnIndex = controlView.columnAtPoint(cellFrame.origin)
+				log('column=' + columnIndex)
+				var table = controlView.tableView
+				log('table=' + table)
+				var column = table.tableColumns[columnIndex]
+				log('column=' + column)
+				log('type=' + this.type)
+
+//			return
+
+			}
+			this.Original(arguments)
 			return
 		
 //			this.drawsBackground = NO
@@ -349,33 +364,33 @@
 			cellFrame.origin.x = cellFrame.origin.x+2
 			this.stringValue.draw({ inRect : cellFrame, withAttributes : { NSFont : this.font } })
 		}
-/*
-		Swizzle- (NSImage *)image
-		{
-		}
-*/		
-/*		
 		- (void)drawSortIndicatorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView ascending:(BOOL)ascending priority:(NSInteger)priority
 		{
-			log('HEP ' + ascending + ' p=' + priority)
+			log('**********HEP ' + ascending + ' p=' + priority)
+			this.Original(arguments)
 			return
 		}
-*/
-/*		
-		- (NSColor *)ahighlightColorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+
+		
+		- (NSColor *)highlightColorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 		{
+			log('AHIGHLIGHT>>>>>>>')
 			return
 		}
-- (void)adrawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+			log('INTERIOR>>>>>>>')
 }
-*/
-Swizzle- (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView
+
+Swizzle- (void)ahighlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-	log('highlight=' + flag)
-	log('background color=' + this.backgroundColor)
-	log('font=' + this.font)
-	log('isHighlighted=' + this.isHighlighted)
+
+//	log('highlight=' + flag)
+//	log('background color=' + this.backgroundColor)
+//	log('font=' + this.font)
+//	log('isHighlighted=' + this.isHighlighted)
+
+	log(this + 'h=' + flag + ' h2=' + this.isHighlighted + ' view=' + this.controlView)
 //	this.Original(arguments)
 }
 
