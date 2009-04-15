@@ -50,6 +50,14 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #import "GDataXMLNode.h"
 #endif
 
+// Appended to swizzled method names
+#define OriginalMethodPrefix	@"original"
+
+
+
+
+
+
 
 //
 // JSCocoaController
@@ -1046,45 +1054,44 @@ static id JSCocoaSingleton = NULL;
 //
 + (BOOL)swizzleInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
 {
-	const char*	encoding = [self typeEncodingOfMethod:methodName class:[NSString stringWithUTF8String:class_getName(class)]];
-	if (!encoding)	return	NO;
-	
-	id originalMethodName = [NSString stringWithFormat:@"original%@", methodName];
-	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
-	if (!b)	return NO;
-
 	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
 	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
-	SEL origSel_ = NSSelectorFromString(methodName);
-	Method m1 = class_getInstanceMethod(class, NSSelectorFromString(methodName));
-	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(m1));
+	SEL origSel_			= NSSelectorFromString(methodName);
+	Method origMethod		= class_getInstanceMethod(class, origSel_);
+	if (!origMethod)		return	NSLog(@"Method does not exist in instance swizzle %@.%@", class, methodName), NO;
+
+	// Prefix method name with "original"
+	id originalMethodName	= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
+	SEL altSel_				= NSSelectorFromString(originalMethodName);
+	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
+	if (!b)					return NO;
+
+	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
 	
-	m1 = class_getInstanceMethod(class, origSel_);
-	Method m2 = class_getInstanceMethod(class, NSSelectorFromString(originalMethodName));
-	method_exchangeImplementations(m1, m2);
+	method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
 	
 	return	YES;
 }
 + (BOOL)swizzleClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
 {
 	class = objc_getMetaClass(class_getName(class));
-	const char*	encoding = [self typeEncodingOfMethod:methodName class:[NSString stringWithUTF8String:class_getName(class)]];
-	if (!encoding)	return	NO;
-	
-	id originalMethodName = [NSString stringWithFormat:@"original%@", methodName];
-	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)encoding];
-	if (!b)	return NO;
-	
+
 	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
 	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
-	SEL origSel_ = NSSelectorFromString(methodName);
-	Method m1 = class_getClassMethod(class, NSSelectorFromString(methodName));
-	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(m1));
+	SEL origSel_			= NSSelectorFromString(methodName);
+	Method origMethod		= class_getClassMethod(class, origSel_);
+	if (!origMethod)		return	NSLog(@"Method does not exist in class swizzle %@.%@", class, methodName), NO;
+
+	// Prefix method name with "original"
+	id originalMethodName	= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
+	SEL altSel_				= NSSelectorFromString(originalMethodName);
+	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
+	if (!b)					return NO;
+
+	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
 	
-	m1 = class_getClassMethod(class, origSel_);
-	Method m2 = class_getClassMethod(class, NSSelectorFromString(originalMethodName));
-	method_exchangeImplementations(m1, m2);
-	
+	method_exchangeImplementations(class_getClassMethod(class, origSel_), class_getClassMethod(class, altSel_));
+
 	return	YES;
 }
 
@@ -2134,16 +2141,14 @@ int	liveInstanceCount	= 0;
 
 
 #pragma mark -
-#pragma mark JS OSX object
+#pragma mark JavascriptCore callbacks
+#pragma mark JavascriptCore OSX object
 
 //
 //
-//	Global resolver
+//	Global resolver : main class used as 'this' in Javascript's global scope. Name requests go through here.
 //
 //
-
-
-
 JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
@@ -2282,7 +2287,11 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 
 
 
-#pragma mark JSCocoa object
+#pragma mark JavascriptCore JSCocoa object
+
+//
+// Below lie the Javascript callbacks for all Javascript objects created by JSCocoa, used to pass ObjC data to and fro Javascript.
+//
 
 
 //
@@ -3526,7 +3535,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		// Swizzled handling : we're just changing the selector
 		if (callingSwizzled)
 		{
-			if (![superSelector hasPrefix:@"original"])
+			if (![superSelector hasPrefix:OriginalMethodPrefix])
 			{
 				if (superArguments)		free(superArguments);
 				return	throwException(ctx, exception, [NSString stringWithFormat:@"Original called on a non swizzled method (%@)", superSelector]), NULL;

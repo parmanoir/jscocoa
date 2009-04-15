@@ -71,18 +71,6 @@
 			//
 			this.views = {}
 			
-			//
-			// Gradient header
-			//
-/*			
-			var headerCell = GradientTableHeaderCell.instance()
-//			header
-			var columns = this.jscocoaItemsList.tableColumns
-//			for (var i=0; i<columns.length; i++)	columns[i].headerCell = headerCell
-			columns[0].headerCell = headerCell
-			columns[1].headerCell = headerCell
-*/			
-
 				var query = NSMetadataQuery.instance()
 //				var descriptors = NSArray.arrayWithObject(NSSortDescriptor.instance({withKey:'kMDItemFSName', ascending:true}))
 //				query.setSortDescriptors(descriptors)
@@ -96,7 +84,7 @@
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"))
 //				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemFSName like[cdw] '*jscocoa*')"))
 				query.setPredicate(NSPredicate.predicateWithFormat("(kMDItemDisplayName like '*\.jscocoa')"))
-//				query.startQuery
+				query.startQuery
 				this.query = query
 //				log('QUERY========' + query)
 				
@@ -105,11 +93,16 @@
 			// Set ourselves as jscocoa items list delegate
 			//
 			this.jscocoaItemsList.delegate = this
+			
+			//
+			// Load source code view
+			//
+			this.jscocoaSourceCodeView.mainFrameURL = (NSBundle.mainBundle.pathFor({ resource : 'source code view', ofType : 'html' }))
 		}
 		- (void)notified:(id)n
 		{
-			log('NOTIFIED' + n.object.results.length)
-			if (n.object.results.length)	log(n.object.results[0].attributes)
+//			log('NOTIFIED' + n.object.results.length)
+//			if (n.object.results.length)	log(n.object.results[0].attributes)
 			this.willChangeValueForKey('jscocoaItems')
 			this.jscocoaItemsFromSpotlight = n.object.results
 			this.didChangeValueForKey('jscocoaItems')
@@ -170,7 +163,9 @@
 	if (!this.jscocoaItemsFromSpotlight)	return
 	var row = notification.object.selectedRow
 //	log('selectedIndex=' + row)
-//	log('selectedObject=' + this.jscocoaItemsFromSpotlight[row].valueForKey('kMDItemFSName'))
+	var item = this.jscocoaItemsFromSpotlight[row]
+	log('selectedObject=' + item.valueForKey('kMDItemFSName'))
+	log('selectedObject=' + item.valueForKey('kMDItemPath'))
 }
 /*
 - (BOOL)selectionShouldChangeInTableView:(NSTableView *)tableView
@@ -205,6 +200,7 @@
 				if (viewName == 'source')
 				{
 					var view = WebView.instance({ withFrame : NSMakeRect(200, 0, 400, 400) })
+					log('view=' + view)
 					this.window.contentView.addSubview(view)
 					// Breaks on Debugger() — adobe 10 ?
 					view.mainFrameURL = 'http://yahoo.com'
@@ -234,19 +230,9 @@
 		IBOutlet	sidebarItemsList
 		IBOutlet	jscocoaItemsList
 		IBOutlet	window
-		
-		IBOutlet	listSelection1
-	}
-	
-	class	DetailSourceView < NSView
-	{
-		- (void)setDetail:(id)detail
-		{
-			log('detail=' + detail)
-		}
-		- (id)detail
-		{
-		}
+
+
+		IBOutlet	jscocoaSourceCodeView
 	}
 	
 
@@ -287,163 +273,26 @@
 			this.Super(arguments)
 		}
 	}
-/*	
-	class GradientTableHeaderCell < NSTableHeaderCell
-	{
-		- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
-		{
-//			log('DRAW ' + this.stringValue)
-			this.Super(arguments)
-//return
-			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
-			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
-			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
-			gradient.drawIn({rect : cellFrame, angle : 90})
-		}
-	}
-	
-	class GradientTableColumn < NSTableColumn
-	{
-		- (void)setHeaderCell:(NSCell *)cell
-		{
-			log('HELLO********************')
-		}
-		- (id)headerCell
-		{
-			var r = this.Super(arguments)
-			log('CELL=' + r)
-			log('CELL NAME=' + r.stringValue)
-			log('JUST SET IT AT START')
-//			return r
-			return	NSTableHeaderCell.alloc.init
-		}
-	}
-*/	
 
-	class	NSTableHeaderCell
-	{
-		Swizzle- (void)adrawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
-		{
-			log('this=' + this)
-			log('target=' + this.target)
-			log('representedObject=' + this.representedObject)
-			log('objectValue=' + this.objectValue)
-//			this.Original(arguments)
-			log('draw')
-			log('column=' + controlView)
-			if (controlView.isKindOfClass(NSTableHeaderView))
-			{
-				var columnIndex = controlView.columnAtPoint(cellFrame.origin)
-				log('column=' + columnIndex)
-				var table = controlView.tableView
-				log('table=' + table)
-				var column = table.tableColumns[columnIndex]
-				log('column=' + column)
-				log('type=' + this.type)
-
-//			return
-
-			}
-			this.Original(arguments)
-			return
-		
-//			this.drawsBackground = NO
-//			this.Original(arguments)
-//			log('DRAW ' + this.stringValue)
-//			this.Super(arguments)
-//			NSColor.redColor.set
-//			NSBezierPath.bezierPathWithRect(cellFrame).fill
-//return
-			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
-			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
-			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
-			gradient.drawIn({rect : cellFrame, angle : 90})
-			
-			if (!this.stringValue)	return
-			cellFrame.origin.y = 1
-			cellFrame.origin.x = cellFrame.origin.x+2
-			this.stringValue.draw({ inRect : cellFrame, withAttributes : { NSFont : this.font } })
-		}
-		- (void)drawSortIndicatorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView ascending:(BOOL)ascending priority:(NSInteger)priority
-		{
-			log('**********HEP ' + ascending + ' p=' + priority)
-			this.Original(arguments)
-			return
-		}
-
-		
-		- (NSColor *)highlightColorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
-		{
-			log('AHIGHLIGHT>>>>>>>')
-			return
-		}
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
-{
-			log('INTERIOR>>>>>>>')
-}
-
-Swizzle- (void)ahighlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView
-{
-
-//	log('highlight=' + flag)
-//	log('background color=' + this.backgroundColor)
-//	log('font=' + this.font)
-//	log('isHighlighted=' + this.isHighlighted)
-
-	log(this + 'h=' + flag + ' h2=' + this.isHighlighted + ' view=' + this.controlView)
-//	this.Original(arguments)
-}
-
-	}
-	
 	//
 	// Custom Split View
 	//
-	class SplitView < NSSplitView
+	class NSSplitView
 	{
-		- (void)drawDividerInRect:(NSRect)rect
+		Swizzle- (void)drawDividerInRect:(NSRect)rect
 		{
+			// Draw gradient
 			var color1 = NSColor.colorWithDevice({ white : 1, alpha : 1 })
 			var color2 = NSColor.colorWithDevice({ white : 0.85, alpha : 1 })
 			var gradient = NSGradient.instance({withStartingColor : color1, endingColor : color2 })
 			gradient.drawIn({rect : rect, angle : 90})
 			
+			// Draw top and bottom lines
 			NSColor.colorWithDevice({ red : 0, green : 0, blue : 0, alpha : 0.4 }).set
 			NSBezierPath.bezierPathWithRect(new NSRect(rect.origin.x, rect.origin.y, rect.size.width, 1)).fill
 			NSBezierPath.bezierPathWithRect(new NSRect(rect.origin.x, rect.origin.y+rect.size.height-1, rect.size.width, 1)).fill
 			
-			this.Super(arguments)
-		}
-	}
-	
-	
-	//
-	// 
-	//
-	log('un custom drawing.js, ou un list de tout les methods custom draw')
-	log('reload this file at runtime to change appearance')
-	
-	log('swizzle scrollbar draw')
-	
-	
-	function	mouseDown(event)
-	{
-		log('HELLLO')
-		return this.Original(arguments)
-	}
-	
-
-
-	class NSButtonCell
-	{
-		Swizzle- (void)drawBezelWithFrame:(NSRect)frame inView:(NSView*)controlView
-		{
+			// Call original method to draw know
 			this.Original(arguments)
-			NSBezierPath.bezierPathWithOvalInRect(frame).stroke
 		}
 	}
-	
-
-
-//breaking lines by truncation
-//http://gemma.apple.com/documentation/Cocoa/Conceptual/Rulers/Tasks/TruncatingStrings.html
