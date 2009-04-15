@@ -41,71 +41,70 @@ Are you missing on that list ? [Send me a mail !](mailto:parmanoir@gmail.com)
 What does it look like ?
 --
 Use straight Javascript syntax to call Cocoa.
-<pre>
-// Get current application name
-var appName = NSWorkspace.sharedWorkspace.activeApplication.NSApplicationName
 
-// Alloc an object (need to release)
-var button = NSButton.alloc.initWithFrame(NSMakeRect(0, 0, 100, 40))
-// Alloc an object (no need to release)
-var button = NSButton.instance({ withFrame:NSMakeRect(0, 0, 100, 40) }) 
+	// Get current application name
+	var appName = NSWorkspace.sharedWorkspace.activeApplication.NSApplicationName
 
-// Setting
-var window = NSWorkspace.sharedWorkspace.activeApplication.keyWindow
-// Instead of calling setTitle ...
-window.setTitle('new title')
-// ... set the 'title' property
-window.title = 'new title'
+	// Alloc an object (need to release)
+	var button = NSButton.alloc.initWithFrame(NSMakeRect(0, 0, 100, 40))
+	// Alloc an object (no need to release)
+	var button = NSButton.instance({ withFrame:NSMakeRect(0, 0, 100, 40) }) 
 
-// Call methods with jQuery-like syntax
-obj.call({ withParam1:'Hello', andParam2:'World' }) 
-obj['callWithParam1:andParam2:']('Hello', 'World') 
-obj.callWithParam1_andParam2('Hello', 'World' )
+	// Setting
+	var window = NSWorkspace.sharedWorkspace.activeApplication.keyWindow
+	// Instead of calling setTitle ...
+	window.setTitle('new title')
+	// ... set the 'title' property
+	window.title = 'new title'
 
-// Unicode ! Javascript is fully Unicode compliant, so is JSCocoa
-function	追加する(最初の, 次の)	{	return 最初の+ 次の }
-var 結果 = 追加する('こんにちは', '世界')
-NSApplication.sharedApplication.keyWindow.title = 結果
+	// Call methods with jQuery-like syntax
+	obj.call({ withParam1:'Hello', andParam2:'World' }) 
+	obj['callWithParam1:andParam2:']('Hello', 'World') 
+	obj.callWithParam1_andParam2('Hello', 'World' )
 
-// Define a new Javascript class usable by Cocoa (inspired by Cappucino)
-class MyClass < NSObject
-{
-	// Custom drawing, calling parent method
-	- (void)drawRect:(NSRect)rect
+	// Unicode ! Javascript is fully Unicode compliant, so is JSCocoa
+	function	追加する(最初の, 次の)	{	return 最初の+ 次の }
+	var 結果 = 追加する('こんにちは', '世界')
+	NSApplication.sharedApplication.keyWindow.title = 結果
+
+	// Define a new Javascript class usable by Cocoa (inspired by Cappucino)
+	class MyClass < NSObject
 	{
-		// do some drawing here
-		...
-		// Call parent method
-		this.Super(arguments)			
-	}
-	// Class method
-	+ (float)addFloatX:(float)x andFloatY:(float)y
-	{
-		return x + y
-	}
-}
-
-// Manipulate an existing class
-class NSButton
-{
-	// Add a method to an existing class
-	- (void)someNewMethod:(NSString*)name
-	{
-		...
+		// Custom drawing, calling parent method
+		- (void)drawRect:(NSRect)rect
+		{
+			// do some drawing here
+			...
+			// Call parent method
+			this.Super(arguments)			
+		}
+		// Class method
+		+ (float)addFloatX:(float)x andFloatY:(float)y
+		{
+			return x + y
+		}
 	}
 
-	// Swizzle an instance method of an existing class
-	Swizzle- (void)drawRect:(NSRect)rect
+	// Manipulate an existing class
+	class NSButton
 	{
-		// Draw something behind the button
-		...
-		// Call original swizzled method
-		this.Original(arguments)
-		// Draw something in front of the button
-		NSBezierPath.bezierPathWithOvalInRect(rect).stroke
+		// Add a method to an existing class
+		- (void)someNewMethod:(NSString*)name
+		{
+			...
+		}
+
+		// Swizzle an instance method of an existing class
+		Swizzle- (void)drawRect:(NSRect)rect
+		{
+			// Draw something behind the button
+			...
+			// Call original swizzled method
+			this.Original(arguments)
+			// Draw something in front of the button
+			NSBezierPath.bezierPathWithOvalInRect(rect).stroke
+		}
 	}
-}
-</pre>
 
 
 Starting up
