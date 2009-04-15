@@ -111,7 +111,7 @@ class NSButton
 Starting up
 --
 This will start a controller, eval a file, call a Javascript method and get an ObjC object out of it. You can start multiple interpreters, e.g. one for each document.
-<pre>
+
 	// Start
 	JSCocoaController* jsc = [JSCocoa new];
 
@@ -135,7 +135,6 @@ This will start a controller, eval a file, call a Javascript method and get an O
 	[jsc garbageCollect];
 	// Destroy
 	[jsc release];
-</pre>
 
 
 Add it to your project
