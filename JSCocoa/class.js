@@ -739,3 +739,9 @@
 		for (var i in strings)	__localizedStrings[i] = strings[i]
 	}
 
+	function	allKeysInHash(o)
+	{
+		var r = []
+		for (var i in this) r.push(i)
+		return r
+	}

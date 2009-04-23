@@ -190,6 +190,28 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Load class kit
 	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
+
+
+	// Add allKeys method to Javascript hash : { a : 1, b : 2, c : 3 }.allKeys() = ['a', 'b', 'c']
+
+	// Retrieve Javascript function from class.js
+	JSStringRef jsName = JSStringCreateWithUTF8CString("allKeysInHash");
+	JSValueRef fn = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
+	JSStringRelease(jsName);
+	
+	if (fn)
+	{
+		// Add it to Object.prototype with dont enum property
+		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return Object.prototype");
+		JSObjectRef fn2 = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+		JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn2, NULL, 0, NULL, NULL);
+		JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
+		JSStringRelease(scriptJS);
+
+		JSStringRef jsName = JSStringCreateWithUTF8CString("allKeys");
+		JSObjectSetProperty(ctx, jsObject, jsName, fn, kJSPropertyAttributeDontEnum, NULL);
+		JSStringRelease(jsName);
+	}
 	
 	return	self;
 }
