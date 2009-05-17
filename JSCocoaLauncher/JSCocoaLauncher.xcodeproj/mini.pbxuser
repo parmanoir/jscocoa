@@ -64,11 +64,8 @@
 			PBXWorkspaceStateSaveDate = 264248373;
 		};
 		perUserProjectItems = {
-			3D0D3B880FAA83C800697133 = 3D0D3B880FAA83C800697133 /* PBXTextBookmark */;
-			3D15F3100FBF5874009E31F4 = 3D15F3100FBF5874009E31F4 /* PBXTextBookmark */;
-			3D15F42B0FC01CC7009E31F4 /* PBXTextBookmark */ = 3D15F42B0FC01CC7009E31F4 /* PBXTextBookmark */;
-			3D15F42D0FC01CD0009E31F4 /* PBXTextBookmark */ = 3D15F42D0FC01CD0009E31F4 /* PBXTextBookmark */;
-			3D15F43C0FC01D19009E31F4 /* PBXTextBookmark */ = 3D15F43C0FC01D19009E31F4 /* PBXTextBookmark */;
+			3D15F3100FBF5874009E31F4 /* PBXTextBookmark */ = 3D15F3100FBF5874009E31F4 /* PBXTextBookmark */;
+			3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */ = 3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D9CE8300F836379004EB118 /* Source Control */;
 		userBuildSettings = {
@@ -90,16 +87,6 @@
 			sepNavWindowFrame = "{{38, 237}, {1283, 915}}";
 		};
 	};
-	3D0D3B880FAA83C800697133 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
-		name = "launcher.js: 13";
-		rLen = 41;
-		rLoc = 133;
-		rType = 0;
-		vrLen = 2441;
-		vrLoc = 0;
-	};
 	3D15F3100FBF5874009E31F4 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
@@ -110,27 +97,7 @@
 		vrLen = 2441;
 		vrLoc = 0;
 	};
-	3D15F42B0FC01CC7009E31F4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
-		name = "launcher.js: 13";
-		rLen = 41;
-		rLoc = 133;
-		rType = 0;
-		vrLen = 2441;
-		vrLoc = 0;
-	};
-	3D15F42D0FC01CD0009E31F4 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
-		name = "launcher.js: 13";
-		rLen = 41;
-		rLoc = 133;
-		rType = 0;
-		vrLen = 2441;
-		vrLoc = 0;
-	};
-	3D15F43C0FC01D19009E31F4 /* PBXTextBookmark */ = {
+	3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
 		name = "launcher.js: 13";
