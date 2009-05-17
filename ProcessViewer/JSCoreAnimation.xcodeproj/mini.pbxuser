@@ -61,14 +61,14 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 251421944;
-			PBXWorkspaceStateSaveDate = 251421944;
+			PBXPerProjectTemplateStateSaveDate = 264250504;
+			PBXWorkspaceStateSaveDate = 264250504;
 		};
 		perUserProjectItems = {
-			3DF7D6FA0EFC650000F2DCCD /* PBXBookmark */ = 3DF7D6FA0EFC650000F2DCCD /* PBXBookmark */;
-			3DF7D6FE0EFC65E500F2DCCD /* PBXBookmark */ = 3DF7D6FE0EFC65E500F2DCCD /* PBXBookmark */;
-			3DF7D70A0EFC661000F2DCCD /* PBXTextBookmark */ = 3DF7D70A0EFC661000F2DCCD /* PBXTextBookmark */;
-			3DF7D70B0EFC661000F2DCCD /* PBXTextBookmark */ = 3DF7D70B0EFC661000F2DCCD /* PBXTextBookmark */;
+			3D15F5640FC0253A009E31F4 /* PBXTextBookmark */ = 3D15F5640FC0253A009E31F4 /* PBXTextBookmark */;
+			3D15F5710FC0255B009E31F4 /* PBXTextBookmark */ = 3D15F5710FC0255B009E31F4 /* PBXTextBookmark */;
+			3D15F5840FC02850009E31F4 /* PBXTextBookmark */ = 3D15F5840FC02850009E31F4 /* PBXTextBookmark */;
+			3D15F5850FC02850009E31F4 /* PBXTextBookmark */ = 3D15F5850FC02850009E31F4 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D68AD3A0E841D9700C2EC5B /* Source Control */;
 		userBookmarkGroup = 3D210B390E9A8777000C62F5 /* PBXBookmarkGroup */;
@@ -83,6 +83,62 @@
 			sepNavWindowFrame = "{{334, 245}, {1206, 809}}";
 		};
 	};
+	3D15F5640FC0253A009E31F4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
+		name = "main.js: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1777;
+		vrLoc = 0;
+	};
+	3D15F5710FC0255B009E31F4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D15F5720FC0255B009E31F4 /* NSWindow.h */;
+		rLen = 1;
+		rLoc = 235;
+		rType = 1;
+	};
+	3D15F5720FC0255B009E31F4 /* NSWindow.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = NSWindow.h;
+		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSWindow.h;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {904, 7491}}";
+			sepNavSelRange = "{8245, 135}";
+			sepNavVisRange = "{6564, 4215}";
+			sepNavWindowFrame = "{{107, 82}, {963, 1007}}";
+		};
+	};
+	3D15F5840FC02850009E31F4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
+		name = "main.js: 333";
+		rLen = 0;
+		rLoc = 10658;
+		rType = 0;
+		vrLen = 1802;
+		vrLoc = 9235;
+	};
+	3D15F5850FC02850009E31F4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D15F5860FC02850009E31F4 /* NSWindow.h */;
+		name = "NSWindow.h: 236";
+		rLen = 135;
+		rLoc = 8245;
+		rType = 0;
+		vrLen = 4215;
+		vrLoc = 6564;
+	};
+	3D15F5860FC02850009E31F4 /* NSWindow.h */ = {
+		isa = PBXFileReference;
+		name = NSWindow.h;
+		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSWindow.h;
+		sourceTree = "<absolute>";
+	};
 	3D210B390E9A8777000C62F5 /* PBXBookmarkGroup */ = {
 		isa = PBXBookmarkGroup;
 		children = (
@@ -94,8 +150,8 @@
 		isa = PBXTextBookmark;
 		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
 		name = duration;
-		rLen = 3;
-		rLoc = 9892;
+		rLen = 0;
+		rLoc = 7198;
 		rType = 0;
 		vrLen = 2096;
 		vrLoc = 10704;
@@ -139,31 +195,13 @@
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
 	};
-	3D68AD3D0E841DC800C2EC5B /* JSCocoaController.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1147, 27984}}";
-			sepNavSelRange = "{13915, 0}";
-			sepNavVisRange = "{12763, 2965}";
-			sepNavWindowFrame = "{{356, 110}, {1206, 809}}";
-		};
-	};
-	3D68AD3F0E841DC800C2EC5B /* JSCocoaPrivateObject.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1153, 1397}}";
-			sepNavSelRange = "{1109, 0}";
-			sepNavVisRange = "{216, 1061}";
-			sepNavWindowFrame = "{{298, 381}, {1212, 797}}";
-		};
-	};
-	3D68AD400E841DC800C2EC5B /* JSCocoaPrivateObject.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1153, 693}}";
-			sepNavSelRange = "{1026, 10}";
-			sepNavVisRange = "{0, 1134}";
-			sepNavWindowFrame = "{{129, 232}, {1212, 797}}";
-		};
-	};
 	3D68AD410E841DC800C2EC5B /* JSCocoaFFIArgument.m */ = {
+		isa = PBXFileReference;
+		fileEncoding = 4;
+		lastKnownFileType = sourcecode.c.objc;
+		name = JSCocoaFFIArgument.m;
+		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoa/JSCocoaFFIArgument.m";
+		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1086, 10439}}";
 			sepNavSelRange = "{1852, 0}";
@@ -171,35 +209,12 @@
 			sepNavWindowFrame = "{{236, 164}, {1206, 809}}";
 		};
 	};
-	3D68AD420E841DC800C2EC5B /* JSCocoaFFIArgument.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1152, 847}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{231, 2349}";
-			sepNavWindowFrame = "{{337, 118}, {1211, 761}}";
-		};
-	};
-	3D68AD430E841DC800C2EC5B /* JSCocoaFFIClosure.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1152, 2101}}";
-			sepNavSelRange = "{2341, 26}";
-			sepNavVisRange = "{1368, 1625}";
-			sepNavWindowFrame = "{{54, 414}, {1211, 761}}";
-		};
-	};
-	3D68AD450E841DC800C2EC5B /* BridgeSupportController.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {997, 1936}}";
-			sepNavSelRange = "{1279, 6}";
-			sepNavVisRange = "{899, 1064}";
-		};
-	};
 	3D68AD500E841E1800C2EC5B /* main.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1152, 5203}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 1777}";
-			sepNavWindowFrame = "{{96, 157}, {1211, 761}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1152, 5324}}";
+			sepNavSelRange = "{10658, 0}";
+			sepNavVisRange = "{9235, 1802}";
+			sepNavWindowFrame = "{{261, 206}, {1211, 761}}";
 		};
 	};
 	3DAAC0B80E88575B004DA255 /* JSCocoaFFIArgument.m:443 */ = {
@@ -218,50 +233,6 @@
 		location = JSCoreAnimation;
 		modificationTime = 251421993.321716;
 		state = 2;
-	};
-	3DC69C790E85DC6C009BA653 /* jsclass.js */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1147, 1309}}";
-			sepNavSelRange = "{1303, 1}";
-			sepNavVisRange = "{273, 2223}";
-			sepNavWindowFrame = "{{472, 153}, {1206, 809}}";
-		};
-	};
-	3DC69C7A0E85DC6C009BA653 /* encodings.js */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1152, 648}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 772}";
-			sepNavWindowFrame = "{{199, 244}, {1211, 761}}";
-		};
-	};
-	3DF7D6FA0EFC650000F2DCCD /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3D68AD3D0E841DC800C2EC5B /* JSCocoaController.m */;
-	};
-	3DF7D6FE0EFC65E500F2DCCD /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
-	};
-	3DF7D70A0EFC661000F2DCCD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
-		name = "main.js: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1777;
-		vrLoc = 0;
-	};
-	3DF7D70B0EFC661000F2DCCD /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D68AD3D0E841DC800C2EC5B /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 431";
-		rLen = 0;
-		rLoc = 13915;
-		rType = 0;
-		vrLen = 2965;
-		vrLoc = 12763;
 	};
 	8D1107260486CEB800E47090 /* JSCoreAnimation */ = {
 		activeExec = 0;

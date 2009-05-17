@@ -62,7 +62,7 @@ Use straight Javascript syntax to call Cocoa.
 	obj['callWithParam1:andParam2:']('Hello', 'World') 
 	obj.callWithParam1_andParam2('Hello', 'World' )
 
-	// Unicode ! Javascript is fully Unicode compliant, so is JSCocoa
+	// Unicode identifiers !
 	function	追加する(最初の, 次の)	{	return 最初の+ 次の }
 	var 結果 = 追加する('こんにちは', '世界')
 	NSApplication.sharedApplication.keyWindow.title = 結果

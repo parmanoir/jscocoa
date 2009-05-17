@@ -135,11 +135,11 @@ void	NSLogPostLog(char* file, int line)
 
 - (void)logData:(NSData*)data file:(char*)file lineNumber:(int)line
 {
-//	if (![window isVisible] && autoOpens)	[self open];
+	id str = [[[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding] autorelease];
 
-	id str = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
-//	[[NSAlert alertWithMessageText:@"hello" defaultButton:@"Furthe" alternateButton:nil otherButton:nil informativeTextWithFormat:str] runModal];
-
+	// Get out now if we have no data to display
+	if ([data length] == 0)	return;
+	
 	// Write back to original stderr
 	write(original_stderr, [data bytes], [data length]);
 
@@ -148,8 +148,6 @@ void	NSLogPostLog(char* file, int line)
 	[webView search:@""];
 	// Log string
 	[webView logString:str file:file lineNumber:line];
-	
-	[str release];
 }
 
 - (void)updateLogWithFile:(char*)file lineNumber:(int)line
@@ -362,8 +360,7 @@ void	NSLogPostLog(char* file, int line)
 
 - (void)performFindPanelAction:(id)sender
 {
-
-	NSLog(@"iiiiiiiiiiiiiiii");
+	NSLog(@"performFindPanelAction");
 }
 
 

@@ -416,6 +416,7 @@ static id JSCocoaSingleton = NULL;
 }
 
 
+
 //
 // Call a Javascript function by function reference (JSValueRef)
 // 
