@@ -295,7 +295,7 @@ w /= 3.6
 				{
 					var layers = this.appHash[path]
 					// If application is in '/Applications/', push it back in the arena
-					if (path.substr(0, applicationPath.length) == applicationPath)
+					if (path.substr(0, applicationPath.length) == applicationPath && path.match(/\//g).length <= 2)
 					{
 						pitchLayerAndItsMirror(layers, this.pitchAngle, this.pitchDistance)
 						layers[0].bounds	= layers[0].originalBounds
