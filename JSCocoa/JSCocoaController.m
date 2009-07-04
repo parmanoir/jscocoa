@@ -457,7 +457,7 @@ static id JSCocoaSingleton = NULL;
 
 //
 // Call a Javascript function by name
-//	Requires nil termination : [[JSCocoa sharedController] callJSFunctionNamed:arg1, arg2, nil]
+//	Arguments require nil termination : [[JSCocoa sharedController] callJSFunctionNamed:@"myFunction" withArguments:arg1, arg2, nil]
 // 
 - (JSValueRef)callJSFunctionNamed:(NSString*)name withArguments:(id)firstArg, ... 
 {
@@ -496,6 +496,16 @@ static id JSCocoaSingleton = NULL;
 	return	[self callJSFunction:jsFunction withArguments:arguments];
 }
 
+//
+// Call a Javascript function by name
+//	Arguments must be in an NSArray : [[JSCocoa sharedController] callJSFunctionNamed:@"myFunction" withArguments:[NSArray array...]]
+//
+- (JSValueRef)callJSFunctionNamed:(NSString*)name withArgumentsArray:(NSArray*)arguments
+{
+	JSObjectRef jsFunction = [self JSFunctionNamed:name];
+	if (!jsFunction)	return	NULL;
+	return	[self callJSFunction:jsFunction withArguments:arguments];
+}
 
 //
 // Get a function by name, check if function exists by name

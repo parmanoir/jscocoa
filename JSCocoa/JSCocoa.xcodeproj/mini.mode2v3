@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D96BD38100012F2004CB846</string>
+						<string>3D96BD711000159C004CB846</string>
 						<key>history</key>
 						<array>
-							<string>3D96BCA1100011C4004CB846</string>
+							<string>3D96BD661000156D004CB846</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>431 312 1124 748 0 0 1920 1178 </string>
+				<string>446 272 1124 748 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -256,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D96BD39100012F2004CB846</string>
+						<string>3D96BD721000159C004CB846</string>
 						<key>history</key>
 						<array>
 							<string>3D9CDF890F76F308004EB118</string>
@@ -555,11 +555,11 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>3D9CDF7D0F76F1BA004EB118</string>
-		<string>3D9CDF800F76F1BA004EB118</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/JSCocoa/JSCocoa.xcodeproj</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>3D9CDF800F76F1BA004EB118</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
 	</array>
 	<key>WindowString</key>
 	<string>1533 758 350 420 0 0 1920 1178 </string>
@@ -715,8 +715,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -739,6 +737,8 @@
 							<string>240pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
@@ -791,7 +791,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>

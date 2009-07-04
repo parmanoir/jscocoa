@@ -747,8 +747,3 @@
 	}
 	
 	
-	
-	function	test1(a, b)
-	{
-		log('a=' + a + ' b=' + b)
-	}

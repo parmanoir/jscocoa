@@ -52,6 +52,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (BOOL)isMaybeSplitCall:(NSString*)start forClass:(id)class;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
+- (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArgumentsArray:(NSArray*)arguments;
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
