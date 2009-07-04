@@ -37,6 +37,12 @@ JSCocoaController* jsc = nil;
 //	[[JSCocoaController sharedController] evalJSFile:[[NSBundle mainBundle] pathForResource:@"class" ofType:@"js"]];
 /*	
 	JSValueRef v;
+	id args = [NSArray arrayWithObjects:[NSNumber numberWithInt:3], [NSNumber numberWithInt:5], @"hello!!", nil];
+	JSObjectRef f = [[JSCocoaController sharedController] JSFunctionNamed:@"test1"];
+	v = [[JSCocoaController sharedController] callJSFunction:f withArguments:args];
+	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
+
+	JSValueRef v;
 	v = [[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:[NSNumber numberWithInt:3], [NSNumber numberWithInt:5], @"hello!!", nil];
 	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
 	v = [[JSCocoaController sharedController] callJSFunctionNamed:@"test2" withArguments:nil];

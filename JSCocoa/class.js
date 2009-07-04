@@ -745,3 +745,10 @@
 		for (var i in this) r.push(i)
 		return r
 	}
+	
+	
+	
+	function	test1(a, b)
+	{
+		log('a=' + a + ' b=' + b)
+	}

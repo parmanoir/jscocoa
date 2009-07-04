@@ -112,6 +112,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)init
 {
+
 //	NSLog(@"JSCocoa : %x spawning", self);
 	self	= [super init];
 	controllerCount++;
@@ -497,9 +498,9 @@ static id JSCocoaSingleton = NULL;
 
 
 //
-// Check if function exists
+// Get a function by name, check if function exists by name
 //
-- (BOOL)hasJSFunctionNamed:(NSString*)name
+- (JSObjectRef)JSFunctionNamed:(NSString*)name
 {
 	JSValueRef exception		= NULL;
 	// Get function as property of global object
@@ -513,8 +514,14 @@ static id JSCocoaSingleton = NULL;
 		return	NO;
 	}
 	
-	return	!!JSValueToObject(ctx, jsFunctionValue, NULL);	
+	return	JSValueToObject(ctx, jsFunctionValue, NULL);	
 }
+
+- (BOOL)hasJSFunctionNamed:(NSString*)name
+{
+	return	!![self JSFunctionNamed:name];
+}
+
 
 //
 // Unbox a JSValueRef
@@ -1415,6 +1422,7 @@ static id JSCocoaSingleton = NULL;
 //
 - (NSString*)formatJSException:(JSValueRef)exception
 {
+	if (!exception)	return @"formatJSException:(null)";
 	// Convert exception to string
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
 	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);

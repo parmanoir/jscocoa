@@ -60,12 +60,18 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 264248373;
-			PBXWorkspaceStateSaveDate = 264248373;
+			PBXPerProjectTemplateStateSaveDate = 264422026;
+			PBXWorkspaceStateSaveDate = 264422026;
 		};
 		perUserProjectItems = {
-			3D15F3100FBF5874009E31F4 /* PBXTextBookmark */ = 3D15F3100FBF5874009E31F4 /* PBXTextBookmark */;
-			3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */ = 3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */;
+			3D2EBBE30FC2484000B40578 /* PBXTextBookmark */ = 3D2EBBE30FC2484000B40578 /* PBXTextBookmark */;
+			3D2EBBE40FC2484000B40578 /* PBXTextBookmark */ = 3D2EBBE40FC2484000B40578 /* PBXTextBookmark */;
+			3D2EBBFD0FC2D6D200B40578 /* PBXBookmark */ = 3D2EBBFD0FC2D6D200B40578 /* PBXBookmark */;
+			3D2EBC000FC2D6E300B40578 /* PBXBookmark */ = 3D2EBC000FC2D6E300B40578 /* PBXBookmark */;
+			3D2EBC100FC2E33F00B40578 /* PBXTextBookmark */ = 3D2EBC100FC2E33F00B40578 /* PBXTextBookmark */;
+			3D2EBC130FC2E33F00B40578 /* PBXTextBookmark */ = 3D2EBC130FC2E33F00B40578 /* PBXTextBookmark */;
+			3D2EBC140FC2E33F00B40578 /* PBXTextBookmark */ = 3D2EBC140FC2E33F00B40578 /* PBXTextBookmark */;
+			3D2EBC150FC2E33F00B40578 /* PBXTextBookmark */ = 3D2EBC150FC2E33F00B40578 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D9CE8300F836379004EB118 /* Source Control */;
 		userBuildSettings = {
@@ -87,25 +93,92 @@
 			sepNavWindowFrame = "{{38, 237}, {1283, 915}}";
 		};
 	};
-	3D15F3100FBF5874009E31F4 /* PBXTextBookmark */ = {
+	3D2EBBE30FC2484000B40578 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
-		name = "launcher.js: 13";
-		rLen = 41;
-		rLoc = 133;
+		name = "launcher.js: 250";
+		rLen = 0;
+		rLoc = 7549;
 		rType = 0;
-		vrLen = 2441;
+		vrLen = 1809;
+		vrLoc = 7147;
+	};
+	3D2EBBE40FC2484000B40578 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D2EBBE50FC2484000B40578 /* NSEvent.h */;
+		name = "NSEvent.h: 188";
+		rLen = 17;
+		rLoc = 6033;
+		rType = 0;
+		vrLen = 2323;
+		vrLoc = 4829;
+	};
+	3D2EBBE50FC2484000B40578 /* NSEvent.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = NSEvent.h;
+		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSEvent.h;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {904, 4884}}";
+			sepNavSelRange = "{6033, 17}";
+			sepNavVisRange = "{4829, 2322}";
+			sepNavWindowFrame = "{{38, 145}, {963, 1007}}";
+		};
+	};
+	3D2EBBFD0FC2D6D200B40578 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D9CEB180F862115004EB118 /* JSCocoaController.h */;
+	};
+	3D2EBC000FC2D6E300B40578 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D9CEB190F862115004EB118 /* JSCocoaController.m */;
+	};
+	3D2EBC100FC2E33F00B40578 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9CEB190F862115004EB118 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 115";
+		rLen = 1;
+		rLoc = 3687;
+		rType = 0;
+		vrLen = 2004;
+		vrLoc = 2742;
+	};
+	3D2EBC130FC2E33F00B40578 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9CEB180F862115004EB118 /* JSCocoaController.h */;
+		name = "JSCocoaController.h: 51";
+		rLen = 0;
+		rLoc = 1214;
+		rType = 0;
+		vrLen = 2009;
 		vrLoc = 0;
 	};
-	3D15F60E0FC030FC009E31F4 /* PBXTextBookmark */ = {
+	3D2EBC140FC2E33F00B40578 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D9CEAB00F8620E2004EB118 /* launcher.js */;
-		name = "launcher.js: 13";
-		rLen = 41;
-		rLoc = 133;
+		name = "launcher.js: 250";
+		rLen = 0;
+		rLoc = 7549;
 		rType = 0;
-		vrLen = 2441;
-		vrLoc = 0;
+		vrLen = 1809;
+		vrLoc = 7147;
+	};
+	3D2EBC150FC2E33F00B40578 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D2EBC160FC2E33F00B40578 /* NSEvent.h */;
+		name = "NSEvent.h: 188";
+		rLen = 17;
+		rLoc = 6033;
+		rType = 0;
+		vrLen = 2322;
+		vrLoc = 4829;
+	};
+	3D2EBC160FC2E33F00B40578 /* NSEvent.h */ = {
+		isa = PBXFileReference;
+		name = NSEvent.h;
+		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSEvent.h;
+		sourceTree = "<absolute>";
 	};
 	3D9CE8280F836374004EB118 /* JSCocoaLauncher */ = {
 		isa = PBXExecutable;
@@ -148,10 +221,10 @@
 	};
 	3D9CEAB00F8620E2004EB118 /* launcher.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1071, 3289}}";
-			sepNavSelRange = "{133, 41}";
-			sepNavVisRange = "{0, 2441}";
-			sepNavWindowFrame = "{{395, 67}, {1130, 895}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1071, 3509}}";
+			sepNavSelRange = "{7549, 0}";
+			sepNavVisRange = "{7147, 1809}";
+			sepNavWindowFrame = "{{700, 9}, {1130, 895}}";
 		};
 	};
 	3D9CEAFB0F862115004EB118 /* BridgeSupportController.m */ = {
@@ -181,17 +254,17 @@
 	3D9CEB180F862115004EB118 /* JSCocoaController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1071, 2992}}";
-			sepNavSelRange = "{3684, 5}";
+			sepNavSelRange = "{1214, 0}";
 			sepNavVisRange = "{0, 2009}";
-			sepNavWindowFrame = "{{535, 283}, {1130, 895}}";
+			sepNavWindowFrame = "{{406, 180}, {1130, 895}}";
 		};
 	};
 	3D9CEB190F862115004EB118 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1003, 41272}}";
-			sepNavSelRange = "{35000, 303}";
-			sepNavVisRange = "{0, 2296}";
-			sepNavWindowFrame = "{{601, 164}, {1130, 895}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1071, 41877}}";
+			sepNavSelRange = "{3687, 1}";
+			sepNavVisRange = "{2742, 2004}";
+			sepNavWindowFrame = "{{185, 205}, {1130, 895}}";
 		};
 	};
 	3D9CEB1A0F862115004EB118 /* JSCocoaFFIArgument.h */ = {
@@ -204,9 +277,9 @@
 	};
 	3D9CEB1B0F862115004EB118 /* JSCocoaFFIArgument.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1195, 12254}}";
-			sepNavSelRange = "{8736, 0}";
-			sepNavVisRange = "{18425, 1093}";
+			sepNavIntBoundsRect = "{{0, 0}, {565, 13046}}";
+			sepNavSelRange = "{11217, 0}";
+			sepNavVisRange = "{26395, 732}";
 			sepNavWindowFrame = "{{535, 105}, {1130, 895}}";
 		};
 	};
@@ -252,9 +325,9 @@
 	};
 	3D9CEB210F862115004EB118 /* JSCocoaPrivateObject.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1071, 1562}}";
-			sepNavSelRange = "{1333, 24}";
-			sepNavVisRange = "{1330, 1031}";
+			sepNavIntBoundsRect = "{{0, 0}, {1195, 1573}}";
+			sepNavSelRange = "{1372, 0}";
+			sepNavVisRange = "{1330, 314}";
 			sepNavWindowFrame = "{{466, 153}, {1130, 895}}";
 		};
 	};

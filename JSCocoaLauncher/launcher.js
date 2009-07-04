@@ -8,10 +8,8 @@
 */
 
 	JSCocoa.hazardReport
+
 	
-	var a = NSString.stringWithString('a%a')
-	a = a.stringByAddingPercentEscapesUsingEncoding(NSASCIIStringEncoding)
-	log('=' + a)
 
 	class ApplicationController < NSObject
 	{

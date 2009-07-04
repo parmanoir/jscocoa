@@ -53,6 +53,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
+- (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
 - (BOOL)setObject:(id)object withName:(id)name;
 - (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
