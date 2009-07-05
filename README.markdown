@@ -27,6 +27,7 @@ Contribute and discuss
 Who uses it ?
 --
 
+* [JSCocoaLoader-sugar](http://github.com/onecrayon/JSCocoaLoader-sugar/tree/master)JSCocoaLoader.sugar allows the [Espresso text editor](http://macrabbit.com/espresso/) to be extended using JSCocoa
 * [JSTalk](http://github.com/ccgus/jstalk/tree/master) Gus Mueller, to let Cocoa applications be scripted in Javascript
 * [PluginManager](http://github.com/Grayson/pluginmanager/tree/master) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
 * [Elysium](http://lucidmac.com/products/elysium/) Matt Mower, to script Elysium, a MIDI sequencer
