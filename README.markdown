@@ -114,7 +114,7 @@ Starting up
 This will start a controller, eval a file, call a Javascript method and get an ObjC object out of it. You can start multiple interpreters, e.g. one for each document.
 
 	// Start
-	JSCocoaController* jsc = [JSCocoa new];
+	JSCocoa* jsc = [JSCocoa new];
 
 	// Eval a file
 	[jsc evalJSFile:@"path to a file"];
@@ -130,8 +130,8 @@ This will start a controller, eval a file, call a Javascript method and get an O
 	// To get an ObjC object
 	id resultingObject = [jsc unboxJSValueRef:returnValue];
 	
-	// Once we're done, let's cleanup and release
-	// This will remove all existing ObjC objects left in the Javascript context
+	// (Cleanup : only needed if you don't use ObjC's Garbage Collection)
+	// Remove all existing references to ObjC objects in the Javascript context
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
 	// Destroy
