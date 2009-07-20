@@ -266,13 +266,12 @@
 	return	ptr;
 }
 
-
-
+// This	destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)alignPtr:(void**)ptr accordingToEncoding:(char)encoding
 {
 	int alignOnSize = [JSCocoaFFIArgument alignmentOfTypeEncoding:encoding];
 	
-	int address = (int)*ptr;
+	long address = (long)*ptr;
 	if ((address % alignOnSize) != 0)
 		address = (address+alignOnSize) & ~(alignOnSize-1);
 //	NSLog(@"alignOf(%c)=%d", encoding, alignOnSize);
@@ -280,9 +279,10 @@
 	*ptr = (void*)address;
 }
 
+// This	destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)advancePtr:(void**)ptr accordingToEncoding:(char)encoding
 {
-	int address = (int)*ptr;
+	long address = (long)*ptr;
 	address += [JSCocoaFFIArgument sizeOfTypeEncoding:encoding];
 	*ptr = (void*)address;
 }
