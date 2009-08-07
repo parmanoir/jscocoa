@@ -295,7 +295,7 @@
 //
 - (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx
 {
-	BOOL r = [JSCocoaFFIArgument fromJSValueRef:value inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:structureTypeEncoding fromStorage:ptr];
+	BOOL r = [JSCocoaFFIArgument fromJSValueRef:value inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:structureTypeEncoding fromStorage:ptr];
 	if (!r)	
 	{
 		NSLog(@"fromJSValueRef FAILED, jsType=%d encoding=%c structureEncoding=%@", JSValueGetType(ctx, value), typeEncoding, structureTypeEncoding);
@@ -303,7 +303,7 @@
 	return r;
 }
 
-+ (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx withTypeEncoding:(char)typeEncoding withStructureTypeEncoding:(NSString*)structureTypeEncoding fromStorage:(void*)ptr;
++ (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx typeEncoding:(char)typeEncoding fullTypeEncoding:(NSString*)fullTypeEncoding fromStorage:(void*)ptr;
 {
 	if (!typeEncoding)	return	NO;
 
@@ -366,7 +366,7 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues to ObjC
-			BOOL isJSStruct = NSOrderedSame == [structureTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
 			if (isJSStruct)
 			{
 				// Beware ! This context is not the global context and will be valid only for that call.
@@ -380,7 +380,7 @@
 			if (!JSValueIsObject(ctx, value))	return	NO;
 			JSObjectRef object = JSValueToObject(ctx, value, NULL);
 			void* p = ptr;
-			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:structureTypeEncoding];
+			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
 			int numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:object inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[type UTF8String] fromStorage:&p];
 			return	numParsed;
 		}
@@ -436,13 +436,14 @@
 	}
 #endif	
 //	if (typeEncoding == '{')	p = [self storage];
-	BOOL r = [JSCocoaFFIArgument toJSValueRef:value inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:structureTypeEncoding fromStorage:p];
+	id encoding = structureTypeEncoding ? structureTypeEncoding : pointerTypeEncoding;
+	BOOL r = [JSCocoaFFIArgument toJSValueRef:value inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:encoding fromStorage:p];
 	if (!r)	NSLog(@"toJSValueRef FAILED");
 	return	r;
 }
 
 
-+ (BOOL)toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx withTypeEncoding:(char)typeEncoding withStructureTypeEncoding:(NSString*)structureTypeEncoding fromStorage:(void*)ptr
++ (BOOL)toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx typeEncoding:(char)typeEncoding fullTypeEncoding:(NSString*)fullTypeEncoding fromStorage:(void*)ptr
 {
 	if (!typeEncoding)	return	NO;
 	
@@ -497,7 +498,7 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues from ObjC to JS
-			BOOL isJSStruct = NSOrderedSame == [structureTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
 			if (isJSStruct)
 			{
 				JSValueRefAndContextRef*	jsStruct = (JSValueRefAndContextRef*)ptr;
@@ -506,7 +507,7 @@
 			}
 		
 			void* p = ptr;
-			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:structureTypeEncoding];
+			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
 			// Bail if structure not found
 			if (!type)	return	0;
 
@@ -555,7 +556,7 @@
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"rawPointer";
-			[private setRawPointer:*(void**)ptr];
+			[private setRawPointer:*(void**)ptr encoding:fullTypeEncoding];
 			*value = o;
 			return	YES;
 		}
@@ -625,7 +626,7 @@
 					// Align 
 					[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:encoding];
 					// Get value
-					[JSCocoaFFIArgument toJSValueRef:&valueJS inContext:ctx withTypeEncoding:encoding withStructureTypeEncoding:nil fromStorage:*ptr];
+					[JSCocoaFFIArgument toJSValueRef:&valueJS inContext:ctx typeEncoding:encoding fullTypeEncoding:nil fromStorage:*ptr];
 					// Advance ptr
 					[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
 				}
@@ -697,7 +698,7 @@
 				// Align 
 				[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:encoding];
 				// Get value
-				[JSCocoaFFIArgument fromJSValueRef:valueJS inContext:ctx withTypeEncoding:encoding withStructureTypeEncoding:nil fromStorage:*ptr];
+				[JSCocoaFFIArgument fromJSValueRef:valueJS inContext:ctx typeEncoding:encoding fullTypeEncoding:nil fromStorage:*ptr];
 				// Advance ptr
 				[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
 			}

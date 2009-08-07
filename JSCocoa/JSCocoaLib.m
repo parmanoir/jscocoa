@@ -185,7 +185,7 @@
 	void*	pointedValue = [self pointerForIndex:index];
 
 	JSValueRef returnValue;
-	[JSCocoaFFIArgument toJSValueRef:&returnValue inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:nil fromStorage:pointedValue];
+	[JSCocoaFFIArgument toJSValueRef:&returnValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	returnValue;
 }
 
@@ -194,7 +194,7 @@
 	char	typeEncoding = [self typeAtIndex:index];
 	void*	pointedValue = [self pointerForIndex:index];
 
-	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:nil fromStorage:pointedValue];
+	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	YES;
 }
 

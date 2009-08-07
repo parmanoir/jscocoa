@@ -182,7 +182,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	char encoding = [[encodings objectAtIndex:0] typeEncoding];
 	if (jsReturnValue && encoding != 'v')
 	{
-		[JSCocoaFFIArgument fromJSValueRef:jsReturnValue inContext:ctx withTypeEncoding:encoding withStructureTypeEncoding:[[encodings objectAtIndex:0] structureTypeEncoding] fromStorage:returnValue];
+		[JSCocoaFFIArgument fromJSValueRef:jsReturnValue inContext:ctx typeEncoding:encoding fullTypeEncoding:[[encodings objectAtIndex:0] structureTypeEncoding] fromStorage:returnValue];
 #ifdef __BIG_ENDIAN__
 		// As ffi always uses a sizeof(long) return value (even for chars and shorts), do some shifting
 		int size = [JSCocoaFFIArgument sizeOfTypeEncoding:encoding];

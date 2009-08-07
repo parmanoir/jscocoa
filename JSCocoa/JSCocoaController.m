@@ -437,7 +437,7 @@ static id JSCocoaSingleton = NULL;
 		{
 			char typeEncoding = _C_ID;
 			id argument = [arguments objectAtIndex:i];
-			[JSCocoaFFIArgument toJSValueRef:&jsArguments[i] inContext:ctx withTypeEncoding:typeEncoding withStructureTypeEncoding:NULL fromStorage:&argument];
+			[JSCocoaFFIArgument toJSValueRef:&jsArguments[i] inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:NULL fromStorage:&argument];
 		}
 	}
 
@@ -1828,61 +1828,61 @@ int	liveInstanceCount	= 0;
         char result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(char)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(char)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(unsigned char)) == 0) {
         unsigned char result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(unsigned char)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(unsigned char)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(short)) == 0) {
         short result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(short)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(short)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(unsigned short)) == 0) {
         unsigned short result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(unsigned short)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(unsigned short)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(int)) == 0) {
         int result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(int)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(int)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(unsigned int)) == 0) {
         unsigned int result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(unsigned int)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(unsigned int)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(long)) == 0) {
         long result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(long)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(long)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(unsigned long)) == 0) {
         unsigned long result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(unsigned long)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(unsigned long)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(float)) == 0) {
         float result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(float)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(float)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
     else if (strcmp(type, @encode(double)) == 0) {
         double result;
         [invocation getReturnValue:&result];
 		if (!result)		return JSValueMakeNull(localCtx);
-        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx withTypeEncoding:@encode(double)[0] withStructureTypeEncoding:NULL fromStorage:&result];
+        [JSCocoaFFIArgument toJSValueRef:&jsReturnValue inContext:localCtx typeEncoding:@encode(double)[0] fullTypeEncoding:NULL fromStorage:&result];
     }
 	// Structure return
 	else if (type && type[0] == '{')
@@ -2183,6 +2183,7 @@ int	liveInstanceCount	= 0;
 
 #pragma mark -
 #pragma mark JavascriptCore callbacks
+#pragma mark -
 #pragma mark JavascriptCore OSX object
 
 //
@@ -2387,13 +2388,20 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	{
 		return [thisPrivateObject jsValueRef];
 	}
+
+	if ([thisPrivateObject.type isEqualToString:@"externalJSValueRef"])	
+	{
+		NSLog(@"need to convert context valueOfCallback");
+//		return [thisPrivateObject jsValueRef];
+	}
 	
 	// NSNumber special case
 	if ([thisPrivateObject.object isKindOfClass:[NSNumber class]])
 		return	JSValueMakeNumber(ctx, [thisPrivateObject.object doubleValue]);
 
 	// Convert to string
-	id toString = [NSString stringWithFormat:@"JSCocoaPrivateObject type=%@", thisPrivateObject.type];
+//	id toString = [NSString stringWithFormat:@"JSCocoaPrivateObject type=%@", thisPrivateObject.type];
+	id toString = [thisPrivateObject description];
 	
 	// Object
 	if ([thisPrivateObject.type isEqualToString:@"@"])
@@ -2409,7 +2417,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 			return outValue;
 		}
 		else
-		
 			toString = [NSString stringWithFormat:@"%@", [[thisPrivateObject object] description]];
 	}
 
@@ -2823,9 +2830,10 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		}
 		return	o;
 	}
-
-	// Struct valueOf
-	if ([privateObject.type isEqualToString:@"struct"] && [propertyName isEqualToString:@"valueOf"])
+	
+	
+	// Struct + rawPointer valueOf
+	if (/*[privateObject.type isEqualToString:@"struct"] &&*/ ([propertyName isEqualToString:@"valueOf"] || [propertyName isEqualToString:@"toString"]))
 	{
 		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
@@ -2833,7 +2841,48 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		private.methodName = propertyName;
 		return	o;
 	}
-	
+
+
+	if ([privateObject.type isEqualToString:@"rawPointer"])
+	{
+		NSLog(@"RAWPOINTER : %@ request %@ (%@)", privateObject, propertyName, [privateObject rawPointerEncoding]);
+//		NSLog(@"%@", 
+		
+		if ([[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
+		{
+			NSLog(@"===============>");
+			JSGlobalContextRef globalContext = [privateObject rawPointer];
+			NSLog(@"global contextObject=%x", JSContextGetGlobalObject(globalContext));
+			JSValueRef r = JSObjectGetProperty(globalContext, JSContextGetGlobalObject(globalContext), propertyNameJS, NULL);
+
+			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+			private.type = @"externalJSValueRef";
+			[private setExternalJSValueRef:r ctx:globalContext];
+			return	o;
+//			private.type = @"method";
+//			private.methodName = propertyName;
+
+			
+//			NSLog(@"%x %d", r, JSValueGetType(globalContext, r));
+//			return	r;
+		}
+	}
+
+	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
+	{
+		NSLog(@"HOOOOOOOOOOOO");
+		JSContextRef externalCtx = [privateObject ctx];
+		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, NULL);
+
+		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+		private.type = @"externalJSValueRef";
+		[private setExternalJSValueRef:r ctx:externalCtx];
+		return	o;
+	}
+
+
 	// Structs will get here when being asked javascript attributes (eg 'x' in point.x)
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
 	
@@ -3510,11 +3559,28 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 	id	superSelectorClass		= NULL;
 
 	// Pure JS functions for derived ObjC classes
-	if ([privateObject jsValueRef] && [privateObject.type isEqualToString:@"jsFunction"])
+	if ([privateObject jsValueRef])
 	{
-		JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
-		JSValueRef ret = JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
-		return	ret;
+		if ([privateObject.type isEqualToString:@"jsFunction"])
+		{
+			JSObjectRef jsFunction = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
+			JSValueRef ret = JSObjectCallAsFunction(ctx, jsFunction, thisObject, argumentCount, arguments, exception);
+			return	ret;
+		}
+		else
+		if ([privateObject.type isEqualToString:@"externalJSValueRef"])
+		{
+			NSLog(@"need to convert arguments from context to context");
+			JSContextRef externalCtx = [privateObject ctx];
+			JSObjectRef jsFunction = JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
+			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, thisObject, argumentCount, arguments, exception);
+
+			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+			private.type = @"externalJSValueRef";
+			[private setExternalJSValueRef:ret ctx:externalCtx];
+			return	o;
+		}
 	}
 	// Javascript custom methods
 	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
@@ -3656,6 +3722,8 @@ static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef obje
 {
 	// Only invoked when converting to strings and numbers.
 	// Would have been useful to be called on BOOLs too, to avoid false positives of ('varname' in object) when varname may start a split call.
+	
+	// toString and valueOf conversions go through getProperty, at the end of the function.
 	
 	// Used on string conversions, eg jsHash[objcNSString] to convert objcNSString to a js string
 	return	valueOfCallback(ctx, NULL, object, 0, NULL, NULL);

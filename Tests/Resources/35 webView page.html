@@ -1,0 +1,35 @@
+<html>
+	<style>
+		div
+		{
+			margin: 1em;
+		}
+	</style>
+<body>
+
+	<p>JSCocoa will interact with this webpage.
+	<p>This page should show two DIVs with a green background-color. Last div should contain 8.
+	<hr>
+	
+	<div id='hideMe'>This should be hidden.</div>
+
+	<div id='showMe' style='display: none; background-color: lime'>This should be shown.</div>
+
+	<div id='colorMe' style='background-color: red'>This should be green.</div>
+
+	<div id='replaceMe'>This should be replaced by the digit eight.</div>
+	
+	<script>
+		function	replaceDiv(name, value)
+		{
+			document.getElementById(name).innerHTML = value
+		}
+		
+		function	doStuff(color)
+		{
+			document.body.style.backgroundColor = color || 'red'
+		}
+	</script>
+	
+</body>
+</html>

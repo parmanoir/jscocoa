@@ -18,12 +18,15 @@
 
 //
 // Boxing object
+//
 //	type
 //	@			ObjC object
 //	struct		C struct
 //	method		ObjC method name
 //	rawPointer	raw C pointer (_C_PTR)
-//	function	Javascript function
+//	jsFunction	Javascript function
+//	jsValueRef	raw jsvalue
+//	externalJSValueRef	EXPERIMENTAL from webView
 //
 
 @interface JSCocoaPrivateObject : NSObject {
@@ -68,8 +71,11 @@
 
 - (void)setJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 - (JSValueRef)jsValueRef;
+- (JSContextRef)ctx;
+- (void)setExternalJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 
 - (void*)rawPointer;
-- (void)setRawPointer:(void*)rp;
+- (void)setRawPointer:(void*)rp encoding:(id)encoding;
+- (id)rawPointerEncoding;
 
 @end
