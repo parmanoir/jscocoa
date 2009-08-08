@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		3D0E38920ED8CE1D00077F66 /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 3D0E388B0ED8CE1D00077F66 /* Tests */; };
+		3D19C08A102E3CBE0061613F /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D19C089102E3CBE0061613F /* test.js */; };
 		3D8915900EA8F50D00BE4E70 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */; };
 		3D9D80E50EF87B1B00D71763 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9D80E40EF87B1B00D71763 /* JavaScriptCore.framework */; };
 		3DB065B10F28D7A60043C238 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB065A30F28D7A60043C238 /* BridgeSupportController.m */; };
@@ -33,6 +34,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* TestsRunner_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestsRunner_Prefix.pch; sourceTree = "<group>"; };
 		3D0E388B0ED8CE1D00077F66 /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tests; path = ../Tests; sourceTree = SOURCE_ROOT; };
+		3D19C089102E3CBE0061613F /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		3D89158E0EA8F50D00BE4E70 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
 		3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
 		3D9D80E40EF87B1B00D71763 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
@@ -71,6 +73,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3D19C089102E3CBE0061613F /* test.js */,
 				3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */,
 				3D89158E0EA8F50D00BE4E70 /* ApplicationController.h */,
 			);
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DB065B20F28D7A60043C238 /* class.js in Resources */,
+				3D19C08A102E3CBE0061613F /* test.js in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				3D0E38920ED8CE1D00077F66 /* Tests in Resources */,

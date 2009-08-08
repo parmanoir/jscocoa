@@ -14,7 +14,6 @@
 	//
 	class WebViewLoadDelegate35 < NSObject
 	{
-//		- (void)webView:(WebView *)senderdidFinishLoadForFrame:(WebFrame *)frame
 		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 		{
 //			log('LOADED')
@@ -77,6 +76,9 @@
 //			JSGlobalContextRef
 //JSGlobalContextRef JSGlobalContextRetain(JSGlobalContextRef ctx);
 
+			n = null
+			__jsc__.garbageCollect
+
 			loadDelegate = null
 			window = null
 //			__jsc__.garbageCollect
@@ -104,13 +106,12 @@
 	var view = WebView.alloc.initWithFrame(contentView.frame)
 	view.release
 	var loadDelegate = WebViewLoadDelegate35.instance()
-//	var loadDelegate = WebViewLoadDelegate35.alloc.init
 	// Does not retain the delegate
 	view.frameLoadDelegate = loadDelegate
 	view.autoresizingMask = NSViewWidthSizable+NSViewHeightSizable
 	contentView.addSubview(view)
 	
-	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
+//	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
 
 	
 	var path = NSBundle.mainBundle.resourcePath + '/Tests/Resources/35 webView page.html'
@@ -120,7 +121,7 @@
 	view = null
 
 
-//	registerWaitingTest('35 webview')
+	registerWaitingTest('35 webview')
 //	throw 'TEST'
 	
 

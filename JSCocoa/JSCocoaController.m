@@ -2504,22 +2504,10 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		JSValueRef externalJSValueRef = [thisPrivateObject jsValueRef];
 		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].valueOf()");
 		JSObjectRef fn = JSObjectMakeFunction(externalCtx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
-		NSLog(@"> call");
 		JSValueRef result = JSObjectCallAsFunction(externalCtx, fn, NULL, 1, (JSValueRef*)&externalJSValueRef, NULL);
 		JSStringRelease(scriptJS);
-		NSLog(@"> callED");
-		
-		NSLog(@"external type=%d", JSValueGetType(externalCtx, result));
-
 
 		return	valueFromContext(externalCtx, result, ctx);
-//		return	result;
-
-		return	JSValueMakeNull(ctx);
-
-		
-		
-//		return [thisPrivateObject jsValueRef];
 	}
 	
 	// NSNumber special case
@@ -2990,9 +2978,16 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	// External WebView value
 	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
 	{
-		NSLog(@"externalCtx getProperty need custom exception handling");
 		JSContextRef externalCtx = [privateObject ctx];
-		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, NULL);
+		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, exception);
+
+		// If WebView had an exception, re-throw it in our context
+		if (exception && *exception)	
+		{
+			id s = [JSCocoaController formatJSException:*exception inContext:externalCtx];
+			throwException(ctx, exception, [NSString stringWithFormat:@"(WebView) %@", s]);
+			return JSValueMakeNull(ctx);
+		}
 
 		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
@@ -3243,20 +3238,17 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		JSValueRef externalValue = [privateObject jsValueRef];
 		JSObjectRef externalObject = JSValueToObject(externalCtx, externalValue, NULL);
 		JSValueRef convertedValue = valueToContext(ctx, jsValue, externalCtx);
-		JSObjectSetProperty(externalCtx, externalObject, propertyNameJS, convertedValue, kJSPropertyAttributeNone, NULL);
+		JSObjectSetProperty(externalCtx, externalObject, propertyNameJS, convertedValue, kJSPropertyAttributeNone, exception);
+
+		// If WebView had an exception, re-throw it in our context
+		if (exception && *exception)	
+		{
+			id s = [JSCocoaController formatJSException:*exception inContext:externalCtx];
+			throwException(ctx, exception, [NSString stringWithFormat:@"(WebView) %@", s]);
+			return false;
+		}
 		
 		return	true;
-/*		
-		NSLog(@"externalCtx getProperty need custom exception handling");
-		JSContextRef externalCtx = [privateObject ctx];
-		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, NULL);
-
-		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-		private.type = @"externalJSValueRef";
-		[private setExternalJSValueRef:r ctx:externalCtx];
-		return	o;
-*/
 	}
 
 	//
@@ -3712,41 +3704,28 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		else
 		if ([privateObject.type isEqualToString:@"externalJSValueRef"])
 		{
-			NSLog(@"need to convert arguments from context to context");
 			JSContextRef externalCtx = [privateObject ctx];
 			JSObjectRef jsFunction = JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
-			NSLog(@"about to call ctx=%x externalCtx=%x", ctx, externalCtx);
 			
-			
+			// Convert arguments to WebView context
 			JSValueRef* convertedArguments = NULL;
 			if (argumentCount) convertedArguments = malloc(sizeof(JSValueRef)*argumentCount);
 			for (int i=0; i<argumentCount; i++)
-			{
-				JSValueRef arg = arguments[i];
-				NSLog(@"%d type=%d", i, JSValueGetType(ctx, arg));
-				convertedArguments[i] = NULL;
-///				convertedArguments[i] = JSValueMakeNull(externalCtx);
 				convertedArguments[i] = valueToContext(ctx, arguments[i], externalCtx);
-			}
-//			return JSValueMakeNull(ctx);
-//convertedArguments = arguments;
+
+			// Call
 			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, thisObject, argumentCount, convertedArguments, exception);
-			
+			if (convertedArguments) free(convertedArguments);
+
+			// If WebView had an exception, re-throw it in our context
 			if (exception && *exception)	
-			
 			{
-			
 				id s = [JSCocoaController formatJSException:*exception inContext:externalCtx];
-				NSLog(@"****%@****", s);
-			
-				throwException(ctx, exception, [NSString stringWithFormat:@"exception in external context"]);
-				
+				throwException(ctx, exception, [NSString stringWithFormat:@"(WebView) %@", s]);
 				return JSValueMakeNull(ctx);
 			}
-//return ret;			
-//			if (convertedArguments)	free(convertedArguments);
-			
-			NSLog(@"called");
+
+
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"externalJSValueRef";

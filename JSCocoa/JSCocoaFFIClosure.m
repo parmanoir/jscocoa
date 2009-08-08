@@ -198,7 +198,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	}
 
 	if (effectiveArgumentCount)	free(args);
-	if (exception)	NSLog(@"EXC jsc=%@ ctx=%x, effectiveArgumentCount=%d", [JSCocoaController controllerFromContext:ctx], ctx, effectiveArgumentCount);
 	if (exception)	NSLog(@"%@", [[JSCocoaController controllerFromContext:ctx] formatJSException:exception]);
 }
 

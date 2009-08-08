@@ -30,6 +30,7 @@ JSCocoaController* jsc = nil;
 
 //	jsc = [JSCocoaController sharedController];
 	jsc = [JSCocoa new];
+	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
 
 
 
