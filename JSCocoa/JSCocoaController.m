@@ -1430,21 +1430,21 @@ static id JSCocoaSingleton = NULL;
 //	This way, JavascriptCore will add line and sourceURL.
 //	(throw new String('error') instead of throw 'error')
 //
-- (NSString*)formatJSException:(JSValueRef)exception
++ (NSString*)formatJSException:(JSValueRef)exception inContext:(JSContextRef)context
 {
 	if (!exception)	return @"formatJSException:(null)";
 	// Convert exception to string
-	JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
+	JSStringRef resultStringJS = JSValueToStringCopy(context, exception, NULL);
 	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
 	[NSMakeCollectable(b) autorelease];
 
 	// Only objects contain line and source URL
-	if (JSValueGetType(ctx, exception) != kJSTypeObject)	return	b;
+	if (JSValueGetType(context, exception) != kJSTypeObject)	return	b;
 
 	// Iterate over all properties of the exception
-	JSObjectRef jsObject = JSValueToObject(ctx, exception, NULL);
-	JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(ctx, jsObject);
+	JSObjectRef jsObject = JSValueToObject(context, exception, NULL);
+	JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(context, jsObject);
 	int i, nameCount = JSPropertyNameArrayGetCount(jsNames);
 	id line = nil, sourceURL = nil;
 	for (i=0; i<nameCount; i++)
@@ -1452,8 +1452,8 @@ static id JSCocoaSingleton = NULL;
 		JSStringRef jsName = JSPropertyNameArrayGetNameAtIndex(jsNames, i);
 		id name = (id)JSStringCopyCFString(kCFAllocatorDefault, jsName);
 
-		JSValueRef	jsValueRef = JSObjectGetProperty(ctx, jsObject, jsName, NULL);
-		JSStringRef	valueJS = JSValueToStringCopy(ctx, jsValueRef, NULL);
+		JSValueRef	jsValueRef = JSObjectGetProperty(context, jsObject, jsName, NULL);
+		JSStringRef	valueJS = JSValueToStringCopy(context, jsValueRef, NULL);
 		NSString* value = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, valueJS);
 		JSStringRelease(valueJS);
 		
@@ -1466,6 +1466,12 @@ static id JSCocoaSingleton = NULL;
 	JSPropertyNameArrayRelease(jsNames);
 	return [NSString stringWithFormat:@"%@ on line %@ of %@", b, line, sourceURL];
 }
+
+- (NSString*)formatJSException:(JSValueRef)exception
+{
+	return [JSCocoaController formatJSException:exception inContext:ctx];
+}
+
 
 //
 // Error reporting
@@ -2378,6 +2384,123 @@ BOOL	isUsingStret(id argumentEncodings)
 }
 
 //
+// Convert FROM a webView context to a local context
+//
+JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
+{
+	int type = JSValueGetType(externalCtx, value);
+	switch (type)
+	{
+		case kJSTypeUndefined:
+		{
+			return JSValueMakeUndefined(ctx);
+		}
+
+		case kJSTypeNull:
+		{
+			return JSValueMakeNull(ctx);
+		}
+
+		case kJSTypeBoolean:
+		{
+			bool b = JSValueToBoolean(externalCtx, value);
+			return JSValueMakeBoolean(ctx, b);
+		}
+
+		case kJSTypeNumber:
+		{
+			double d = JSValueToNumber(externalCtx, value, NULL);
+			return JSValueMakeNumber(ctx, d);
+		}
+
+		case kJSTypeString:
+		case kJSTypeObject:
+		{
+			// Add an (externalContext) suffix to distinguish boxed JSValues from a WebView
+			JSStringRef jsString	= JSValueToStringCopy(externalCtx, value, NULL);
+
+			NSString* string		= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, jsString);
+			NSString* idString		= [NSString stringWithFormat:@">%@ (externalContext)", string];
+			[string release];
+			JSStringRelease(jsString);
+			
+			jsString				= JSStringCreateWithUTF8CString([idString UTF8String]);
+			JSValueRef returnValue	= JSValueMakeString(ctx, jsString);
+			JSStringRelease(jsString);
+			
+			return returnValue;
+		}
+	}
+	return JSValueMakeNull(ctx);
+}
+
+//
+// Convert TO a webView context from a local context
+//
+JSValueRef valueToContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx)
+{
+	int type = JSValueGetType(ctx, value);
+	switch (type)
+	{
+		case kJSTypeUndefined:
+		{
+			return JSValueMakeUndefined(externalCtx);
+		}
+
+		case kJSTypeNull:
+		{
+			return JSValueMakeNull(externalCtx);
+		}
+
+		case kJSTypeBoolean:
+		{
+			bool b = JSValueToBoolean(ctx, value);
+			return JSValueMakeBoolean(externalCtx, b);
+		}
+
+		case kJSTypeNumber:
+		{
+			double d = JSValueToNumber(ctx, value, NULL);
+			return JSValueMakeNumber(externalCtx, d);
+		}
+
+		case kJSTypeString:
+		{
+			JSStringRef	jsString = JSValueToStringCopy(ctx, value, NULL);
+			JSValueRef	returnValue = JSValueMakeString(externalCtx, jsString);
+			JSStringRelease(jsString);
+			return		returnValue;
+		}
+		case kJSTypeObject:
+		{
+			JSObjectRef o = JSValueToObject(ctx, value, NULL);
+			if (!o)		return	JSValueMakeNull(externalCtx);
+			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
+			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	return	JSValueMakeNull(externalCtx);
+			return	[privateObject jsValueRef];
+			NSLog(@"AAAA %@", privateObject);
+/*		
+			// Add an (externalContext) suffix to distinguish boxed JSValues from a WebView
+			JSStringRef jsString = JSValueToStringCopy(externalCtx, value, NULL);
+
+			NSString* string = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, jsString);
+			NSString* idString = [NSString stringWithFormat:@">%@ (externalContext)", string];
+			[string release];
+			JSStringRelease(jsString);
+			
+			jsString = JSStringCreateWithUTF8CString([idString UTF8String]);
+			JSValueRef returnValue = JSValueMakeString(ctx, jsString);
+			JSStringRelease(jsString);
+			
+			return returnValue;
+*/
+		}
+	}
+	return JSValueMakeNull(externalCtx);
+}
+
+
+//
 // Autocall : return value
 //
 JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception)
@@ -2392,6 +2515,25 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	if ([thisPrivateObject.type isEqualToString:@"externalJSValueRef"])	
 	{
 		NSLog(@"need to convert context valueOfCallback");
+		JSContextRef externalCtx = [thisPrivateObject ctx];
+		JSValueRef externalJSValueRef = [thisPrivateObject jsValueRef];
+		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].valueOf()");
+		JSObjectRef fn = JSObjectMakeFunction(externalCtx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+		NSLog(@"> call");
+		JSValueRef result = JSObjectCallAsFunction(externalCtx, fn, NULL, 1, (JSValueRef*)&externalJSValueRef, NULL);
+		JSStringRelease(scriptJS);
+		NSLog(@"> callED");
+		
+		NSLog(@"external type=%d", JSValueGetType(externalCtx, result));
+
+
+		return	valueFromContext(externalCtx, result, ctx);
+//		return	result;
+
+		return	JSValueMakeNull(ctx);
+
+		
+		
 //		return [thisPrivateObject jsValueRef];
 	}
 	
@@ -2871,7 +3013,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 
 	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
 	{
-		NSLog(@"HOOOOOOOOOOOO");
+		NSLog(@"externalCtx getProperty need custom exception handling");
 		JSContextRef externalCtx = [privateObject ctx];
 		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, NULL);
 
@@ -3115,6 +3257,12 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			BOOL set = [callee setJSValue:value forJSName:name];
 			if (set)	return	true;
 		}
+	}
+
+	if ([privateObject.type isEqualToString:@"rawPointer"])
+	{
+		NSLog(@"SET");
+		return	false;
 	}
 
 	//
@@ -3573,8 +3721,38 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			NSLog(@"need to convert arguments from context to context");
 			JSContextRef externalCtx = [privateObject ctx];
 			JSObjectRef jsFunction = JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
-			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, thisObject, argumentCount, arguments, exception);
-
+			NSLog(@"about to call ctx=%x externalCtx=%x", ctx, externalCtx);
+			
+			
+			JSValueRef* convertedArguments = NULL;
+			if (argumentCount) convertedArguments = malloc(sizeof(JSValueRef)*argumentCount);
+			for (int i=0; i<argumentCount; i++)
+			{
+				JSValueRef arg = arguments[i];
+				NSLog(@"%d type=%d", i, JSValueGetType(ctx, arg));
+				convertedArguments[i] = NULL;
+///				convertedArguments[i] = JSValueMakeNull(externalCtx);
+				convertedArguments[i] = valueToContext(ctx, arguments[i], externalCtx);
+			}
+//			return JSValueMakeNull(ctx);
+//convertedArguments = arguments;
+			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, thisObject, argumentCount, convertedArguments, exception);
+			
+			if (exception && *exception)	
+			
+			{
+			
+				id s = [JSCocoaController formatJSException:*exception inContext:externalCtx];
+				NSLog(@"****%@****", s);
+			
+				throwException(ctx, exception, [NSString stringWithFormat:@"exception in external context"]);
+				
+				return JSValueMakeNull(ctx);
+			}
+//return ret;			
+//			if (convertedArguments)	free(convertedArguments);
+			
+			NSLog(@"called");
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"externalJSValueRef";

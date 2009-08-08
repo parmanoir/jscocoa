@@ -29,6 +29,19 @@
 		{
 			document.body.style.backgroundColor = color || 'red'
 		}
+		
+		function	displayObject(object, value)
+		{
+			document.getElementById(object).innerHTML = value
+//			document.body.style.backgroundColor = 'lime'
+		}
+
+
+		function	replaceNodeValue(node, value)
+		{
+			node.innerHTML = value
+		}
+//		replaceNodeValue(document.body, 'hello')
 	</script>
 	
 </body>

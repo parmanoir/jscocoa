@@ -17,17 +17,39 @@
 //		- (void)webView:(WebView *)senderdidFinishLoadForFrame:(WebFrame *)frame
 		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 		{
-
 //			log('LOADED')
 //			log('k=' + sender.mainFrame.globalContext + '!!!!')
 			
 			var w = sender.mainFrame.globalContext
+//			w.doStuff('blue')
+//			log('r=' + r)
 
 
 //log('color=' + w.document.getElementById('colorMe').style.backgroundColor)
+//log('node=' + w.document.body)
 			var n = w.document.body
-			log('n=' + n)
-			var n = w.doStuff('blue')
+			
+			w.replaceNodeValue(n, 'WORLD')
+			
+			n.style.backgroundColor = 'lime'
+			
+//			w.displayObject('replaceMe', '8')
+//try
+{
+//			var n = w.document.getElementById('colorMe')
+//			w.document.getElementById('colorMe').style.backgroundColor = 'blue'
+//			log('n=' + n)
+			}
+//			catch(e)
+			{
+//				for (var i in e) log(i + '=' + e[i])
+//				log('caught' + (typeof e))
+			}
+			
+//			var node = w.document.getElementById('replaceMe')
+//			log('node=' + node)
+//			var n = w.doStuff('blue')
+//			w.displayObject('replaceMe', this)
 //			n = null
 
 //			var n = w.document.getElementById('colorMe')
@@ -51,7 +73,7 @@
 
 			loadDelegate = null
 			window = null
-			__jsc__.garbageCollect
+//			__jsc__.garbageCollect
 		}
 	}
 	
@@ -80,6 +102,8 @@
 	// Does not retain the delegate
 	view.frameLoadDelegate = loadDelegate
 	contentView.addSubview(view)
+	
+	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
 
 	
 	var path = NSBundle.mainBundle.resourcePath + '/Tests/Resources/35 webView page.html'
