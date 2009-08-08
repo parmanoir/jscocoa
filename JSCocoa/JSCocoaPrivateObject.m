@@ -22,6 +22,7 @@
 	isAutoCall	= NO;
 	jsValue		= NULL;
 	retainObject	= YES;
+	retainContext	= NO;
 	rawPointer	= NULL;
 	ctx			= NULL;
 	
@@ -46,6 +47,8 @@
 		JSValueUnprotect(ctx, jsValue);
 		[JSCocoaController downJSValueProtectCount];
 	}
+	if (retainContext)
+		JSGlobalContextRelease((JSGlobalContextRef)ctx);
 	
 	// Release properties
 	[type release];
@@ -136,6 +139,8 @@
 	jsValue = v;
 	ctx		= c;
 	JSValueProtect(ctx, jsValue);
+	JSGlobalContextRetain((JSGlobalContextRef)c);
+	retainContext = YES;
 	[JSCocoaController upJSValueProtectCount];
 }
 

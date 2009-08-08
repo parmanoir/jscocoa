@@ -2384,7 +2384,7 @@ BOOL	isUsingStret(id argumentEncodings)
 }
 
 //
-// Convert FROM a webView context to a local context
+// Convert FROM a webView context to a local context (called by valueOf(), toString())
 //
 JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
 {
@@ -2413,6 +2413,7 @@ JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContex
 			return JSValueMakeNumber(ctx, d);
 		}
 
+		// Make strings and objects show up only as strings
 		case kJSTypeString:
 		case kJSTypeObject:
 		{
@@ -2478,22 +2479,6 @@ JSValueRef valueToContext(JSContextRef ctx, JSValueRef value, JSContextRef exter
 			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
 			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	return	JSValueMakeNull(externalCtx);
 			return	[privateObject jsValueRef];
-			NSLog(@"AAAA %@", privateObject);
-/*		
-			// Add an (externalContext) suffix to distinguish boxed JSValues from a WebView
-			JSStringRef jsString = JSValueToStringCopy(externalCtx, value, NULL);
-
-			NSString* string = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, jsString);
-			NSString* idString = [NSString stringWithFormat:@">%@ (externalContext)", string];
-			[string release];
-			JSStringRelease(jsString);
-			
-			jsString = JSStringCreateWithUTF8CString([idString UTF8String]);
-			JSValueRef returnValue = JSValueMakeString(ctx, jsString);
-			JSStringRelease(jsString);
-			
-			return returnValue;
-*/
 		}
 	}
 	return JSValueMakeNull(externalCtx);
@@ -2985,16 +2970,13 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	}
 
 
+	// If we have an external Javascript context, query it
 	if ([privateObject.type isEqualToString:@"rawPointer"])
 	{
-		NSLog(@"RAWPOINTER : %@ request %@ (%@)", privateObject, propertyName, [privateObject rawPointerEncoding]);
-//		NSLog(@"%@", 
-		
 		if ([[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
 		{
-			NSLog(@"===============>");
 			JSGlobalContextRef globalContext = [privateObject rawPointer];
-			NSLog(@"global contextObject=%x", JSContextGetGlobalObject(globalContext));
+//			NSLog(@"global contextObject=%x", JSContextGetGlobalObject(globalContext));
 			JSValueRef r = JSObjectGetProperty(globalContext, JSContextGetGlobalObject(globalContext), propertyNameJS, NULL);
 
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
@@ -3002,15 +2984,10 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			private.type = @"externalJSValueRef";
 			[private setExternalJSValueRef:r ctx:globalContext];
 			return	o;
-//			private.type = @"method";
-//			private.methodName = propertyName;
-
-			
-//			NSLog(@"%x %d", r, JSValueGetType(globalContext, r));
-//			return	r;
 		}
 	}
 
+	// External WebView value
 	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
 	{
 		NSLog(@"externalCtx getProperty need custom exception handling");
@@ -3259,10 +3236,27 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		}
 	}
 
-	if ([privateObject.type isEqualToString:@"rawPointer"])
+	// External WebView value
+	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
 	{
-		NSLog(@"SET");
-		return	false;
+		JSContextRef externalCtx = [privateObject ctx];
+		JSValueRef externalValue = [privateObject jsValueRef];
+		JSObjectRef externalObject = JSValueToObject(externalCtx, externalValue, NULL);
+		JSValueRef convertedValue = valueToContext(ctx, jsValue, externalCtx);
+		JSObjectSetProperty(externalCtx, externalObject, propertyNameJS, convertedValue, kJSPropertyAttributeNone, NULL);
+		
+		return	true;
+/*		
+		NSLog(@"externalCtx getProperty need custom exception handling");
+		JSContextRef externalCtx = [privateObject ctx];
+		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, NULL);
+
+		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+		private.type = @"externalJSValueRef";
+		[private setExternalJSValueRef:r ctx:externalCtx];
+		return	o;
+*/
 	}
 
 	//

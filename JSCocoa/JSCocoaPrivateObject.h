@@ -49,6 +49,7 @@
 	
 	BOOL		isAutoCall;
 	BOOL		retainObject;
+	BOOL		retainContext;
 }
 
 @property (copy) NSString*	type;

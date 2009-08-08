@@ -24,14 +24,20 @@
 //			w.doStuff('blue')
 //			log('r=' + r)
 
+//log(w.document.body.innerHTML)
+//return
+
 
 //log('color=' + w.document.getElementById('colorMe').style.backgroundColor)
 //log('node=' + w.document.body)
 			var n = w.document.body
 			
-			w.replaceNodeValue(n, 'WORLD')
+			w.replaceNodeValue(n, 'WORLD, time=' + (new Date))
 			
-			n.style.backgroundColor = 'lime'
+			n.innerHTML = '****replaced****'
+			n.style.backgroundColor = 'red'
+			
+//			n.style.backgroundColor = 'lime'
 			
 //			w.displayObject('replaceMe', '8')
 //try
@@ -86,7 +92,7 @@
 
 
 	var rect = new NSRect(100, 100, 400, 400)
-	var style = NSTitledWindowMask+NSClosableWindowMask
+	var style = NSTitledWindowMask+NSClosableWindowMask+NSResizableWindowMask
 	var window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(rect, style, NSBackingStoreBuffered, false)
 	window.releasedWhenClosed = 0
 	window.makeKeyAndOrderFront(null)
@@ -101,12 +107,14 @@
 //	var loadDelegate = WebViewLoadDelegate35.alloc.init
 	// Does not retain the delegate
 	view.frameLoadDelegate = loadDelegate
+	view.autoresizingMask = NSViewWidthSizable+NSViewHeightSizable
 	contentView.addSubview(view)
 	
 	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
 
 	
 	var path = NSBundle.mainBundle.resourcePath + '/Tests/Resources/35 webView page.html'
+//	path = 'http://yahoo.com'
 	view.mainFrameURL = path
 
 	view = null
