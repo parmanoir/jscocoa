@@ -115,13 +115,15 @@ int runCount = 0;
 
 - (IBAction)runJSTests:(id)sender
 {
+	[jsc callJSFunctionNamed:@"resetDelayedTests" withArguments:nil];
+
 	runCount++;
 	jsc.delegate = nil;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-	int count = [jsc runTests:path];
-	BOOL b = !!count;
+	int testCount = [jsc runTests:path];
+	BOOL b = !!testCount;
 	[self garbageCollect:nil];
 
 	// Test delegate
@@ -145,7 +147,14 @@ JSValueRef res;
 	jsc.delegate = nil;
 	
 	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
-	else	NSLog(@"All %d tests ran OK !", count);
+	else	
+	{
+
+		int delayedTestCount = [jsc toInt:[jsc callJSFunctionNamed:@"delayedTestCount" withArguments:nil]];
+		
+		if (delayedTestCount)	NSLog(@"All %d tests ran OK, %d delayed pending", testCount, delayedTestCount);
+		else					NSLog(@"All %d tests ran OK !", testCount);
+	}
 }
 
 //

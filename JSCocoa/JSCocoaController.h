@@ -52,12 +52,20 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArgumentsArray:(NSArray*)arguments;
-- (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
 - (BOOL)setObject:(id)object withName:(id)name;
 - (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
 - (BOOL)removeObjectWithName:(id)name;
+// Get ObjC and raw values from Javascript
+- (id)unboxJSValueRef:(JSValueRef)jsValue;
+- (BOOL)toBool:(JSValueRef)value;
+- (double)toDouble:(JSValueRef)value;
+- (int)toInt:(JSValueRef)value;
+- (NSString*)toString:(JSValueRef)value;
+// Wrapper for unboxJSValueRef
+- (id)toObject:(JSValueRef)value;
+
 
 //
 // Framework

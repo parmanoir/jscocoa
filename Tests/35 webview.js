@@ -16,81 +16,42 @@
 	{
 		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 		{
-//			log('LOADED')
-//			log('k=' + sender.mainFrame.globalContext + '!!!!')
-			
+			// Global context is frame's window object
 			var w = sender.mainFrame.globalContext
-//			w.doStuff('blue')
-//			log('r=' + r)
-
-//log(w.document.body.innerHTML)
-//return
 
 
-//log('color=' + w.document.getElementById('colorMe').style.backgroundColor)
-//log('node=' + w.document.body)
 			var n = w.document.body
 			
-			w.replaceNodeValue(n, 'WORLD, time=' + (new Date))
-			
-			n.innerHTML = '****replaced****'
-			n.style.backgroundColor = 'red'
-			
-//			n.style.backgroundColor = 'lime'
-			
-//			w.displayObject('replaceMe', '8')
-//try
-{
-//			var n = w.document.getElementById('colorMe')
-//			w.document.getElementById('colorMe').style.backgroundColor = 'blue'
-//			log('n=' + n)
-			}
-//			catch(e)
-			{
-//				for (var i in e) log(i + '=' + e[i])
-//				log('caught' + (typeof e))
-			}
-			
-//			var node = w.document.getElementById('replaceMe')
-//			log('node=' + node)
-//			var n = w.doStuff('blue')
-//			w.displayObject('replaceMe', this)
-//			n = null
+			// Paint the first P
+//			w.document.body.firstChild.nextSibling.style.backgroundColor = 'lime'
+//			w.document.body.childNodes[1].style.backgroundColor = 'lime'
 
-//			var n = w.document.getElementById('colorMe')
-/*
-			log('external document=' + n)
-			n.style.backgroundColor = 'lime'
+			w.document.getElementById('hideMe').style.display = 'none'
+			w.document.getElementById('showMe').style.display = 'block'
+			w.document.getElementById('colorMe').style.backgroundColor = 'lime'
+
+			var n = w.document.getElementById('replaceMe')
+			w.replaceNodeValue(n, 8)
 			
+			if (w.document.getElementById('hideMe').style.display != 'none')			throw 'WebView hiding div failed'
+			if (w.document.getElementById('showMe').style.display != 'block')			throw 'WebView revealing div failed'
+			if (w.document.getElementById('colorMe').style.backgroundColor != 'lime')	throw 'WebView coloring failed'
+			if (w.document.getElementById('replaceMe').innerHTML != '8')				throw 'WebView replacing content failed'
+			
+
+			n = null
 			w = null
-			n = null
-*/			
-//			log('external document=' + w.location)
-//			log('external document=' + w.document.location.href)
-//			log('LL=' + sender.hash)
-//			log('sig=' + sender.mainFrame.methodSignatureForSelector('globalContext'))
-//			NSMethodSignature
-
-//- (JSGlobalContextRef)globalContext
-
-//			JSGlobalContextRef
-//JSGlobalContextRef JSGlobalContextRetain(JSGlobalContextRef ctx);
-
-			n = null
-			__jsc__.garbageCollect
 
 			loadDelegate = null
 			window = null
-//			__jsc__.garbageCollect
+			
+			// This will close the window right now
+			__jsc__.garbageCollect
+
+			completeDelayedTest('35 webview', true)
 		}
 	}
 	
-
-
-
-
-//JSGlobalContextRef
-
 
 
 	var rect = new NSRect(100, 100, 400, 400)
@@ -121,7 +82,6 @@
 	view = null
 
 
-	registerWaitingTest('35 webview')
-//	throw 'TEST'
+	registerDelayedTest('35 webview')
 	
 

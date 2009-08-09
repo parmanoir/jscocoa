@@ -536,12 +536,50 @@ static id JSCocoaSingleton = NULL;
 //
 // Unbox a JSValueRef
 //
-- (id)unboxJSValueRef:(JSValueRef)jsValue
+- (id)unboxJSValueRef:(JSValueRef)value
 {
 	id object = nil;
-	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&object inContext:ctx];
+	[JSCocoaFFIArgument unboxJSValueRef:value toObject:&object inContext:ctx];
 	return object;
 }
+
+//
+// Conversion boolean / number / string
+//
+- (BOOL)toBool:(JSValueRef)value
+{
+	if (!value)	return false;
+	return JSValueToBoolean(ctx, value);
+}
+
+- (double)toDouble:(JSValueRef)value
+{
+	if (!value)	return 0;
+	return JSValueToNumber(ctx, value, NULL);
+}
+
+- (int)toInt:(JSValueRef)value
+{
+	if (!value)	return 0;
+	return (int)JSValueToNumber(ctx, value, NULL);
+}
+
+- (NSString*)toString:(JSValueRef)value
+{
+	if (!value)	return nil;
+	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
+	NSString* resultString = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+	JSStringRelease(resultStringJS);
+	[NSMakeCollectable(resultString) autorelease];
+	return	resultString;
+}
+
+- (id)toObject:(JSValueRef)value
+{
+	return [self unboxJSValueRef:value];
+}
+
+
 
 //
 // Add/Remove an ObjC object variable to the global context
@@ -2386,7 +2424,7 @@ BOOL	isUsingStret(id argumentEncodings)
 //
 // Convert FROM a webView context to a local context (called by valueOf(), toString())
 //
-JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
+JSValueRef valueFromExternalContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
 {
 	int type = JSValueGetType(externalCtx, value);
 	switch (type)
@@ -2421,7 +2459,11 @@ JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContex
 			JSStringRef jsString	= JSValueToStringCopy(externalCtx, value, NULL);
 
 			NSString* string		= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, jsString);
-			NSString* idString		= [NSString stringWithFormat:@">%@ (externalContext)", string];
+			NSString* idString;
+			
+			// Mark only objects as (externalContext), not raw strings
+			if (type == kJSTypeObject)	idString = [NSString stringWithFormat:@"%@ (externalContext)", string];
+			else						idString = [NSString stringWithFormat:@"%@", string];
 			[string release];
 			JSStringRelease(jsString);
 			
@@ -2438,7 +2480,7 @@ JSValueRef valueFromContext(JSContextRef externalCtx, JSValueRef value, JSContex
 //
 // Convert TO a webView context from a local context
 //
-JSValueRef valueToContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx)
+JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx)
 {
 	int type = JSValueGetType(ctx, value);
 	switch (type)
@@ -2497,17 +2539,17 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		return [thisPrivateObject jsValueRef];
 	}
 
+	// External jsValueRef from WebView
 	if ([thisPrivateObject.type isEqualToString:@"externalJSValueRef"])	
 	{
-		NSLog(@"need to convert context valueOfCallback");
-		JSContextRef externalCtx = [thisPrivateObject ctx];
-		JSValueRef externalJSValueRef = [thisPrivateObject jsValueRef];
-		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].valueOf()");
-		JSObjectRef fn = JSObjectMakeFunction(externalCtx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
-		JSValueRef result = JSObjectCallAsFunction(externalCtx, fn, NULL, 1, (JSValueRef*)&externalJSValueRef, NULL);
+		JSContextRef externalCtx		= [thisPrivateObject ctx];
+		JSValueRef externalJSValueRef	= [thisPrivateObject jsValueRef];
+		JSStringRef scriptJS= JSStringCreateWithUTF8CString("return arguments[0].valueOf()");
+		JSObjectRef fn		= JSObjectMakeFunction(externalCtx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+		JSValueRef result	= JSObjectCallAsFunction(externalCtx, fn, NULL, 1, (JSValueRef*)&externalJSValueRef, NULL);
 		JSStringRelease(scriptJS);
 
-		return	valueFromContext(externalCtx, result, ctx);
+		return	valueFromExternalContext(externalCtx, result, ctx);
 	}
 	
 	// NSNumber special case
@@ -3237,7 +3279,8 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		JSContextRef externalCtx = [privateObject ctx];
 		JSValueRef externalValue = [privateObject jsValueRef];
 		JSObjectRef externalObject = JSValueToObject(externalCtx, externalValue, NULL);
-		JSValueRef convertedValue = valueToContext(ctx, jsValue, externalCtx);
+		if (!externalObject)	return	false;
+		JSValueRef convertedValue = valueToExternalContext(ctx, jsValue, externalCtx);
 		JSObjectSetProperty(externalCtx, externalObject, propertyNameJS, convertedValue, kJSPropertyAttributeNone, exception);
 
 		// If WebView had an exception, re-throw it in our context
@@ -3706,15 +3749,32 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		{
 			JSContextRef externalCtx = [privateObject ctx];
 			JSObjectRef jsFunction = JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
+			if (!jsFunction)
+			{
+				throwException(ctx, exception, [NSString stringWithFormat:@"WebView call : value not a function"]);
+				return JSValueMakeNull(ctx);
+			}
+
+			// Retrieve 'this' : either the global external object (window), or a previous 
+			JSObjectRef externalThisObject;
+			JSCocoaPrivateObject* privateThis		= JSObjectGetPrivate(thisObject);
+			if ([privateThis jsValueRef])	externalThisObject = JSValueToObject(externalCtx, [privateThis jsValueRef], NULL);
+			else							externalThisObject = JSContextGetGlobalObject(externalCtx);
+
+			if (!externalThisObject)
+			{
+				throwException(ctx, exception, [NSString stringWithFormat:@"WebView call : externalThisObject not found"]);
+				return JSValueMakeNull(ctx);
+			}
 			
 			// Convert arguments to WebView context
 			JSValueRef* convertedArguments = NULL;
 			if (argumentCount) convertedArguments = malloc(sizeof(JSValueRef)*argumentCount);
 			for (int i=0; i<argumentCount; i++)
-				convertedArguments[i] = valueToContext(ctx, arguments[i], externalCtx);
+				convertedArguments[i] = valueToExternalContext(ctx, arguments[i], externalCtx);
 
 			// Call
-			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, thisObject, argumentCount, convertedArguments, exception);
+			JSValueRef ret = JSObjectCallAsFunction(externalCtx, jsFunction, externalThisObject, argumentCount, convertedArguments, exception);
 			if (convertedArguments) free(convertedArguments);
 
 			// If WebView had an exception, re-throw it in our context
@@ -3725,7 +3785,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 				return JSValueMakeNull(ctx);
 			}
 
-
+			// Box result from WebView
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"externalJSValueRef";

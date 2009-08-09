@@ -8,7 +8,7 @@
 <body>
 
 	<p>JSCocoa will interact with this webpage.
-	<p>This page should show two DIVs with a green background-color. Last div should contain 8.
+	<p>This page should show two DIVs with a green background-color. Last div should contain the digit 8, not the word eight.
 	<hr>
 	
 	<div id='hideMe'>This should be hidden.</div>
@@ -17,14 +17,9 @@
 
 	<div id='colorMe' style='background-color: red'>This should be green.</div>
 
-	<div id='replaceMe'>This should be replaced by the digit eight.</div>
+	<div>The digit eight should follow : <span style='border: solid 1px black' id='replaceMe'>eight</span></div>
 	
 	<script>
-		function	replaceDiv(name, value)
-		{
-			document.getElementById(name).innerHTML = value
-		}
-		
 		function	doStuff(color)
 		{
 			document.body.style.backgroundColor = color || 'red'
