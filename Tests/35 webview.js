@@ -33,10 +33,14 @@
 			var n = w.document.getElementById('replaceMe')
 			w.replaceNodeValue(n, 8)
 			
-			if (w.document.getElementById('hideMe').style.display != 'none')			throw 'WebView hiding div failed'
-			if (w.document.getElementById('showMe').style.display != 'block')			throw 'WebView revealing div failed'
-			if (w.document.getElementById('colorMe').style.backgroundColor != 'lime')	throw 'WebView coloring failed'
-			if (w.document.getElementById('replaceMe').innerHTML != '8')				throw 'WebView replacing content failed'
+			if (w.document.getElementById('hideMe').style.display != 'none')			throw '(WebView) hiding div failed'
+			if (w.document.getElementById('showMe').style.display != 'block')			throw '(WebView) revealing div failed'
+			if (w.document.getElementById('colorMe').style.backgroundColor != 'lime')	throw '(WebView) coloring failed'
+			if (w.document.getElementById('replaceMe').innerHTML != '8')				throw '(WebView) replacing content failed'
+
+			w.eval('function addMe(a, b) { return a+b}')
+			if (w.addMe(3, 4) != 7)														throw '(WebView) adding a Javascript function failed'
+			
 			
 
 			n = null
@@ -53,27 +57,26 @@
 	}
 	
 
-
+	// Build a window
 	var rect = new NSRect(100, 100, 400, 400)
 	var style = NSTitledWindowMask+NSClosableWindowMask+NSResizableWindowMask
 	var window = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(rect, style, NSBackingStoreBuffered, false)
 	window.releasedWhenClosed = 0
 	window.makeKeyAndOrderFront(null)
 	window.release
-	
 
 	var contentView = window.contentView
-
+	
+	// Add a WebView
 	var view = WebView.alloc.initWithFrame(contentView.frame)
 	view.release
 	var loadDelegate = WebViewLoadDelegate35.instance()
-	// Does not retain the delegate
+	// WebView does NOT retain the delegate
 	view.frameLoadDelegate = loadDelegate
 	view.autoresizingMask = NSViewWidthSizable+NSViewHeightSizable
 	contentView.addSubview(view)
 	
 //	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
-
 	
 	var path = NSBundle.mainBundle.resourcePath + '/Tests/Resources/35 webView page.html'
 //	path = 'http://yahoo.com'
@@ -82,6 +85,7 @@
 	view = null
 
 
+	// The test won't be completed in this run loop cycle
 	registerDelayedTest('35 webview')
-	
+
 

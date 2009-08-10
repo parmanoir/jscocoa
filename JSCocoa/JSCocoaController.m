@@ -214,6 +214,12 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		JSStringRelease(jsName);
 	}
 	
+	// Objects can use their own dealloc, normally used up by JSCocoa
+	// JSCocoa registers 'safeDealloc' in place of 'dealloc' and calls it in the next run loop cycle. 
+	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
+	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
+	useSafeDealloc = YES;
+	
 	return	self;
 }
 
@@ -223,7 +229,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (void)cleanUp
 {
 //	NSLog(@"JSCocoa : %x dying", self);
-	
+	[self setUseSafeDealloc:NO];
 	[self unlinkAllReferences];
 	JSGarbageCollect(ctx);
 
@@ -711,6 +717,15 @@ static id JSCocoaSingleton = NULL;
 	useAutoCall = b;
 }
 
+- (BOOL)useSafeDealloc
+{
+	return	useSafeDealloc;
+}
+- (void)setUseSafeDealloc:(BOOL)b
+{
+	useSafeDealloc = b;
+}
+
 
 - (JSGlobalContextRef)ctx
 {
@@ -1121,6 +1136,10 @@ static id JSCocoaSingleton = NULL;
 
 + (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
+	if ([methodName isEqualToString:@"dealloc"])
+	{
+		methodName = @"safeDealloc";
+	}
 	return [self addMethod:methodName class:class jsFunction:valueAndContext encoding:encoding];
 }
 + (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
@@ -1620,6 +1639,15 @@ static id autoreleasePool;
 //	[self evalJSString:@"for (var i in this) { log('DELETE ' + i); this[i] = null; delete this[i]; }"];
 	[self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
 	// Everything is now collectable !
+}
+
+//
+// Custom dealloc code for objects will be executed here
+//
+- (void)safeDeallocInstance:(id)sender
+{
+	[sender safeDealloc];
+	// sender is retained by performSelector, object will be destroyed upon function exit
 }
 
 #pragma mark Garbage Collection debug
@@ -2633,9 +2661,25 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	if (boxedObject)
 	{
 		id key = [NSString stringWithFormat:@"%x", boxedObject];
+		// Object may have been already deallocated
 		id existingBoxedObject = [boxedObjects objectForKey:key];
 		if (existingBoxedObject)
 		{
+			// Safe dealloc ?
+			if ([boxedObject retainCount] == 1)
+			{
+				if ([boxedObject respondsToSelector:@selector(safeDealloc)])
+				{
+					id jsc = NULL;
+					object_getInstanceVariable(boxedObject, "__jsCocoaController", (void**)&jsc);
+					NSLog(@"%d", [jsc retainCount]);
+					if (jsc)	[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
+					else		NSLog(@"safeDealloc could not find the context attached to %@.%x", [boxedObject class], boxedObject);
+					NSLog(@"%d", [jsc retainCount]);
+				}
+				
+			}
+
 			[boxedObjects removeObjectForKey:key];
 		}
 		else
@@ -2645,7 +2689,6 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 		}
 	}
 
-	
 	// Immediate release if dealloc is not overloaded
 	[private release];
 #ifdef __OBJC_GC__
@@ -3868,6 +3911,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			superSelector		= NULL;
 			superSelectorClass	= NULL;
 		}
+		
+		// Don't call NSObject's safeDealloc as it doesn't exist
+		if ([superSelector isEqualToString:@"safeDealloc"] && superSelectorClass == [NSObject class])
+			return	JSValueMakeUndefined(ctx);
 	}
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;

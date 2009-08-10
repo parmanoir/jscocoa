@@ -31,7 +31,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
-    id _delegate;
+    id					_delegate;
+	BOOL				useSafeDealloc;
 }
 
 @property (assign) id delegate;
@@ -128,6 +129,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 - (BOOL)useAutoCall;
 - (void)setUseAutoCall:(BOOL)b;
+- (BOOL)useSafeDealloc;
+- (void)setUseSafeDealloc:(BOOL)b;
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
 
@@ -145,6 +148,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 @interface NSObject (JSCocoaControllerDelegateMethods)
 - (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url;
+- (void) safeDealloc;
 
 //
 // Getting
@@ -218,7 +222,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @end
 
 //
-// Boxed object cache : holds one JSObjectRef for each reference to a pointer
+// Boxed object cache : holds one JSObjectRef for each reference to a pointer to an ObjC object
 //
 @interface BoxedJSObject : NSObject {
 	JSObjectRef	jsObject;
