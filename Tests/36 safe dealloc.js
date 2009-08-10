@@ -38,12 +38,19 @@
 	var o2 = SafeDeallocTest2.instance()
 	
 	// Need to remove this : needed to put __jsc__ ivar in instances
-	o1.blaaaaaaaaaaah = 'hello'
-	o2.blaaaaaaaaaaah = 'hello'
+//	o1.blaaaaaaaaaaah = 'hello'
+//	o2.blaaaaaaaaaaah = 'hello'
 
 
 	var o3 = BlahBlah.instance()
 	o3.someVar = 'hello'
+	o3.retainCount
+//	log('valueOf=' + o3.valueOf)
+//	log('toString=' + o3.toString)
+//	log('someVar=' + o3.someVar)
+	
+	o3.valueOf = function () { return 'hello' }
+	log('ts='+ o3)
 
 	o1 = null
 	o2 = null
@@ -64,4 +71,4 @@
 
 
 
-	throw ('CHECK RETAIN COUNT + REMOVE DUMMY VARS + bindings auto remove')
+	throw ('REMOVE DUMMY VARS + bindings auto remove')

@@ -2812,7 +2812,20 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			JSValueRef hashProperty			= [callee JSValueForJSName:name].value;
 			if (hashProperty && !JSValueIsNull(ctx, hashProperty))
 			{
-				return	hashProperty;
+				BOOL	returnHashValue = YES;
+				// Make sure to not return hash value if it's native code (valueOf, toString)
+				if ([propertyName isEqualToString:@"valueOf"] || [propertyName isEqualToString:@"toString"])
+				{
+					id script = [NSString stringWithFormat:@"return arguments[0].toString().indexOf('[native code]') != -1", propertyName];
+					JSStringRef scriptJS = JSStringCreateWithUTF8CString([script UTF8String]);
+					JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+					JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&hashProperty, NULL);
+					JSStringRelease(scriptJS);
+					BOOL isNativeCode =  result ? JSValueToBoolean(ctx, result) : NO;
+					returnHashValue = !isNativeCode;
+//					NSLog(@"isNative(%@)=%d rawJSResult=%x hashProperty=%x returnHashValue=%d", propertyName, isNativeCode, result, hashProperty, returnHashValue);
+				}
+				if (returnHashValue)	return	hashProperty;
 			}
 		}
 
