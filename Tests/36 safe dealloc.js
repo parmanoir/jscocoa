@@ -24,10 +24,15 @@
 			this.Super(arguments)
 	
 			safe2Called++
-
 		}
 	}
 	
+	class	BlahBlah < NSObject
+	{
+		- (void)dealloc
+		{
+		}
+	}
 	
 	var o1 = SafeDeallocTest.instance()
 	var o2 = SafeDeallocTest2.instance()
@@ -37,9 +42,12 @@
 	o2.blaaaaaaaaaaah = 'hello'
 
 
+	var o3 = BlahBlah.instance()
+	o3.someVar = 'hello'
 
 	o1 = null
-	o23 = null
+	o2 = null
+	o3 = null
 	__jsc__.garbageCollect
 	
 	
@@ -56,4 +64,4 @@
 
 
 
-	log('CHECK RETAIN COUNT + REMOVE DUMMY VARS')
+	throw ('CHECK RETAIN COUNT + REMOVE DUMMY VARS + bindings auto remove')

@@ -88,6 +88,7 @@ JSCocoaController* jsc = nil;
 
 - (void)applicationWillTerminate:(id)notif
 {
+	[jsc setUseSafeDealloc:NO];
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
 	NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);

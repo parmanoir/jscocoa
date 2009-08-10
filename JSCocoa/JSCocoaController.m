@@ -1136,10 +1136,10 @@ static id JSCocoaSingleton = NULL;
 
 + (BOOL)addInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
+	// Custom case for dealloc, renamed to safeDealloc and called in the next run loop cycle
 	if ([methodName isEqualToString:@"dealloc"])
-	{
 		methodName = @"safeDealloc";
-	}
+		
 	return [self addMethod:methodName class:class jsFunction:valueAndContext encoding:encoding];
 }
 + (BOOL)addClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
@@ -2672,10 +2672,13 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 				{
 					id jsc = NULL;
 					object_getInstanceVariable(boxedObject, "__jsCocoaController", (void**)&jsc);
-					NSLog(@"%d", [jsc retainCount]);
-					if (jsc)	[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
-					else		NSLog(@"safeDealloc could not find the context attached to %@.%x", [boxedObject class], boxedObject);
-					NSLog(@"%d", [jsc retainCount]);
+					// Call safeDealloc if enabled (will be disabled upon last JSCocoaController release, to make sure the )
+					if (jsc)	
+					{
+						if ([jsc useSafeDealloc])
+							[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
+					}
+					else	NSLog(@"safeDealloc could not find the context attached to %@.%x", [boxedObject class], boxedObject);
 				}
 				
 			}
