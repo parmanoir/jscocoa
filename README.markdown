@@ -131,10 +131,6 @@ This will start a controller, eval a file, call a Javascript method and get an O
 	id resultingObject = [jsc unboxJSValueRef:returnValue];
 	
 	// (Cleanup : only needed if you don't use ObjC's Garbage Collection)
-	// Remove all existing references to ObjC objects in the Javascript context
-	[jsc unlinkAllReferences];
-	[jsc garbageCollect];
-	// Destroy
 	[jsc release];
 
 
