@@ -88,15 +88,19 @@ JSCocoaController* jsc = nil;
 
 - (void)applicationWillTerminate:(id)notif
 {
+/*
 	[jsc setUseSafeDealloc:NO];
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
+*/	
 	NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
 	// Check if JSCocoa can be released (retainCount got down to 1)
 	// Won't work under ObjC GC
 #ifndef __OBJC_GC__
-	if ([jsc retainCount] != 1)									NSLog(@"***Invalid JSCocoa retainCount***");
+//	if ([jsc retainCount] != 1)									NSLog(@"***Invalid JSCocoa retainCount***");
+	// Must be 2 with new release method
+	if ([jsc retainCount] != 2)									NSLog(@"***Invalid JSCocoa retainCount***");
 #endif
 	[jsc release];
 	

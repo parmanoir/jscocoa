@@ -3,6 +3,8 @@
 
 	var safe1Called = 0
 	var safe2Called = 0
+
+	// This js dealloc method will be called in the next run loop cycle, then the ObjC release method, deallocating the object
 	class	SafeDeallocTest < NSObject
 	{
 		- (void)dealloc
@@ -16,6 +18,7 @@
 		}
 	}
 	
+	// js deallocs are standard methods and can be derived.
 	class	SafeDeallocTest2 < SafeDeallocTest
 	{
 		- (void)dealloc
@@ -26,14 +29,7 @@
 			safe2Called++
 		}
 	}
-	
-	class	BlahBlah < NSObject
-	{
-		- (void)dealloc
-		{
-		}
-	}
-	
+
 	var o1 = SafeDeallocTest.instance()
 	var o2 = SafeDeallocTest2.instance()
 	
@@ -41,24 +37,10 @@
 //	o1.blaaaaaaaaaaah = 'hello'
 //	o2.blaaaaaaaaaaah = 'hello'
 
-
-	var o3 = BlahBlah.instance()
-	o3.someVar = 'hello'
-	o3.retainCount
-//	log('valueOf=' + o3.valueOf)
-//	log('toString=' + o3.toString)
-//	log('someVar=' + o3.someVar)
-	
-	o3.valueOf = function () { return 'hello' }
-	log('ts='+ o3)
-
 	o1 = null
 	o2 = null
-	o3 = null
 	__jsc__.garbageCollect
 	
-	
-	// Need to support derived classes !
 
 
 	registerDelayedTest('36 safe dealloc')
@@ -69,6 +51,4 @@
 // ^disabled for now. Any safe dealloc will have to be called before JSCocoaController is deallocated
 
 
-
-
-	throw ('REMOVE DUMMY VARS + bindings auto remove')
+//	throw ('bindings auto remove')

@@ -220,6 +220,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc = YES;
 	
+	
 	return	self;
 }
 
@@ -252,6 +253,22 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 	JSGlobalContextRelease(ctx);
 }
+
+- (oneway void)release
+{
+	// Each controller adds itself to its Javascript context, therefore retain count will be two when user last calls release.
+	// We check for this and clean up references then call GC, which will lower retain count to 1.
+	// Use 'useSafeDealloc' to make sure we're not reentering this one-time code block when GC calls release.
+	if ([self retainCount] == 2 && useSafeDealloc)
+	{
+		[self setUseSafeDealloc:NO];
+		[self unlinkAllReferences];
+		// This will take retain count from 2 to 1, readying this instance for deallocation
+		[self garbageCollect];
+	}
+	[super release];
+}
+
 - (void)dealloc
 {
 	[self cleanUp];
@@ -2219,6 +2236,7 @@ int	liveInstanceCount	= 0;
 	private.type = @"@";
 	[private setObjectNoRetain:newInstance];
 	// No — will retain allocated object and trigger "did you forget to call init" warning
+	// Object will be automatically boxed when returned to Javascript by 
 //	JSObjectRef thisObject = [JSCocoaController boxedJSObject:newInstance inContext:ctx];
 	
 	// Create function object boxing our init method
@@ -2239,7 +2257,16 @@ int	liveInstanceCount	= 0;
 	// Return nil then.
 	if (returnObject == nil)	return	JSValueMakeNull(ctx);
 	private = JSObjectGetPrivate(returnObject);
-	[[private object] release];
+	id boxedObject = [private object];
+	[boxedObject release];
+	
+	// Register our context in there so that safeDealloc finds it.
+	if ([boxedObject respondsToSelector:@selector(safeDealloc)])
+	{
+		id jsc = [JSCocoaController controllerFromContext:ctx];
+		object_setInstanceVariable(boxedObject, "__jsCocoaController", (void*)jsc);
+	}
+//	NSLog(@"instanced %@", [[private object] class]);
 	
 //	NSLog(@"returnValue from instanceWithContext=%x", returnValue);
 	return	returnValue;
@@ -2678,7 +2705,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 						if ([jsc useSafeDealloc])
 							[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
 					}
-					else	NSLog(@"safeDealloc could not find the context attached to %@.%x", [boxedObject class], boxedObject);
+					else	NSLog(@"safeDealloc could not find the context attached to %@.%x - allocate this object with instance(), or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
 				}
 				
 			}
