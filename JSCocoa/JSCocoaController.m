@@ -1663,7 +1663,10 @@ static id autoreleasePool;
 //
 - (void)safeDeallocInstance:(id)sender
 {
+	// This code might re-box the instance ...
 	[sender safeDealloc];
+	// So, clean it up
+	[boxedObjects removeObjectForKey:[NSString stringWithFormat:@"%x", sender]];
 	// sender is retained by performSelector, object will be destroyed upon function exit
 }
 
@@ -2647,7 +2650,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 			JSStringRelease(scriptJS);
 
 			[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&structDescription inContext:ctx];
-
 		}
 		
 		toString = [NSString stringWithFormat:@"<%@ %@>", thisPrivateObject.structureName, structDescription];

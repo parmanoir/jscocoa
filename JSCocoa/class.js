@@ -654,6 +654,9 @@
 			
 			// Replace outlets
 			script = script.replace(/^\s*IBOutlet\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceOutlets)
+
+			// Replace keys
+			script = script.replace(/^\s*Key\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceKeys)
 			
 			// Replace actions
 			script = script.replace(/^\s*IBAction\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceActions)
@@ -701,6 +704,12 @@
 	{
 		var r = 'IBOutlet(\'' + outletName + '\')'
 		if (paramName) r += '.setter = function (' + paramName + ')'
+		return	r
+	}
+
+	function	expandJSMacros_ReplaceKeys(r, keyName, skippedParen, paramName)
+	{
+		var r = 'Key(\'' + keyName + '\')'
 		return	r
 	}
 

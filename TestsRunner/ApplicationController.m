@@ -93,7 +93,8 @@ JSCocoaController* jsc = nil;
 	[jsc unlinkAllReferences];
 	[jsc garbageCollect];
 */	
-	NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
+	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
+	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
 	// Check if JSCocoa can be released (retainCount got down to 1)
 	// Won't work under ObjC GC
