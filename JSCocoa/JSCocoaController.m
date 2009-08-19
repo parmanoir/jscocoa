@@ -186,6 +186,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif	
 
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	[BurksPool setJSFunctionHash:jsFunctionHash];
 #endif
 
 	// Load class kit
@@ -1119,13 +1120,24 @@ static id JSCocoaSingleton = NULL;
 		method_setImplementation(method, fn);
 	}
 
+	// Register js functions in hashes
+	id jsc = [JSCocoaController controllerFromContext:valueAndContext.ctx];
+
+	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", class, methodName];
+	id privateObject = [[JSCocoaPrivateObject alloc] init];
+	[privateObject setJSValueRef:valueAndContext.value ctx:[jsc ctx]];
+	[jsFunctionHash setObject:privateObject forKey:keyForClassAndMethod];
+
+	valueAndContext.ctx = [jsc ctx];
+	[BurksPool addMethod:methodName class:class jsFunction:valueAndContext encodings:typeEncodings];
+	return	YES;
 #elif
 	if (!encoding)	return	NSLog(@"addMethod called with null encoding"), NO;
 	
 	SEL selector = NSSelectorFromString(methodName);
 
-	id keyForClassAndMethod = [NSString stringWithFormat:@"%@ %@", class, methodName];
-	id keyForFunction = [NSString stringWithFormat:@"%x", valueAndContext.value];
+	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", class, methodName];
+	id keyForFunction		= [NSString stringWithFormat:@"%x", valueAndContext.value];
 
 	id existingMethodForJSFunction = [closureHash valueForKey:keyForFunction];
 	if (existingMethodForJSFunction)

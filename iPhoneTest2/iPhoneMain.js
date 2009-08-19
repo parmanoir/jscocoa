@@ -6,6 +6,7 @@
 	{
 		Method('applicationDidFinishLaunching:').encoding('void id').fn = function (application)
 		{
+			log('***(callback)***finished launching, self=' + this + ' application=' + application)
 			// Table view background
 			this.viewController.view.backgroundColor = UIColor.groupTableView0BackgroundColor
 			this.window.addSubview(this.viewController.view)
