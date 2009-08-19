@@ -24,7 +24,7 @@ static	id jsFunctionHash = nil;
 
 
 //
-// Instance methods : use their implementation as callbacks for new methods
+// Instance methods : JSCocoaController's addMethod uses their implementation as callbacks for new methods
 //
 - (id)id_
 {
@@ -73,12 +73,6 @@ static	id jsFunctionHash = nil;
 {
 	[BurksPool callSelector:_cmd ofInstance:self writeContext:NULL withArguments:&p1, NULL];
 }
-/*
-2009-08-19 19:06:01.819 iPhoneTest2[38357:20b] No encoding found when adding iPhoneTest2ViewController.tableView:numberOfRowsInSection:(i@:@i)
-2009-08-19 19:06:01.820 iPhoneTest2[38357:20b] No encoding found when adding iPhoneTest2ViewController.tableView:cellForRowAtIndexPath:(@@:@@)
-2009-08-19 19:06:01.833 iPhoneTest2[38357:20b] No encoding found when adding PolygonView.drawRect:(v24@0:4{CGRect={CGPoint=ff}{CGSize=ff}}8)
-
-*/
 
 
 

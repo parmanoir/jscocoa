@@ -1137,7 +1137,7 @@ static id JSCocoaSingleton = NULL;
 	[jsFunctionClasses setObject:class forKey:keyForFunction];
 	
 	return	YES;
-#elif
+#else
 	if (!encoding)	return	NSLog(@"addMethod called with null encoding"), NO;
 	
 	SEL selector = NSSelectorFromString(methodName);
