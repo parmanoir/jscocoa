@@ -19,111 +19,82 @@ static	id methodEncodings = nil;
 // Imported from JSCocoaController
 static	id jsFunctionHash = nil;
 
-//static	JSContextRef ctx = nil;
-/*
-	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
-	static	id	closureHash;
-	// Given a jsFunction, retrieve its selector
-	static	id	jsFunctionSelectors;
-	// Given a jsFunction, retrieve which class it's attached to
-	static	id	jsFunctionClasses;
-	// Given a class, return the parent class implementing JSCocoaHolder method
-	static	id	jsClassParents;
-	
-	// Given a class + methodName, retrieve its jsFunction
-	static	id	jsFunctionHash;
-	
-	// Split call cache
-	static	id	splitCallCache;
-
-	// Shared instance stats
-	static	id	sharedInstanceStats	= nil;
-	
-	// Boxed objects
-	static	id	boxedObjects;
-*/
-
-//void callJSFunction()
-//{
-/*
-	JSObjectRef jsFunctionObject = JSValueToObject(ctx, jsFunction, NULL);
-	JSValueRef	exception = NULL;
-	
-
-	// ## Only objC for now. Need to test C function pointers.
-	
-	// Argument count is encodings count minus return value
-	int	i, idx = 0, effectiveArgumentCount = [encodings count]-1;
-	// Skip self and selector
-	if (isObjC)
-	{
-		effectiveArgumentCount -= 2;
-		idx = 2;
-	}
-	// Convert arguments
-	JSValueRef*	args = NULL;
-	if (effectiveArgumentCount)
-	{
-		args = malloc(effectiveArgumentCount*sizeof(JSValueRef));
-		for (i=0; i<effectiveArgumentCount; i++, idx++)
-		{
-			// +1 to skip return value
-			id encodingObject = [encodings objectAtIndex:idx+1];
-
-			id arg = [[JSCocoaFFIArgument alloc] init];
-			char encoding = [encodingObject typeEncoding];
-			if (encoding == '{')	[arg setStructureTypeEncoding:[encodingObject structureTypeEncoding] withCustomStorage:*(void**)&closureArgs[idx]];
-			else					[arg setTypeEncoding:[encodingObject typeEncoding] withCustomStorage:closureArgs[idx]];
-			
-			args[i] = NULL;
-			[arg toJSValueRef:&args[i] inContext:ctx];
-			
-			[arg release];
-		}
-	}
-	
-	JSObjectRef jsThis = NULL;
-	
-	// Create 'this'
-	if (isObjC)
-		jsThis = [JSCocoaController boxedJSObject:*(void**)closureArgs[0] inContext:ctx];
-
-	// Call !
-	JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);
-
-	// Convert return value if it's not void
-	char encoding = [[encodings objectAtIndex:0] typeEncoding];
-	if (jsReturnValue && encoding != 'v')
-	{
-		[JSCocoaFFIArgument fromJSValueRef:jsReturnValue inContext:ctx typeEncoding:encoding fullTypeEncoding:[[encodings objectAtIndex:0] structureTypeEncoding] fromStorage:returnValue];
-#ifdef __BIG_ENDIAN__
-		// As ffi always uses a sizeof(long) return value (even for chars and shorts), do some shifting
-		int size = [JSCocoaFFIArgument sizeOfTypeEncoding:encoding];
-		int paddedSize = sizeof(long);
-		long	v; 
-		if (size > 0 && size < paddedSize && paddedSize == 4)
-		{
-			v = *(long*)returnValue;
-			v = CFSwapInt32(v);
-			*(long*)returnValue = v;
-		}
-#endif	
-	}
-
-	if (effectiveArgumentCount)	free(args);
-	if (exception)	NSLog(@"%@", [[JSCocoaController controllerFromContext:ctx] formatJSException:exception]);
-*/
-//}
-
 
 @implementation BurksPool
 
+
+//
+// Instance methods : use their implementation as callbacks for new methods
+//
+- (id)id_
+{
+	JSContextRef ctx;
+	JSValueRef r = [BurksPool callSelector:_cmd ofInstance:self writeContext:&ctx withArguments:NULL];
+	return	[[JSCocoaController controllerFromContext:ctx] toObject:r];
+}
+
+- (void)v_
+{
+	[BurksPool callSelector:_cmd ofInstance:self writeContext:NULL withArguments:NULL];
+}
+
+- (void)v_id:(id)p1
+{
+	[BurksPool callSelector:_cmd ofInstance:self writeContext:NULL withArguments:&p1, NULL];
+}
+
+- (void)v_id:(id)p1 id:(id)p2
+{
+	[BurksPool callSelector:_cmd ofInstance:self writeContext:NULL withArguments:&p1, &p2, NULL];
+}
+
+- (int)i_id:(id)p1
+{
+	JSContextRef ctx;
+	JSValueRef r = [BurksPool callSelector:_cmd ofInstance:self writeContext:&ctx withArguments:&p1, NULL];
+	return [[JSCocoaController controllerFromContext:ctx] toInt:r];
+}
+
+- (int)i_id:(id)p1 i:(int)p2
+{
+	JSContextRef ctx;
+	JSValueRef r = [BurksPool callSelector:_cmd ofInstance:self writeContext:&ctx withArguments:&p1, &p2, NULL];
+	return [[JSCocoaController controllerFromContext:ctx] toInt:r];
+}
+
+- (id)i_id:(id)p1 id:(id)p2
+{
+	JSContextRef ctx;
+	JSValueRef r = [BurksPool callSelector:_cmd ofInstance:self writeContext:&ctx withArguments:&p1, &p2, NULL];
+	return [[JSCocoaController controllerFromContext:ctx] toObject:r];
+}
+
+- (void)drawRect:(CGRect)p1
+{
+	[BurksPool callSelector:_cmd ofInstance:self writeContext:NULL withArguments:&p1, NULL];
+}
+/*
+2009-08-19 19:06:01.819 iPhoneTest2[38357:20b] No encoding found when adding iPhoneTest2ViewController.tableView:numberOfRowsInSection:(i@:@i)
+2009-08-19 19:06:01.820 iPhoneTest2[38357:20b] No encoding found when adding iPhoneTest2ViewController.tableView:cellForRowAtIndexPath:(@@:@@)
+2009-08-19 19:06:01.833 iPhoneTest2[38357:20b] No encoding found when adding PolygonView.drawRect:(v24@0:4{CGRect={CGPoint=ff}{CGSize=ff}}8)
+
+*/
+
+
+
+//
+// From a key (class method), get a JSCocoaPrivateObject containing context + js function
+//	(called by JSCocoaController)
+//
 + (void)setJSFunctionHash:(id)hash
 {
 	jsFunctionHash = hash;
 }
 
-+ (JSValueRef)callSelector:(SEL)sel ofInstance:(id)o withArguments:(void*)firstArg, ...
+//
+// Call the iPhone js function given a class and method 
+//
++ (JSValueRef)callSelector:(SEL)sel ofInstance:(id)o writeContext:(JSContextRef*)_ctx withArguments:(void*)firstArg, ...
 {
 	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", [o class], NSStringFromSelector(sel)];
 	id encodings			= [methodEncodings objectForKey:keyForClassAndMethod];
@@ -133,6 +104,7 @@ static	id jsFunctionHash = nil;
 	if (!privateObject)	return	NSLog(@"No js function found for %@", keyForClassAndMethod), NULL;
 
 	JSContextRef ctx = [privateObject ctx];
+	if (_ctx) *_ctx = ctx;
 
 	// One to skip return value, 2 to skip common ObjC message parameters (instance, selector)
 	int effectiveArgumentCount = [encodings count]-1-2;
@@ -178,8 +150,8 @@ static	id jsFunctionHash = nil;
 	JSObjectRef jsThis = [JSCocoaController boxedJSObject:o inContext:ctx];
 
 	// Call !
+	JSValueRef	exception			= NULL;
 	JSObjectRef jsFunctionObject	= JSValueToObject(ctx, [privateObject jsValueRef], NULL);
-	JSValueRef	exception;
 	JSValueRef	returnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);
 	
 	if (effectiveArgumentCount)	free(args);
@@ -188,43 +160,6 @@ static	id jsFunctionHash = nil;
 	return returnValue;
 }
 
-- (id)v_at_sel
-{
-	NSLog(@"Called on get ************** self=%@", self);
-	return nil;
-}
-
-- (void)setValue:(id)p1
-{
-//	JSValueRef args[
-//	NSLog(@"Called on set ************** %@ self=%@ sel=%s", i, self, _cmd);
-
-//	callJSFunction(self, _cmd, &p1, NULL);
-
-	[BurksPool callSelector:_cmd ofInstance:self withArguments:&p1, &p1, &p1, NULL];
-
-
-//	JSValueRef args[] = { [JSCocoaFFIArgument jsValueRefWithTypeEncoding:'@' customStorage:&i inContext:ctx] };
-
-//	JSValueRef returnValue = callJSFunction(self, _cmd, [NSArray arrayWithObjects:
-//			[JSCocoaFFIArgument jsValueRefWithTypeEncoding:'@' customStorage:&i],
-//												nil);
-/*
-	id keyForClassAndMethod = [NSString stringWithFormat:@"%@ %@", [self class], NSStringFromSelector(_cmd)];
-	id encodings = [methodEncodings objectForKey:keyForClassAndMethod];
-	id privateObject = [jsFunctionHash objectForKey:keyForClassAndMethod];
-	NSLog(@"%@ %@", privateObject, encodings);
-	
-	JSContextRef ctx = [privateObject ctx];
-	JSObjectRef jsFunctionObject = JSValueToObject(ctx, [privateObject jsValueRef], NULL);
-
-	JSObjectRef jsThis = NULL;
-	int effectiveArgumentCount = 0;
-	JSValueRef* args = NULL;
-	JSValueRef exception = NULL;
-	JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);
-*/	
-}
 
 //
 // Flatten an encoding array to a string
@@ -254,7 +189,7 @@ static	id jsFunctionHash = nil;
 		Method m = methods[i];
 		IMP imp = method_getImplementation(m);
 		id encoding = [self flattenEncoding:[JSCocoaController parseObjCMethodEncoding:method_getTypeEncoding(m)]];
-//		NSLog(@"(%d) sel=%s enc=%s ENC2=%@", i, method_getName(m), method_getTypeEncoding(m), encoding);
+//		NSLog(@"(Gathering %d) sel=%s enc=%s ENC2=%@", i, method_getName(m), method_getTypeEncoding(m), encoding);
 		[IMPs setObject:[NSNumber numberWithUnsignedLong:(long)imp] forKey:encoding];
 	}
 	free(methods);

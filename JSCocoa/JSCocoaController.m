@@ -1124,12 +1124,18 @@ static id JSCocoaSingleton = NULL;
 	id jsc = [JSCocoaController controllerFromContext:valueAndContext.ctx];
 
 	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", class, methodName];
+	id keyForFunction		= [NSString stringWithFormat:@"%x", valueAndContext.value];
+
 	id privateObject = [[JSCocoaPrivateObject alloc] init];
 	[privateObject setJSValueRef:valueAndContext.value ctx:[jsc ctx]];
 	[jsFunctionHash setObject:privateObject forKey:keyForClassAndMethod];
 
 	valueAndContext.ctx = [jsc ctx];
 	[BurksPool addMethod:methodName class:class jsFunction:valueAndContext encodings:typeEncodings];
+	
+	[jsFunctionSelectors setObject:methodName forKey:keyForFunction];
+	[jsFunctionClasses setObject:class forKey:keyForFunction];
+	
 	return	YES;
 #elif
 	if (!encoding)	return	NSLog(@"addMethod called with null encoding"), NO;
