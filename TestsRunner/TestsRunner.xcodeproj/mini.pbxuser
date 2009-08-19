@@ -75,6 +75,12 @@
 			3DA4A962103C73780062930D /* PBXTextBookmark */ = 3DA4A962103C73780062930D /* PBXTextBookmark */;
 			3DA4A963103C73780062930D /* PBXTextBookmark */ = 3DA4A963103C73780062930D /* PBXTextBookmark */;
 			3DA4A964103C73780062930D /* PBXTextBookmark */ = 3DA4A964103C73780062930D /* PBXTextBookmark */;
+			3DA4A9AA103C800C0062930D /* PBXTextBookmark */ = 3DA4A9AA103C800C0062930D /* PBXTextBookmark */;
+			3DA4A9AB103C800C0062930D /* PBXTextBookmark */ = 3DA4A9AB103C800C0062930D /* PBXTextBookmark */;
+			3DA4A9AC103C800D0062930D /* PBXTextBookmark */ = 3DA4A9AC103C800D0062930D /* PBXTextBookmark */;
+			3DA4A9AD103C800D0062930D /* PBXTextBookmark */ = 3DA4A9AD103C800D0062930D /* PBXTextBookmark */;
+			3DA4A9AE103C800D0062930D /* PBXTextBookmark */ = 3DA4A9AE103C800D0062930D /* PBXTextBookmark */;
+			3DA4A9AF103C800D0062930D /* PBXTextBookmark */ = 3DA4A9AF103C800D0062930D /* PBXTextBookmark */;
 			3DED27BF1037ACE60093C660 = 3DED27BF1037ACE60093C660 /* PBXTextBookmark */;
 			3DED27C01037ACE60093C660 = 3DED27C01037ACE60093C660 /* PBXTextBookmark */;
 			3DED27C11037ACE60093C660 = 3DED27C11037ACE60093C660 /* PBXTextBookmark */;
@@ -265,6 +271,64 @@
 		vrLen = 1974;
 		vrLoc = 692;
 	};
+	3DA4A9AA103C800C0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: #if with no expression";
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		rLen = 1;
+		rLoc = 1139;
+		rType = 1;
+	};
+	3DA4A9AB103C800C0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1140";
+		rLen = 0;
+		rLoc = 37695;
+		rType = 0;
+		vrLen = 1803;
+		vrLoc = 36698;
+	};
+	3DA4A9AC103C800D0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DED27BE1037ACE60093C660 /* 32 new class syntax.js */;
+		name = "32 new class syntax.js: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1376;
+		vrLoc = 0;
+	};
+	3DA4A9AD103C800D0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1662";
+		rLen = 0;
+		rLoc = 56941;
+		rType = 0;
+		vrLen = 2594;
+		vrLoc = 55024;
+	};
+	3DA4A9AE103C800D0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A40F28D7A60043C238 /* class.js */;
+		name = "class.js: 251";
+		rLen = 4;
+		rLoc = 7195;
+		rType = 0;
+		vrLen = 2495;
+		vrLoc = 6058;
+	};
+	3DA4A9AF103C800D0062930D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DED27C21037ACE60093C660 /* 36 safe dealloc.js */;
+		name = "36 safe dealloc.js: 80";
+		rLen = 50;
+		rLoc = 1456;
+		rType = 0;
+		vrLen = 2009;
+		vrLoc = 692;
+	};
 	3DB065A30F28D7A60043C238 /* BridgeSupportController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {907, 2068}}";
@@ -275,9 +339,9 @@
 	};
 	3DB065A40F28D7A60043C238 /* class.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1009, 8360}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1009, 8382}}";
 			sepNavSelRange = "{7195, 4}";
-			sepNavVisRange = "{6058, 2429}";
+			sepNavVisRange = "{6058, 2495}";
 			sepNavWindowFrame = "{{669, 59}, {1068, 890}}";
 		};
 	};
@@ -299,9 +363,9 @@
 	};
 	3DB065A80F28D7A60043C238 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1224, 47168}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1224, 47102}}";
 			sepNavSelRange = "{56941, 0}";
-			sepNavVisRange = "{55024, 2583}";
+			sepNavVisRange = "{55024, 2594}";
 			sepNavWindowFrame = "{{122, 100}, {1283, 915}}";
 		};
 	};
@@ -387,7 +451,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {904, 1815}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 1351}";
+			sepNavVisRange = "{0, 1376}";
 		};
 	};
 	3DED27BF1037ACE60093C660 /* PBXTextBookmark */ = {
@@ -429,7 +493,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {904, 1287}}";
 			sepNavSelRange = "{1456, 50}";
-			sepNavVisRange = "{692, 1974}";
+			sepNavVisRange = "{692, 2009}";
 		};
 	};
 	3DED281E1037AF6E0093C660 /* PBXTextBookmark */ = {

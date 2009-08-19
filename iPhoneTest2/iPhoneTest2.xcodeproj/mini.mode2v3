@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA4A96C103C73930062930D</string>
+						<string>3DA4A9C2103C84C20062930D</string>
 						<key>history</key>
 						<array>
-							<string>3DED2E5B103C6A490093C660</string>
+							<string>3DA4A9B9103C847E0062930D</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -242,6 +242,46 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>3DA4A97E103C7AA60062930D</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>iPhone.bridgeSupport</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>3DA4A97F103C7AA60062930D</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>iPhone.bridgeSupport</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3DA4A9C3103C84C20062930D</string>
+						<key>history</key>
+						<array>
+							<string>3DA4A973103C79DE0062930D</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1061, 857}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>486 129 1061 898 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>3DED2C2B103C50AA0093C660</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>iPhoneMain.js</string>
@@ -256,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA4A96D103C73930062930D</string>
+						<string>3DA4A9C4103C84C20062930D</string>
 						<key>history</key>
 						<array>
 							<string>3DED2E5C103C6A490093C660</string>
@@ -296,7 +336,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA4A96E103C73930062930D</string>
+						<string>3DA4A9C5103C84C20062930D</string>
 						<key>history</key>
 						<array>
 							<string>3DED2E5D103C6A490093C660</string>
@@ -336,7 +376,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA4A96F103C73930062930D</string>
+						<string>3DA4A9C6103C84C20062930D</string>
 						<key>history</key>
 						<array>
 							<string>3DED2E5F103C6A490093C660</string>
@@ -376,7 +416,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA4A970103C73930062930D</string>
+						<string>3DA4A9C7103C84C20062930D</string>
 						<key>history</key>
 						<array>
 							<string>3DED2E61103C6A490093C660</string>
@@ -526,7 +566,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>347</real>
+										<real>328</real>
 									</array>
 									<key>PBXSmartGroupTreeModuleColumnsKey_v4</key>
 									<array>
@@ -538,16 +578,20 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>1C37FBAC04509CD000000102</string>
+										<string>3DA4A97B103C7AA60062930D</string>
+										<string>3DA4A97C103C7AA60062930D</string>
+										<string>3DA4A97D103C7AA60062930D</string>
 										<string>1C37FAAC04509CD000000102</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>0</integer>
+											<integer>23</integer>
+											<integer>22</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {347, 341}}</string>
+									<string>{{0, 70}, {328, 338}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -557,11 +601,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{10, 27}, {364, 359}}</string>
+								<string>{{10, 27}, {345, 356}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>347</real>
+									<real>328</real>
 								</array>
 							</dict>
 							<key>Module</key>
@@ -679,15 +723,17 @@
 	<array>
 		<string>3DA4A971103C73930062930D</string>
 		<string>3DA4A972103C73930062930D</string>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3DED29F1103BA47F0093C660</string>
 		<string>3DED2A2A103BA7E20093C660</string>
 		<string>3DED2A75103BAA9C0093C660</string>
 		<string>3DED2C2B103C50AA0093C660</string>
-		<string>3DED294C103B973E0093C660</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneTest2.xcodeproj</string>
+		<string>3DA4A97E103C7AA60062930D</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>3DED294C103B973E0093C660</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneTest2.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1577 754 345 424 0 0 1920 1178 </string>
@@ -855,20 +901,22 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1030, 328}}</string>
+								<string>{{0, 0}, {1030, 224}}</string>
 								<key>RubberWindowFrame</key>
 								<string>514 136 1030 779 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>328pt</string>
+							<string>224pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 307}, {1030, 98}}</string>
+								<string>{{0, 184}, {1030, 325}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -881,14 +929,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 333}, {1030, 405}}</string>
+								<string>{{0, 229}, {1030, 509}}</string>
 								<key>RubberWindowFrame</key>
 								<string>514 136 1030 779 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
 							<key>Proportion</key>
-							<string>405pt</string>
+							<string>509pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -917,7 +965,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -1066,7 +1114,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>iPhoneMain.js</string>
+										<string>BurksPool.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -1122,8 +1170,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>3DED2916103B95550093C660</string>
-				<string>3DED2917103B95550093C660</string>
+				<string>3DA4A978103C7AA30062930D</string>
+				<string>3DA4A979103C7AA30062930D</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

@@ -171,7 +171,7 @@ static	id jsFunctionHash = nil;
 }
 
 //
-// Gather instance method implementations, removing ObjC indices ( - (id)method:(id)param -> @8@0:4 -> @@:)
+// Gather instance method implementations, removing ObjC indices ( - (id)method -> @8@0:4 -> @@:)
 //
 + (void)gatherIMPs
 {
@@ -184,7 +184,7 @@ static	id jsFunctionHash = nil;
 		IMP imp = method_getImplementation(m);
 		id encoding = [self flattenEncoding:[JSCocoaController parseObjCMethodEncoding:method_getTypeEncoding(m)]];
 //		NSLog(@"(Gathering %d) sel=%s enc=%s ENC2=%@", i, method_getName(m), method_getTypeEncoding(m), encoding);
-		[IMPs setObject:[NSNumber numberWithUnsignedLong:(long)imp] forKey:encoding];
+		[IMPs setObject:[NSValue valueWithPointer:imp] forKey:encoding];
 	}
 	free(methods);
 }
@@ -198,9 +198,9 @@ static	id jsFunctionHash = nil;
 	
 	id encoding = [self flattenEncoding:encodings];
 	
-	NSNumber* IMPnumber = [IMPs objectForKey:encoding];
+	NSValue* IMPvalue = [IMPs objectForKey:encoding];
 //	NSLog(@"enc=%@*** IMP=%@", encoding, IMPnumber);
-	if (IMPnumber)	return (IMP)[IMPnumber unsignedLongValue];
+	if (IMPvalue)	return (IMP)[IMPvalue pointerValue];
 	return	nil;
 }
 
