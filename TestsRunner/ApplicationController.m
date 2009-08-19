@@ -121,6 +121,7 @@ int runCount = 0;
 
 - (IBAction)runJSTests:(id)sender
 {
+	// Clean up notifications registered by previously run tests
 	[jsc callJSFunctionNamed:@"resetDelayedTests" withArguments:nil];
 
 	runCount++;

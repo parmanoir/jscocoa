@@ -64,7 +64,10 @@
 
 - (NSString*)description
 {
-	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %x typeEncoding=%c isReturnValue=%d storage=%x", self, typeEncoding, isReturnValue, ptr];
+	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %x typeEncoding=%c %@ isReturnValue=%d storage=%x", self, 
+			typeEncoding, 
+			(structureTypeEncoding ? structureTypeEncoding : @""),
+			isReturnValue, ptr];
 }
 
 #pragma mark Getters / Setters
@@ -1058,6 +1061,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		else			return	[self unboxJSHash:jsObject toObject:o inContext:ctx];
 	}
 	// ## Hmmm ? CGColorRef is returned as a pointer but CALayer.foregroundColor asks an objc object (@)
+//	NSLog(@"unboxing private %@", private);
 	if ([private.type isEqualToString:@"rawPointer"])	*(id*)o = [private rawPointer];
 	else												*(id*)o = [private object];
 	return	YES;

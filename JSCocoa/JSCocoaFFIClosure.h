@@ -16,6 +16,7 @@
 
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 #import "iPhone/ffi.h"
+#import "iPhone/BurksPool.h"
 #endif
 
 

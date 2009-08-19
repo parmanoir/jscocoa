@@ -33,6 +33,7 @@
 		3DA390190EA7523300CB6F74 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA390130EA7523300CB6F74 /* BridgeSupportController.m */; };
 		3DB582150EA17CAC00EB80D9 /* JavascriptCore-dlsym.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB5820C0EA17CAC00EB80D9 /* JavascriptCore-dlsym.m */; };
 		3DB582770EA1814000EB80D9 /* iPhoneMain.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB582760EA1814000EB80D9 /* iPhoneMain.js */; };
+		3DED293F103B970D0093C660 /* BurksPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED293E103B970D0093C660 /* BurksPool.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,8 @@
 		3DB582130EA17CAC00EB80D9 /* JSStringRefCF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSStringRefCF.h; sourceTree = "<group>"; };
 		3DB582140EA17CAC00EB80D9 /* JSValueRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSValueRef.h; sourceTree = "<group>"; };
 		3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = iPhoneMain.js; path = ../iPhoneMain.js; sourceTree = "<group>"; };
+		3DED293D103B970D0093C660 /* BurksPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BurksPool.h; path = ../JSCocoa/iPhone/BurksPool.h; sourceTree = SOURCE_ROOT; };
+		3DED293E103B970D0093C660 /* BurksPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BurksPool.m; path = ../JSCocoa/iPhone/BurksPool.m; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,10 +177,7 @@
 		3DB581EF0EA17C9000EB80D9 /* JSCocoa */ = {
 			isa = PBXGroup;
 			children = (
-				3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */,
-				3D3B55C90F1D4C2200D60188 /* GDataDefines.h */,
-				3D3B559A0F1D41F300D60188 /* GDataXMLNode.h */,
-				3D3B559B0F1D41F300D60188 /* GDataXMLNode.m */,
+				3DED2940103B97130093C660 /* iPhone */,
 				3DB5820B0EA17CAC00EB80D9 /* JavascriptCore */,
 				3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */,
 				3DA3900C0EA7523300CB6F74 /* JSCocoaController.h */,
@@ -210,6 +210,19 @@
 				3DB582140EA17CAC00EB80D9 /* JSValueRef.h */,
 			);
 			name = JavascriptCore;
+			sourceTree = "<group>";
+		};
+		3DED2940103B97130093C660 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */,
+				3D3B55C90F1D4C2200D60188 /* GDataDefines.h */,
+				3D3B559A0F1D41F300D60188 /* GDataXMLNode.h */,
+				3D3B559B0F1D41F300D60188 /* GDataXMLNode.m */,
+				3DED293D103B970D0093C660 /* BurksPool.h */,
+				3DED293E103B970D0093C660 /* BurksPool.m */,
+			);
+			name = iPhone;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +293,7 @@
 				3DA390190EA7523300CB6F74 /* BridgeSupportController.m in Sources */,
 				3D3B559C0F1D41F300D60188 /* GDataXMLNode.m in Sources */,
 				3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */,
+				3DED293F103B970D0093C660 /* BurksPool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

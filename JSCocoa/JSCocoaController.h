@@ -102,6 +102,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 // Tests
 - (int)runTests:(NSString*)path;
+- (int)runTests:(NSString*)path withSelector:(SEL)sel;
 
 //
 // Autorelease pool

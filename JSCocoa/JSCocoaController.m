@@ -219,8 +219,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc = YES;
-	
-	
+
 	return	self;
 }
 
@@ -332,7 +331,9 @@ static id JSCocoaSingleton = NULL;
 	
 	BOOL runningFromSystemLibrary = [[NSString stringWithUTF8String:info.dli_fname] hasPrefix:@"/System"];
 	if (!runningFromSystemLibrary)	NSLog(@"***Running a nightly JavascriptCore***");
+#if !TARGET_OS_IPHONE
 	if ([NSGarbageCollector defaultCollector])	NSLog(@"***Running with ObjC Garbage Collection***");
+#endif
 }
 
 #pragma mark Script evaluation
@@ -340,7 +341,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Evaluate a file
 // 
-- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
+- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue withLintex:(BOOL)withLintex
 {
 	NSError*	error;
 	id script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
@@ -352,15 +353,21 @@ static id JSCocoaSingleton = NULL;
 	//
 	if (_delegate && [_delegate respondsToSelector:@selector(JSCocoa:canLoadJSFile:)] && ![_delegate JSCocoa:self canLoadJSFile:path])	return	NO;
 	
-	// Expand macros
-	if ([self hasJSFunctionNamed:@"expandJSMacros"])
+	// Normal path, with macro expansion for class definitions
+	// OR
+	// Lintex path
+	id functionName = withLintex ? @"lintex" : @"expandJSMacros";
+
+	// Expand macros or lintex
+	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
+	if (!hasFunction && [functionName isEqualToString:@"lintex"])	NSLog(@"lintex function not found to process %@", path);
+	if (hasFunction)
 	{
-		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:@"expandJSMacros" withArguments:script, nil]];
+		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:functionName withArguments:script, nil]];
 		// Bail if expansion failed
 		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
-		{
-			return NSLog(@"Macro expansion failed on %@ (%@)", path, expandedScript), NO;
-		}
+			return NSLog(@"%@ expansion failed on %@ (%@)", functionName, path, expandedScript), NO;
+
 		script = expandedScript;
 	}
 
@@ -394,12 +401,23 @@ static id JSCocoaSingleton = NULL;
 	return	YES;
 }
 
+- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
+{
+	return	[self evalJSFile:path toJSValueRef:returnValue withLintex:NO];
+}
+
+
 //
 // Evaluate a file, without caring about return result
 // 
 - (BOOL)evalJSFile:(NSString*)path
 {
 	return	[self evalJSFile:path toJSValueRef:nil];
+}
+
+- (BOOL)evalJSFileWithLintex:(NSString*)path
+{
+	return	[self evalJSFile:path toJSValueRef:nil withLintex:YES];
 }
 
 //
@@ -434,6 +452,7 @@ static id JSCocoaSingleton = NULL;
 	return	result;
 }
 
+// Evaluate a string, no script URL
 - (JSValueRef)evalJSString:(NSString*)script
 {
 	return [self evalJSString:script withScriptURL:nil];
@@ -511,8 +530,8 @@ static id JSCocoaSingleton = NULL;
 		return	NULL;
 	}
 	
-	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
 	// Return if function is not of function type
+	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
 	if (!jsFunction)			return	NSLog(@"callJSFunctionNamed : %@ is not a function", name), NULL;
 
 	// Call !
@@ -1082,6 +1101,25 @@ static id JSCocoaSingleton = NULL;
 */
 + (BOOL)addMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encoding:(char*)encoding
 {
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	// For the iPhone, use a Burks Pool, storing pointer to implementations matching required type encodings
+	id typeEncodings = [JSCocoaController parseObjCMethodEncoding:encoding];
+	if (!typeEncodings)	return NSLog(@"addMethod : Invalid encoding %s for %@.%@", encoding, class, methodName), NO;
+
+	SEL selector = NSSelectorFromString(methodName);
+	IMP fn = [BurksPool IMPforTypeEncodings:typeEncodings];
+	if (!fn)	return	NSLog(@"No encoding found when adding %@.%@(%s)", class, methodName, encoding), NO;
+
+	// First addMethod : use class_addMethod to set closure
+	if (!class_addMethod(class, selector, fn, encoding))
+	{
+		// After that, we need to patch the method's implementation to set closure
+		Method method = class_getInstanceMethod(class, selector);
+		if (!method)	method = class_getClassMethod(class, selector);
+		method_setImplementation(method, fn);
+	}
+
+#elif
 	if (!encoding)	return	NSLog(@"addMethod called with null encoding"), NO;
 	
 	SEL selector = NSSelectorFromString(methodName);
@@ -1148,6 +1186,7 @@ static id JSCocoaSingleton = NULL;
 		return	NSLog(@"addMethod %@ on %@ FAILED : no functionPointer in closure", methodName, class), NO;
 
 	return	YES;
+#endif	
 }
 
 
@@ -1595,8 +1634,9 @@ static id JSCocoaSingleton = NULL;
 
 
 #pragma mark Tests
-- (int)runTests:(NSString*)path
+- (int)runTests:(NSString*)path withSelector:(SEL)sel
 {
+	int count = 0;
 #if defined(TARGET_OS_IPHONE)
 #elif defined(TARGET_IPHONE_SIMULATOR)
 #else
@@ -1607,12 +1647,12 @@ static id JSCocoaSingleton = NULL;
 
 	if ([files count] == 0)	return	[JSCocoaController logAndSay:@"no test files found"], 0;
 	
-	int count = 0;
 	for (id file in files)
 	{
 		id filePath = [NSString stringWithFormat:@"%@/%@", path, file];
 //		NSLog(@">>>evaling %@", filePath);
-		BOOL evaled = [self evalJSFile:filePath];
+//		BOOL evaled = [self evalJSFile:filePath];
+		id evaled = [self performSelector:sel withObject:filePath];
 //		NSLog(@">>>EVALED %d, %@", evaled, filePath);
 		if (!evaled)	
 		{
@@ -1625,6 +1665,10 @@ static id JSCocoaSingleton = NULL;
 	}
 #endif	
 	return	count;
+}
+- (int)runTests:(NSString*)path
+{
+	return [self runTests:path withSelector:@selector(evalJSFile:)];
 }
 
 #pragma mark Autorelease pool
@@ -2038,6 +2082,7 @@ int	liveInstanceCount	= 0;
 		}
 	
 //		NSLog(@"SET JS VALUE %x %@", valueAndContext.value, [(id)JSStringCopyCFString(kCFAllocatorDefault, name) autorelease]);
+//		NSLog(@"SET JSValue %@=%@", JSStringCopyCFString(kCFAllocatorDefault, name), JSStringCopyCFString(kCFAllocatorDefault, JSValueToStringCopy(c, valueAndContext.value, NULL)));
 		JSObjectSetProperty(c, hash, name, valueAndContext.value, kJSPropertyAttributeNone, NULL);
 		JSStringRelease(name);
 		return	YES;
@@ -2059,9 +2104,12 @@ int	liveInstanceCount	= 0;
 			JSStringRelease(name);
 			return	valueAndContext;
 		}
-
 		valueAndContext.ctx		= c;
 		valueAndContext.value	= JSObjectGetProperty(c, hash, name, NULL);
+
+//		NSLog(@"GET JS VALUE %x %@", valueAndContext.value, [(id)JSStringCopyCFString(kCFAllocatorDefault, name) autorelease]);
+//		NSLog(@"<-GET JSValue %@=%@", JSStringCopyCFString(kCFAllocatorDefault, name), JSStringCopyCFString(kCFAllocatorDefault, JSValueToStringCopy(c, valueAndContext.value, NULL)));
+
 		JSStringRelease(name);
 		return	valueAndContext;
 	}
@@ -2084,7 +2132,6 @@ int	liveInstanceCount	= 0;
 		}
 		bool r =	JSObjectDeleteProperty(c, hash, name, NULL);
 		JSStringRelease(name);
-
 		return	r;
 	}
 	return	NO;
@@ -4161,7 +4208,10 @@ id	JSLocalizedString(id stringName, id firstArg, ...)
 - (id)description
 {
 	id boxedObject = [(JSCocoaPrivateObject*)JSObjectGetPrivate(jsObject) object];
-	id retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+	id retainCount = [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+#if !TARGET_OS_IPHONE
+	retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+#endif
 	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%@)>",
 				[self class], 
 				self, 

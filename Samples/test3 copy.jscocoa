@@ -1,8 +1,15 @@
 
+// Hello world !
 
-	echo 'HELLO WORLD'
-	
-	for (var i=0; i<10; i++)
-	{
-		var b = 2 + i
-	}
+var a = function add(a, b)
+{
+	return a+b
+}
+
+
+a(4, 3)
+
+
+// end file
+// More test
+
