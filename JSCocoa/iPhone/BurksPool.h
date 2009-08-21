@@ -17,5 +17,6 @@
 + (IMP)IMPforTypeEncodings:(NSArray*)encodings;
 + (BOOL)addMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext encodings:(id)encodings;
 + (JSValueRef)callSelector:(SEL)sel ofInstance:(id)o writeContext:(JSContextRef*)_ctx withArguments:(void*)firstArg, ...;
++ (id)flattenEncoding:(id)encodings;
 
 @end

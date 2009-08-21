@@ -93,6 +93,8 @@ static	id jsFunctionHash = nil;
 	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", [o class], NSStringFromSelector(sel)];
 	id encodings			= [methodEncodings objectForKey:keyForClassAndMethod];
 	id privateObject		= [jsFunctionHash objectForKey:keyForClassAndMethod];
+	
+//	NSLog(@"Call %@ encoding=%@", keyForClassAndMethod, [self flattenEncoding:encodings]);
 
 	if (!encodings)		return	NSLog(@"No encodings found for %@", keyForClassAndMethod), NULL;
 	if (!privateObject)	return	NSLog(@"No js function found for %@", keyForClassAndMethod), NULL;

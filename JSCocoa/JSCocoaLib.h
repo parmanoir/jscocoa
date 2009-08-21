@@ -52,3 +52,11 @@
 - (int)typeCount;
 
 @end
+
+
+
+@interface JSCocoaObjCMsgSend : NSObject
+
++ (void)checkObjCMsgSend;
+
+@end

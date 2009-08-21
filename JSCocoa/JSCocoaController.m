@@ -220,6 +220,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc = YES;
+	
+//	[JSCocoaObjCMsgSend checkObjCMsgSend];
 
 	return	self;
 }
@@ -2504,7 +2506,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 
 
 //
-// From PyObjC : when to call objc_msgSendStret, for structure return
+// From PyObjC : when to call objc_msgSend_stret, for structure return
 //		Depending on structure size & architecture, structures are returned as function first argument (done transparently by ffi) or via registers
 //
 BOOL	isUsingStret(id argumentEncodings)
@@ -2542,6 +2544,28 @@ BOOL	isUsingStret(id argumentEncodings)
 				return	YES;
 			}
 		return	NO;				
+}
+
+//
+//	Return the correct objc_msgSend* variety according to encodings
+//
+void*	getObjCCallAddress(id argumentEncodings)
+{
+	BOOL	usingStret	= isUsingStret(argumentEncodings);
+	void*	callAddress	= objc_msgSend;
+	if (usingStret)	callAddress = objc_msgSend_stret;
+
+
+	#if __i386__ // || TARGET_OS_IPHONE iPhone uses objc_msgSend
+	char returnEncoding = [[argumentEncodings objectAtIndex:0] typeEncoding];
+	if (returnEncoding == 'f' || returnEncoding == 'd')
+	{
+		callAddress = objc_msgSend_fpret;
+	}
+	
+	#endif
+
+	return	callAddress;
 }
 
 //
@@ -2984,17 +3008,11 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					return	NULL;
 				}
 				
-
 				// Extract arguments
-				const char* typeEncoding = method_getTypeEncoding(method);
-				id argumentEncodings = [JSCocoaController parseObjCMethodEncoding:typeEncoding];
-				//
-				// From PyObjC : when to call objc_msgSendStret, for structure return
-				//		Depending on structure size & architecture, structures are returned as function first argument (done transparently by ffi) or via registers
-				//
-				BOOL	usingStret = isUsingStret(argumentEncodings);
-				void* callAddress = objc_msgSend;
-				if (usingStret)	callAddress = objc_msgSend_stret;
+				const char* typeEncoding	= method_getTypeEncoding(method);
+				id argumentEncodings		= [JSCocoaController parseObjCMethodEncoding:typeEncoding];
+				// Call address
+				void* callAddress			= getObjCCallAddress(argumentEncodings);
 				
 				//
 				// ffi data
@@ -3017,7 +3035,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// Allocate return value storage if it's a pointer
 				if ([returnValue typeEncoding] == '^')
 					[returnValue allocateStorage];
-				
+					
 				// Setup ffi
 				ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, [returnValue ffi_type], args);
 				//
@@ -3371,13 +3389,8 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			id argumentEncodings = [JSCocoaController parseObjCMethodEncoding:typeEncoding];
 			if ([[argumentEncodings objectAtIndex:0] typeEncoding] != 'v')	return	throwException(ctx, exception, [NSString stringWithFormat:@"(in setter) %@ must return void", setterName]), false;
 
-			//
-			// From PyObjC : when to call objc_msgSendStret, for structure return
-			//		Depending on structure size & architecture, structures are returned as function first argument (done transparently by ffi) or via registers
-			//
-			BOOL	usingStret = isUsingStret(argumentEncodings);
-			void* callAddress = objc_msgSend;
-			if (usingStret)	callAddress = objc_msgSend_stret;
+			// Call address
+			void* callAddress = getObjCCallAddress(argumentEncodings);
 			
 			//
 			// ffi data
@@ -3665,14 +3678,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		callAddressArgumentCount = [argumentEncodings count]-3;
 
 		// Get call address
-		callAddress = objc_msgSend;
-
-		//
-		// From PyObjC : when to call objc_msgSendStret, for structure return
-		//		Depending on structure size & architecture, structures are returned as function first argument (done transparently by ffi) or via registers
-		//
-		BOOL	usingStret = isUsingStret(argumentEncodings);
-		if (usingStret)	callAddress = objc_msgSend_stret;
+		callAddress = getObjCCallAddress(argumentEncodings);
 	}
 
 	//
@@ -3840,6 +3846,23 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Allocate return value storage if it's a pointer
 	if ([returnValue typeEncoding] == '^')
 		[returnValue allocateStorage];
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	BOOL	iPhoneFloatFix = NO;
+	if ([returnValue typeEncoding] == 'f')
+	{
+		iPhoneFloatFix = YES;
+		returnValue = [[[JSCocoaFFIArgument alloc] init] autorelease];
+		[returnValue setTypeEncoding:'i'];
+//		[returnValue setTypeEncoding:'f'];
+//NSLog(@">>>>COMMENTED RETURN VALUE PATCH");
+		NSLog(@"allocated storage=%x", [returnValue storage]);
+		
+		struct dl_info info;
+		dladdr(callAddress, &info);
+		NSLog(@"patch callAddress(%s)", info.dli_sname);
+		callAddress = objc_msgSend;
+	}
+#endif		
 
 	// Setup ffi
 	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, effectiveArgumentCount, [returnValue ffi_type], args);
@@ -3865,6 +3888,37 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Return now if our function returns void
 	// Return null as a JSValueRef to avoid crashing
 	if ([returnValue ffi_type] == &ffi_type_void)	return	JSValueMakeNull(ctx);
+
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+	if (iPhoneFloatFix)
+	{
+		float		floatRes = -1;
+		unsigned int addy = (unsigned int)&floatRes;
+#if TARGET_IPHONE_SIMULATOR
+//		__asm__ ("leal %0, %eax" : "r" (floatRes) );
+		__asm__ ("push %eax");
+		__asm__ ("movl %%eax, %0\n" :"=r"(addy));
+
+		__asm__ ("fstp (%eax)");
+		__asm__ ("pop %eax");
+
+#else
+	
+#endif
+		NSLog(@"***floatRes=%f", floatRes);
+		
+		void* ptr = [returnValue storage];
+//		float a = (float)ptr;
+		float b = *(float*)ptr;
+		float seven = 7.0;
+		void* ptr7 = &seven;
+//		float c = *(float**)ptr;
+		NSLog(@">rawptr=%x float=%f intvalue=%x expecting=%x", ptr, *(float*)ptr, *(unsigned int*)ptr, *(unsigned int*)ptr7);
+		NSLog(@">%x", *(float**)&ptr);
+		NSLog(@">%f (argCount=%d)", *(float*)ptr, effectiveArgumentCount);
+		NSLog(@"done");
+	}
+#endif		
 	
 	// Else, convert return value
 	JSValueRef	jsReturnValue = NULL;

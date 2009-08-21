@@ -199,6 +199,114 @@
 }
 
 
+@end
 
+
+//
+// This is used to disassemble the resulting binary and check which objc_msgSend version is used.
+//	otool -tV binary
+//
+//	objc_msgSend
+//	objc_msgSend_fpret
+//
+
+@implementation JSCocoaObjCMsgSend
+
++ (float)addFloat:(float)a Float:(float)b
+{
+	float c = a+b;
+	NSLog(@"***** returning %f+%f=%f (0x%x+0x%x=0x%x)", a, b, c, *(unsigned long*)&a, *(unsigned long*)&b, *(unsigned long*)&c);
+	return a + b;
+}
+
++ (float)returnFloat
+{
+	return 1.2f;
+}
++ (double)returnDouble
+{
+	return 1.2;
+}
+
+
+double absoluteInMemoryDouble = 3.2;
++ (void)checkObjCMsgSend
+{
+	NSLog(@"comment me out");
+	
+	float returnedFloat = [self returnFloat];
+	float b2 = returnedFloat+0.5;
+	NSLog(@"%f", b2);
+	
+	
+//	__asm__("mov	r0, r1");
+	
+	int x, y;
+//	__asm__("usat %0, #8, %1\n\t" : "=r"(y) : "r"(x));
+//	__asm__("fst s15, %1\n\t" : "=r"(y));
+//	__asm__("fsts s15, %1\n\t" : "=r"(y) : "r"(x));
+//	__asm__("stfeqs");
+//	__asm__("eazeazez %0, #8, %1\n\t" : "=r"(y) : "r"(x));
+	
+typedef	struct { char a; id b;			} struct_C_ID;
+typedef	struct { char a; char b;		} struct_C_CHR;
+typedef	struct { char a; short b;		} struct_C_SHT;
+typedef	struct { char a; int b;			} struct_C_INT;
+typedef	struct { char a; long b;		} struct_C_LNG;
+typedef	struct { char a; long long b;	} struct_C_LNG_LNG;
+typedef	struct { char a; float b;		} struct_C_FLT;
+typedef	struct { char a; double b;		} struct_C_DBL;
+typedef	struct { char a; BOOL b;		} struct_C_BOOL;
+
+	NSLog(@"sizeof(id)=%d",		sizeof(id));
+	NSLog(@"sizeof(char)=%d",	sizeof(char));
+	NSLog(@"sizeof(short)=%d",	sizeof(short));
+	NSLog(@"sizeof(int)=%d",	sizeof(int));
+	NSLog(@"sizeof(long)=%d",	sizeof(long));
+	NSLog(@"sizeof(float)=%d",	sizeof(float));
+	NSLog(@"sizeof(double)=%d",	sizeof(double));
+	NSLog(@"sizeof(BOOL)=%d",	sizeof(BOOL));
+	
+	NSLog(@"UISlider.value encoding=%s", [JSCocoa typeEncodingOfMethod:@"value" class:@"UISlider"]);
+
+//	NSLog(@"float=%f", [self returnFloat]);
+//	NSLog(@"double=%f", [self returnDouble]);
+	id slider = [[UISlider alloc] init];
+//	[slider setValue:0.6];
+	NSLog(@"check dummy slider value");
+	NSLog(@"dummy slider.value=%f", [slider value]);
+	
+	float d = [self addFloat:3 Float:4];
+	NSLog(@"d=%f", d);
+	float a, b, c;
+	a = 4;
+	b = 3;
+	c = a+b;
+	NSLog(@"hello");
+	NSLog(@"%f", c);
+	a = 5;
+	b = 6;
+	c = a*b;
+	NSLog(@"%f", c);
+	NSLog(@"hello");
+	
+//#pragma arm
+	c = a*c;
+	NSLog(@"%f", c);
+//#pragma arm
+	c = b*c;
+	NSLog(@"%f", c);
+	
+	double da, db, dc;
+	da = 3;
+	db = 2;
+	dc = da+db;
+	NSLog(@"%f", dc);
+	dc = da*db+absoluteInMemoryDouble;
+	NSLog(@"%f", dc);
+	
+}
 
 @end
+
+

@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	[JSCocoaSymbolFetcher populateJavascriptCoreSymbols];
 
 	// Load iPhone bridgeSupport
-	[[BridgeSupportController sharedController] loadBridgeSupport:[NSString stringWithFormat:@"%@/iPhone.bridgeSupport", [[NSBundle mainBundle] bundlePath]]];
+	[[BridgeSupportController sharedController] loadBridgeSupport:[NSString stringWithFormat:@"%@/iPhone.bridgesupport", [[NSBundle mainBundle] bundlePath]]];
 	// Load js class kit
 	id c = [JSCocoaController sharedController];
 	[c evalJSFile:[NSString stringWithFormat:@"%@/class.js", [[NSBundle mainBundle] bundlePath]]];

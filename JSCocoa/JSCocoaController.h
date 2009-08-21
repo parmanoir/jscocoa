@@ -140,6 +140,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (void)setUseSafeDealloc:(BOOL)b;
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
++ (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
 
 
 
@@ -249,7 +250,7 @@ id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATIO
 
 
 //
-// From PyObjC : when to call objc_msgSendStret, for structure return
+// From PyObjC : when to call objc_msgSend_stret, for structure return
 //		Depending on structure size & architecture, structures are returned as function first argument (done transparently by ffi) or via registers
 //
 

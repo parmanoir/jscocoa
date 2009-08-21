@@ -1,4 +1,14 @@
 
+	// Call twice to check for a difference in return registers
+	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
+	log('JSCocoaObjCMsgSend.addFloat_Float_=' + JSCocoaObjCMsgSend.addFloat_Float_(3, 4))
+	log('JSCocoaObjCMsgSend.addFloat_Float_=' + JSCocoaObjCMsgSend.addFloat_Float_(5, 6))
+	log('***************Called JSCocoaObjCMsgSend.addFloatFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
+	log('JSCocoaObjCMsgSend.returnFloat=' + JSCocoaObjCMsgSend.returnFloat)
+	log('***************Called JSCocoaObjCMsgSend.returnFloat')
+
 	//
 	// Application Delegate
 	//
@@ -87,9 +97,13 @@
 
 				this.cells = [cell0, cell1]
 
-
 				slider.add({target:this, action:'pointCountChanged:', forControlEvents:0xffffffff})
 				onoff.add({target:this, action:'fillModeChanged:', forControlEvents:0xffffffff})
+				
+				slider.value = 0
+				
+				log('inited slider=' + slider)
+				log('slider.value=' + slider.value)
 			}
 			return	this.cells[indexPath.row]
 		}
@@ -104,8 +118,15 @@
 		}
 		IBAction('pointCountChanged').fn = function (sender)
 		{
-			this.polygonView.pointCount = Math.round(sender.value*10+5)
+//			log('sender=' + sender)
+//			log('sender.value=' + sender.value)
+//			log('typeof sender.value=' + (typeof sender.value))
+			var pointCount = Math.round(sender.value*10+5)
+//			log('pointCount=' + pointCount)
+			this.polygonView.pointCount = pointCount
+//			log('point count set')
 			this.polygonView.setNeedsDisplay
+//			log('display')
 		}
 		
 		//
