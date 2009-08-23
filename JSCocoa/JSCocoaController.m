@@ -3087,7 +3087,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					else
 					{
 						double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
-						NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", doubleRes);
+						NSLog(@"jsCocoaObject_callAsFunction_ffi raw double %f", doubleRes);
 						return	JSValueMakeNumber(ctx, doubleRes);
 					}
 #endif
@@ -3952,13 +3952,13 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if (originalFloatEncoding == 'f')
 		{
 			float floatRes = [JSCocoaIPhoneLibffiFix returnFloatFromRegistersAfterARMFFICall];
-			NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", floatRes);
+			NSLog(@"getProperty raw float %f", floatRes);
 			return	JSValueMakeNumber(ctx, floatRes);
 		}
 		else
 		{
 			double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
-			NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", doubleRes);
+			NSLog(@"getProperty raw double %f", doubleRes);
 			return	JSValueMakeNumber(ctx, doubleRes);
 		}
 #endif

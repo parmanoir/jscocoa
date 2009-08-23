@@ -144,7 +144,15 @@
 //			log('sender.value=' + sender.value)
 //			log('typeof sender.value=' + (typeof sender.value))
 			var pointCount = Math.round(sender.value*10+5)
-//			log('pointCount=' + pointCount)
+			if (pointCount < 5 || pointCount > 15)
+			{
+				log('out of bounds pointCount=' + pointCount)
+				if (pointCount < 5)		pointCount = 5
+				if (pointCount > 15)	pointCount = 15
+			}
+			
+			
+			log('pointCount=' + pointCount)
 			this.polygonView.pointCount = pointCount
 //			log('point count set')
 			this.polygonView.setNeedsDisplay

@@ -413,14 +413,25 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 + (float)returnFloatFromRegistersAfterARMFFICall
 {
 	float		floatRes = -1;
-	unsigned int addy = (unsigned int)&floatRes;
+//	unsigned int addy = (unsigned int)&floatRes;
+	// Aligned ?
+	void*		addy = malloc(sizeof(float));
+	
 
 	// ## what about the clobber list ? 
-	__asm__("	mov		r0, %0 		\n\t" 		: "=r"(addy) );
+	__asm__("usat %0, #8, %1\n\t" : "=r"(addy) : "r"(addy) : "r0");
+
+//	__asm__("	push	r0		\n\t"		);
+//	__asm__("	push	{r1}		\n\t"		);
+	__asm__("	mov		r0, %0 		\n\t" 		: "=r"(addy));
 	__asm__("	fmrs	r1, s15		\n\t"		);
 	__asm__("	str		r1, [r0]	\n\t"		);
+//	__asm__("	pop		{r1}		\n\t"		);
+//	__asm__("	pop		{r0}		\n\t"		);
 	
-	NSLog(@"got ARM float s15 %f", floatRes);
+	floatRes = *(float*)addy;
+	NSLog(@"got ARM float s15 %f (%x)", floatRes, addy);
+	
 
 	return	floatRes;
 }
@@ -428,12 +439,14 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 + (double)returnDoubleFromRegistersAfterARMFFICall
 {
 	double		doubleRes = -1;
-	unsigned int addy = (unsigned int)&doubleRes;
+//	unsigned int addy = (unsigned int)&doubleRes;
+	void*		addy = malloc(sizeof(double));
 
 	__asm__("	mov		r0, %0 		\n\t" 		: "=r"(addy) );
 	__asm__("	fstd	d7, [r0]	\n\t"		);
 	
-	NSLog(@"got ARM double d7 %f", doubleRes);
+	doubleRes = *(double*)addy;
+	NSLog(@"got ARM double d7 %f (%x)", doubleRes, addy);
 
 	return	doubleRes;
 }
