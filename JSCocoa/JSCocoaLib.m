@@ -215,7 +215,15 @@
 + (float)addFloat:(float)a Float:(float)b
 {
 	float c = a+b;
-	NSLog(@"***** returning %f+%f=%f (0x%x+0x%x=0x%x)", a, b, c, *(unsigned long*)&a, *(unsigned long*)&b, *(unsigned long*)&c);
+//	NSLog(@"***** returning %f+%f=%f (0x%x+0x%x=0x%x)", a, b, c, *(unsigned long*)&a, *(unsigned long*)&b, *(unsigned long*)&c);
+	NSLog(@"float %f", c);
+	return a + b;
+}
+
++ (double)addDouble:(double)a Double:(double)b
+{
+	double c = a+b;
+	NSLog(@"double %f", c);
 	return a + b;
 }
 
@@ -225,25 +233,106 @@
 }
 + (double)returnDouble
 {
-	return 1.2;
+	return 3.4;
+}
+
++ (CGPoint)returnPoint
+{
+	return CGPointMake(1, 2);
+}
++ (CGRect)returnRect
+{
+	return CGRectMake(3, 4, 5, 6);
 }
 
 
+/*
+
+http://richard.giliam.net/?p=20
+inline int add2f(int a, int b) {
+   int ret = 0;
+   asm volatile (
+      "add  %0, %1, %2     \n\t"
+      : "=r"(ret)       // Output registers
+      : "r"(a), "r"(b)  // Input registers
+      : "r0", "r1"      // Clobber List
+   );
+   return ret;
+}
+
+
+*/
+
 double absoluteInMemoryDouble = 3.2;
+unsigned int absoluteInMemoryUInt = 1;
 + (void)checkObjCMsgSend
 {
-	NSLog(@"comment me out");
+
+	return;
+
+/*
+
+	FMRS{cond} Rd, Sn
+	The FMRS instruction transfers the contents of Sn into Rd.
+
+
+	Store r0 in [sp]
+	30004b84	e58d0010	str	r0, [sp, #16]
+
+*/
+/*
+
+	__asm__("	ldr		r0, %0 		\n\t" : "=r"(addy));
+	__asm__("	mov		%0, r0 		\n\t" : "=r"(savedR0));
+	// Transfer s15 into r0
+	__asm__("	fmrs	r0, s15		\n\t");
+	__asm__("	mov		[%0], r0		\n\t" : "=r"(addy));
+	__asm__("	mov		r0, %0		\n\t" : "=r"(savedR0));
+*/
+// load from 0x1c820
+//0001c804	e59f3014	ldr	r3, [pc, #20]	; 0x1c820
+// store 
+//0001c808	e5823000	str	r3, [r2]
+
+//	NSLog(@"got ARM float s15 %f", floatRes);
 	
-	float returnedFloat = [self returnFloat];
-	float b2 = returnedFloat+0.5;
-	NSLog(@"%f", b2);
+//	NEED LDR
+
+//	absoluteInMemoryUInt += 0x12345678;
+	
+//	return;
+
+//	NSLog(@"comment me out");
+	
+//	float returnedFloat = [self returnFloat];
+//	float b2 = returnedFloat+0.5;
+//	NSLog(@"%f", b2);
 	
 	
 //	__asm__("mov	r0, r1");
 	
+	
+/*
+	
+	___extendsfdf2vfp
+___extendsfdf2vfp:
+30002d64	ee070a90	fmsr	s15, r0
+30002d68	eeb77ae7	fcvtds	d7, s15
+30002d6c	ec510b17	fmrrd	r0, r1, d7
+
+*/	
+/*
 	int x, y;
+	double blah;
+	blah = [self returnDouble];
+
+	__asm__("	fmsr	s15, r0		\n\t");
+	__asm__("	fcvtds	d7, s15		\n\t");
+	__asm__("	fmrrd	r0, r1, d7	\n\t");
+*/
+
 //	__asm__("usat %0, #8, %1\n\t" : "=r"(y) : "r"(x));
-//	__asm__("fst s15, %1\n\t" : "=r"(y));
+//	__asm__("fstd %0, s15\n\t" : "=r"(blah));
 //	__asm__("fsts s15, %1\n\t" : "=r"(y) : "r"(x));
 //	__asm__("stfeqs");
 //	__asm__("eazeazez %0, #8, %1\n\t" : "=r"(y) : "r"(x));
@@ -310,3 +399,45 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 @end
 
 
+#if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
+
+/*
+	This file needs to be compiled with -mno-thumb in 'Additional Compiler Flags' in File Info (right click) > Build
+	-mno-thumb enables fpu register access.
+	
+	Done with ___extendsfdf2vfp when compiled.
+*/
+//##LATER : if working, move to own file
+@implementation JSCocoaIPhoneLibffiFix
+
++ (float)returnFloatFromRegistersAfterARMFFICall
+{
+	float		floatRes = -1;
+	unsigned int addy = (unsigned int)&floatRes;
+
+	// ## what about the clobber list ? 
+	__asm__("	mov		r0, %0 		\n\t" 		: "=r"(addy) );
+	__asm__("	fmrs	r1, s15		\n\t"		);
+	__asm__("	str		r1, [r0]	\n\t"		);
+	
+	NSLog(@"got ARM float s15 %f", floatRes);
+
+	return	floatRes;
+}
+
++ (double)returnDoubleFromRegistersAfterARMFFICall
+{
+	double		doubleRes = -1;
+	unsigned int addy = (unsigned int)&doubleRes;
+
+	__asm__("	mov		r0, %0 		\n\t" 		: "=r"(addy) );
+	__asm__("	fstd	d7, [r0]	\n\t"		);
+	
+	NSLog(@"got ARM double d7 %f", doubleRes);
+
+	return	doubleRes;
+}
+
+
+@end
+#endif

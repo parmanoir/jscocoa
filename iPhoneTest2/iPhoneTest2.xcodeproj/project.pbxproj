@@ -21,7 +21,7 @@
 		3D3B56CA0F1E9A1100D60188 /* sysv.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C30F1E9A1100D60188 /* sysv.o */; };
 		3D3B56CB0F1E9A1100D60188 /* types.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C40F1E9A1100D60188 /* types.o */; };
 		3D3B56CC0F1E9A1100D60188 /* debug.o in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3B56C50F1E9A1100D60188 /* debug.o */; };
-		3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */; };
+		3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */; settings = {COMPILER_FLAGS = "-mno-thumb"; }; };
 		3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */; };
 		3D7A818F0EA238D3009DE07C /* hiPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818D0EA238D3009DE07C /* hiPointCount.png */; };
 		3D7A81900EA238D3009DE07C /* lowPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818E0EA238D3009DE07C /* lowPointCount.png */; };
@@ -334,7 +334,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_THUMB_SUPPORT = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;

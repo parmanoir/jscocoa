@@ -3035,6 +3035,19 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// Allocate return value storage if it's a pointer
 				if ([returnValue typeEncoding] == '^')
 					[returnValue allocateStorage];
+
+				// iPhone float fix
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+				BOOL	iPhoneFloatFix = NO;
+				char	originalFloatEncoding;
+				if ([returnValue typeEncoding] == 'f' || [returnValue typeEncoding] == 'd')
+				{
+					originalFloatEncoding = [returnValue typeEncoding];
+					iPhoneFloatFix = YES;
+					returnValue = [[[JSCocoaFFIArgument alloc] init] autorelease];
+					[returnValue setTypeEncoding:'i'];
+				}
+#endif		
 					
 				// Setup ffi
 				ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, [returnValue ffi_type], args);
@@ -3047,6 +3060,40 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 					ffi_call(&cif, callAddress, storage, values);
 				}
+				
+				// iPhone float fix
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+				if (iPhoneFloatFix)
+				{
+#if TARGET_IPHONE_SIMULATOR
+					float		floatRes = -1;
+					unsigned int addy = (unsigned int)&floatRes;
+
+					__asm__ ("push %eax");
+					__asm__ ("movl %%eax, %0\n" :"=r"(addy));
+					__asm__ ("fst (%eax)");
+					__asm__ ("pop %eax");
+
+					NSLog(@"***floatRes=%f", floatRes);
+					return	JSValueMakeNumber(ctx, floatRes);
+#else
+
+					if (originalFloatEncoding == 'f')
+					{
+						float floatRes = [JSCocoaIPhoneLibffiFix returnFloatFromRegistersAfterARMFFICall];
+						NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", floatRes);
+						return	JSValueMakeNumber(ctx, floatRes);
+					}
+					else
+					{
+						double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
+						NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", doubleRes);
+						return	JSValueMakeNumber(ctx, doubleRes);
+					}
+#endif
+				}
+#endif		
+				
 
 				// Return now if our function returns void
 				// NO - box it
@@ -3846,21 +3893,17 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Allocate return value storage if it's a pointer
 	if ([returnValue typeEncoding] == '^')
 		[returnValue allocateStorage];
+
+	// iPhone float fix
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	BOOL	iPhoneFloatFix = NO;
-	if ([returnValue typeEncoding] == 'f')
+	char	originalFloatEncoding;
+	if ([returnValue typeEncoding] == 'f' || [returnValue typeEncoding] == 'd')
 	{
+		originalFloatEncoding = [returnValue typeEncoding];
 		iPhoneFloatFix = YES;
 		returnValue = [[[JSCocoaFFIArgument alloc] init] autorelease];
 		[returnValue setTypeEncoding:'i'];
-//		[returnValue setTypeEncoding:'f'];
-//NSLog(@">>>>COMMENTED RETURN VALUE PATCH");
-		NSLog(@"allocated storage=%x", [returnValue storage]);
-		
-		struct dl_info info;
-		dladdr(callAddress, &info);
-		NSLog(@"patch callAddress(%s)", info.dli_sname);
-		callAddress = objc_msgSend;
 	}
 #endif		
 
@@ -3889,34 +3932,36 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Return null as a JSValueRef to avoid crashing
 	if ([returnValue ffi_type] == &ffi_type_void)	return	JSValueMakeNull(ctx);
 
+	// iPhone float fix
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	if (iPhoneFloatFix)
 	{
+#if TARGET_IPHONE_SIMULATOR
 		float		floatRes = -1;
 		unsigned int addy = (unsigned int)&floatRes;
-#if TARGET_IPHONE_SIMULATOR
-//		__asm__ ("leal %0, %eax" : "r" (floatRes) );
+
 		__asm__ ("push %eax");
 		__asm__ ("movl %%eax, %0\n" :"=r"(addy));
-
-		__asm__ ("fstp (%eax)");
+		__asm__ ("fst (%eax)");
 		__asm__ ("pop %eax");
 
-#else
-	
-#endif
 		NSLog(@"***floatRes=%f", floatRes);
-		
-		void* ptr = [returnValue storage];
-//		float a = (float)ptr;
-		float b = *(float*)ptr;
-		float seven = 7.0;
-		void* ptr7 = &seven;
-//		float c = *(float**)ptr;
-		NSLog(@">rawptr=%x float=%f intvalue=%x expecting=%x", ptr, *(float*)ptr, *(unsigned int*)ptr, *(unsigned int*)ptr7);
-		NSLog(@">%x", *(float**)&ptr);
-		NSLog(@">%f (argCount=%d)", *(float*)ptr, effectiveArgumentCount);
-		NSLog(@"done");
+		return	JSValueMakeNumber(ctx, floatRes);
+#else
+
+		if (originalFloatEncoding == 'f')
+		{
+			float floatRes = [JSCocoaIPhoneLibffiFix returnFloatFromRegistersAfterARMFFICall];
+			NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", floatRes);
+			return	JSValueMakeNumber(ctx, floatRes);
+		}
+		else
+		{
+			double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
+			NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", doubleRes);
+			return	JSValueMakeNumber(ctx, doubleRes);
+		}
+#endif
 	}
 #endif		
 	

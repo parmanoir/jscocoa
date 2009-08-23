@@ -1,13 +1,35 @@
 
 	// Call twice to check for a difference in return registers
 	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
-	log('JSCocoaObjCMsgSend.addFloat_Float_=' + JSCocoaObjCMsgSend.addFloat_Float_(3, 4))
-	log('JSCocoaObjCMsgSend.addFloat_Float_=' + JSCocoaObjCMsgSend.addFloat_Float_(5, 6))
+	log('JSCocoaObjCMsgSend.addFloat_Float_(7)=' + JSCocoaObjCMsgSend.addFloat_Float_(3, 4))
+	log('JSCocoaObjCMsgSend.addFloat_Float_(11)=' + JSCocoaObjCMsgSend.addFloat_Float_(5, 6))
 	log('***************Called JSCocoaObjCMsgSend.addFloatFloat')
 
-	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
-	log('JSCocoaObjCMsgSend.returnFloat=' + JSCocoaObjCMsgSend.returnFloat)
+	log('***************About to call JSCocoaObjCMsgSend.addDouble_Double_')
+	log('JSCocoaObjCMsgSend.addDouble_Double_(7)=' + JSCocoaObjCMsgSend.addDouble_Double_(3, 4))
+	log('JSCocoaObjCMsgSend.addDouble_Double_(11)=' + JSCocoaObjCMsgSend.addDouble_Double_(5, 6))
+	log('***************Called JSCocoaObjCMsgSend.addFloatFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnFloat')
+	log('JSCocoaObjCMsgSend.returnFloat(1.2)=' + JSCocoaObjCMsgSend.returnFloat)
 	log('***************Called JSCocoaObjCMsgSend.returnFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnDouble')
+	log('JSCocoaObjCMsgSend.returnDouble(3.4)=' + JSCocoaObjCMsgSend.returnDouble)
+	log('***************Called JSCocoaObjCMsgSend.returnDouble')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnPoint')
+	var o = JSCocoaObjCMsgSend.returnPoint
+	log('JSCocoaObjCMsgSend.returnPoint(1, 2)=' + o.x + ', ' + o.y)
+	log('***************Called JSCocoaObjCMsgSend.returnPoint')
+	
+	log('***************About to call JSCocoaObjCMsgSend.returnRect')
+	var o = JSCocoaObjCMsgSend.returnRect
+	log('JSCocoaObjCMsgSend.returnRect(3, 4, 5, 6)=' + o.origin.x + ', ' + o.origin.y + ', ' + o.size.width + ', ' + o.size.height)
+	log('***************Called JSCocoaObjCMsgSend.returnRect')
+	CGRect
+	log('Also check return value of structs, eg View.frame, View.position')
+
 
 	//
 	// Application Delegate
