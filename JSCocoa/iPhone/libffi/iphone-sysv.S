@@ -5,6 +5,7 @@
 #if !TARGET_IPHONE_SIMULATOR
 
 
+#define __SOFTFP__
 
 /* -----------------------------------------------------------------------
    sysv.S - Copyright (c) 1998, 2008 Red Hat, Inc.

@@ -16,6 +16,12 @@
 	//
 	var newClass = JSCocoaController.createClass_parentClass("InstanceVariableTester", "NSObject")
 	var container = InstanceVariableTester.alloc.init
+	
+	container['safeDealloc'] = function ()
+	{
+		log('**************safedealloc')
+	}
+	
 //	JSCocoaController.logInstanceStats
 	
 	container.myValue1 = 3.14
@@ -41,7 +47,6 @@
 
 //	JSCocoaController.log('container2.myValue1=' + container2.myValue1)
 	if (container2.myValue1 != 7.89)			throw "(4) Invalid instance variable"	
-	
 
 
 	// Test deletion
@@ -57,6 +62,7 @@
 		if (count1 != (count0+2))	throw 'invalid hash count — got ' + count1 + ', expected ' + (count0+2) + ' (1)'
 
 	// Release instances
+
 	container.release
 	container2.release
 	container = null
@@ -69,11 +75,12 @@
 	
 	// Collect
 	__jsc__.garbageCollect
+	__jsc__.garbageCollect
 	var instanceCount2 = JSCocoaController.liveInstanceCount(InstanceVariableTester)
 
 	// Test that objects and their hashes were deleted by expecting initial hash count
 	var count2 = JSCocoaController.JSCocoaHashCount
-//	JSCocoaController.log('********' + count0 + '****' + count1 + '*******' + count2)
-//	JSCocoaController.logInstanceStats
+	JSCocoaController.log('********initialHashCount=' + count0 + '****postTest=' + count1 + '*******postGC=' + count2)
+	JSCocoaController.logInstanceStats
 	if (!hasObjCGC)
 		if (Number(count2) != Number(count0))	throw 'invalid hash count after GC — got ' + count2 + ', expected ' + count0 + ' (2)'

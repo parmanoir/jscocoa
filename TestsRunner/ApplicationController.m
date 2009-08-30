@@ -153,7 +153,11 @@ JSValueRef res;
 	}
 	jsc.delegate = nil;
 	
-	if (!b)	{	NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); return; }
+	if (!b)	
+	{	
+		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
+		return; 
+	}
 	else	
 	{
 

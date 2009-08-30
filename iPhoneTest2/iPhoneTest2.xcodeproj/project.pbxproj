@@ -20,7 +20,7 @@
 		3D7A81900EA238D3009DE07C /* lowPointCount.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A818E0EA238D3009DE07C /* lowPointCount.png */; };
 		3D97DA6C10425AAA00E2E233 /* ffi-iphone.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA5A10425AAA00E2E233 /* ffi-iphone.c */; };
 		3D97DA6D10425AAA00E2E233 /* ffi-iphonesimulator.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA5C10425AAA00E2E233 /* ffi-iphonesimulator.c */; };
-		3D97DA6E10425AAA00E2E233 /* iphone-sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */; settings = {COMPILER_FLAGS = "-mfloat-abi=soft"; }; };
+		3D97DA6E10425AAA00E2E233 /* iphone-sysv.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */; };
 		3D97DA6F10425AAA00E2E233 /* iphonesimulator-darwin.S in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA6510425AAA00E2E233 /* iphonesimulator-darwin.S */; };
 		3D97DA7110425AAA00E2E233 /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA6710425AAA00E2E233 /* prep_cif.c */; };
 		3D97DA7210425AAA00E2E233 /* raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D97DA6810425AAA00E2E233 /* raw_api.c */; };

@@ -1657,8 +1657,8 @@ static id JSCocoaSingleton = NULL;
 - (int)runTests:(NSString*)path withSelector:(SEL)sel
 {
 	int count = 0;
-#if defined(TARGET_OS_IPHONE)
-#elif defined(TARGET_IPHONE_SIMULATOR)
+#if TARGET_OS_IPHONE
+#elif TARGET_IPHONE_SIMULATOR
 #else
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	id predicate = [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
@@ -2478,7 +2478,12 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 		{
 			// Check if constant's declared_type is NSString*
 			id value = [[xmlDocument rootElement] attributeForName:@"value"];
-			if (!value)	return	NSLog(@"(OSX_getPropertyCallback) %@ enum has no value set", propertyName), NULL;
+			if (!value)	
+			{
+				value = [[xmlDocument rootElement] attributeForName:@"value64"];
+				if (!value)
+					return	NSLog(@"(OSX_getPropertyCallback) %@ enum has no value set", propertyName), NULL;
+			}
 
 			// Try parsing value
 			double doubleValue = 0;
@@ -3034,20 +3039,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// Allocate return value storage if it's a pointer
 				if ([returnValue typeEncoding] == '^')
 					[returnValue allocateStorage];
-/*
-				// iPhone float fix
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-				BOOL	iPhoneFloatFix = NO;
-				char	originalFloatEncoding;
-				if ([returnValue typeEncoding] == 'f' || [returnValue typeEncoding] == 'd')
-				{
-					originalFloatEncoding = [returnValue typeEncoding];
-					iPhoneFloatFix = YES;
-					returnValue = [[[JSCocoaFFIArgument alloc] init] autorelease];
-					[returnValue setTypeEncoding:'i'];
-				}
-#endif		
-*/					
+
 				// Setup ffi
 				ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 2, [returnValue ffi_type], args);
 				//
@@ -3059,40 +3051,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 					if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 					ffi_call(&cif, callAddress, storage, values);
 				}
-/*				
-				// iPhone float fix
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-				if (iPhoneFloatFix)
-				{
-#if TARGET_IPHONE_SIMULATOR
-					float		floatRes = -1;
-					unsigned int addy = (unsigned int)&floatRes;
-
-					__asm__ ("push %eax");
-					__asm__ ("movl %%eax, %0\n" :"=r"(addy));
-					__asm__ ("fst (%eax)");
-					__asm__ ("pop %eax");
-
-					NSLog(@"***floatRes=%f", floatRes);
-					return	JSValueMakeNumber(ctx, floatRes);
-#else
-
-					if (originalFloatEncoding == 'f')
-					{
-						float floatRes = [JSCocoaIPhoneLibffiFix returnFloatFromRegistersAfterARMFFICall];
-						NSLog(@"jsCocoaObject_callAsFunction_ffi raw float %f", floatRes);
-						return	JSValueMakeNumber(ctx, floatRes);
-					}
-					else
-					{
-						double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
-						NSLog(@"jsCocoaObject_callAsFunction_ffi raw double %f", doubleRes);
-						return	JSValueMakeNumber(ctx, doubleRes);
-					}
-#endif
-				}
-#endif		
-*/				
 
 				// Return now if our function returns void
 				// NO - box it
@@ -3892,20 +3850,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Allocate return value storage if it's a pointer
 	if ([returnValue typeEncoding] == '^')
 		[returnValue allocateStorage];
-/*
-	// iPhone float fix
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-	BOOL	iPhoneFloatFix = NO;
-	char	originalFloatEncoding;
-	if ([returnValue typeEncoding] == 'f' || [returnValue typeEncoding] == 'd')
-	{
-		originalFloatEncoding = [returnValue typeEncoding];
-		iPhoneFloatFix = YES;
-		returnValue = [[[JSCocoaFFIArgument alloc] init] autorelease];
-		[returnValue setTypeEncoding:'i'];
-	}
-#endif		
-*/
+
 	// Setup ffi
 	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, effectiveArgumentCount, [returnValue ffi_type], args);
 
@@ -3930,40 +3875,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Return now if our function returns void
 	// Return null as a JSValueRef to avoid crashing
 	if ([returnValue ffi_type] == &ffi_type_void)	return	JSValueMakeNull(ctx);
-/*
-	// iPhone float fix
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-	if (iPhoneFloatFix)
-	{
-#if TARGET_IPHONE_SIMULATOR
-		float		floatRes = -1;
-		unsigned int addy = (unsigned int)&floatRes;
 
-		__asm__ ("push %eax");
-		__asm__ ("movl %%eax, %0\n" :"=r"(addy));
-		__asm__ ("fst (%eax)");
-		__asm__ ("pop %eax");
-
-		NSLog(@"***floatRes=%f", floatRes);
-		return	JSValueMakeNumber(ctx, floatRes);
-#else
-
-		if (originalFloatEncoding == 'f')
-		{
-			float floatRes = [JSCocoaIPhoneLibffiFix returnFloatFromRegistersAfterARMFFICall];
-			NSLog(@"getProperty raw float %f", floatRes);
-			return	JSValueMakeNumber(ctx, floatRes);
-		}
-		else
-		{
-			double doubleRes = [JSCocoaIPhoneLibffiFix returnDoubleFromRegistersAfterARMFFICall];
-			NSLog(@"getProperty raw double %f", doubleRes);
-			return	JSValueMakeNumber(ctx, doubleRes);
-		}
-#endif
-	}
-#endif		
-*/	
 	// Else, convert return value
 	JSValueRef	jsReturnValue = NULL;
 	BOOL converted = [returnValue toJSValueRef:&jsReturnValue inContext:ctx];

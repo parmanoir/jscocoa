@@ -15,14 +15,14 @@
 			1D6058900D05DD3D006BFB54 /* iPhoneTest2 */,
 		);
 		breakpoints = (
-			3DA4B200103E44740062930D /* JSCocoaController.m:3964 */,
-			3DA4B282103E49220062930D /* JSCocoaController.m:3949 */,
-			3DA4B296103E4A230062930D /* JSCocoaController.m:3897 */,
+			3DA4B200103E44740062930D /* JSCocoaController.m:3873 */,
+			3DA4B282103E49220062930D /* JSCocoaController.m:3873 */,
+			3DA4B296103E4A230062930D /* JSCocoaController.m:3848 */,
 			3DA4B2A2103E4A960062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4:124 */,
 			3DA4B2A5103E4A970062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4:124 */,
 			3DA4B2A8103E4A980062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4:124 */,
 			3DA4B2AB103E4A980062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4:124 */,
-			3DA4B2BC103E4BC30062930D /* JSCocoaLib.m:217 */,
+			3DA4B2BC103E4BC30062930D /* JSCocoaLib.m:204 */,
 			3D97D7BB1041F90F00E2E233 /* ffi.c:194 */,
 			3D97D81C1042121A00E2E233 /* ffi.c:121 */,
 			3D97D81E1042121E00E2E233 /* ffi.c:194 */,
@@ -90,20 +90,18 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 273260878;
-			PBXWorkspaceStateSaveDate = 273260878;
+			PBXPerProjectTemplateStateSaveDate = 273294607;
+			PBXWorkspaceStateSaveDate = 273294607;
 		};
 		perUserProjectItems = {
-			3D09177C1049A17600FEDAD9 /* PBXTextBookmark */ = 3D09177C1049A17600FEDAD9 /* PBXTextBookmark */;
-			3D09177D1049A17600FEDAD9 /* PBXTextBookmark */ = 3D09177D1049A17600FEDAD9 /* PBXTextBookmark */;
-			3D09177E1049A17600FEDAD9 /* PBXTextBookmark */ = 3D09177E1049A17600FEDAD9 /* PBXTextBookmark */;
-			3D09177F1049A17600FEDAD9 /* PBXTextBookmark */ = 3D09177F1049A17600FEDAD9 /* PBXTextBookmark */;
-			3D67433B1048381C007EF0EA = 3D67433B1048381C007EF0EA /* PBXTextBookmark */;
-			3D6743811048E62F007EF0EA = 3D6743811048E62F007EF0EA /* PBXTextBookmark */;
-			3D67448C1049A107007EF0EA = 3D67448C1049A107007EF0EA /* PBXTextBookmark */;
-			3D67449A1049A13E007EF0EA = 3D67449A1049A13E007EF0EA /* PBXTextBookmark */;
-			3D67449B1049A13E007EF0EA = 3D67449B1049A13E007EF0EA /* PBXTextBookmark */;
-			3D67449D1049A13E007EF0EA = 3D67449D1049A13E007EF0EA /* PBXTextBookmark */;
+			3D2973711049E42600A6B09B /* PBXTextBookmark */ = 3D2973711049E42600A6B09B /* PBXTextBookmark */;
+			3D2973721049E42600A6B09B /* PBXTextBookmark */ = 3D2973721049E42600A6B09B /* PBXTextBookmark */;
+			3D2973741049E42600A6B09B /* PBXTextBookmark */ = 3D2973741049E42600A6B09B /* PBXTextBookmark */;
+			3D2973751049E42600A6B09B /* PBXTextBookmark */ = 3D2973751049E42600A6B09B /* PBXTextBookmark */;
+			3DA1897E104A2550003CB828 /* PBXTextBookmark */ = 3DA1897E104A2550003CB828 /* PBXTextBookmark */;
+			3DA1897F104A2550003CB828 /* PBXTextBookmark */ = 3DA1897F104A2550003CB828 /* PBXTextBookmark */;
+			3DA18981104A2550003CB828 /* PBXTextBookmark */ = 3DA18981104A2550003CB828 /* PBXTextBookmark */;
+			3DA18982104A2550003CB828 /* PBXTextBookmark */ = 3DA18982104A2550003CB828 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DB581E90EA17C1600EB80D9 /* Source Control */;
 		userBuildSettings = {
@@ -125,29 +123,19 @@
 			sepNavWindowFrame = "{{101, 95}, {1322, 916}}";
 		};
 	};
-	3D09177C1049A17600FEDAD9 /* PBXTextBookmark */ = {
+	3D2973711049E42600A6B09B /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */;
-		name = "iphone-sysv.S: 202";
-		rLen = 10;
-		rLoc = 4711;
+		name = "iphone-sysv.S: 8";
+		rLen = 0;
+		rLoc = 193;
 		rType = 0;
-		vrLen = 1254;
-		vrLoc = 4021;
+		vrLen = 2368;
+		vrLoc = 0;
 	};
-	3D09177D1049A17600FEDAD9 /* PBXTextBookmark */ = {
+	3D2973721049E42600A6B09B /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */;
-		name = "iphone-sysv.S: 202";
-		rLen = 10;
-		rLoc = 4711;
-		rType = 0;
-		vrLen = 1255;
-		vrLoc = 4020;
-	};
-	3D09177E1049A17600FEDAD9 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D67449C1049A13E007EF0EA /* sysv.S */;
+		fRef = 3D2973731049E42600A6B09B /* sysv.S */;
 		name = "sysv.S: 1";
 		rLen = 0;
 		rLoc = 0;
@@ -155,15 +143,38 @@
 		vrLen = 2724;
 		vrLoc = 0;
 	};
-	3D09177F1049A17600FEDAD9 /* PBXTextBookmark */ = {
+	3D2973731049E42600A6B09B /* sysv.S */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.asm;
+		name = sysv.S;
+		path = "/Users/mini/Desktop/Downloaded Files/Downloading/libffi-3.0.8/src/arm/sysv.S";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {909, 2783}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 2724}";
+			sepNavWindowFrame = "{{316, 119}, {968, 1004}}";
+		};
+	};
+	3D2973741049E42600A6B09B /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 274";
+		name = "JSCocoaLib.m: 204";
 		rLen = 0;
-		rLoc = 6224;
+		rLoc = 4973;
 		rType = 0;
-		vrLen = 1520;
-		vrLoc = 5712;
+		vrLen = 1945;
+		vrLoc = 3028;
+	};
+	3D2973751049E42600A6B09B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D64C8860F3F1A45004D610C /* JSCocoaLib.h */;
+		name = "JSCocoaLib.h: 55";
+		rLen = 0;
+		rLoc = 1236;
+		rType = 0;
+		vrLen = 1236;
+		vrLoc = 0;
 	};
 	3D3B559A0F1D41F300D60188 /* GDataXMLNode.h */ = {
 		uiCtxt = {
@@ -190,95 +201,19 @@
 	};
 	3D64C8850F3F1A45004D610C /* JSCocoaLib.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {904, 5280}}";
-			sepNavSelRange = "{6224, 0}";
-			sepNavVisRange = "{5712, 1520}";
+			sepNavIntBoundsRect = "{{0, 0}, {904, 2255}}";
+			sepNavSelRange = "{4973, 0}";
+			sepNavVisRange = "{3027, 1946}";
 			sepNavWindowFrame = "{{619, 132}, {963, 1007}}";
 		};
 	};
 	3D64C8860F3F1A45004D610C /* JSCocoaLib.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {904, 894}}";
-			sepNavSelRange = "{1424, 0}";
-			sepNavVisRange = "{0, 1499}";
+			sepNavSelRange = "{1236, 0}";
+			sepNavVisRange = "{0, 1236}";
 			sepNavWindowFrame = "{{142, 96}, {963, 1007}}";
 		};
-	};
-	3D67433B1048381C007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 460";
-		rLen = 0;
-		rLoc = 10504;
-		rType = 0;
-		vrLen = 1637;
-		vrLoc = 8743;
-	};
-	3D6743811048E62F007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D6743821048E62F007EF0EA /* sysv.S */;
-		rLen = 0;
-		rLoc = 2147483647;
-		rType = 0;
-	};
-	3D6743821048E62F007EF0EA /* sysv.S */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.asm;
-		name = sysv.S;
-		path = "/Users/mini/Desktop/Downloaded Files/Downloading/libffi-3.0.8/src/arm/sysv.S";
-		sourceTree = "<absolute>";
-	};
-	3D67448C1049A107007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */;
-		name = "iphone-sysv.S: 202";
-		rLen = 10;
-		rLoc = 4711;
-		rType = 0;
-		vrLen = 1236;
-		vrLoc = 4067;
-	};
-	3D67449A1049A13E007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */;
-		name = "iphone-sysv.S: 202";
-		rLen = 10;
-		rLoc = 4711;
-		rType = 0;
-		vrLen = 1207;
-		vrLoc = 4067;
-	};
-	3D67449B1049A13E007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D67449C1049A13E007EF0EA /* sysv.S */;
-		name = "sysv.S: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 2689;
-		vrLoc = 0;
-	};
-	3D67449C1049A13E007EF0EA /* sysv.S */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.asm;
-		name = sysv.S;
-		path = "/Users/mini/Desktop/Downloaded Files/Downloading/libffi-3.0.8/src/arm/sysv.S";
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 2783}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 2724}";
-		};
-	};
-	3D67449D1049A13E007EF0EA /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 274";
-		rLen = 0;
-		rLoc = 6224;
-		rType = 0;
-		vrLen = 1487;
-		vrLoc = 5744;
 	};
 	3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */ = {
 		uiCtxt = {
@@ -321,6 +256,7 @@
 		lineNumber = 194;
 		location = iPhoneTest2;
 		modificationTime = 272766255.943747;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3D97D8061042115D00E2E233 /* ffi.c */ = {
@@ -329,14 +265,6 @@
 		lastKnownFileType = sourcecode.c.c;
 		name = ffi.c;
 		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoa/iPhone/libffi/libffi-iphonesimulator/ffi.c";
-		sourceTree = "<absolute>";
-	};
-	3D97D8081042115D00E2E233 /* prep_cif.c */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = sourcecode.c.c;
-		name = prep_cif.c;
-		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoa/iPhone/libffi/prep_cif.c";
 		sourceTree = "<absolute>";
 	};
 	3D97D81C1042121A00E2E233 /* ffi.c:121 */ = {
@@ -354,6 +282,7 @@
 		lineNumber = 121;
 		location = iPhoneTest2;
 		modificationTime = 272766268.217584;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3D97D81E1042121E00E2E233 /* ffi.c:194 */ = {
@@ -371,6 +300,7 @@
 		lineNumber = 194;
 		location = iPhoneTest2;
 		modificationTime = 272766271.353445;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3D97D8311042123A00E2E233 /* prep_cif.c:91 */ = {
@@ -381,13 +311,14 @@
 		continueAfterActions = 0;
 		countType = 0;
 		delayBeforeContinue = 0;
-		fileReference = 3D97D8081042115D00E2E233 /* prep_cif.c */;
+		fileReference = 3D97DA6710425AAA00E2E233 /* prep_cif.c */;
 		functionName = "ffi_prep_cif()";
 		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 91;
 		location = iPhoneTest2;
 		modificationTime = 272766257.810792;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3D97DA5A10425AAA00E2E233 /* ffi-iphone.c */ = {
@@ -431,9 +362,9 @@
 	};
 	3D97DA6410425AAA00E2E233 /* iphone-sysv.S */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1142, 3597}}";
-			sepNavSelRange = "{4711, 10}";
-			sepNavVisRange = "{4020, 1255}";
+			sepNavIntBoundsRect = "{{0, 0}, {1142, 2992}}";
+			sepNavSelRange = "{193, 0}";
+			sepNavVisRange = "{0, 2368}";
 			sepNavWindowFrame = "{{445, 77}, {1201, 874}}";
 		};
 	};
@@ -453,11 +384,57 @@
 			sepNavWindowFrame = "{{607, 195}, {1171, 851}}";
 		};
 	};
+	3DA1897E104A2550003CB828 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D97DA6410425AAA00E2E233 /* iphone-sysv.S */;
+		name = "iphone-sysv.S: 8";
+		rLen = 0;
+		rLoc = 193;
+		rType = 0;
+		vrLen = 2368;
+		vrLoc = 0;
+	};
+	3DA1897F104A2550003CB828 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA18980104A2550003CB828 /* sysv.S */;
+		name = "sysv.S: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2724;
+		vrLoc = 0;
+	};
+	3DA18980104A2550003CB828 /* sysv.S */ = {
+		isa = PBXFileReference;
+		name = sysv.S;
+		path = "/Users/mini/Desktop/Downloaded Files/Downloading/libffi-3.0.8/src/arm/sysv.S";
+		sourceTree = "<absolute>";
+	};
+	3DA18981104A2550003CB828 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 204";
+		rLen = 0;
+		rLoc = 4973;
+		rType = 0;
+		vrLen = 1946;
+		vrLoc = 3027;
+	};
+	3DA18982104A2550003CB828 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D64C8860F3F1A45004D610C /* JSCocoaLib.h */;
+		name = "JSCocoaLib.h: 55";
+		rLen = 0;
+		rLoc = 1236;
+		rType = 0;
+		vrLen = 1236;
+		vrLoc = 0;
+	};
 	3DA3900B0EA7523300CB6F74 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 48191}}";
-			sepNavSelRange = "{87685, 0}";
-			sepNavVisRange = "{87135, 1350}";
+			sepNavIntBoundsRect = "{{0, 0}, {1056, 47278}}";
+			sepNavSelRange = "{134725, 0}";
+			sepNavVisRange = "{134355, 1899}";
 			sepNavWindowFrame = "{{578, 112}, {1124, 804}}";
 		};
 	};
@@ -533,7 +510,7 @@
 			sepNavWindowFrame = "{{268, 52}, {1068, 890}}";
 		};
 	};
-	3DA4B200103E44740062930D /* JSCocoaController.m:3964 */ = {
+	3DA4B200103E44740062930D /* JSCocoaController.m:3873 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -545,12 +522,13 @@
 		functionName = "jsCocoaObject_callAsFunction_ffi()";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 3964;
+		lineNumber = 3873;
 		location = iPhoneTest2;
 		modificationTime = 272766255.943307;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
-	3DA4B282103E49220062930D /* JSCocoaController.m:3949 */ = {
+	3DA4B282103E49220062930D /* JSCocoaController.m:3873 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -562,12 +540,13 @@
 		functionName = "jsCocoaObject_callAsFunction_ffi()";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 3949;
+		lineNumber = 3873;
 		location = iPhoneTest2;
 		modificationTime = 272766255.943442;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
-	3DA4B296103E4A230062930D /* JSCocoaController.m:3897 */ = {
+	3DA4B296103E4A230062930D /* JSCocoaController.m:3848 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -579,9 +558,10 @@
 		functionName = "jsCocoaObject_callAsFunction_ffi()";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 3897;
+		lineNumber = 3848;
 		location = iPhoneTest2;
 		modificationTime = 272766255.943531;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3DA4B2A0103E4A960062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4 */ = {
@@ -603,6 +583,7 @@
 		ignoreCount = 0;
 		lineNumber = 124;
 		modificationTime = 272766255.943616;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3DA4B2A3103E4A970062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4 */ = {
@@ -624,6 +605,7 @@
 		ignoreCount = 0;
 		lineNumber = 124;
 		modificationTime = 272766255.943624;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3DA4B2A6103E4A980062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4 */ = {
@@ -645,6 +627,7 @@
 		ignoreCount = 0;
 		lineNumber = 124;
 		modificationTime = 272766255.943629;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3DA4B2A9103E4A980062930D /* asm jsCocoaObject_callAsFunction_ffi  0x000106c4 */ = {
@@ -666,9 +649,10 @@
 		ignoreCount = 0;
 		lineNumber = 124;
 		modificationTime = 272766255.943635;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
-	3DA4B2BC103E4BC30062930D /* JSCocoaLib.m:217 */ = {
+	3DA4B2BC103E4BC30062930D /* JSCocoaLib.m:204 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -680,9 +664,10 @@
 		functionName = "+addFloat:Float:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 217;
+		lineNumber = 204;
 		location = iPhoneTest2;
 		modificationTime = 272766255.943641;
+		originalNumberOfMultipleMatches = 0;
 		state = 1;
 	};
 	3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */ = {
@@ -696,6 +681,9 @@
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
 		debuggerPlugin = GDBDebugging;
 		disassemblyDisplayState = 0;
 		dylibVariantSuffix = "";
@@ -708,6 +696,7 @@
 		name = iPhoneTest2;
 		savedGlobals = {
 		};
+		showTypeColumn = 0;
 		sourceDirectories = (
 		);
 		variableFormatDictionary = {
@@ -718,6 +707,9 @@
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
 		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
 		};
 	};
 	3DB581EA0EA17C1600EB80D9 /* Code sense */ = {

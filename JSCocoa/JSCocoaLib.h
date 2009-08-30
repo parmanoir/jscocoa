@@ -52,19 +52,3 @@
 - (int)typeCount;
 
 @end
-
-/*
-#if TARGET_OS_IPHONE
-@interface JSCocoaIPhoneLibffiFix : NSObject
-
-+ (float)returnFloatFromRegistersAfterARMFFICall;
-+ (double)returnDoubleFromRegistersAfterARMFFICall;
-
-@end
-#endif
-*/
-@interface JSCocoaObjCMsgSend : NSObject
-
-+ (void)checkObjCMsgSend;
-
-@end
