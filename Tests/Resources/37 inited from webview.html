@@ -34,7 +34,10 @@
 		else				log('no JSCocoa :(')
 		
 		log('jsc=' + ('__jsc__' in this) + ' (' + __jsc__ + ')')
-		log('NSDate=' + OSX.NSDate.alloc.init)
+		var objCDate = OSX.NSDate.alloc.init
+		log('NSDate=' + objCDate)
+		objCDate.release
+		objCDate = null
 
 		var delegate = OSX.NSApplication.sharedApplication.delegate
 		

@@ -1435,6 +1435,12 @@
 			3DA3A4BA10518B240069FDEE /* PBXTextBookmark */ = 3DA3A4BA10518B240069FDEE /* PBXTextBookmark */;
 			3DA3A4BB10518B240069FDEE /* PBXTextBookmark */ = 3DA3A4BB10518B240069FDEE /* PBXTextBookmark */;
 			3DA3A4BC10518B240069FDEE /* PBXTextBookmark */ = 3DA3A4BC10518B240069FDEE /* PBXTextBookmark */;
+			3DA3A4C310518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C310518B920069FDEE /* PBXTextBookmark */;
+			3DA3A4C410518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C410518B920069FDEE /* PBXTextBookmark */;
+			3DA3A4C510518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C510518B920069FDEE /* PBXTextBookmark */;
+			3DA3A4C610518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C610518B920069FDEE /* PBXTextBookmark */;
+			3DA3A4C710518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C710518B920069FDEE /* PBXTextBookmark */;
+			3DA3A4C810518B920069FDEE /* PBXTextBookmark */ = 3DA3A4C810518B920069FDEE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D89158A0EA8F4BA00BE4E70 /* Source Control */;
 		userBuildSettings = {
@@ -1570,7 +1576,7 @@
 	};
 	3D89158E0EA8F50D00BE4E70 /* ApplicationController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1266, 727}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 750}}";
 			sepNavSelRange = "{403, 41}";
 			sepNavVisRange = "{0, 618}";
 			sepNavWindowFrame = "{{1099, -103}, {1325, 863}}";
@@ -1580,7 +1586,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1266, 6886}}";
 			sepNavSelRange = "{20608, 0}";
-			sepNavVisRange = "{18622, 1997}";
+			sepNavVisRange = "{18620, 1999}";
 			sepNavWindowFrame = "{{313, 97}, {1325, 863}}";
 		};
 	};
@@ -4698,7 +4704,7 @@
 		isa = PBXTextBookmark;
 		fRef = 3DA39E141050C9400069FDEE /* 37 inited from webview.html */;
 		rLen = 0;
-		rLoc = 2147484838;
+		rLoc = 2147484901;
 		rType = 0;
 	};
 	3DA39E141050C9400069FDEE /* 37 inited from webview.html */ = {
@@ -4725,9 +4731,9 @@
 		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/Resources/37 inited from webview.html";
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 891}}";
-			sepNavSelRange = "{1791, 0}";
-			sepNavVisRange = "{0, 2202}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 924}}";
+			sepNavSelRange = "{652, 0}";
+			sepNavVisRange = "{16, 2247}";
 		};
 	};
 	3DA39E191050C9400069FDEE /* PBXTextBookmark */ = {
@@ -6218,7 +6224,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6278,7 +6284,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6338,7 +6344,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6398,7 +6404,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6502,7 +6508,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6658,7 +6664,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6728,7 +6734,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 10";
 		rLen = 0;
-		rLoc = 2198;
+		rLoc = 2261;
 		rType = 0;
 		vrLen = 146;
 		vrLoc = 0;
@@ -6748,7 +6754,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 15";
 		rLen = 0;
-		rLoc = 589;
+		rLoc = 652;
 		rType = 0;
 		vrLen = 242;
 		vrLoc = 0;
@@ -6818,7 +6824,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 20";
 		rLen = 0;
-		rLoc = 2217;
+		rLoc = 2280;
 		rType = 0;
 		vrLen = 252;
 		vrLoc = 0;
@@ -7098,7 +7104,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 17";
 		rLen = 0;
-		rLoc = 589;
+		rLoc = 652;
 		rType = 0;
 		vrLen = 291;
 		vrLoc = 0;
@@ -7168,7 +7174,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 17";
 		rLen = 0;
-		rLoc = 571;
+		rLoc = 606;
 		rType = 0;
 		vrLen = 295;
 		vrLoc = 0;
@@ -7238,7 +7244,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 18";
 		rLen = 0;
-		rLoc = 2188;
+		rLoc = 2251;
 		rType = 0;
 		vrLen = 321;
 		vrLoc = 0;
@@ -7308,7 +7314,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 18";
 		rLen = 0;
-		rLoc = 549;
+		rLoc = 588;
 		rType = 0;
 		vrLen = 339;
 		vrLoc = 0;
@@ -7518,7 +7524,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 19";
 		rLen = 0;
-		rLoc = 588;
+		rLoc = 614;
 		rType = 0;
 		vrLen = 380;
 		vrLoc = 0;
@@ -7798,7 +7804,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 30";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 540;
 		vrLoc = 0;
@@ -7868,7 +7874,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 30";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 546;
 		vrLoc = 0;
@@ -7938,7 +7944,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 30";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 549;
 		vrLoc = 0;
@@ -8008,7 +8014,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 30";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 549;
 		vrLoc = 0;
@@ -8068,7 +8074,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 1952;
+		rLoc = 2015;
 		rType = 0;
 		vrLen = 640;
 		vrLoc = 0;
@@ -8138,7 +8144,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 1948;
+		rLoc = 2011;
 		rType = 0;
 		vrLen = 649;
 		vrLoc = 0;
@@ -8208,7 +8214,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 1948;
+		rLoc = 2011;
 		rType = 0;
 		vrLen = 649;
 		vrLoc = 0;
@@ -8258,7 +8264,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 687;
 		vrLoc = 0;
@@ -8318,7 +8324,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 691;
 		vrLoc = 0;
@@ -8378,7 +8384,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 691;
 		vrLoc = 0;
@@ -8418,7 +8424,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 693;
 		vrLoc = 0;
@@ -8458,7 +8464,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8518,7 +8524,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8558,7 +8564,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8598,7 +8604,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8638,7 +8644,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8678,7 +8684,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8718,7 +8724,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 704;
 		vrLoc = 0;
@@ -8748,7 +8754,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 34";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 757;
 		vrLoc = 0;
@@ -8815,7 +8821,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 35";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 793;
 		vrLoc = 0;
@@ -8865,7 +8871,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 36";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 799;
 		vrLoc = 0;
@@ -8915,7 +8921,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 36";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 839;
 		vrLoc = 0;
@@ -8965,7 +8971,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 859;
 		vrLoc = 0;
@@ -9015,7 +9021,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 859;
 		vrLoc = 0;
@@ -9065,7 +9071,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 873;
 		vrLoc = 0;
@@ -9115,7 +9121,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 861;
 		vrLoc = 0;
@@ -9215,7 +9221,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 755;
 		vrLoc = 0;
@@ -9265,7 +9271,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 32";
 		rLen = 0;
-		rLoc = 1896;
+		rLoc = 1959;
 		rType = 0;
 		vrLen = 755;
 		vrLoc = 0;
@@ -9751,7 +9757,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -9795,7 +9801,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -9825,7 +9831,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -9892,7 +9898,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -9988,7 +9994,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -10066,7 +10072,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -10106,7 +10112,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -10156,7 +10162,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -10243,7 +10249,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 31";
 		rLen = 0;
-		rLoc = 559;
+		rLoc = 598;
 		rType = 0;
 		vrLen = 780;
 		vrLoc = 0;
@@ -10263,7 +10269,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 35";
 		rLen = 0;
-		rLoc = 1914;
+		rLoc = 1977;
 		rType = 0;
 		vrLen = 837;
 		vrLoc = 0;
@@ -10313,7 +10319,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 35";
 		rLen = 0;
-		rLoc = 1919;
+		rLoc = 1982;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 0;
@@ -10363,7 +10369,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 35";
 		rLen = 0;
-		rLoc = 1919;
+		rLoc = 1982;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 0;
@@ -10413,7 +10419,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 44";
 		rLen = 0;
-		rLoc = 2184;
+		rLoc = 2247;
 		rType = 0;
 		vrLen = 909;
 		vrLoc = 0;
@@ -10463,7 +10469,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 41";
 		rLen = 0;
-		rLoc = 2072;
+		rLoc = 2135;
 		rType = 0;
 		vrLen = 917;
 		vrLoc = 0;
@@ -10513,7 +10519,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 41";
 		rLen = 0;
-		rLoc = 2072;
+		rLoc = 2135;
 		rType = 0;
 		vrLen = 909;
 		vrLoc = 0;
@@ -10567,7 +10573,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10688,7 +10694,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10748,7 +10754,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10808,7 +10814,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10868,7 +10874,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10928,7 +10934,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 42";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 942;
 		vrLoc = 0;
@@ -10978,7 +10984,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 671;
+		rLoc = 734;
 		rType = 0;
 		vrLen = 964;
 		vrLoc = 0;
@@ -11038,7 +11044,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 54";
 		rLen = 0;
-		rLoc = 2184;
+		rLoc = 2247;
 		rType = 0;
 		vrLen = 1116;
 		vrLoc = 0;
@@ -11098,7 +11104,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 680;
+		rLoc = 743;
 		rType = 0;
 		vrLen = 1116;
 		vrLoc = 0;
@@ -11158,7 +11164,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1737;
+		rLoc = 1800;
 		rType = 0;
 		vrLen = 1128;
 		vrLoc = 0;
@@ -11218,7 +11224,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 697;
+		rLoc = 760;
 		rType = 0;
 		vrLen = 1128;
 		vrLoc = 0;
@@ -11278,7 +11284,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 697;
+		rLoc = 760;
 		rType = 0;
 		vrLen = 1128;
 		vrLoc = 0;
@@ -11338,7 +11344,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 50";
 		rLen = 0;
-		rLoc = 2177;
+		rLoc = 2240;
 		rType = 0;
 		vrLen = 1059;
 		vrLoc = 0;
@@ -11398,7 +11404,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 1737;
+		rLoc = 1800;
 		rType = 0;
 		vrLen = 1047;
 		vrLoc = 0;
@@ -11458,7 +11464,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 50";
 		rLen = 0;
-		rLoc = 2173;
+		rLoc = 2236;
 		rType = 0;
 		vrLen = 1045;
 		vrLoc = 0;
@@ -11518,7 +11524,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 40";
 		rLen = 0;
-		rLoc = 1737;
+		rLoc = 1800;
 		rType = 0;
 		vrLen = 1180;
 		vrLoc = 0;
@@ -11578,7 +11584,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 37";
 		rLen = 0;
-		rLoc = 691;
+		rLoc = 754;
 		rType = 0;
 		vrLen = 1469;
 		vrLoc = 0;
@@ -11648,7 +11654,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 48";
 		rLen = 0;
-		rLoc = 1737;
+		rLoc = 1800;
 		rType = 0;
 		vrLen = 1476;
 		vrLoc = 0;
@@ -11698,7 +11704,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 48";
 		rLen = 0;
-		rLoc = 1737;
+		rLoc = 1800;
 		rType = 0;
 		vrLen = 1476;
 		vrLoc = 0;
@@ -11758,7 +11764,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 54";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2020;
 		rType = 0;
 		vrLen = 1452;
 		vrLoc = 0;
@@ -11818,7 +11824,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 1491;
 		vrLoc = 0;
@@ -11878,7 +11884,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 2071;
+		rLoc = 2134;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 0;
@@ -11938,7 +11944,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 2069;
+		rLoc = 2132;
 		rType = 0;
 		vrLen = 1537;
 		vrLoc = 0;
@@ -12068,7 +12074,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 54";
 		rLen = 0;
-		rLoc = 1487;
+		rLoc = 1550;
 		rType = 0;
 		vrLen = 1776;
 		vrLoc = 0;
@@ -12118,7 +12124,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 54";
 		rLen = 0;
-		rLoc = 1487;
+		rLoc = 1550;
 		rType = 0;
 		vrLen = 1776;
 		vrLoc = 0;
@@ -12178,7 +12184,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12292,7 +12298,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12372,7 +12378,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12452,7 +12458,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12532,7 +12538,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12612,7 +12618,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12692,7 +12698,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1702;
+		rLoc = 1765;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 0;
@@ -12772,7 +12778,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 50";
 		rLen = 0;
-		rLoc = 1146;
+		rLoc = 1209;
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 0;
@@ -12852,7 +12858,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 50";
 		rLen = 0;
-		rLoc = 1146;
+		rLoc = 1209;
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 0;
@@ -12932,7 +12938,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13012,7 +13018,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13099,7 +13105,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13179,7 +13185,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13259,7 +13265,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13339,7 +13345,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13419,7 +13425,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 56";
 		rLen = 0;
-		rLoc = 1694;
+		rLoc = 1757;
 		rType = 0;
 		vrLen = 1895;
 		vrLoc = 0;
@@ -13489,7 +13495,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 55";
 		rLen = 0;
-		rLoc = 1551;
+		rLoc = 1614;
 		rType = 0;
 		vrLen = 1941;
 		vrLoc = 0;
@@ -13569,7 +13575,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 59";
 		rLen = 0;
-		rLoc = 1803;
+		rLoc = 1866;
 		rType = 0;
 		vrLen = 1936;
 		vrLoc = 0;
@@ -13649,7 +13655,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 63";
 		rLen = 0;
-		rLoc = 1857;
+		rLoc = 1920;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -13729,7 +13735,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 63";
 		rLen = 0;
-		rLoc = 1805;
+		rLoc = 1868;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -13819,7 +13825,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -13899,7 +13905,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -13979,7 +13985,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14059,7 +14065,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14139,7 +14145,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14256,7 +14262,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14353,7 +14359,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -14433,7 +14439,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14513,7 +14519,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14613,7 +14619,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -14727,7 +14733,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -14854,7 +14860,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -14974,7 +14980,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -15044,7 +15050,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -15104,7 +15110,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -15194,7 +15200,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -15274,7 +15280,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 0;
@@ -15324,7 +15330,7 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
@@ -15384,10 +15390,70 @@
 		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
 		name = "37 inited from webview.html: 62";
 		rLen = 0;
-		rLoc = 1791;
+		rLoc = 1854;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 0;
+	};
+	3DA3A4C310518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
+		name = "37 inited from webview.html: 40";
+		rLen = 0;
+		rLoc = 652;
+		rType = 0;
+		vrLen = 2247;
+		vrLoc = 16;
+	};
+	3DA3A4C410518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 254";
+		rLen = 0;
+		rLoc = 8590;
+		rType = 0;
+		vrLen = 2215;
+		vrLoc = 7453;
+	};
+	3DA3A4C510518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 113";
+		rLen = 21;
+		rLoc = 3680;
+		rType = 0;
+		vrLen = 2085;
+		vrLoc = 2627;
+	};
+	3DA3A4C610518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 666";
+		rLen = 0;
+		rLoc = 20608;
+		rType = 0;
+		vrLen = 1999;
+		vrLoc = 18620;
+	};
+	3DA3A4C710518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158E0EA8F50D00BE4E70 /* ApplicationController.h */;
+		name = "ApplicationController.h: 24";
+		rLen = 41;
+		rLoc = 403;
+		rType = 0;
+		vrLen = 618;
+		vrLoc = 0;
+	};
+	3DA3A4C810518B920069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A70F28D7A60043C238 /* JSCocoaController.h */;
+		name = "JSCocoaController.h: 99";
+		rLen = 16;
+		rLoc = 2777;
+		rType = 0;
+		vrLen = 2258;
+		vrLoc = 2278;
 	};
 	3DB065A30F28D7A60043C238 /* BridgeSupportController.m */ = {
 		uiCtxt = {
@@ -15417,15 +15483,15 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1278, 3234}}";
 			sepNavSelRange = "{2777, 16}";
-			sepNavVisRange = "{2278, 2086}";
+			sepNavVisRange = "{2278, 2258}";
 			sepNavWindowFrame = "{{182, 225}, {1337, 917}}";
 		};
 	};
 	3DB065A80F28D7A60043C238 /* JSCocoaController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1224, 47256}}";
-			sepNavSelRange = "{8590, 0}";
-			sepNavVisRange = "{7453, 2154}";
+			sepNavSelRange = "{3680, 21}";
+			sepNavVisRange = "{2627, 2085}";
 			sepNavWindowFrame = "{{436, 112}, {1283, 915}}";
 		};
 	};
