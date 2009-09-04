@@ -110,10 +110,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 // Init
 //
-- (id)init
+- (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
 {
 
-//	NSLog(@"JSCocoa : %x spawning", self);
+	NSLog(@"JSCocoa : %x spawning with context %x", self, _ctx);
 	self	= [super init];
 	controllerCount++;
 
@@ -173,7 +173,22 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	//
 	// Start context
 	//
-	ctx = JSGlobalContextCreate(OSXObjectClass);
+	if (!_ctx)
+	{
+		ctx = JSGlobalContextCreate(OSXObjectClass);
+	}
+	else
+	{
+		ctx = _ctx;
+		JSGlobalContextRetain(ctx);
+		
+		JSObjectRef o = JSObjectMake(ctx, OSXObjectClass, NULL);
+		// Set
+		JSStringRef	jsName = JSStringCreateWithUTF8CString("OSX");
+		JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeDontDelete, NULL);
+		JSStringRelease(jsName);
+		
+	}
 
 	// Create a reference to ourselves, and make it read only, don't enum, don't delete
 	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
@@ -221,10 +236,16 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc = YES;
 	
-//	[JSCocoaObjCMsgSend checkObjCMsgSend];
-
 	return	self;
 }
+
+//- (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
+- (id)init
+{
+	id o = [self initWithGlobalContext:nil];
+	return	o;
+}
+
 
 //
 // Dealloc
@@ -2734,10 +2755,10 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	{
 		id structDescription = nil;
 		id self = [JSCocoaController controllerFromContext:ctx];
-
+NSLog(@"******** STRUCT DESCRIBE");
 		if ([self hasJSFunctionNamed:@"describeStruct"])
 		{
-
+NSLog(@"******** STRUCT DESCRIBE 2222222");
 			JSStringRef scriptJS = JSStringCreateWithUTF8CString("return describeStruct(arguments[0])");
 			JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
 			JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&thisObject, NULL);
@@ -2747,7 +2768,7 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		}
 		
 		toString = [NSString stringWithFormat:@"<%@ %@>", thisPrivateObject.structureName, structDescription];
-
+NSLog(@"TOSTRING RESULT=%@ jsc=%x", toString, ctx);
 	}
 
 	// Convert to string and return

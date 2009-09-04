@@ -1,0 +1,40 @@
+<html>
+	<style>
+		#dump
+		{
+			white-space: pre;
+		}
+	</style>
+<body>
+
+
+	<h1>WebView's context used as JSCocoa source</h1>
+	
+	
+	<a href='http://yahoo.com'>Yahoo</a>
+	
+	<p>
+	<div id='dump'></div>
+	<script>
+		function	log(str)
+		{
+			str = str.replace(/</g, '&lt;')
+			str = str.replace(/>/g, '&gt;')
+			document.getElementById('dump').innerHTML += str + '\n'
+		}
+	
+	
+		if ('OSX' in this)	log('HAS OSX')
+		else				log('no JSCocoa :(')
+		
+		log('jsc=' + ('__jsc__' in this) + ' (' + __jsc__ + ')')
+		log('date=' + OSX.NSDate.alloc.init)
+		log('app delegate=' + OSX.NSApplication.sharedApplication.delegate)
+		log('test hash=' + OSX.NSApplication.sharedApplication.delegate.testHash( { hello : 'world' } ) )
+		
+		log('NSPoint=' + new OSX.NSPoint(1, 2))
+	</script>
+
+	
+</body>
+</html>

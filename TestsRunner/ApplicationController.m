@@ -16,90 +16,23 @@ JSCocoaController* jsc = nil;
 //- (void)awakeFromNib
 - (void)applicationDidFinishLaunching:(id)notif
 {
-
 	[JSCocoaController hazardReport];
 
-//[[NSGarbageCollector defaultCollector] disable];
-	
-//	NSLog(@"DEALLOC AUTORELEASEPOOL");
-//	[JSCocoaController deallocAutoreleasePool];
-//	[[NSAutoreleasePool alloc] init];
-
-
-
-
-//	jsc = [JSCocoaController sharedController];
 	jsc = [JSCocoa new];
 	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
 
-
-
-
-//	[[JSCocoaController sharedController] evalJSFile:[[NSBundle mainBundle] pathForResource:@"class" ofType:@"js"]];
-
-	// Test JSFunctionNamed, [jsc callJSFunctionNamed:... withArgumentsArray:...]
-/*	
-	JSValueRef v;
-	id args = [NSArray arrayWithObjects:[NSNumber numberWithInt:3], [NSNumber numberWithInt:5], @"hello!!", nil];
-	JSObjectRef f = [[JSCocoaController sharedController] JSFunctionNamed:@"test1"];
-	v = [[JSCocoaController sharedController] callJSFunction:f withArguments:args];
-	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
-
-	v = [[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArgumentsArray:args];
-	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
-
-
-	JSValueRef v;
-	v = [[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:[NSNumber numberWithInt:3], [NSNumber numberWithInt:5], @"hello!!", nil];
-	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
-	v = [[JSCocoaController sharedController] callJSFunctionNamed:@"test2" withArguments:nil];
-	NSLog(@">>RET=%@", [[JSCocoaController sharedController] formatJSException:v]);
-*/	
-//	[[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:self];
-/*
-	JSValueRef value = [[JSCocoaController sharedController] callJSFunctionNamed:@"test1" withArguments:@"myself", nil];
-	id object;
-	id object2 = [[JSCocoaController sharedController] unboxJSValueRef:value];
-	[JSCocoaFFIArgument unboxJSValueRef:value toObject:&object inContext:[[JSCocoaController sharedController] ctx]];
-	NSLog(@"result=*%@*%@*", object, object2);
-*/	
-	
-/*
-	NSRect rect = { 10, 20, 30, 40 };
-	NSRect rect1, rect2;
-	NSDivideRect(rect, &rect1, &rect2, 5, 0);
-	float* r;
-	r = &rect;	NSLog(@"r=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
-	r = &rect1;	NSLog(@"r1=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
-	r = &rect2;	NSLog(@"r2=%f, %f, %f, %f", r[0], r[1], r[2], r[3]);
-*/	
-
-/*
-	CGColorRef color = CGColorCreateGenericRGB(1.0, 0.8, 0.6, 0.2);
-	const CGFloat* colors = CGColorGetComponents(color);
-	NSLog(@"%f %f %f %f %f", colors[0], colors[1], colors[2], colors[3], colors[4]);
-	
-	CGColorRelease(color);
-*/
 	[[NSApplication sharedApplication] setDelegate:self];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
-//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(id)notif
 {
-/*
-	[jsc setUseSafeDealloc:NO];
-	[jsc unlinkAllReferences];
-	[jsc garbageCollect];
-*/	
 	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
 	// Check if JSCocoa can be released (retainCount got down to 1)
 	// Won't work under ObjC GC
 #ifndef __OBJC_GC__
-//	if ([jsc retainCount] != 1)									NSLog(@"***Invalid JSCocoa retainCount***");
 	// Must be 2 with new release method
 	if ([jsc retainCount] != 2)									NSLog(@"***Invalid JSCocoa retainCount***");
 #endif
@@ -124,6 +57,9 @@ int runCount = 0;
 	// Clean up notifications registered by previously run tests
 	[jsc callJSFunctionNamed:@"resetDelayedTests" withArguments:nil];
 
+	//
+	// Run js tests
+	//
 	runCount++;
 	jsc.delegate = nil;
 	id path = [[NSBundle mainBundle] bundlePath];
@@ -133,26 +69,41 @@ int runCount = 0;
 	BOOL b = !!testCount;
 	[self garbageCollect:nil];
 
+	//
 	// Test delegate
+	//
 	id error = nil;
 	error = [self testDelegate];
-/*
-//	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
-//[[NSGarbageCollector defaultCollector] collectExhaustively];
-JSValueRef res;
-	res = [jsc evalJSString:@"NSApplication.sharedApplication"];
-	NSLog(@"res=%@", [jsc unboxJSValueRef:res]);
-	[self garbageCollect:nil];
-	res = [jsc evalJSString:@"NSApplication.sharedApplication"];
-	NSLog(@"res=%@", [jsc unboxJSValueRef:res]);
-*/
 	if (error)
 	{
 		b = NO;
 		path = error;
 	}
 	jsc.delegate = nil;
+
+
+
+	//
+	// Test JSCocoa inited from a WebView
+	//
 	
+	id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
+	id nibURL	= [NSURL fileURLWithPath:nibPath];
+	id webViewNib = [[NSNib alloc] initWithContentsOfURL:nibURL];
+//	NSLog(@">>>%@", webViewNib);
+	[webViewNib instantiateNibWithOwner:self topLevelObjects:nil];
+//	NSLog(@">>>>>>%@", webViewUsedAsContextSource);
+	[webViewUsedAsContextSource setFrameLoadDelegate:self];
+
+	id pageURL	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
+	[webViewUsedAsContextSource setMainFrameURL:pageURL];
+
+
+	JSContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
+	
+	JSCocoa* jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
+
+	NSLog(@"********xxx %x", [[webViewUsedAsContextSource mainFrame] globalContext]);
 	if (!b)	
 	{	
 		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
@@ -160,7 +111,6 @@ JSValueRef res;
 	}
 	else	
 	{
-
 		int delayedTestCount = [jsc toInt:[jsc callJSFunctionNamed:@"delayedTestCount" withArguments:nil]];
 		
 		if (delayedTestCount)	NSLog(@"All %d tests ran OK, %d delayed pending", testCount, delayedTestCount);
@@ -183,15 +133,10 @@ JSValueRef res;
 	js = @"NSWorkspace.sharedWorkspace.activeApplication";
 
 	js = @"var a = NSMakePoint(2, 3)";
-
-
 	[JSCocoaController garbageCollect];
-//	JSValueRefAndContextRef v = [[JSCocoaController sharedController] evalJSString:js];
-//	JSValueRefAndContextRef v = [jsc evalJSString:js];
 	JSValueRef ret = [jsc evalJSString:js];
 	[JSCocoaController garbageCollect];
 	
-//	JSStringRef resultStringJS = JSValueToStringCopy(v.ctx, v.value, NULL);
 	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret, NULL);
 	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
@@ -645,6 +590,22 @@ int dummyValue;
 	return	script;
 }
 
+
+
+//
+// JSCocoa inited from a WebView tests
+//
+- (void)webView:(id *)sender didClearWindowObject:(id *)windowObject forFrame:(id *)frame
+{
+	NSLog(@"*********************");
+}
+
+- (id)testHash:(id)hash
+{
+	NSLog(@"hash from WebView : %@", hash);
+	
+	return [NSArray arrayWithObjects:@"Hello", @"world", nil];
+}
 
 
 @end

@@ -11,6 +11,8 @@
 
 @interface ApplicationController : NSObject {
 
+	IBOutlet	id webViewUsedAsContextSource;
+
 }
 
 - (IBAction)runJSTests:(id)sender;

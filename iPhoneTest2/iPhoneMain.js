@@ -1,5 +1,6 @@
 
 	// Call twice to check for a difference in return registers
+/*
 	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
 	log('JSCocoaObjCMsgSend.addFloat_Float_(7)=' + JSCocoaObjCMsgSend.addFloat_Float_(3, 4))
 	log('JSCocoaObjCMsgSend.addFloat_Float_(11)=' + JSCocoaObjCMsgSend.addFloat_Float_(5, 6))
@@ -29,7 +30,7 @@
 	log('***************Called JSCocoaObjCMsgSend.returnRect')
 	CGRect
 	log('Also check return value of structs, eg View.frame, View.position')
-
+*/
 
 	//
 	// Application Delegate
@@ -38,7 +39,7 @@
 	{
 		Method('applicationDidFinishLaunching:').encoding('void id').fn = function (application)
 		{
-			log('***(applicationDidFinishLaunching:)***finished launching, self=' + this + ' application=' + application)
+//			log('***(applicationDidFinishLaunching:)***finished launching, self=' + this + ' application=' + application)
 			// Table view background
 			this.viewController.view.backgroundColor = UIColor.groupTableView0BackgroundColor
 			this.window.addSubview(this.viewController.view)
@@ -124,8 +125,8 @@
 				
 				slider.value = 0
 				
-				log('inited slider=' + slider)
-				log('slider.value=' + slider.value)
+//				log('inited slider=' + slider)
+//				log('slider.value=' + slider.value)
 			}
 			return	this.cells[indexPath.row]
 		}
@@ -152,7 +153,7 @@
 			}
 			
 			
-			log('pointCount=' + pointCount)
+//			log('pointCount=' + pointCount)
 			this.polygonView.pointCount = pointCount
 //			log('point count set')
 			this.polygonView.setNeedsDisplay

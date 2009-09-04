@@ -43,6 +43,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 @property (assign) id delegate;
 
+- (id)init;
+- (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
 + (id)sharedController;
 + (id)controllerFromContext:(JSContextRef)ctx;
 + (BOOL)hasSharedController;
