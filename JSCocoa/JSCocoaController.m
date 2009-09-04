@@ -182,7 +182,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		JSGlobalContextRetain(ctx);
 		
 		JSObjectRef o = JSObjectMake(ctx, OSXObjectClass, NULL);
-		// Set
+		// Set a global var named 'OSX' which will fulfill the usual role of JSCocoa's global object
 		JSStringRef	jsName = JSStringCreateWithUTF8CString("OSX");
 		JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeDontDelete, NULL);
 		JSStringRelease(jsName);
@@ -238,7 +238,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	return	self;
 }
 
-//- (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
 - (id)init
 {
 	id o = [self initWithGlobalContext:nil];
