@@ -202,6 +202,46 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>3D09178C1049C75B00FEDAD9</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>JSCocoaLib.h</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>3D09178D1049C75B00FEDAD9</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>JSCocoaLib.h</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3DA3A13E105152AF0069FDEE</string>
+						<key>history</key>
+						<array>
+							<string>3DA18982104A2550003CB828</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {963, 910}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>142 152 963 951 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>3D6744581048F1EB007EF0EA</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>iphone-sysv.S</string>
@@ -216,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA3A11D105142B10069FDEE</string>
+						<string>3DA3A13F105152AF0069FDEE</string>
 						<key>history</key>
 						<array>
 							<string>3DA1897E104A2550003CB828</string>
@@ -256,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3DA3A11E105142B10069FDEE</string>
+						<string>3DA3A140105152AF0069FDEE</string>
 						<key>history</key>
 						<array>
 							<string>3DA18981104A2550003CB828</string>
@@ -276,46 +316,6 @@
 				<false/>
 				<key>RubberWindowFrame</key>
 				<string>619 188 963 951 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>3D09178C1049C75B00FEDAD9</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>JSCocoaLib.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D09178D1049C75B00FEDAD9</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>JSCocoaLib.h</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>3DA3A11F105142B10069FDEE</string>
-						<key>history</key>
-						<array>
-							<string>3DA18982104A2550003CB828</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {963, 910}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>142 152 963 951 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -398,11 +398,13 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
+											<integer>47</integer>
+											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {328, 338}}</string>
+									<string>{{0, 761}, {328, 338}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -605,12 +607,12 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>3D09178C1049C75B00FEDAD9</string>
 		<string>3D2EF45D1041CE18006CFDDB</string>
-		<string>3D6744581048F1EB007EF0EA</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneTest2.xcodeproj</string>
+		<string>3D6744581048F1EB007EF0EA</string>
+		<string>3D09178C1049C75B00FEDAD9</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneTest2.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1575 754 345 424 0 0 1920 1178 </string>
@@ -780,7 +782,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1101, 318}}</string>
 								<key>RubberWindowFrame</key>
-								<string>466 151 1101 877 0 0 1920 1178 </string>
+								<string>538 163 1101 877 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -806,7 +808,7 @@
 								<key>Frame</key>
 								<string>{{0, 323}, {1101, 513}}</string>
 								<key>RubberWindowFrame</key>
-								<string>466 151 1101 877 0 0 1920 1178 </string>
+								<string>538 163 1101 877 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -836,7 +838,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.buildV3</string>
 			<key>WindowString</key>
-			<string>466 151 1101 877 0 0 1920 1178 </string>
+			<string>538 163 1101 877 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>

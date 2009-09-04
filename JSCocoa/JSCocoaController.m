@@ -2755,10 +2755,8 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	{
 		id structDescription = nil;
 		id self = [JSCocoaController controllerFromContext:ctx];
-NSLog(@"******** STRUCT DESCRIBE");
 		if ([self hasJSFunctionNamed:@"describeStruct"])
 		{
-NSLog(@"******** STRUCT DESCRIBE 2222222");
 			JSStringRef scriptJS = JSStringCreateWithUTF8CString("return describeStruct(arguments[0])");
 			JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
 			JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&thisObject, NULL);
@@ -2768,7 +2766,6 @@ NSLog(@"******** STRUCT DESCRIBE 2222222");
 		}
 		
 		toString = [NSString stringWithFormat:@"<%@ %@>", thisPrivateObject.structureName, structDescription];
-NSLog(@"TOSTRING RESULT=%@ jsc=%x", toString, ctx);
 	}
 
 	// Convert to string and return

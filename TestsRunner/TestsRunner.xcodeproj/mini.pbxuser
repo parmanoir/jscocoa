@@ -839,6 +839,30 @@
 			3DA3A0FA1050DBBF0069FDEE /* PBXTextBookmark */ = 3DA3A0FA1050DBBF0069FDEE /* PBXTextBookmark */;
 			3DA3A0FB1050DBBF0069FDEE /* PBXTextBookmark */ = 3DA3A0FB1050DBBF0069FDEE /* PBXTextBookmark */;
 			3DA3A0FC1050DBBF0069FDEE /* PBXTextBookmark */ = 3DA3A0FC1050DBBF0069FDEE /* PBXTextBookmark */;
+			3DA3A135105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A135105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A137105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A137105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A139105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A139105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A13A105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A13A105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A13B105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A13B105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A13C105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A13C105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A13D105151CF0069FDEE /* PBXTextBookmark */ = 3DA3A13D105151CF0069FDEE /* PBXTextBookmark */;
+			3DA3A143105152B80069FDEE /* PBXTextBookmark */ = 3DA3A143105152B80069FDEE /* PBXTextBookmark */;
+			3DA3A144105152B80069FDEE /* PBXTextBookmark */ = 3DA3A144105152B80069FDEE /* PBXTextBookmark */;
+			3DA3A145105152B80069FDEE /* PBXTextBookmark */ = 3DA3A145105152B80069FDEE /* PBXTextBookmark */;
+			3DA3A147105152D10069FDEE /* PBXTextBookmark */ = 3DA3A147105152D10069FDEE /* PBXTextBookmark */;
+			3DA3A148105152D10069FDEE /* PBXTextBookmark */ = 3DA3A148105152D10069FDEE /* PBXTextBookmark */;
+			3DA3A149105152D10069FDEE /* PBXTextBookmark */ = 3DA3A149105152D10069FDEE /* PBXTextBookmark */;
+			3DA3A14A105152D10069FDEE /* PBXTextBookmark */ = 3DA3A14A105152D10069FDEE /* PBXTextBookmark */;
+			3DA3A14B105152D10069FDEE /* PBXTextBookmark */ = 3DA3A14B105152D10069FDEE /* PBXTextBookmark */;
+			3DA3A14E105152D50069FDEE /* PBXTextBookmark */ = 3DA3A14E105152D50069FDEE /* PBXTextBookmark */;
+			3DA3A14F105152D50069FDEE /* PBXTextBookmark */ = 3DA3A14F105152D50069FDEE /* PBXTextBookmark */;
+			3DA3A150105152D50069FDEE /* PBXTextBookmark */ = 3DA3A150105152D50069FDEE /* PBXTextBookmark */;
+			3DA3A152105152F00069FDEE /* PBXTextBookmark */ = 3DA3A152105152F00069FDEE /* PBXTextBookmark */;
+			3DA3A153105152F00069FDEE /* PBXTextBookmark */ = 3DA3A153105152F00069FDEE /* PBXTextBookmark */;
+			3DA3A154105152F00069FDEE /* PBXTextBookmark */ = 3DA3A154105152F00069FDEE /* PBXTextBookmark */;
+			3DA3A157105152F20069FDEE /* PBXTextBookmark */ = 3DA3A157105152F20069FDEE /* PBXTextBookmark */;
+			3DA3A158105152F20069FDEE /* PBXTextBookmark */ = 3DA3A158105152F20069FDEE /* PBXTextBookmark */;
+			3DA3A159105152F20069FDEE /* PBXTextBookmark */ = 3DA3A159105152F20069FDEE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D89158A0EA8F4BA00BE4E70 /* Source Control */;
 		userBuildSettings = {
@@ -982,9 +1006,9 @@
 	};
 	3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1266, 6457}}";
-			sepNavSelRange = "{13431, 17}";
-			sepNavVisRange = "{11879, 1619}";
+			sepNavIntBoundsRect = "{{0, 0}, {1266, 6512}}";
+			sepNavSelRange = "{13433, 17}";
+			sepNavVisRange = "{12335, 1667}";
 			sepNavWindowFrame = "{{313, 97}, {1325, 863}}";
 		};
 	};
@@ -1167,7 +1191,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 160";
 		rLen = 0;
-		rLoc = 3262;
+		rLoc = 3264;
 		rType = 0;
 		vrLen = 1228;
 		vrLoc = 4501;
@@ -1361,7 +1385,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3324";
 		rLen = 22;
-		rLoc = 114984;
+		rLoc = 114852;
 		rType = 0;
 		vrLen = 2370;
 		vrLoc = 112650;
@@ -3001,7 +3025,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2838";
 		rLen = 114;
-		rLoc = 96699;
+		rLoc = 96567;
 		rType = 0;
 		vrLen = 2565;
 		vrLoc = 108001;
@@ -3011,7 +3035,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2838";
 		rLen = 114;
-		rLoc = 96699;
+		rLoc = 96567;
 		rType = 0;
 		vrLen = 2715;
 		vrLoc = 108001;
@@ -3021,7 +3045,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3101";
 		rLen = 0;
-		rLoc = 106580;
+		rLoc = 106448;
 		rType = 0;
 		vrLen = 2687;
 		vrLoc = 104558;
@@ -3041,7 +3065,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3143";
 		rLen = 0;
-		rLoc = 108069;
+		rLoc = 107937;
 		rType = 0;
 		vrLen = 2735;
 		vrLoc = 105091;
@@ -3061,7 +3085,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3157";
 		rLen = 0;
-		rLoc = 108621;
+		rLoc = 108489;
 		rType = 0;
 		vrLen = 2652;
 		vrLoc = 105907;
@@ -3081,7 +3105,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3156";
 		rLen = 0;
-		rLoc = 108621;
+		rLoc = 108489;
 		rType = 0;
 		vrLen = 2667;
 		vrLoc = 105907;
@@ -3101,7 +3125,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2847";
 		rLen = 0;
-		rLoc = 97119;
+		rLoc = 96987;
 		rType = 0;
 		vrLen = 2342;
 		vrLoc = 95315;
@@ -3121,7 +3145,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2848";
 		rLen = 0;
-		rLoc = 97210;
+		rLoc = 97078;
 		rType = 0;
 		vrLen = 2430;
 		vrLoc = 95315;
@@ -3141,7 +3165,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3003";
 		rLen = 0;
-		rLoc = 103019;
+		rLoc = 102887;
 		rType = 0;
 		vrLen = 2752;
 		vrLoc = 100880;
@@ -3161,7 +3185,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2963";
 		rLen = 0;
-		rLoc = 101384;
+		rLoc = 101252;
 		rType = 0;
 		vrLen = 3086;
 		vrLoc = 99620;
@@ -3181,7 +3205,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3068";
 		rLen = 0;
-		rLoc = 105214;
+		rLoc = 105082;
 		rType = 0;
 		vrLen = 2638;
 		vrLoc = 103308;
@@ -3201,7 +3225,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3151";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2849;
 		vrLoc = 105574;
@@ -3221,7 +3245,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3080";
 		rLen = 0;
-		rLoc = 105705;
+		rLoc = 105573;
 		rType = 0;
 		vrLen = 2934;
 		vrLoc = 103959;
@@ -3241,7 +3265,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3109";
 		rLen = 0;
-		rLoc = 106910;
+		rLoc = 106778;
 		rType = 0;
 		vrLen = 2804;
 		vrLoc = 104709;
@@ -3261,7 +3285,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3135";
 		rLen = 0;
-		rLoc = 107853;
+		rLoc = 107721;
 		rType = 0;
 		vrLen = 2843;
 		vrLoc = 105139;
@@ -3281,7 +3305,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3134";
 		rLen = 0;
-		rLoc = 107853;
+		rLoc = 107721;
 		rType = 0;
 		vrLen = 2846;
 		vrLoc = 105139;
@@ -3301,7 +3325,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3147";
 		rLen = 0;
-		rLoc = 108363;
+		rLoc = 108231;
 		rType = 0;
 		vrLen = 2846;
 		vrLoc = 105139;
@@ -3321,7 +3345,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3351,7 +3375,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3371,7 +3395,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3391,7 +3415,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3411,7 +3435,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3431,7 +3455,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3451,7 +3475,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3471,7 +3495,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3150";
 		rLen = 0;
-		rLoc = 108396;
+		rLoc = 108264;
 		rType = 0;
 		vrLen = 2799;
 		vrLoc = 105139;
@@ -3491,7 +3515,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1661;
 		vrLoc = 47088;
@@ -3511,7 +3535,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1750;
 		vrLoc = 47181;
@@ -3531,7 +3555,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1821;
 		vrLoc = 47254;
@@ -3551,7 +3575,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1878;
 		vrLoc = 47313;
@@ -3571,7 +3595,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1855;
 		vrLoc = 47467;
@@ -3591,7 +3615,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1890;
 		vrLoc = 47489;
@@ -3611,7 +3635,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1953;
 		vrLoc = 47489;
@@ -3631,7 +3655,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1953;
 		vrLoc = 47489;
@@ -3641,7 +3665,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1928;
 		vrLoc = 47514;
@@ -3661,7 +3685,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1939;
 		vrLoc = 47525;
@@ -3681,7 +3705,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 1977;
 		vrLoc = 47532;
@@ -3701,7 +3725,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 47579;
@@ -3721,7 +3745,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2019;
 		vrLoc = 47606;
@@ -3741,7 +3765,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2219;
 		vrLoc = 47620;
@@ -3778,7 +3802,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2233;
 		vrLoc = 47624;
@@ -3808,7 +3832,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2217;
 		vrLoc = 47754;
@@ -3828,7 +3852,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2233;
 		vrLoc = 47796;
@@ -3848,7 +3872,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 3142";
 		rLen = 16;
-		rLoc = 108112;
+		rLoc = 107980;
 		rType = 0;
 		vrLen = 2261;
 		vrLoc = 47863;
@@ -3931,7 +3955,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 561";
 		rLen = 0;
-		rLoc = 18386;
+		rLoc = 18388;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 7716;
@@ -3951,7 +3975,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 561";
 		rLen = 0;
-		rLoc = 18386;
+		rLoc = 18388;
 		rType = 0;
 		vrLen = 2353;
 		vrLoc = 7716;
@@ -3961,7 +3985,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 84";
 		rLen = 0;
-		rLoc = 3179;
+		rLoc = 3181;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 1552;
@@ -3981,7 +4005,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 85";
 		rLen = 0;
-		rLoc = 3179;
+		rLoc = 3181;
 		rType = 0;
 		vrLen = 1279;
 		vrLoc = 1552;
@@ -4001,7 +4025,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 85";
 		rLen = 0;
-		rLoc = 3179;
+		rLoc = 3181;
 		rType = 0;
 		vrLen = 1302;
 		vrLoc = 1552;
@@ -4029,7 +4053,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 84";
 		rLen = 0;
-		rLoc = 3179;
+		rLoc = 3181;
 		rType = 0;
 		vrLen = 1302;
 		vrLoc = 1552;
@@ -4100,7 +4124,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {909, 1012}}";
 			sepNavSelRange = "{373, 13}";
-			sepNavVisRange = "{142, 2515}";
+			sepNavVisRange = "{142, 2513}";
 		};
 	};
 	3DA39E131050C9400069FDEE /* PBXTextBookmark */ = {
@@ -4134,7 +4158,7 @@
 		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/Resources/37 inited from webview.html";
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 891}}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 868}}";
 			sepNavSelRange = "{493, 0}";
 			sepNavVisRange = "{0, 778}";
 		};
@@ -4585,7 +4609,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 592";
 		rLen = 0;
-		rLoc = 18617;
+		rLoc = 18494;
 		rType = 0;
 		vrLen = 1602;
 		vrLoc = 1790;
@@ -5393,7 +5417,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 599";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1988;
 		vrLoc = 16522;
@@ -5513,7 +5537,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 599";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1859;
 		vrLoc = 16790;
@@ -5573,7 +5597,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 603";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1990;
 		vrLoc = 16525;
@@ -5633,7 +5657,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 603";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1838;
 		vrLoc = 16677;
@@ -5693,7 +5717,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 601";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1864;
 		vrLoc = 16677;
@@ -5753,7 +5777,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 601";
 		rLen = 0;
-		rLoc = 18752;
+		rLoc = 18625;
 		rType = 0;
 		vrLen = 1864;
 		vrLoc = 16677;
@@ -5813,7 +5837,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 101";
 		rLen = 0;
-		rLoc = 3178;
+		rLoc = 3180;
 		rType = 0;
 		vrLen = 1748;
 		vrLoc = 1849;
@@ -5957,7 +5981,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 598";
 		rLen = 0;
-		rLoc = 18573;
+		rLoc = 18494;
 		rType = 0;
 		vrLen = 1347;
 		vrLoc = 17274;
@@ -7513,7 +7537,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 603";
 		rLen = 8;
-		rLoc = 18627;
+		rLoc = 18500;
 		rType = 0;
 		vrLen = 2078;
 		vrLoc = 16612;
@@ -7573,7 +7597,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 603";
 		rLen = 8;
-		rLoc = 18627;
+		rLoc = 18500;
 		rType = 0;
 		vrLen = 2001;
 		vrLoc = 16693;
@@ -7623,7 +7647,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2006;
 		vrLoc = 16748;
@@ -7693,7 +7717,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -7753,7 +7777,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -7813,7 +7837,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -7853,7 +7877,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -7893,7 +7917,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -7953,7 +7977,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -7973,7 +7997,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2758";
 		rLen = 0;
-		rLoc = 93500;
+		rLoc = 93465;
 		rType = 0;
 		vrLen = 2345;
 		vrLoc = 92119;
@@ -7993,7 +8017,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -8013,7 +8037,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2761";
 		rLen = 0;
-		rLoc = 93596;
+		rLoc = 93520;
 		rType = 0;
 		vrLen = 2826;
 		vrLoc = 91307;
@@ -8033,7 +8057,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -8053,7 +8077,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2771";
 		rLen = 0;
-		rLoc = 94166;
+		rLoc = 94035;
 		rType = 0;
 		vrLen = 2839;
 		vrLoc = 91476;
@@ -8073,7 +8097,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -8093,7 +8117,7 @@
 		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 2771";
 		rLen = 0;
-		rLoc = 94164;
+		rLoc = 94035;
 		rType = 0;
 		vrLen = 2308;
 		vrLoc = 90423;
@@ -8113,7 +8137,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -8153,7 +8177,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 1857;
 		vrLoc = 16902;
@@ -8183,7 +8207,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 607";
 		rLen = 0;
-		rLoc = 18749;
+		rLoc = 18622;
 		rType = 0;
 		vrLen = 2008;
 		vrLoc = 16751;
@@ -8193,7 +8217,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 2155;
 		vrLoc = 11036;
@@ -8250,7 +8274,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 2122;
 		vrLoc = 11181;
@@ -8300,7 +8324,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 2103;
 		vrLoc = 11214;
@@ -8350,7 +8374,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 2018;
 		vrLoc = 11302;
@@ -8400,7 +8424,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 2004;
 		vrLoc = 11337;
@@ -8450,7 +8474,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1708;
 		vrLoc = 11648;
@@ -8500,7 +8524,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1725;
 		vrLoc = 11648;
@@ -8550,7 +8574,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1729;
 		vrLoc = 11679;
@@ -8600,7 +8624,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1749;
 		vrLoc = 11700;
@@ -8650,7 +8674,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1738;
 		vrLoc = 11733;
@@ -8700,7 +8724,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1752;
 		vrLoc = 11733;
@@ -8750,7 +8774,7 @@
 		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
 		name = "ApplicationController.m: 460";
 		rLen = 17;
-		rLoc = 13431;
+		rLoc = 13433;
 		rType = 0;
 		vrLen = 1619;
 		vrLoc = 11879;
@@ -8783,6 +8807,258 @@
 		rLoc = 373;
 		rType = 0;
 		vrLen = 2515;
+		vrLoc = 142;
+	};
+	3DA3A135105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA3A136105151CF0069FDEE /* iPhoneMain.js */;
+		rLen = 0;
+		rLoc = 2147483660;
+		rType = 0;
+	};
+	3DA3A136105151CF0069FDEE /* iPhoneMain.js */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.javascript;
+		name = iPhoneMain.js;
+		path = "/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneMain.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavWindowFrame = "{{402, 61}, {968, 1004}}";
+		};
+	};
+	3DA3A137105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA3A138105151CF0069FDEE /* iPhoneMain.js */;
+		name = "iPhoneMain.js: 156";
+		rLen = 0;
+		rLoc = 5479;
+		rType = 0;
+		vrLen = 2287;
+		vrLoc = 3463;
+	};
+	3DA3A138105151CF0069FDEE /* iPhoneMain.js */ = {
+		isa = PBXFileReference;
+		name = iPhoneMain.js;
+		path = "/Users/mini/Software Inexdo/JSCocoa/iPhoneTest2/iPhoneMain.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {909, 2860}}";
+			sepNavSelRange = "{5479, 0}";
+			sepNavVisRange = "{3463, 2287}";
+		};
+	};
+	3DA3A139105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
+		name = "37 inited from webview.html: 30";
+		rLen = 0;
+		rLoc = 493;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	3DA3A13A105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 460";
+		rLen = 17;
+		rLoc = 13433;
+		rType = 0;
+		vrLen = 1435;
+		vrLoc = 12272;
+	};
+	3DA3A13B105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 216";
+		rLen = 24;
+		rLoc = 7380;
+		rType = 0;
+		vrLen = 2303;
+		vrLoc = 93696;
+	};
+	3DA3A13C105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39F641050D0290069FDEE /* JSContextRef.h */;
+		name = "JSContextRef.h: 118";
+		rLen = 66;
+		rLoc = 4859;
+		rType = 0;
+		vrLen = 3528;
+		vrLoc = 211;
+	};
+	3DA3A13D105151CF0069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E101050C9400069FDEE /* 35 webview.js */;
+		name = "35 webview.js: 20";
+		rLen = 13;
+		rLoc = 373;
+		rType = 0;
+		vrLen = 2515;
+		vrLoc = 142;
+	};
+	3DA3A143105152B80069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
+		name = "37 inited from webview.html: 30";
+		rLen = 0;
+		rLoc = 493;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	3DA3A144105152B80069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 460";
+		rLen = 17;
+		rLoc = 13433;
+		rType = 0;
+		vrLen = 1432;
+		vrLoc = 12275;
+	};
+	3DA3A145105152B80069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E101050C9400069FDEE /* 35 webview.js */;
+		name = "35 webview.js: 20";
+		rLen = 13;
+		rLoc = 373;
+		rType = 0;
+		vrLen = 2513;
+		vrLoc = 142;
+	};
+	3DA3A147105152D10069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 593";
+		rLen = 0;
+		rLoc = 18494;
+		rType = 0;
+		vrLen = 1196;
+		vrLoc = 17212;
+	};
+	3DA3A148105152D10069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 598";
+		rLen = 0;
+		rLoc = 18494;
+		rType = 0;
+		vrLen = 1569;
+		vrLoc = 17013;
+	};
+	3DA3A149105152D10069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 111";
+		rLen = 0;
+		rLoc = 3265;
+		rType = 0;
+		vrLen = 1204;
+		vrLoc = 4613;
+	};
+	3DA3A14A105152D10069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		rLen = 0;
+		rLoc = 93465;
+		rType = 0;
+	};
+	3DA3A14B105152D10069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB065A80F28D7A60043C238 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 2769";
+		rLen = 0;
+		rLoc = 94035;
+		rType = 0;
+		vrLen = 1633;
+		vrLoc = 92683;
+	};
+	3DA3A14E105152D50069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
+		name = "37 inited from webview.html: 30";
+		rLen = 0;
+		rLoc = 493;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	3DA3A14F105152D50069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 460";
+		rLen = 17;
+		rLoc = 13433;
+		rType = 0;
+		vrLen = 1566;
+		vrLoc = 12314;
+	};
+	3DA3A150105152D50069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E101050C9400069FDEE /* 35 webview.js */;
+		name = "35 webview.js: 20";
+		rLen = 13;
+		rLoc = 373;
+		rType = 0;
+		vrLen = 2513;
+		vrLoc = 142;
+	};
+	3DA3A152105152F00069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 598";
+		rLen = 0;
+		rLoc = 18494;
+		rType = 0;
+		vrLen = 1395;
+		vrLoc = 16461;
+	};
+	3DA3A153105152F00069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		rLen = 7;
+		rLoc = 3111;
+		rType = 0;
+	};
+	3DA3A154105152F00069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 106";
+		rLen = 0;
+		rLoc = 3098;
+		rType = 0;
+		vrLen = 1483;
+		vrLoc = 2295;
+	};
+	3DA3A157105152F20069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E161050C9400069FDEE /* 37 inited from webview.html */;
+		name = "37 inited from webview.html: 30";
+		rLen = 0;
+		rLoc = 493;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	3DA3A158105152F20069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D89158F0EA8F50D00BE4E70 /* ApplicationController.m */;
+		name = "ApplicationController.m: 460";
+		rLen = 17;
+		rLoc = 13433;
+		rType = 0;
+		vrLen = 1667;
+		vrLoc = 12335;
+	};
+	3DA3A159105152F20069FDEE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DA39E101050C9400069FDEE /* 35 webview.js */;
+		name = "35 webview.js: 20";
+		rLen = 13;
+		rLoc = 373;
+		rType = 0;
+		vrLen = 2513;
 		vrLoc = 142;
 	};
 	3DB065A30F28D7A60043C238 /* BridgeSupportController.m */ = {
@@ -8819,10 +9095,10 @@
 	};
 	3DB065A80F28D7A60043C238 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1224, 47608}}";
-			sepNavSelRange = "{7380, 24}";
-			sepNavVisRange = "{93304, 2409}";
-			sepNavWindowFrame = "{{397, 53}, {1283, 915}}";
+			sepNavIntBoundsRect = "{{0, 0}, {907, 47245}}";
+			sepNavSelRange = "{94035, 0}";
+			sepNavVisRange = "{92683, 1633}";
+			sepNavWindowFrame = "{{436, 112}, {1283, 915}}";
 		};
 	};
 	3DB065A90F28D7A60043C238 /* JSCocoaFFIArgument.h */ = {

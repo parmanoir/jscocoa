@@ -103,7 +103,7 @@ int runCount = 0;
 	
 	JSCocoa* jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 
-	NSLog(@"********xxx %x", [[webViewUsedAsContextSource mainFrame] globalContext]);
+//	NSLog(@"********xxx %x", [[webViewUsedAsContextSource mainFrame] globalContext]);
 	if (!b)	
 	{	
 		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
@@ -595,11 +595,6 @@ int dummyValue;
 //
 // JSCocoa inited from a WebView tests
 //
-- (void)webView:(id *)sender didClearWindowObject:(id *)windowObject forFrame:(id *)frame
-{
-	NSLog(@"*********************");
-}
-
 - (id)testHash:(id)hash
 {
 	NSLog(@"hash from WebView : %@", hash);
