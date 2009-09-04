@@ -1810,7 +1810,7 @@ int	liveInstanceCount	= 0;
 + (void)logInstanceStats
 {
 	id allKeys = [sharedInstanceStats allKeys];
-	NSLog(@"====instanceStats : %d classes spawned %d live instances (%d since launch, %d dead)====", [allKeys count], liveInstanceCount, fullInstanceCount, fullInstanceCount-liveInstanceCount);
+	NSLog(@"====instanceStats : %d classes spawned %d instances since launch, %d dead, %d alive====", [allKeys count], fullInstanceCount, fullInstanceCount-liveInstanceCount, liveInstanceCount);
 	for (id key in allKeys)		
 		NSLog(@"%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
 	if ([allKeys count])	NSLog(@"====");
@@ -2227,9 +2227,10 @@ int	liveInstanceCount	= 0;
 // Dealloc : unprotect js hash
 - (void)deallocAndCleanupJS
 {
+//	NSLog(@"***deallocing %@", self);
 	JSObjectRef hash = NULL;
 	object_getInstanceVariable(self, "__jsHash", (void**)&hash);
-	if (hash)	
+	if (hash)
 	{
 		id jsc = NULL;
 		object_getInstanceVariable(self, "__jsCocoaController", (void**)&jsc);
