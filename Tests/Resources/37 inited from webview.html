@@ -1,5 +1,9 @@
 <html>
 	<style>
+		html
+		{
+			font-family: lucida grande;
+		}
 		#dump
 		{
 			white-space: pre;
@@ -16,6 +20,8 @@
 	<p>
 	<div id='dump'></div>
 	<script>
+	try
+	{
 		function	log(str)
 		{
 			str = str.replace(/</g, '&lt;')
@@ -28,11 +34,46 @@
 		else				log('no JSCocoa :(')
 		
 		log('jsc=' + ('__jsc__' in this) + ' (' + __jsc__ + ')')
-		log('date=' + OSX.NSDate.alloc.init)
-		log('app delegate=' + OSX.NSApplication.sharedApplication.delegate)
-		log('test hash=' + OSX.NSApplication.sharedApplication.delegate.testHash( { hello : 'world' } ) )
+		log('NSDate=' + OSX.NSDate.alloc.init)
+
+		var delegate = OSX.NSApplication.sharedApplication.delegate
 		
-		log('NSPoint=' + new OSX.NSPoint(1, 2))
+		if (delegate.get5 != 5)										throw	'get5 failed'
+		if (delegate.add1(5) !=6)									throw	'add1 failed'
+		delegate.dummyValue = 13
+		if (delegate.dummyValue != 13)								throw 'dummyValue failed'
+		
+		var point = new OSX.NSPoint(123, 456)
+		if (point.x != 123 || point.y != 456)						throw 'new NSPoint failed'
+		var rect = new OSX.NSRect(4, 7, 13, 26)
+		if (rect.origin.x != 4 || rect.origin.y != 7 
+			|| rect.size.width != 13 || rect.size.height != 26)		throw 'new NSRect failed'
+			
+		//
+		// Test arrays and hashes
+		//	First, test conversion from Javascript to NSArray and NSDictionary (1)
+		//	Then, test javascript access (via [] instead of objectAtIndex, objectForKey) to NSArray and NSDictionary (2)
+		//
+		var array = delegate.testArray( ['hello', 'world', [4, 5, 6], 'end' ] )
+		if (!array)													throw 'array test failed (1)'
+		if (array[0] != 'Hello' || array[1] != 'world')				throw 'array test failed (2)'
+		
+		var hash = delegate.testHash( { hello : 'world', subHash : { part1 : 'bonjour', part2 : 'monde' }, end : 'fin', subArray : [11, 12, 13] } ) 
+		if (!hash)													throw 'hash test failed (1)'
+		if (hash['Hello'] != 'world')								throw 'hash test failed (2)'
+		
+		log('app delegate=' + delegate)
+		log('test array=' +  array)
+		log('test hash=' + hash)
+		
+		delegate.finishTest37(true)
+		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'
+	}
+	catch(e)
+	{
+		document.body.style.backgroundColor = 'red'
+		document.body.innerHTML = '<pre>' + e + '</pre>'
+	}
 	</script>
 
 	

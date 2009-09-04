@@ -112,8 +112,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
 {
-
-	NSLog(@"JSCocoa : %x spawning with context %x", self, _ctx);
+//	NSLog(@"JSCocoa : %x spawning with context %x", self, _ctx);
 	self	= [super init];
 	controllerCount++;
 
@@ -1835,6 +1834,11 @@ int	liveInstanceCount	= 0;
 	for (id key in allKeys)		
 		NSLog(@"%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
 	if ([allKeys count])	NSLog(@"====");
+}
++ (void)logBoxedObjects
+{
+	NSLog(@"====%d boxedObjects====", [[boxedObjects allKeys] count]);
+	NSLog(@"%@", boxedObjects);
 }
 
 #pragma mark Distant Object Handling (DO)

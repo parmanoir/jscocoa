@@ -8,6 +8,7 @@
 
 #import "ApplicationController.h"
 #import "JSCocoa.h"
+#import <WebKit/WebKit.h>
 
 @implementation ApplicationController
 
@@ -82,28 +83,30 @@ int runCount = 0;
 	jsc.delegate = nil;
 
 
-
 	//
 	// Test JSCocoa inited from a WebView
 	//
-	
+
+	// Load nib
 	id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
 	id nibURL	= [NSURL fileURLWithPath:nibPath];
 	id webViewNib = [[NSNib alloc] initWithContentsOfURL:nibURL];
-//	NSLog(@">>>%@", webViewNib);
-	[webViewNib instantiateNibWithOwner:self topLevelObjects:nil];
-//	NSLog(@">>>>>>%@", webViewUsedAsContextSource);
+
+	// Instantiate nib with ourselves as owner
+	topObjects = nil;
+	[webViewNib instantiateNibWithOwner:self topLevelObjects:&topObjects];
+	[webViewNib release];
+	[topObjects retain];
 	[webViewUsedAsContextSource setFrameLoadDelegate:self];
 
 	id pageURL	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
 	[webViewUsedAsContextSource setMainFrameURL:pageURL];
 
+	// Init JSCocoa from WebView's globalContext
+	JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
+	jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 
-	JSContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
-	
-	JSCocoa* jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 
-//	NSLog(@"********xxx %x", [[webViewUsedAsContextSource mainFrame] globalContext]);
 	if (!b)	
 	{	
 		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
@@ -125,6 +128,17 @@ int runCount = 0;
 {
 	[jsc garbageCollect];
 }
+
+- (IBAction)logInstanceStats:(id)sender
+{
+	[JSCocoa logInstanceStats];
+}
+
+- (IBAction)logBoxedObjects:(id)sender
+{
+	[JSCocoa logBoxedObjects];
+}
+
 
 
 - (IBAction)runSimpleTestFile:(id)sender
@@ -595,11 +609,61 @@ int dummyValue;
 //
 // JSCocoa inited from a WebView tests
 //
+- (id)testArray:(id)array
+{
+//	NSLog(@"array from WebView : %@", array);
+
+	if (![[array objectAtIndex:0] isEqualToString:@"hello"])			return	nil;
+	if (![[array objectAtIndex:1] isEqualToString:@"world"])			return	nil;
+	if (![[array objectAtIndex:3] isEqualToString:@"end"])				return	nil;
+	
+	id subArray = [array objectAtIndex:2];
+	if (!subArray)														return	nil;
+	if (![subArray isKindOfClass:[NSArray class]])						return	nil;
+	if ([[subArray objectAtIndex:0] intValue] != 4)						return	nil;
+	if ([[subArray objectAtIndex:1] intValue] != 5)						return	nil;
+	if ([[subArray objectAtIndex:2] intValue] != 6)						return	nil;
+
+	return [NSArray arrayWithObjects:@"Hello", @"world", nil];
+}
+
 - (id)testHash:(id)hash
 {
-	NSLog(@"hash from WebView : %@", hash);
+//	NSLog(@"hash from WebView : %@", hash);
+
+	if (![[hash objectForKey:@"hello"] isEqualToString:@"world"])		return	nil;
+	if (![[hash objectForKey:@"end"] isEqualToString:@"fin"])			return	nil;
 	
-	return [NSArray arrayWithObjects:@"Hello", @"world", nil];
+	id subHash = [hash objectForKey:@"subHash"];
+	if (!subHash)														return	nil;
+	if (![[subHash objectForKey:@"part1"] isEqualToString:@"bonjour"])	return	nil;
+	if (![[subHash objectForKey:@"part2"] isEqualToString:@"monde"])	return	nil;
+	id subArray = [hash objectForKey:@"subArray"];
+	if (!subArray)														return	nil;
+	if ([[subArray objectAtIndex:0] intValue] != 11)					return	nil;
+	if ([[subArray objectAtIndex:1] intValue] != 12)					return	nil;
+	if ([[subArray objectAtIndex:2] intValue] != 13)					return	nil;
+	
+	return [NSDictionary dictionaryWithObjectsAndKeys:@"world", @"Hello", nil];
+}
+
+- (void)finishTest37:(BOOL)b
+{
+	if (!b)	return;
+	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
+	
+	[jsc2 release];
+	for (id o in topObjects)
+		[o release];
+	[topObjects release];
+	topObjects	= nil;
+	jsc2		= nil;
+/*	
+	NSLog(@"****************");
+	[JSCocoa logInstanceStats];
+	[JSCocoa logBoxedObjects];
+	NSLog(@"****************");
+*/	
 }
 
 

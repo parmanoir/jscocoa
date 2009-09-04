@@ -7,16 +7,22 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "JSCocoa.h"
 
 
 @interface ApplicationController : NSObject {
 
 	IBOutlet	id webViewUsedAsContextSource;
+	
+	JSCocoa* jsc2;
+	id topObjects;
 
 }
 
 - (IBAction)runJSTests:(id)sender;
 - (IBAction)garbageCollect:(id)sender;
+- (IBAction)logInstanceStats:(id)sender;
+- (IBAction)logBoxedObjects:(id)sender;
 
 - (IBAction)runSimpleTestFile:(id)sender;
 - (IBAction)unlinkAllReferences:(id)sender;

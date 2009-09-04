@@ -98,6 +98,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 + (void)logInstanceStats;
 - (id)instanceStats;
++ (void)logBoxedObjects;
 
 //
 // Class handling
