@@ -450,7 +450,7 @@
 {
 	if (!typeEncoding)	return	NO;
 	
-//	NSLog(@"toJSValueRef: %c", typeEncoding);
+//	NSLog(@"toJSValueRef: %c ptr=%x", typeEncoding, ptr);
 	switch  (typeEncoding)
 	{
 		case	_C_ID:	
@@ -859,7 +859,11 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:nil];
 	if (!xmlDocument)	return	NO;
 	id rootElement = [xmlDocument rootElement];
+#if __LP64__	
+	id type = [[rootElement attributeForName:@"type64"] stringValue];
+#else
 	id type = [[rootElement attributeForName:@"type"] stringValue];
+#endif
 	[xmlDocument release];
 	return	type;
 }

@@ -28,7 +28,7 @@
 	if (typeof (minor.valueOf()) != 'number')	throw 'type o failed (2)'
 	if (!(major >= 1))							throw 'type o failed (3)'
 	
-//	log('major=' + major + ' minor=' + minor)
+//	log('OpenGL version major=' + major + ' minor=' + minor)
 
 
 	var windowCount = new outArgument
@@ -36,7 +36,7 @@
 //	log('windowCount=' + windowCount)
 	
 	if (typeof (minor.valueOf()) != 'number')	throw 'type o failed (4)'
-	if (!(major >= 1))							throw 'type o failed (5)'
+	if (!(major >= 1 && major < 500))			throw 'type o failed (5)'
 
 
 	

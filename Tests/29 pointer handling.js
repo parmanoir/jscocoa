@@ -28,7 +28,14 @@ NSDeviceRGBColorSpace];
 	//
 	// Test get : allocate a memory buffer and have Cocoa fill it
 	//
-	var buffer = new memoryBuffer('ffff')
+
+	// 32bit only
+//	var encoding = 'ffff'
+
+	// 32 and 64 bit : get size of CGFloat by inspecting a signature of method returning CGFloat (##dirty)
+	var signature = JSCocoa.typeEncodingOfMethod_class('whiteComponent', 'NSColor')
+	var CGFloatEncoding = signature.charAt(0)
+	var buffer = new memoryBuffer(CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding)
 
 	var r = 0.9
 	var g = 0.8
@@ -36,6 +43,7 @@ NSDeviceRGBColorSpace];
 	var a = 0.6
 
 	var color = NSColor.colorWithDevice({ red : r, green : g, blue : b, alpha : a })
+	
 	
 	// Use scrambled pattern 2 3 0 1 instead of 0 1 2 3 to test
 	color.get({	red : new outArgument(buffer, 2), 
@@ -83,7 +91,7 @@ NSDeviceRGBColorSpace];
 	
 	
 	// Allocate room for 3 points
-	var buffer = new memoryBuffer('ffffff')
+	var buffer = new memoryBuffer(CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding)
 	// Copy points into our buffer
 	path.element({ atIndex : 1, associatedPoints : new outArgument(buffer, 0) })
 
@@ -117,7 +125,7 @@ NSDeviceRGBColorSpace];
 	path.setAssociatedPoints_atIndex(buffer, 1)
 
 	// Copy points into a new buffer
-	var buffer2 = new memoryBuffer('ffffff')
+	var buffer2 = new memoryBuffer(CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding+CGFloatEncoding)
 	path.element({ atIndex : 1, associatedPoints : new outArgument(buffer2, 0) })
 
 	if (!floatsEq(buffer2[0], 123))		throw 'pointer handling raw get failed (15)'

@@ -20,7 +20,8 @@
 	if (!('y' in p2))			throw	'NSPoint structure instance failed — property with undefined value not created (y)'
 	p2.x = 4.5
 	p2.y = 8.2
-	
+//	log('p1=' + p1.x + ',' + p1.y);
+//	log('p2=' + p2.x + ',' + p2.y);
 	if (!NSEqualPoints(p1, p2))	throw	'NSPoint structure instance failed'
 
 

@@ -1,13 +1,27 @@
 
 
 
+
+
 	var safe1Called = 0
 	var safe2Called = 0
 	var	bindingCleaned
-	
+
+	//
+	// Safe dealloc test completion
+	//	AT THIS POINT OBJECTS WILL STILL BE ALIVE, as JavscriptCore is still retaining the JSCocoaPrivateObjects holding them.
+	//	They will be deallocated on next GC cycle.
+	//
 	function	checkEndTest36()
 	{
-		if (safe1Called == 2 && safe2Called == 1 && bindingCleaned) completeDelayedTest('36 safe dealloc', true)
+		if (safe1Called == 2 && safe2Called == 1 && bindingCleaned)
+		{
+			completeDelayedTest('36 safe dealloc', true)
+			
+//			JSCocoa.logInstanceStats
+//			__jsc__.garbageCollect
+//			JSCocoa.logInstanceStats
+		}
 	}
 	
 

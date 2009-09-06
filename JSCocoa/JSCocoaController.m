@@ -357,6 +357,26 @@ static id JSCocoaSingleton = NULL;
 	if ([NSGarbageCollector defaultCollector])	NSLog(@"***Running with ObjC Garbage Collection***");
 #endif
 }
+// Report what we're running on
++ (NSString*)runningArchitecture
+{
+#if defined(__ppc__)
+	return @"PPC";
+#elif defined(__ppc64__)
+	return @"PPC64";
+#elif defined(__i386__) 
+	return @"i386";
+#elif defined(__x86_64__) 
+	return @"x86_64";
+#elif TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
+	return @"iPhone";
+#elif TARGET_OS_IPHONE && TARGET_IPHONE_SIMULATOR
+	return @"iPhone Simulator";
+#else
+	return @"unknown architecture";
+#endif
+}
+
 
 #pragma mark Script evaluation
 
@@ -957,7 +977,12 @@ static id JSCocoaSingleton = NULL;
 		BOOL	isReturnValue = [[child name] isEqualToString:@"retval"];
 		if ([[child name] isEqualToString:@"arg"] || isReturnValue)
 		{
+#if __LP64__	
+			id typeEncoding = [[child attributeForName:@"type64"] stringValue];
+			if (!typeEncoding)	typeEncoding = [[child attributeForName:@"type"] stringValue];
+#else
 			id typeEncoding = [[child attributeForName:@"type"] stringValue];
+#endif			
 			char typeEncodingChar = [typeEncoding UTF8String][0];
 		
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
@@ -2474,6 +2499,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 		else
 		if ([type isEqualToString:@"constant"])
 		{
+			// ##fix : NSZeroPoint, NSZeroRect, NSZeroSize would need special (struct) + type64 handling
 			// Check if constant's declared_type is NSString*
 			id declared_type = [[xmlDocument rootElement] attributeForName:@"declared_type"];
 			if (!declared_type)	declared_type = [[xmlDocument rootElement] attributeForName:@"type"];
@@ -4088,7 +4114,13 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 	// Get structure type
 	id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:privateObject.xml options:0 error:nil];
 	id rootElement = [xmlDocument rootElement];
+//	id structureType = [[rootElement attributeForName:@"type"] stringValue];
+#if __LP64__	
+	id structureType = [[rootElement attributeForName:@"type64"] stringValue];
+	if (!structureType)	structureType = [[rootElement attributeForName:@"type"] stringValue];
+#else
 	id structureType = [[rootElement attributeForName:@"type"] stringValue];
+#endif			
 	[xmlDocument release];
 	id fullStructureType = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:structureType];
 	if (!fullStructureType)	return throwException(ctx, exception, @"Calling constructor on a non struct"), NULL;

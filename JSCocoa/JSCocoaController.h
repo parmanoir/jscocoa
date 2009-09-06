@@ -50,6 +50,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (BOOL)hasSharedController;
 - (JSGlobalContextRef)ctx;
 + (void)hazardReport;
++ (NSString*)runningArchitecture;
 
 //
 // Evaluation
