@@ -484,6 +484,13 @@
 			3D36E6411054030A00132E23 /* PBXTextBookmark */ = 3D36E6411054030A00132E23 /* PBXTextBookmark */;
 			3D36E6481054034200132E23 /* PBXTextBookmark */ = 3D36E6481054034200132E23 /* PBXTextBookmark */;
 			3D36E6491054034200132E23 /* PBXTextBookmark */ = 3D36E6491054034200132E23 /* PBXTextBookmark */;
+			3D36E66910544ABE00132E23 /* PBXTextBookmark */ = 3D36E66910544ABE00132E23 /* PBXTextBookmark */;
+			3D36E66A10544ABE00132E23 /* PBXTextBookmark */ = 3D36E66A10544ABE00132E23 /* PBXTextBookmark */;
+			3D36E66B10544AC500132E23 /* XCBuildMessageTextBookmark */ = 3D36E66B10544AC500132E23 /* XCBuildMessageTextBookmark */;
+			3D36E66C10544AC500132E23 /* PBXTextBookmark */ = 3D36E66C10544AC500132E23 /* PBXTextBookmark */;
+			3D36E66D10544AC500132E23 /* PBXTextBookmark */ = 3D36E66D10544AC500132E23 /* PBXTextBookmark */;
+			3D36E66E10544AC500132E23 /* PBXTextBookmark */ = 3D36E66E10544AC500132E23 /* PBXTextBookmark */;
+			3D36E66F10544AC600132E23 /* PBXTextBookmark */ = 3D36E66F10544AC600132E23 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
@@ -579,9 +586,9 @@
 	};
 	3D36E288105229E700132E23 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 47597}}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 48268}}";
 			sepNavSelRange = "{60088, 0}";
-			sepNavVisRange = "{59045, 2524}";
+			sepNavVisRange = "{10485, 2640}";
 			sepNavWindowFrame = "{{577, 101}, {968, 1004}}";
 		};
 	};
@@ -605,7 +612,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1074, 2167}}";
 			sepNavSelRange = "{948, 0}";
-			sepNavVisRange = "{608, 631}";
+			sepNavVisRange = "{608, 804}";
 			sepNavWindowFrame = "{{510, 113}, {968, 1004}}";
 		};
 	};
@@ -622,6 +629,14 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRange = "{0, 405}";
 			sepNavWindowFrame = "{{39, 111}, {968, 1004}}";
+		};
+	};
+	3D36E2B410522A1200132E23 /* TestsRunner_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {877, 332}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 153}";
+			sepNavWindowFrame = "{{84, 106}, {968, 1004}}";
 		};
 	};
 	3D36E2B910522A2600132E23 /* ApplicationController.m */ = {
@@ -5143,6 +5158,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {909, 1606}}";
 			sepNavSelRange = "{274, 0}";
 			sepNavVisRange = "{0, 1539}";
+			sepNavWindowFrame = "{{714, 76}, {968, 1004}}";
 		};
 	};
 	3D36E618105401B400132E23 /* PBXTextBookmark */ = {
@@ -5351,6 +5367,75 @@
 		rType = 0;
 		vrLen = 1539;
 		vrLoc = 0;
+	};
+	3D36E66910544ABE00132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1779";
+		rLen = 0;
+		rLoc = 60088;
+		rType = 0;
+		vrLen = 2576;
+		vrLoc = 59048;
+	};
+	3D36E66A10544ABE00132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1779";
+		rLen = 0;
+		rLoc = 60088;
+		rType = 0;
+		vrLen = 2640;
+		vrLoc = 10485;
+	};
+	3D36E66B10544AC500132E23 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Precompile TestsRunner_Prefix.pch";
+		fRef = 3D36E2B410522A1200132E23 /* TestsRunner_Prefix.pch */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 0;
+		rLoc = 0;
+		rType = 1;
+	};
+	3D36E66C10544AC500132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E2B410522A1200132E23 /* TestsRunner_Prefix.pch */;
+		name = "TestsRunner_Prefix.pch: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 153;
+		vrLoc = 0;
+	};
+	3D36E66D10544AC500132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 51";
+		rLen = 0;
+		rLoc = 948;
+		rType = 0;
+		vrLen = 823;
+		vrLoc = 589;
+	};
+	3D36E66E10544AC500132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 51";
+		rLen = 0;
+		rLoc = 948;
+		rType = 0;
+		vrLen = 804;
+		vrLoc = 608;
+	};
+	3D36E66F10544AC600132E23 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1779";
+		rLen = 0;
+		rLoc = 60088;
+		rType = 0;
+		vrLen = 2640;
+		vrLoc = 10485;
 	};
 	8D1107260486CEB800E47090 /* TestsRunner */ = {
 		activeExec = 0;

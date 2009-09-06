@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D36E6481054034200132E23</string>
+						<string>3D36E66F10544AC600132E23</string>
 						<key>history</key>
 						<array>
-							<string>3D36E62A1054023700132E23</string>
+							<string>3D36E66910544ABE00132E23</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -236,46 +236,6 @@
 				<false/>
 				<key>RubberWindowFrame</key>
 				<string>577 157 968 948 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>3D36E60A1054014300132E23</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>36 safe dealloc.js</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D36E60B1054014300132E23</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>36 safe dealloc.js</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>3D36E6491054034200132E23</string>
-						<key>history</key>
-						<array>
-							<string>3D36E61E1054020700132E23</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {968, 907}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>714 132 968 948 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -358,13 +318,14 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>78</integer>
-											<integer>77</integer>
+											<integer>64</integer>
+											<integer>25</integer>
+											<integer>24</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {341, 337}}</string>
+									<string>{{0, 960}, {341, 337}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -580,11 +541,10 @@
 		<string>3D36E2F710522B5E00132E23</string>
 		<string>3D36E2F810522B5E00132E23</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
-		<string>3D36E60A1054014300132E23</string>
-		<string>3D36E6061054014300132E23</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>3D36E6061054014300132E23</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1564 755 358 423 0 0 1920 1178 </string>
@@ -745,7 +705,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>&lt;No Editor&gt;</string>
+								<string>TestsRunner_Prefix.pch</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -940,7 +900,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D54069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
