@@ -2007,8 +2007,16 @@ int	liveInstanceCount	= 0;
         argIndex++;
     }
     
+    @try {
+        [invocation invokeWithTarget:callee];
+    }
+    @catch (NSException * e) {
+        NSLog(@"Exception calling %@: %@", callee, [e reason]);
+    }
+    @finally {
+        return JSValueMakeNull(localCtx);
+    }
     
-    [invocation invokeWithTarget:callee];
 
 /*    
     id result = 0x00;
