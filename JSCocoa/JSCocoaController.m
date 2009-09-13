@@ -2012,11 +2012,8 @@ int	liveInstanceCount	= 0;
     }
     @catch (NSException * e) {
         NSLog(@"Exception calling %@: %@", callee, [e reason]);
-    }
-    @finally {
         return JSValueMakeNull(localCtx);
     }
-    
 
 /*    
     id result = 0x00;
