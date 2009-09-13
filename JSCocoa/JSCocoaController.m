@@ -254,22 +254,44 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	[self setUseSafeDealloc:NO];
 	[self unlinkAllReferences];
 	JSGarbageCollect(ctx);
-
+    
 	controllerCount--;
 	if (controllerCount == 0)
 	{
-		if (OSXObjectClass)		JSClassRelease(OSXObjectClass);
-		if (jsCocoaObjectClass)	JSClassRelease(jsCocoaObjectClass);
-		if (hashObjectClass)	JSClassRelease(hashObjectClass);
-
+		if (OSXObjectClass) {
+            JSClassRelease(OSXObjectClass);
+            OSXObjectClass = nil;
+        }
+        
+		if (jsCocoaObjectClass) {
+            JSClassRelease(jsCocoaObjectClass);
+            jsCocoaObjectClass = nil;
+        }
+        
+		if (hashObjectClass) {
+            JSClassRelease(hashObjectClass);
+            hashObjectClass = nil;
+        }
+        
+        // we need to nil these all out, since they are static
+        // and if we make another JSCocoaController after this- they will
+        // still be around and that's kinda bad (like crashing bad).
 		[sharedInstanceStats release];
+        sharedInstanceStats = nil;
 		[closureHash release];
+        closureHash = nil;
 		[jsFunctionSelectors release];
+        jsFunctionSelectors = nil;
 		[jsFunctionClasses release];
+        jsFunctionClasses = nil;
 		[jsFunctionHash release];
+        jsFunctionHash = nil;
 		[splitCallCache release];
+        splitCallCache = nil;
 		[jsClassParents release];
+        jsClassParents = nil;
 		[boxedObjects release];
+        boxedObjects = nil;
 	}
 
 	JSGlobalContextRelease(ctx);

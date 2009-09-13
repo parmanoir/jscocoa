@@ -11,6 +11,10 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef __LP64__
+    printf("__LP64__!\n");
+#endif
+
 	id pool = [[NSAutoreleasePool alloc] init];
 	
 	id c = [JSCocoaController sharedController];
