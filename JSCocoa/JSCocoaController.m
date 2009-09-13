@@ -362,8 +362,9 @@ static id JSCocoaSingleton = NULL;
 {
 #if defined(__ppc__)
 	return @"PPC";
-#elif defined(__ppc64__)
-	return @"PPC64";
+// Unsupported
+//#elif defined(__ppc64__)
+//	return @"PPC64";
 #elif defined(__i386__) 
 	return @"i386";
 #elif defined(__x86_64__) 
@@ -3381,7 +3382,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		
 		// Can't use capitalizedString on the whole string as it will transform 
 		//			myValue 
-		// to		Myvalue (therby destroying camel letters)
+		// to		Myvalue (thereby destroying camel letters)
 		// we want	MyValue
 //		NSString*	setterName = [NSString stringWithFormat:@"set%@:", [propertyName capitalizedString]];
 		// Capitalize only first letter
@@ -4185,12 +4186,6 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 		if (isSpeaking)	system([[NSString stringWithFormat:@"say \"%@\" &", reason] UTF8String]);
 	}
 
-	// Convert exception to string
-	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
-	JSValueRef jsString = JSValueMakeString(ctx, jsName);
-	JSStringRelease(jsName);
-
-
 	// Gather call stack
 	JSValueRef	callStackException = NULL;
 	JSStringRef scriptJS = JSStringCreateWithUTF8CString("return dumpCallStack()");
@@ -4209,6 +4204,11 @@ static void throwException(JSContextRef ctx, JSValueRef* exception, NSString* re
 		if ([callStack length])
 			reason = [NSString stringWithFormat:@"%@\n%@", reason, callStack];
 	}
+
+	// Convert exception to string
+	JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
+	JSValueRef jsString = JSValueMakeString(ctx, jsName);
+	JSStringRelease(jsName);
 
 	// Convert to object to allow JavascriptCore to add line and sourceURL
 	*exception	= JSValueToObject(ctx, jsString, NULL);

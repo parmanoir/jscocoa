@@ -60,6 +60,8 @@ int runCount = 0;
 
 - (IBAction)runJSTests:(id)sender
 {
+	[textField setStringValue:@"Running Tests ..."];
+
 	// Clean up notifications registered by previously run tests
 	[jsc callJSFunctionNamed:@"resetDelayedTests" withArguments:nil];
 
@@ -114,6 +116,8 @@ int runCount = 0;
 
 	if (!b)	
 	{	
+		id str = [NSString stringWithFormat:@"FAILED %@", path];
+		[textField setStringValue:str];
 		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
 		return; 
 	}
@@ -121,8 +125,18 @@ int runCount = 0;
 	{
 		int delayedTestCount = [jsc toInt:[jsc callJSFunctionNamed:@"delayedTestCount" withArguments:nil]];
 		
-		if (delayedTestCount)	NSLog(@"All %d tests ran OK, %d delayed pending", testCount, delayedTestCount);
-		else					NSLog(@"All %d tests ran OK !", testCount);
+		if (delayedTestCount)	
+		{
+			id str = [NSString stringWithFormat:@"All %d tests ran OK, %d delayed pending", testCount, delayedTestCount];
+			NSLog(@"%@", str);
+			[textField setStringValue:str];
+		}
+		else					
+		{
+			id str = [NSString stringWithFormat:@"All %d tests ran OK !", testCount];
+			NSLog(@"%@", str);
+			[textField setStringValue:str];
+		}
 	}
 }
 
@@ -671,5 +685,10 @@ int dummyValue;
 */	
 }
 
+- (void)allTestsRanOK
+{
+	[window makeKeyAndOrderFront:nil];
+	[textField setStringValue:@"All tests ran OK"];
+}
 
 @end

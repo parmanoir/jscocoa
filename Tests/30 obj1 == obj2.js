@@ -11,7 +11,6 @@
 	*/
 
 
-
 	var obj1 = NSWorkspace.sharedWorkspace
 	var obj2 = NSWorkspace.sharedWorkspace
 	

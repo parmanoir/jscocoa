@@ -37,6 +37,10 @@
 	{
 		delayedTests[name] = !!status
 		log('Pending test ' + name + ' ' + (status ? 'complete' : 'FAIL'))
-		if (delayedTestPendingCount() == 0)	log('All pending tests ran, ' + delayedTestSuccessCount() + '/' + delayedTestCount() + ' successful')
+		if (delayedTestPendingCount() == 0)	
+		{
+			log('All pending tests ran, ' + delayedTestSuccessCount() + '/' + delayedTestCount() + ' successful')
+			NSApplication.sharedApplication.delegate.allTestsRanOK
+		}
 	}
 	

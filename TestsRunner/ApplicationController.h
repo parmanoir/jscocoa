@@ -13,6 +13,8 @@
 @interface ApplicationController : NSObject {
 
 	IBOutlet	id webViewUsedAsContextSource;
+	IBOutlet	id window;
+	IBOutlet	id textField;
 	
 	JSCocoa* jsc2;
 	id topObjects;
