@@ -206,7 +206,8 @@
 @implementation JSCocoaLib
 
 //
-// Classes are returned as strings, as sometimes adding them to an array crashes
+// Class list 
+//	Some classes are skipped as adding them to an array crashes (Zombie, classes derived from Object or NSProxy)
 //
 + (NSArray*)classes
 {
@@ -222,24 +223,38 @@
 		const char* name= class_getName(class);
 		if (!name)		continue;
 		id className	= [NSString stringWithUTF8String:name];
+		
+		id superclass	= class_getSuperclass(class);
+		id superclassName = superclass ? [NSString stringWithUTF8String:class_getName(superclass)] : @"";
+		
+		BOOL	isKindOfNSProxy = NO;
+		id c = class;
+		while (c)
+		{
+			if ([[NSString stringWithUTF8String:class_getName(c)] isEqualToString:@"NSProxy"])	isKindOfNSProxy = YES;
+			c = class_getSuperclass(c);
+		}
+		
 //		NSLog(@">>class %@", className);
 		if ([className hasPrefix:@"_NSZombie_"] 
 		||	[className isEqualToString:@"Object"]
-		||	[className isEqualToString:@"List"]
-//		||	[className isEqualToString:@"NSMessageBuilder"]
-//		||	[className isEqualToString:@"NSLeafProxy"]
-//		||	[className isEqualToString:@"__NSGenericDeallocHandler"]
+		||	[superclassName isEqualToString:@"Object"]
+		||	[className isEqualToString:@"NSMessageBuilder"]
+		||	[className isEqualToString:@"NSLeafProxy"]
+		||	[className isEqualToString:@"__NSGenericDeallocHandler"]
+		||	isKindOfNSProxy
 		)
 		{
 //			NSLog(@"skipping %@", className);
 			continue;
 		}
-		[classArray addObject:className];
+//		[classArray addObject:className];
+		[classArray addObject:class];
 
 	}
 
 	free(classList);
-	
+	NSLog(@"done with class list****************");
 	return	classArray;
 }
 
@@ -247,13 +262,13 @@
 {
 	id classes = [self classes];
 	NSMutableArray* classArray	= [NSMutableArray array];
-	for (id className in classes)
+	for (id class in classes)
 	{
-		id class = objc_getClass([className UTF8String]);
+//		id class = objc_getClass([className UTF8String]);
 		id superclass = class_getSuperclass(class);
 		if (superclass)	continue;
 
-		[classArray addObject:className];
+		[classArray addObject:class];
 	}
 	return	classArray;
 }
@@ -261,6 +276,9 @@
 @end
 
 
+//
+// Runtime information
+//
 @implementation NSObject(ClassWalker)
 
 //
@@ -375,13 +393,80 @@ static id copyMethods(Class class, NSMutableArray* array, NSString* type)
 }
 
 
-@end
+//
+// Subclasses
+//
+
+// Recursively go breadth first all a class' subclasses
+static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDictionary* subclassesHash)
+{
+	// Add ourselves
+	[array addObject:class];
+	
+	id className	= [NSString stringWithUTF8String:class_getName(class)];
+	id subclasses = [subclassesHash objectForKey:className];
+	for (id subclass in subclasses)
+	{
+		populateSubclasses(subclass, array, subclassesHash);
+	}
+}
+// Build a hash of className : [direct subclasses] then walk it down recursively.
++ (id)subclasses
+{
+	id classes		= [JSCocoaLib classes];
+	id subclasses	= [NSMutableArray array];
+	id subclassesHash	= [NSMutableDictionary dictionary];
+	
+	for (id class in classes)
+	{
+		id superclass		= [class superclass];
+		if (!superclass)	continue;
+		id superclassName	= [NSString stringWithUTF8String:class_getName(superclass)];
 		
-		// Handle 
-		//	_superclass
-		//	_derivationLevel
-		//	_subclasses
-		//	_ownSubclasses 
-		//	_methods
-		//	_ownMethods
-		//	_ivars _properties
+		id subclassesArray	= [subclassesHash objectForKey:superclassName];
+		if (!subclassesArray)
+		{
+			subclassesArray	= [NSMutableArray array];
+			[subclassesHash setObject:subclassesArray forKey:superclassName];
+		}
+		[subclassesArray addObject:class];
+	}
+	
+	// (Optional) sort by class name
+	for (id className in subclassesHash)
+	{
+		id subclassesArray = [subclassesHash objectForKey:className];
+		[subclassesArray sortUsingSelector:@selector(description)];
+		[subclassesHash setObject:subclassesArray forKey:className];
+	}
+	
+	populateSubclasses(self, subclasses, subclassesHash);
+	
+	return	subclasses;
+}
+- (id)subclasses
+{
+	return [[self class] subclasses];
+}
+
++ (id)subclassTree
+{
+	id subclasses = [self subclasses];
+	id str = [NSMutableString string];
+	for (id subclass in subclasses)
+	{
+		int level = [subclass derivationLevel];
+		for (int i=0; i<level; i++)
+			[str appendString:@" "];
+		[str appendString:[NSString stringWithUTF8String:class_getName(subclass)]];
+		[str appendString:@"\n"];
+	}
+	return	str;
+}
+- (id)subclassTree
+{
+	return [[self class] subclassTree];
+}
+
+
+@end

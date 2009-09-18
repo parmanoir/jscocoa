@@ -234,7 +234,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc = YES;
-	
+
 	return	self;
 }
 
