@@ -28,7 +28,7 @@ JSCocoaController* jsc = nil;
 //	NSLog(@"sizeof(int)=%d", sizeof(int));
 //	NSLog(@"sizeof(long)=%d", sizeof(long));
 //	NSLog(@"sizeof(CGFloat)=%d", sizeof(CGFloat));
-	NSLog(@"****Running %@****", [JSCocoa runningArchitecture]);
+	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 }
 
 - (void)applicationWillTerminate:(id)notif

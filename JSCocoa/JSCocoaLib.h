@@ -52,3 +52,11 @@
 - (int)typeCount;
 
 @end
+
+
+@interface JSCocoaLib : NSObject
+
++ (id)rootclasses;
++ (id)classes;
+
+@end

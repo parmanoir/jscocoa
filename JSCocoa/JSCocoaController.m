@@ -1888,6 +1888,17 @@ int	liveInstanceCount	= 0;
 	NSLog(@"%@", boxedObjects);
 }
 
+#pragma mark Class inspection
++ (id)rootclasses
+{
+	return [JSCocoaLib rootclasses];
+}
+
++ (id)classes
+{
+	return [JSCocoaLib classes];
+}
+
 #pragma mark Distant Object Handling (DO)
 //
 // Distant object handling, courtesy of Gus Mueller
@@ -2323,6 +2334,7 @@ int	liveInstanceCount	= 0;
 }
 
 // Finalize - same as dealloc
+static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 - (void)finalize
 {
 	JSObjectRef hash = NULL;
@@ -2342,6 +2354,7 @@ int	liveInstanceCount	= 0;
 	objc_msgSendSuper(&superData, @selector(finalize));
 	
 	// Ignore warning about missing [super finalize] as the call IS made via objc_msgSendSuper
+	if (__warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper)	[super finalize];
 }
 
 
@@ -2571,6 +2584,16 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 			return	JSValueMakeNumber(ctx, doubleValue);
 		}
 	}
+
+	// Describe ourselves
+	if ([propertyName isEqualToString:@"toString"])
+	{
+		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return '(JSCocoa global object)'");
+		JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+		JSStringRelease(scriptJS);
+		return	fn;
+	}
+
 	return	NULL;
 }
 
@@ -4032,85 +4055,91 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			return	o;
 		}
 	}
+
 	// Javascript custom methods
-	if ([privateObject.methodName isEqualToString:@"toString"] || [privateObject.methodName isEqualToString:@"valueOf"])
+	id methodName = privateObject.methodName;
+	// Possible optimization if more custom methods are handled
+//	if ([customCallPaths valueForKey:methodName])
 	{
-		JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
-		if ([privateObject.methodName isEqualToString:@"toString"])	
+		if ([methodName isEqualToString:@"toString"] || [methodName isEqualToString:@"valueOf"])
 		{
-			JSStringRef str = JSValueToStringCopy(ctx, jsValue, NULL);
-			JSValueRef ret = JSValueMakeString(ctx, str);
-			JSStringRelease(str);
-			return ret;
+			JSValueRef jsValue = valueOfCallback(ctx, function, thisObject, 0, NULL, NULL);
+			if ([privateObject.methodName isEqualToString:@"toString"])	
+			{
+				JSStringRef str = JSValueToStringCopy(ctx, jsValue, NULL);
+				JSValueRef ret = JSValueMakeString(ctx, str);
+				JSStringRelease(str);
+				return ret;
+			}
+			return	jsValue;
 		}
-		return	jsValue;
-	}
-	
-	//
-	// Super/Swizzled handling : get method name and move js arguments to C array
-	//
-	//	call this.Super(arguments) to call parent method
-	//	call this.Original(arguments) to call swizzled method
-	//
-	if ([privateObject.methodName isEqualToString:@"Super"] || [privateObject.methodName isEqualToString:@"Original"])
-	{
-		id methodName = privateObject.methodName;
-		BOOL callingSwizzled = [methodName isEqualToString:@"Original"];
-		if (argumentCount != 1)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants one argument array", methodName]), NULL;
+		
+		//
+		// Super/Swizzled handling : get method name and move js arguments to C array
+		//
+		//	call this.Super(arguments) to call parent method
+		//	call this.Original(arguments) to call swizzled method
+		//
+		if ([methodName isEqualToString:@"Super"] || [methodName isEqualToString:@"Original"])
+		{
+			id methodName = privateObject.methodName;
+			BOOL callingSwizzled = [methodName isEqualToString:@"Original"];
+			if (argumentCount != 1)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants one argument array", methodName]), NULL;
 
-		// Get argument object
-		JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
-		
-		// Get argument count
-		JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
-		JSValueRef	jsLength = JSObjectGetProperty(ctx, argumentObject, jsLengthName, NULL);
-		JSStringRelease(jsLengthName);
-		if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ has no arguments", methodName]), NULL;
-		
-		int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
-		if (superArgumentCount)
-		{
-			superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
-			for (i=0; i<superArgumentCount; i++)
-				superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
-		}
+			// Get argument object
+			JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
+			
+			// Get argument count
+			JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
+			JSValueRef	jsLength = JSObjectGetProperty(ctx, argumentObject, jsLengthName, NULL);
+			JSStringRelease(jsLengthName);
+			if (JSValueGetType(ctx, jsLength) != kJSTypeNumber)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ has no arguments", methodName]), NULL;
+			
+			int i, superArgumentCount = (int)JSValueToNumber(ctx, jsLength, NULL);
+			if (superArgumentCount)
+			{
+				superArguments = malloc(sizeof(JSValueRef)*superArgumentCount);
+				for (i=0; i<superArgumentCount; i++)
+					superArguments[i] = JSObjectGetPropertyAtIndex(ctx, argumentObject, i, NULL);
+			}
 
-		argumentCount = superArgumentCount;
-		
-		// Get method name and associated class (need class for obj_msgSendSuper)
-		JSStringRef	jsCalleeName = JSStringCreateWithUTF8CString("callee");
-		JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
-		JSStringRelease(jsCalleeName);
-		JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
-		superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
-		if (!superSelector)	
-		{
-			if (superArguments)		free(superArguments);
-			if (callingSwizzled)	return	throwException(ctx, exception, @"Original couldn't find swizzled method"), NULL;
-			return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
-		}
-		superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
-		
-		// Swizzled handling : we're just changing the selector
-		if (callingSwizzled)
-		{
-			if (![superSelector hasPrefix:OriginalMethodPrefix])
+			argumentCount = superArgumentCount;
+			
+			// Get method name and associated class (need class for obj_msgSendSuper)
+			JSStringRef	jsCalleeName = JSStringCreateWithUTF8CString("callee");
+			JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
+			JSStringRelease(jsCalleeName);
+			JSObjectRef jsCallee = JSValueToObject(ctx, jsCalleeValue, NULL);
+			superSelector = [[JSCocoaController controllerFromContext:ctx] selectorForJSFunction:jsCallee];
+			if (!superSelector)	
 			{
 				if (superArguments)		free(superArguments);
-				return	throwException(ctx, exception, [NSString stringWithFormat:@"Original called on a non swizzled method (%@)", superSelector]), NULL;
+				if (callingSwizzled)	return	throwException(ctx, exception, @"Original couldn't find swizzled method"), NULL;
+				return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
 			}
-			function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-			JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
-			private.type		= @"method";
-			private.methodName	= superSelector;
+			superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
 			
-			superSelector		= NULL;
-			superSelectorClass	= NULL;
+			// Swizzled handling : we're just changing the selector
+			if (callingSwizzled)
+			{
+				if (![superSelector hasPrefix:OriginalMethodPrefix])
+				{
+					if (superArguments)		free(superArguments);
+					return	throwException(ctx, exception, [NSString stringWithFormat:@"Original called on a non swizzled method (%@)", superSelector]), NULL;
+				}
+				function = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+				JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
+				private.type		= @"method";
+				private.methodName	= superSelector;
+				
+				superSelector		= NULL;
+				superSelectorClass	= NULL;
+			}
+			
+			// Don't call NSObject's safeDealloc as it doesn't exist
+			if ([superSelector isEqualToString:@"safeDealloc"] && superSelectorClass == [NSObject class])
+				return	JSValueMakeUndefined(ctx);
 		}
-		
-		// Don't call NSObject's safeDealloc as it doesn't exist
-		if ([superSelector isEqualToString:@"safeDealloc"] && superSelectorClass == [NSObject class])
-			return	JSValueMakeUndefined(ctx);
 	}
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;

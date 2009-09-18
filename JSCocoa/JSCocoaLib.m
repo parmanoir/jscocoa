@@ -201,3 +201,187 @@
 
 @end
 
+
+
+@implementation JSCocoaLib
+
+//
+// Classes are returned as strings, as sometimes adding them to an array crashes
+//
++ (NSArray*)classes
+{
+	int classCount		= objc_getClassList(nil, 0);
+	Class* classList	= malloc(sizeof(Class)*classCount);
+	objc_getClassList(classList, classCount);
+	
+	
+	NSMutableArray* classArray	= [NSMutableArray array];
+	for (int i=0; i<classCount; i++)
+	{
+		id class		= classList[i];
+		const char* name= class_getName(class);
+		if (!name)		continue;
+		id className	= [NSString stringWithUTF8String:name];
+//		NSLog(@">>class %@", className);
+		if ([className hasPrefix:@"_NSZombie_"] 
+		||	[className isEqualToString:@"Object"]
+		||	[className isEqualToString:@"List"]
+//		||	[className isEqualToString:@"NSMessageBuilder"]
+//		||	[className isEqualToString:@"NSLeafProxy"]
+//		||	[className isEqualToString:@"__NSGenericDeallocHandler"]
+		)
+		{
+//			NSLog(@"skipping %@", className);
+			continue;
+		}
+		[classArray addObject:className];
+
+	}
+
+	free(classList);
+	
+	return	classArray;
+}
+
++ (NSArray*)rootclasses
+{
+	id classes = [self classes];
+	NSMutableArray* classArray	= [NSMutableArray array];
+	for (id className in classes)
+	{
+		id class = objc_getClass([className UTF8String]);
+		id superclass = class_getSuperclass(class);
+		if (superclass)	continue;
+
+		[classArray addObject:className];
+	}
+	return	classArray;
+}
+
+@end
+
+
+@implementation NSObject(ClassWalker)
+
+//
+// Returns which framework containing the class
+//
++ (id)classImage
+{
+	const char* name = class_getImageName(self);
+	if (!name)	return	nil;
+	return	[NSString stringWithUTF8String:name];
+}
+- (id)classImage
+{	
+	return [[self class] classImage];
+}
+
+
+//
+// Derivation path
+//	derivationPath(NSButton) = NSObject, NSResponder, NSView, NSControl, NSButton
+//
++ (id)derivationPath
+{
+	int level = -1;
+	id class = self;
+	id classes = [NSMutableArray array];
+	while (class)
+	{
+		[classes insertObject:class atIndex:0];
+		level++;
+		class = [class superclass];
+	}
+	return	classes;
+}
+- (id)derivationPath
+{
+	return [[self class] derivationPath];
+}
+
+//
+// Derivation level
+//
++ (int)derivationLevel
+{
+	return [[self derivationPath] count]-1;
+}
+- (int)derivationLevel
+{
+	return [[self class] derivationLevel];
+}
+
+//
+// Methods
+//
+
+// Copy all class or instance (type) methods of a class in an array
+static id copyMethods(Class class, NSMutableArray* array, NSString* type)
+{
+	unsigned int methodCount;
+	if ([type isEqualToString:@"class"])
+		class = objc_getMetaClass(class_getName(class));
+
+	Method* methods = class_copyMethodList(class, &methodCount);
+	for (int i=0; i<methodCount; i++)
+	{
+		Method m	= methods[i];
+		Dl_info info;
+		dladdr(method_getImplementation(m), &info);
+
+		id name		= NSStringFromSelector(method_getName(m));
+		id encoding	= [NSString stringWithUTF8String:method_getTypeEncoding(m)];
+		id framework= [NSString stringWithUTF8String:info.dli_fname];
+		
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			encoding,	@"encoding",
+			type,		@"type",
+			class,		@"class",
+			framework, @"framework",
+			nil];
+			
+		[array addObject:hash];
+	}
+	free(methods);
+	return	array;
+}
++ (id)ownMethods
+{
+	id methods = [NSMutableArray array];
+	copyMethods([self class], methods, @"class");
+	copyMethods([self class], methods, @"instance");
+	return methods;
+}
+- (id)ownMethods
+{
+	return [[self class] ownMethods];
+}
++ (id)methods
+{
+	id classes	= [self derivationPath];
+	id methods	= [NSMutableArray array];
+	for (id class in classes)
+	{
+		id m = [class ownMethods];
+		[methods addObjectsFromArray:m];
+	}
+	return	methods;
+}
+- (id)methods
+{
+	return [[self class] methods];
+}
+
+
+@end
+		
+		// Handle 
+		//	_superclass
+		//	_derivationLevel
+		//	_subclasses
+		//	_ownSubclasses 
+		//	_methods
+		//	_ownMethods
+		//	_ivars _properties

@@ -102,6 +102,13 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (void)logBoxedObjects;
 
 //
+// Class inspection (shortcuts to JSCocoaLib)
+//
++ (id)rootclasses;
++ (id)classes;
+
+
+//
 // Class handling
 //
 + (BOOL)overloadInstanceMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext;
