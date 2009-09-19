@@ -426,8 +426,7 @@
 	
 	return dict;
 */
-	// Disabled for now, as the hash hangs the app.
-	return	nil;
+	return	@"Disabled for now, as the resulting hash hangs the app while goring memory";
 }
 
 @end

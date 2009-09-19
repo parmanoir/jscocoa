@@ -113,7 +113,7 @@
 	//
 	// Runtime description
 	//
-	log('runtime description=' + JSCocoa.runtimeReport)
+//	log('runtime description=' + JSCocoa.runtimeReport)
 	
 	
 	

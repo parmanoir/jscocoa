@@ -904,6 +904,9 @@
 			3D12B62F106463DA002CD55A /* PBXTextBookmark */ = 3D12B62F106463DA002CD55A /* PBXTextBookmark */;
 			3D12B630106463DA002CD55A /* PBXTextBookmark */ = 3D12B630106463DA002CD55A /* PBXTextBookmark */;
 			3D12B631106463DA002CD55A /* PBXTextBookmark */ = 3D12B631106463DA002CD55A /* PBXTextBookmark */;
+			3D12B636106495AF002CD55A /* PBXTextBookmark */ = 3D12B636106495AF002CD55A /* PBXTextBookmark */;
+			3D12B637106495AF002CD55A /* PBXTextBookmark */ = 3D12B637106495AF002CD55A /* PBXTextBookmark */;
+			3D12B63A106495BC002CD55A /* PBXTextBookmark */ = 3D12B63A106495BC002CD55A /* PBXTextBookmark */;
 			3D9D1E611063394100A0C3CC = 3D9D1E611063394100A0C3CC /* PBXTextBookmark */;
 			3D9D1E621063394100A0C3CC = 3D9D1E621063394100A0C3CC /* PBXTextBookmark */;
 			3D9D1E641063394100A0C3CC = 3D9D1E641063394100A0C3CC /* PBXTextBookmark */;
@@ -930,7 +933,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 335";
 		rLen = 0;
-		rLoc = 12209;
+		rLoc = 12233;
 		rType = 0;
 		vrLen = 1297;
 		vrLoc = 6662;
@@ -953,8 +956,9 @@
 		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {909, 1309}}";
-			sepNavSelRange = "{2625, 13}";
-			sepNavVisRange = "{802, 1843}";
+			sepNavSelRange = "{2589, 0}";
+			sepNavVisRange = "{802, 1845}";
+			sepNavWindowFrame = "{{670, 54}, {968, 1004}}";
 		};
 	};
 	3D12AFF110633EF6002CD55A /* PBXTextBookmark */ = {
@@ -1029,7 +1033,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 335";
 		rLen = 0;
-		rLoc = 12209;
+		rLoc = 12233;
 		rType = 0;
 		vrLen = 1338;
 		vrLoc = 6662;
@@ -1039,7 +1043,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 335";
 		rLen = 0;
-		rLoc = 12209;
+		rLoc = 12233;
 		rType = 0;
 		vrLen = 1297;
 		vrLoc = 6662;
@@ -1089,7 +1093,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 323";
 		rLen = 0;
-		rLoc = 11618;
+		rLoc = 11642;
 		rType = 0;
 		vrLen = 1297;
 		vrLoc = 6662;
@@ -1139,7 +1143,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 322";
 		rLen = 0;
-		rLoc = 11618;
+		rLoc = 11642;
 		rType = 0;
 		vrLen = 1316;
 		vrLoc = 6662;
@@ -1236,7 +1240,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 322";
 		rLen = 0;
-		rLoc = 11618;
+		rLoc = 11642;
 		rType = 0;
 		vrLen = 1316;
 		vrLoc = 6662;
@@ -1286,7 +1290,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 318";
 		rLen = 0;
-		rLoc = 11617;
+		rLoc = 11641;
 		rType = 0;
 		vrLen = 1416;
 		vrLoc = 6344;
@@ -1346,7 +1350,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 315";
 		rLen = 0;
-		rLoc = 11554;
+		rLoc = 11578;
 		rType = 0;
 		vrLen = 1360;
 		vrLoc = 6344;
@@ -1406,7 +1410,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 299";
 		rLen = 0;
-		rLoc = 11292;
+		rLoc = 11316;
 		rType = 0;
 		vrLen = 1278;
 		vrLoc = 6276;
@@ -1476,7 +1480,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 299";
 		rLen = 0;
-		rLoc = 11292;
+		rLoc = 11316;
 		rType = 0;
 		vrLen = 1278;
 		vrLoc = 6276;
@@ -1526,7 +1530,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 299";
 		rLen = 0;
-		rLoc = 11292;
+		rLoc = 11316;
 		rType = 0;
 		vrLen = 1280;
 		vrLoc = 6276;
@@ -1586,7 +1590,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 314";
 		rLen = 0;
-		rLoc = 11858;
+		rLoc = 11882;
 		rType = 0;
 		vrLen = 1272;
 		vrLoc = 6276;
@@ -1646,7 +1650,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 334";
 		rLen = 0;
-		rLoc = 12870;
+		rLoc = 12894;
 		rType = 0;
 		vrLen = 1327;
 		vrLoc = 6373;
@@ -1706,7 +1710,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 333";
 		rLen = 0;
-		rLoc = 12698;
+		rLoc = 12722;
 		rType = 0;
 		vrLen = 1465;
 		vrLoc = 6373;
@@ -1766,7 +1770,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 349";
 		rLen = 0;
-		rLoc = 12838;
+		rLoc = 12862;
 		rType = 0;
 		vrLen = 1368;
 		vrLoc = 6792;
@@ -1816,7 +1820,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 329";
 		rLen = 0;
-		rLoc = 12452;
+		rLoc = 12476;
 		rType = 0;
 		vrLen = 1419;
 		vrLoc = 6792;
@@ -1866,7 +1870,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 341";
 		rLen = 0;
-		rLoc = 12699;
+		rLoc = 12723;
 		rType = 0;
 		vrLen = 1496;
 		vrLoc = 6792;
@@ -1916,7 +1920,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 326";
 		rLen = 0;
-		rLoc = 12136;
+		rLoc = 12160;
 		rType = 0;
 		vrLen = 1567;
 		vrLoc = 6792;
@@ -1966,7 +1970,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 368";
 		rLen = 0;
-		rLoc = 13132;
+		rLoc = 13156;
 		rType = 0;
 		vrLen = 1635;
 		vrLoc = 7104;
@@ -2023,7 +2027,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 367";
 		rLen = 0;
-		rLoc = 13122;
+		rLoc = 13146;
 		rType = 0;
 		vrLen = 1653;
 		vrLoc = 7104;
@@ -2083,7 +2087,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 367";
 		rLen = 0;
-		rLoc = 13122;
+		rLoc = 13146;
 		rType = 0;
 		vrLen = 1653;
 		vrLoc = 7104;
@@ -2123,7 +2127,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 367";
 		rLen = 0;
-		rLoc = 13122;
+		rLoc = 13146;
 		rType = 0;
 		vrLen = 1635;
 		vrLoc = 7104;
@@ -2183,7 +2187,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 367";
 		rLen = 0;
-		rLoc = 13122;
+		rLoc = 13146;
 		rType = 0;
 		vrLen = 1635;
 		vrLoc = 7104;
@@ -2233,7 +2237,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 367";
 		rLen = 0;
-		rLoc = 13122;
+		rLoc = 13146;
 		rType = 0;
 		vrLen = 1659;
 		vrLoc = 7104;
@@ -2263,7 +2267,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 391";
 		rLen = 0;
-		rLoc = 18464;
+		rLoc = 18488;
 		rType = 0;
 		vrLen = 1659;
 		vrLoc = 7133;
@@ -2313,7 +2317,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 391";
 		rLen = 0;
-		rLoc = 18464;
+		rLoc = 18488;
 		rType = 0;
 		vrLen = 1659;
 		vrLoc = 7133;
@@ -2343,7 +2347,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 389";
 		rLen = 0;
-		rLoc = 18464;
+		rLoc = 18488;
 		rType = 0;
 		vrLen = 1613;
 		vrLoc = 7108;
@@ -2353,7 +2357,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 42";
 		rLen = 0;
-		rLoc = 2645;
+		rLoc = 2647;
 		rType = 0;
 		vrLen = 1156;
 		vrLoc = 0;
@@ -2393,7 +2397,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 384";
 		rLen = 0;
-		rLoc = 15179;
+		rLoc = 15203;
 		rType = 0;
 		vrLen = 1669;
 		vrLoc = 7108;
@@ -2423,7 +2427,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 386";
 		rLen = 0;
-		rLoc = 14375;
+		rLoc = 14399;
 		rType = 0;
 		vrLen = 1659;
 		vrLoc = 7244;
@@ -2463,7 +2467,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1669;
 		vrLoc = 7244;
@@ -2537,7 +2541,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1669;
 		vrLoc = 7244;
@@ -2577,7 +2581,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1664;
 		vrLoc = 7244;
@@ -2627,7 +2631,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1664;
 		vrLoc = 7244;
@@ -2694,7 +2698,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1669;
 		vrLoc = 7244;
@@ -2751,7 +2755,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1664;
 		vrLoc = 7244;
@@ -2771,7 +2775,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 383";
 		rLen = 0;
-		rLoc = 13885;
+		rLoc = 13909;
 		rType = 0;
 		vrLen = 1669;
 		vrLoc = 7244;
@@ -2781,7 +2785,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 397";
 		rLen = 0;
-		rLoc = 14375;
+		rLoc = 14399;
 		rType = 0;
 		vrLen = 1968;
 		vrLoc = 7261;
@@ -2821,7 +2825,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 397";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 7261;
@@ -2861,7 +2865,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 387";
 		rLen = 0;
-		rLoc = 13972;
+		rLoc = 13996;
 		rType = 0;
 		vrLen = 2067;
 		vrLoc = 7261;
@@ -2901,7 +2905,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 391";
 		rLen = 0;
-		rLoc = 14121;
+		rLoc = 14145;
 		rType = 0;
 		vrLen = 1852;
 		vrLoc = 7620;
@@ -3021,7 +3025,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 399";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 1859;
 		vrLoc = 7619;
@@ -3061,7 +3065,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 401";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 1859;
 		vrLoc = 7619;
@@ -3101,7 +3105,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 401";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 1850;
 		vrLoc = 7619;
@@ -3151,7 +3155,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 401";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 1850;
 		vrLoc = 7619;
@@ -3191,7 +3195,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 399";
 		rLen = 0;
-		rLoc = 14339;
+		rLoc = 14363;
 		rType = 0;
 		vrLen = 1852;
 		vrLoc = 7619;
@@ -4045,7 +4049,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 408";
 		rLen = 0;
-		rLoc = 14121;
+		rLoc = 14145;
 		rType = 0;
 		vrLen = 1714;
 		vrLoc = 8323;
@@ -4195,7 +4199,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 400";
 		rLen = 13;
-		rLoc = 13290;
+		rLoc = 13314;
 		rType = 0;
 		vrLen = 1578;
 		vrLoc = 8588;
@@ -4225,7 +4229,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 408";
 		rLen = 0;
-		rLoc = 13617;
+		rLoc = 13641;
 		rType = 0;
 		vrLen = 1764;
 		vrLoc = 8530;
@@ -4265,7 +4269,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 408";
 		rLen = 0;
-		rLoc = 13617;
+		rLoc = 13641;
 		rType = 0;
 		vrLen = 1633;
 		vrLoc = 8808;
@@ -4295,7 +4299,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 408";
 		rLen = 0;
-		rLoc = 13617;
+		rLoc = 13641;
 		rType = 0;
 		vrLen = 1633;
 		vrLoc = 8808;
@@ -4315,7 +4319,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 459";
 		rLen = 0;
-		rLoc = 15694;
+		rLoc = 15718;
 		rType = 0;
 		vrLen = 1751;
 		vrLoc = 9104;
@@ -4402,7 +4406,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 459";
 		rLen = 0;
-		rLoc = 15694;
+		rLoc = 15718;
 		rType = 0;
 		vrLen = 1749;
 		vrLoc = 9106;
@@ -4442,7 +4446,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 459";
 		rLen = 0;
-		rLoc = 15694;
+		rLoc = 15718;
 		rType = 0;
 		vrLen = 1749;
 		vrLoc = 9106;
@@ -4482,7 +4486,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 459";
 		rLen = 0;
-		rLoc = 15694;
+		rLoc = 15718;
 		rType = 0;
 		vrLen = 1749;
 		vrLoc = 9106;
@@ -4502,7 +4506,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 1925;
 		vrLoc = 9104;
@@ -4576,7 +4580,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 1927;
 		vrLoc = 9104;
@@ -4606,7 +4610,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 1910;
 		vrLoc = 9138;
@@ -4646,7 +4650,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 1888;
 		vrLoc = 9141;
@@ -4686,7 +4690,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 1890;
 		vrLoc = 9142;
@@ -4726,7 +4730,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 439";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 1890;
 		vrLoc = 9142;
@@ -4736,7 +4740,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 1950;
 		vrLoc = 9145;
@@ -4766,7 +4770,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 1950;
 		vrLoc = 9145;
@@ -4837,7 +4841,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 417";
 		rLen = 14;
-		rLoc = 13862;
+		rLoc = 13886;
 		rType = 0;
 		vrLen = 1954;
 		vrLoc = 9141;
@@ -4857,7 +4861,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 417";
 		rLen = 14;
-		rLoc = 13862;
+		rLoc = 13886;
 		rType = 0;
 		vrLen = 1989;
 		vrLoc = 9106;
@@ -4867,7 +4871,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 441";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 2037;
 		vrLoc = 9106;
@@ -4934,7 +4938,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 441";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 2037;
 		vrLoc = 9106;
@@ -4964,7 +4968,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 441";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 2068;
 		vrLoc = 9106;
@@ -5004,7 +5008,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 441";
 		rLen = 0;
-		rLoc = 14684;
+		rLoc = 14708;
 		rType = 0;
 		vrLen = 2145;
 		vrLoc = 9106;
@@ -5081,7 +5085,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 442";
 		rLen = 0;
-		rLoc = 14527;
+		rLoc = 14551;
 		rType = 0;
 		vrLen = 2087;
 		vrLoc = 9106;
@@ -5131,7 +5135,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 443";
 		rLen = 0;
-		rLoc = 14546;
+		rLoc = 14570;
 		rType = 0;
 		vrLen = 2103;
 		vrLoc = 9106;
@@ -5205,7 +5209,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 445";
 		rLen = 0;
-		rLoc = 14683;
+		rLoc = 14707;
 		rType = 0;
 		vrLen = 2110;
 		vrLoc = 9106;
@@ -5265,7 +5269,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 449";
 		rLen = 0;
-		rLoc = 14727;
+		rLoc = 14751;
 		rType = 0;
 		vrLen = 2082;
 		vrLoc = 9106;
@@ -5335,7 +5339,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 448";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 9499;
@@ -5402,7 +5406,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 448";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 9499;
@@ -5462,7 +5466,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 448";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 9499;
@@ -5512,7 +5516,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 453";
 		rLen = 0;
-		rLoc = 15098;
+		rLoc = 15122;
 		rType = 0;
 		vrLen = 2056;
 		vrLoc = 9369;
@@ -5632,7 +5636,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 449";
 		rLen = 0;
-		rLoc = 15088;
+		rLoc = 15112;
 		rType = 0;
 		vrLen = 2023;
 		vrLoc = 9459;
@@ -5699,7 +5703,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 448";
 		rLen = 0;
-		rLoc = 14880;
+		rLoc = 14904;
 		rType = 0;
 		vrLen = 2081;
 		vrLoc = 9462;
@@ -5766,7 +5770,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 436";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 2011;
 		vrLoc = 9426;
@@ -5826,7 +5830,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 460";
 		rLen = 0;
-		rLoc = 15337;
+		rLoc = 15361;
 		rType = 0;
 		vrLen = 2073;
 		vrLoc = 9459;
@@ -5886,7 +5890,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 445";
 		rLen = 0;
-		rLoc = 14880;
+		rLoc = 14904;
 		rType = 0;
 		vrLen = 2105;
 		vrLoc = 9426;
@@ -5956,7 +5960,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 445";
 		rLen = 0;
-		rLoc = 14880;
+		rLoc = 14904;
 		rType = 0;
 		vrLen = 2105;
 		vrLoc = 9426;
@@ -5986,7 +5990,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 14683;
+		rLoc = 14707;
 		rType = 0;
 		vrLen = 2123;
 		vrLoc = 9426;
@@ -6026,7 +6030,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 14678;
+		rLoc = 14702;
 		rType = 0;
 		vrLen = 2139;
 		vrLoc = 9426;
@@ -6076,7 +6080,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 14678;
+		rLoc = 14702;
 		rType = 0;
 		vrLen = 2139;
 		vrLoc = 9426;
@@ -6116,7 +6120,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 440";
 		rLen = 0;
-		rLoc = 14678;
+		rLoc = 14702;
 		rType = 0;
 		vrLen = 2139;
 		vrLoc = 9426;
@@ -6146,7 +6150,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 436";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 2111;
 		vrLoc = 9459;
@@ -6196,7 +6200,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 436";
 		rLen = 0;
-		rLoc = 14522;
+		rLoc = 14546;
 		rType = 0;
 		vrLen = 2111;
 		vrLoc = 9459;
@@ -6236,7 +6240,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 442";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2111;
 		vrLoc = 9459;
@@ -6276,7 +6280,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 442";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2111;
 		vrLoc = 9459;
@@ -6306,7 +6310,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 442";
 		rLen = 19;
-		rLoc = 14703;
+		rLoc = 14727;
 		rType = 0;
 		vrLen = 2202;
 		vrLoc = 9368;
@@ -6316,7 +6320,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 485";
 		rLen = 0;
-		rLoc = 15796;
+		rLoc = 15820;
 		rType = 0;
 		vrLen = 1965;
 		vrLoc = 9784;
@@ -6360,7 +6364,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 508";
 		rLen = 0;
-		rLoc = 16395;
+		rLoc = 16419;
 		rType = 0;
 		vrLen = 1805;
 		vrLoc = 10457;
@@ -6494,7 +6498,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 507";
 		rLen = 0;
-		rLoc = 16381;
+		rLoc = 16405;
 		rType = 0;
 		vrLen = 1766;
 		vrLoc = 10496;
@@ -6534,7 +6538,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 521";
 		rLen = 0;
-		rLoc = 16620;
+		rLoc = 16644;
 		rType = 0;
 		vrLen = 1560;
 		vrLoc = 10913;
@@ -6594,7 +6598,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 500";
 		rLen = 0;
-		rLoc = 16311;
+		rLoc = 16335;
 		rType = 0;
 		vrLen = 1487;
 		vrLoc = 11014;
@@ -6664,7 +6668,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 531";
 		rLen = 0;
-		rLoc = 16735;
+		rLoc = 16759;
 		rType = 0;
 		vrLen = 1425;
 		vrLoc = 11149;
@@ -6734,7 +6738,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 531";
 		rLen = 0;
-		rLoc = 16735;
+		rLoc = 16759;
 		rType = 0;
 		vrLen = 1425;
 		vrLoc = 11149;
@@ -6754,7 +6758,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 552";
 		rLen = 0;
-		rLoc = 17306;
+		rLoc = 17330;
 		rType = 0;
 		vrLen = 1632;
 		vrLoc = 11620;
@@ -6804,7 +6808,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 552";
 		rLen = 0;
-		rLoc = 17306;
+		rLoc = 17330;
 		rType = 0;
 		vrLen = 1632;
 		vrLoc = 11620;
@@ -6834,7 +6838,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 544";
 		rLen = 0;
-		rLoc = 17227;
+		rLoc = 17251;
 		rType = 0;
 		vrLen = 1641;
 		vrLoc = 11620;
@@ -6874,7 +6878,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 548";
 		rLen = 0;
-		rLoc = 17259;
+		rLoc = 17283;
 		rType = 0;
 		vrLen = 1660;
 		vrLoc = 11620;
@@ -6924,7 +6928,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 548";
 		rLen = 0;
-		rLoc = 17259;
+		rLoc = 17283;
 		rType = 0;
 		vrLen = 1660;
 		vrLoc = 11620;
@@ -6991,7 +6995,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 557";
 		rLen = 0;
-		rLoc = 17374;
+		rLoc = 17398;
 		rType = 0;
 		vrLen = 1703;
 		vrLoc = 11637;
@@ -7041,7 +7045,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 323";
 		rLen = 0;
-		rLoc = 11759;
+		rLoc = 11783;
 		rType = 0;
 		vrLen = 1583;
 		vrLoc = 10944;
@@ -7118,7 +7122,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 323";
 		rLen = 0;
-		rLoc = 11759;
+		rLoc = 11783;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 11674;
@@ -7168,7 +7172,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 323";
 		rLen = 0;
-		rLoc = 11759;
+		rLoc = 11783;
 		rType = 0;
 		vrLen = 1707;
 		vrLoc = 11647;
@@ -7218,7 +7222,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 323";
 		rLen = 0;
-		rLoc = 11759;
+		rLoc = 11783;
 		rType = 0;
 		vrLen = 1707;
 		vrLoc = 11647;
@@ -7248,7 +7252,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 548";
 		rLen = 0;
-		rLoc = 17259;
+		rLoc = 17283;
 		rType = 0;
 		vrLen = 1701;
 		vrLoc = 11630;
@@ -7298,7 +7302,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 554";
 		rLen = 0;
-		rLoc = 17387;
+		rLoc = 17411;
 		rType = 0;
 		vrLen = 1632;
 		vrLoc = 11618;
@@ -7338,7 +7342,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 564";
 		rLen = 0;
-		rLoc = 17611;
+		rLoc = 17635;
 		rType = 0;
 		vrLen = 1549;
 		vrLoc = 11970;
@@ -7388,7 +7392,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 564";
 		rLen = 0;
-		rLoc = 17611;
+		rLoc = 17635;
 		rType = 0;
 		vrLen = 1549;
 		vrLoc = 11970;
@@ -7418,7 +7422,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 381";
 		rLen = 19;
-		rLoc = 13133;
+		rLoc = 13157;
 		rType = 0;
 		vrLen = 1890;
 		vrLoc = 8069;
@@ -7458,7 +7462,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 560";
 		rLen = 0;
-		rLoc = 17648;
+		rLoc = 17672;
 		rType = 0;
 		vrLen = 1705;
 		vrLoc = 11780;
@@ -7508,7 +7512,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 560";
 		rLen = 0;
-		rLoc = 17648;
+		rLoc = 17672;
 		rType = 0;
 		vrLen = 1705;
 		vrLoc = 11780;
@@ -7538,7 +7542,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 560";
 		rLen = 0;
-		rLoc = 17648;
+		rLoc = 17672;
 		rType = 0;
 		vrLen = 1678;
 		vrLoc = 11807;
@@ -7685,7 +7689,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 117";
 		rLen = 0;
-		rLoc = 2644;
+		rLoc = 2646;
 		rType = 0;
 		vrLen = 1713;
 		vrLoc = 802;
@@ -7762,7 +7766,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 117";
 		rLen = 0;
-		rLoc = 2644;
+		rLoc = 2646;
 		rType = 0;
 		vrLen = 1712;
 		vrLoc = 800;
@@ -7802,7 +7806,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 117";
 		rLen = 0;
-		rLoc = 2644;
+		rLoc = 2646;
 		rType = 0;
 		vrLen = 1712;
 		vrLoc = 800;
@@ -7842,7 +7846,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 117";
 		rLen = 0;
-		rLoc = 2644;
+		rLoc = 2646;
 		rType = 0;
 		vrLen = 1712;
 		vrLoc = 800;
@@ -8607,7 +8611,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 669";
 		rLen = 0;
-		rLoc = 18127;
+		rLoc = 18151;
 		rType = 0;
 		vrLen = 1560;
 		vrLoc = 14782;
@@ -8687,7 +8691,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 689";
 		rLen = 0;
-		rLoc = 18109;
+		rLoc = 18133;
 		rType = 0;
 		vrLen = 1863;
 		vrLoc = 15207;
@@ -8727,7 +8731,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 652";
 		rLen = 188;
-		rLoc = 17413;
+		rLoc = 17437;
 		rType = 0;
 		vrLen = 1579;
 		vrLoc = 15016;
@@ -8767,7 +8771,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 689";
 		rLen = 0;
-		rLoc = 18396;
+		rLoc = 18420;
 		rType = 0;
 		vrLen = 1699;
 		vrLoc = 15016;
@@ -8807,7 +8811,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 674";
 		rLen = 0;
-		rLoc = 17958;
+		rLoc = 17982;
 		rType = 0;
 		vrLen = 1639;
 		vrLoc = 15016;
@@ -8847,7 +8851,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 674";
 		rLen = 0;
-		rLoc = 17958;
+		rLoc = 17982;
 		rType = 0;
 		vrLen = 1731;
 		vrLoc = 15176;
@@ -8887,7 +8891,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 674";
 		rLen = 0;
-		rLoc = 17958;
+		rLoc = 17982;
 		rType = 0;
 		vrLen = 1731;
 		vrLoc = 15176;
@@ -8917,7 +8921,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 674";
 		rLen = 0;
-		rLoc = 17958;
+		rLoc = 17982;
 		rType = 0;
 		vrLen = 1726;
 		vrLoc = 15176;
@@ -8942,7 +8946,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 432;
+		rLoc = 431;
 		rType = 1;
 	};
 	3D12B5E010645B6B002CD55A /* PBXTextBookmark */ = {
@@ -8950,7 +8954,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 370";
 		rLen = 0;
-		rLoc = 10962;
+		rLoc = 10986;
 		rType = 0;
 		vrLen = 675;
 		vrLoc = 9020;
@@ -8970,7 +8974,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 674";
 		rLen = 0;
-		rLoc = 17958;
+		rLoc = 17982;
 		rType = 0;
 		vrLen = 1731;
 		vrLoc = 15176;
@@ -9000,7 +9004,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1843;
 		vrLoc = 802;
@@ -9040,7 +9044,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1843;
 		vrLoc = 802;
@@ -9070,7 +9074,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9100,7 +9104,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9130,7 +9134,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9160,7 +9164,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9190,7 +9194,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9220,7 +9224,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1843;
 		vrLoc = 802;
@@ -9250,7 +9254,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1843;
 		vrLoc = 802;
@@ -9278,7 +9282,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 429";
 		rLen = 0;
-		rLoc = 10962;
+		rLoc = 10986;
 		rType = 0;
 		vrLen = 1014;
 		vrLoc = 8348;
@@ -9328,7 +9332,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9338,7 +9342,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 429";
 		rLen = 0;
-		rLoc = 10945;
+		rLoc = 10897;
 		rType = 0;
 		vrLen = 1726;
 		vrLoc = 9589;
@@ -9348,7 +9352,7 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1840;
 		vrLoc = 802;
@@ -9358,7 +9362,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 433";
 		rLen = 0;
-		rLoc = 10962;
+		rLoc = 10986;
 		rType = 0;
 		vrLen = 1208;
 		vrLoc = 8151;
@@ -9378,7 +9382,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 429";
 		rLen = 0;
-		rLoc = 10945;
+		rLoc = 10897;
 		rType = 0;
 		vrLen = 1810;
 		vrLoc = 9589;
@@ -9388,10 +9392,40 @@
 		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
 		name = "38 class walker.js: 116";
 		rLen = 13;
-		rLoc = 2625;
+		rLoc = 2627;
 		rType = 0;
 		vrLen = 1843;
 		vrLoc = 802;
+	};
+	3D12B636106495AF002CD55A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 429";
+		rLen = 0;
+		rLoc = 10980;
+		rType = 0;
+		vrLen = 1827;
+		vrLoc = 9619;
+	};
+	3D12B637106495AF002CD55A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D12AFF010633EF6002CD55A /* 38 class walker.js */;
+		name = "38 class walker.js: 116";
+		rLen = 13;
+		rLoc = 2627;
+		rType = 0;
+		vrLen = 1840;
+		vrLoc = 802;
+	};
+	3D12B63A106495BC002CD55A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 429";
+		rLen = 0;
+		rLoc = 10980;
+		rType = 0;
+		vrLen = 1846;
+		vrLoc = 9619;
 	};
 	3D36E247105229B500132E23 /* TestsRunner */ = {
 		isa = PBXExecutable;
@@ -9473,7 +9507,7 @@
 	};
 	3D36E288105229E700132E23 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1074, 48059}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1074, 48070}}";
 			sepNavSelRange = "{8496, 0}";
 			sepNavVisRange = "{7513, 1087}";
 			sepNavWindowFrame = "{{671, 123}, {968, 1004}}";
@@ -9497,9 +9531,9 @@
 	};
 	3D36E28E105229E700132E23 /* JSCocoaLib.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 8756}}";
-			sepNavSelRange = "{10945, 0}";
-			sepNavVisRange = "{9589, 1810}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 8745}}";
+			sepNavSelRange = "{10980, 0}";
+			sepNavVisRange = "{9619, 1846}";
 			sepNavWindowFrame = "{{806, 70}, {968, 1004}}";
 		};
 	};
@@ -9554,7 +9588,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 275";
 		rLen = 0;
-		rLoc = 11119;
+		rLoc = 11143;
 		rType = 0;
 		vrLen = 1578;
 		vrLoc = 5313;
@@ -9597,7 +9631,7 @@
 		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
 		name = "JSCocoaLib.m: 275";
 		rLen = 0;
-		rLoc = 11119;
+		rLoc = 11143;
 		rType = 0;
 		vrLen = 1578;
 		vrLoc = 5313;
