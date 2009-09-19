@@ -128,7 +128,7 @@ This will start a controller, eval a file, call a Javascript method and get an O
 	JSValueRef returnValue = [jsc callJSFunctionNamed:@"myJavascriptFunction" withArguments:self, nil];
 	// The return value might be a raw Javascript value (null, true, false, a number) or an ObjC object
 	// To get an ObjC object
-	id resultingObject = [jsc unboxJSValueRef:returnValue];
+	id resultingObject = [jsc toObject:returnValue];
 	
 	// (Cleanup : only needed if you don't use ObjC's Garbage Collection)
 	[jsc release];

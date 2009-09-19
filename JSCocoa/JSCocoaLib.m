@@ -227,6 +227,7 @@
 		id superclass	= class_getSuperclass(class);
 		id superclassName = superclass ? [NSString stringWithUTF8String:class_getName(superclass)] : @"";
 		
+		// Check if this class inherits from NSProxy. isKindOfClass crashes, so use raw ObjC api.
 		BOOL	isKindOfNSProxy = NO;
 		id c = class;
 		while (c)
@@ -234,8 +235,8 @@
 			if ([[NSString stringWithUTF8String:class_getName(c)] isEqualToString:@"NSProxy"])	isKindOfNSProxy = YES;
 			c = class_getSuperclass(c);
 		}
-		
-//		NSLog(@">>class %@", className);
+
+		// Skip classes crashing when added to an NSArray
 		if ([className hasPrefix:@"_NSZombie_"] 
 		||	[className isEqualToString:@"Object"]
 		||	[superclassName isEqualToString:@"Object"]
@@ -245,16 +246,13 @@
 		||	isKindOfNSProxy
 		)
 		{
-//			NSLog(@"skipping %@", className);
 			continue;
 		}
-//		[classArray addObject:className];
+		
 		[classArray addObject:class];
-
 	}
 
 	free(classList);
-	NSLog(@"done with class list****************");
 	return	classArray;
 }
 
@@ -264,13 +262,172 @@
 	NSMutableArray* classArray	= [NSMutableArray array];
 	for (id class in classes)
 	{
-//		id class = objc_getClass([className UTF8String]);
 		id superclass = class_getSuperclass(class);
 		if (superclass)	continue;
 
 		[classArray addObject:class];
 	}
 	return	classArray;
+}
+
+//
+// Return an array of { name : imageName, classNames : [className, className, ...] }
+//
++ (id)imageNames
+{
+	id array = [NSMutableArray array];
+
+	unsigned int imageCount;
+	const char** imageNames = objc_copyImageNames(&imageCount);
+
+	for (int i=0; i<imageCount; i++)
+	{
+		const char* cname	= imageNames[i];
+
+		// Gather image class names
+		id array2 = [NSMutableArray array];
+		unsigned int classCount;
+		const char** classNames = objc_copyClassNamesForImage(cname, &classCount);
+		for (int j=0; j<classCount; j++)
+			[array2 addObject:[NSString stringWithUTF8String:classNames[j]]];
+
+		free(classNames);
+
+		// Hash of name and classNames
+		id name	= [NSString stringWithUTF8String:cname];
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			array2,		@"classNames",
+			nil];
+			
+		[array addObject:hash];
+	}
+	free(imageNames);
+	return	array;
+}
+
+//
+// Return protocols and their associated methods
+//
++ (id)protocols
+{
+	id array = [NSMutableArray array];
+
+	unsigned int protocolCount;
+	Protocol** protocols = objc_copyProtocolList(&protocolCount);
+
+	for (int i=0; i<protocolCount; i++)
+	{
+		id array2	= [NSMutableArray array];
+		Protocol* p	= protocols[i];
+
+		// Common block for copying protocol method descriptions
+		void (^b)(BOOL, BOOL) = ^(BOOL isRequiredMethod, BOOL isInstanceMethod) {
+			unsigned int descriptionCount;
+			struct objc_method_description* methodDescriptions = protocol_copyMethodDescriptionList(p, isRequiredMethod, isInstanceMethod, &descriptionCount);
+			for (int j=0; j<descriptionCount; j++)
+			{
+				struct objc_method_description d = methodDescriptions[j];
+
+				id name			= NSStringFromSelector(d.name);
+				id encoding		= [NSString stringWithUTF8String:d.types];
+				id isRequired	= [NSNumber numberWithBool:isRequiredMethod];
+				id type			= isInstanceMethod ? @"instance" : @"class";
+
+				id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+					name,		@"name",
+					encoding,	@"encoding",
+					isRequired,	@"isRequired",
+					type,		@"type",
+					nil];
+					
+				[array2 addObject:hash];
+			}
+			if (methodDescriptions)	free(methodDescriptions);
+		};
+		
+		// Copy all methods, going through required, non-required, class, instance methods
+		b(YES, YES);
+		b(YES, NO);
+		b(NO, YES);
+		b(NO, NO);
+		
+		// Main object : { name : protocolName, methods : [{ name, encoding, isRequired, type }, ...]
+		id name	= [NSString stringWithUTF8String:protocol_getName(p)];
+		
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			array2,		@"methods",
+			nil];
+			
+		[array addObject:hash];
+	}
+	free(protocols);
+	return	array;
+}
+
+//
+// Runtime report
+//	Report EVERYTHING
+//	classes
+//		{ className : { name
+//						superclassName
+//						derivationPath
+//						subclasses
+//						methods
+//						protocols
+//						ivars
+//						properties
+//					  }
+//	protocols
+//		{ protocolName : { name
+//						   methods
+//						 }
+//	imageNames
+//		{ imageName : { name
+//						classNames : [className1, className2, ...]
+//					  }
+//
++ (id)runtimeReport
+{
+/*
+	id classList	= [self classes];
+	id protocols	= [self protocols];
+	id imageNames	= [self imageNames];
+	
+	id classes		= [NSMutableDictionary dictionary];
+	int classCount	= [classList count];
+//	for (id class in classList)
+	for (int i=0; i<classCount; i++)
+	{
+		id class = [classList objectAtIndex:i];
+		id className = [class description];
+
+		id superclass		= [class superclass];
+		id superclassName	= superclass ? [NSString stringWithUTF8String:class_getName(superclass)] : nil;
+//NSLog(@"%@ (%d/%d)", className, i, classCount-1);
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			className,					@"name",
+			superclassName,				@"superclassName",
+			[class __derivationPath],	@"derivationPath",
+			[class __methods],			@"methods",
+			[class __protocols],		@"protocols",
+			[class __ivars],			@"ivars",
+			[class __properties],		@"properties",
+			nil];
+		[classes setObject:hash forKey:className];
+	}
+	
+	id dict = [NSDictionary dictionaryWithObjectsAndKeys:
+				classes,	@"classes",
+				protocols,	@"protocols",
+				imageNames,	@"imageNames",
+				nil];
+	
+	return dict;
+*/
+	// Disabled for now, as the hash hangs the app.
+	return	nil;
 }
 
 @end
@@ -284,15 +441,15 @@
 //
 // Returns which framework containing the class
 //
-+ (id)classImage
++ (id)__classImage
 {
 	const char* name = class_getImageName(self);
 	if (!name)	return	nil;
 	return	[NSString stringWithUTF8String:name];
 }
-- (id)classImage
+- (id)__classImage
 {	
-	return [[self class] classImage];
+	return [[self class] __classImage];
 }
 
 
@@ -300,7 +457,7 @@
 // Derivation path
 //	derivationPath(NSButton) = NSObject, NSResponder, NSView, NSControl, NSButton
 //
-+ (id)derivationPath
++ (id)__derivationPath
 {
 	int level = -1;
 	id class = self;
@@ -313,21 +470,21 @@
 	}
 	return	classes;
 }
-- (id)derivationPath
+- (id)__derivationPath
 {
-	return [[self class] derivationPath];
+	return [[self class] __derivationPath];
 }
 
 //
 // Derivation level
 //
-+ (int)derivationLevel
++ (int)__derivationLevel
 {
-	return [[self derivationPath] count]-1;
+	return [[self __derivationPath] count]-1;
 }
-- (int)derivationLevel
+- (int)__derivationLevel
 {
-	return [[self class] derivationLevel];
+	return [[self class] __derivationLevel];
 }
 
 //
@@ -337,11 +494,11 @@
 // Copy all class or instance (type) methods of a class in an array
 static id copyMethods(Class class, NSMutableArray* array, NSString* type)
 {
-	unsigned int methodCount;
-	if ([type isEqualToString:@"class"])
-		class = objc_getMetaClass(class_getName(class));
+	if ([type isEqualToString:@"class"])	class = objc_getMetaClass(class_getName(class));
 
+	unsigned int methodCount;
 	Method* methods = class_copyMethodList(class, &methodCount);
+
 	for (int i=0; i<methodCount; i++)
 	{
 		Method m	= methods[i];
@@ -365,31 +522,28 @@ static id copyMethods(Class class, NSMutableArray* array, NSString* type)
 	free(methods);
 	return	array;
 }
-+ (id)ownMethods
++ (id)__ownMethods
 {
 	id methods = [NSMutableArray array];
 	copyMethods([self class], methods, @"class");
 	copyMethods([self class], methods, @"instance");
 	return methods;
 }
-- (id)ownMethods
+- (id)__ownMethods
 {
-	return [[self class] ownMethods];
+	return [[self class] __ownMethods];
 }
-+ (id)methods
++ (id)__methods
 {
-	id classes	= [self derivationPath];
+	id classes	= [self __derivationPath];
 	id methods	= [NSMutableArray array];
 	for (id class in classes)
-	{
-		id m = [class ownMethods];
-		[methods addObjectsFromArray:m];
-	}
+		[methods addObjectsFromArray:[class __ownMethods]];
 	return	methods;
 }
-- (id)methods
+- (id)__methods
 {
-	return [[self class] methods];
+	return [[self class] __methods];
 }
 
 
@@ -411,7 +565,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	}
 }
 // Build a hash of className : [direct subclasses] then walk it down recursively.
-+ (id)subclasses
++ (id)__subclasses
 {
 	id classes		= [JSCocoaLib classes];
 	id subclasses	= [NSMutableArray array];
@@ -436,26 +590,38 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	for (id className in subclassesHash)
 	{
 		id subclassesArray = [subclassesHash objectForKey:className];
-		[subclassesArray sortUsingSelector:@selector(description)];
-		[subclassesHash setObject:subclassesArray forKey:className];
+/*
+id b = ^(id a, id b)	{
+				return [[[a description] lowercaseString] compare:[[b description] lowercaseString]];
+			};
+NSLog(@"block=%@ (%@)", b, [b class]);
+*/
+		[subclassesArray sortUsingComparator:
+			^(id a, id b)	
+			{
+				// Case insensitive compare + remove underscores for sorting (yields [..., NSStatusBarButton, _NSThemeWidget, NSToolbarButton] )
+				return [[[a description] stringByReplacingOccurrencesOfString:@"_" withString:@""] 
+						compare:[[b description] stringByReplacingOccurrencesOfString:@"_" withString:@""] options:NSCaseInsensitiveSearch];
+			}];
 	}
 	
 	populateSubclasses(self, subclasses, subclassesHash);
 	
 	return	subclasses;
 }
-- (id)subclasses
+- (id)__subclasses
 {
-	return [[self class] subclasses];
+	return [[self class] __subclasses];
 }
 
-+ (id)subclassTree
+// Returns a string showing subclasses, prefixed with as many spaces as their derivation level
++ (id)__subclassTree
 {
-	id subclasses = [self subclasses];
+	id subclasses = [self __subclasses];
 	id str = [NSMutableString string];
 	for (id subclass in subclasses)
 	{
-		int level = [subclass derivationLevel];
+		int level = [subclass __derivationLevel];
 		for (int i=0; i<level; i++)
 			[str appendString:@" "];
 		[str appendString:[NSString stringWithUTF8String:class_getName(subclass)]];
@@ -463,10 +629,138 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	}
 	return	str;
 }
-- (id)subclassTree
+- (id)__subclassTree
 {
-	return [[self class] subclassTree];
+	return [[self class] __subclassTree];
 }
 
+//
+// ivars
+//
++ (id)__ownIvars
+{
+	unsigned int ivarCount;
+	Ivar* ivars = class_copyIvarList(self, &ivarCount);
+	
+	id array = [NSMutableArray array];
+	for (int i=0; i<ivarCount; i++)
+	{
+		Ivar ivar	= ivars[i];
+		
+		id name		= [NSString stringWithUTF8String:ivar_getName(ivar)];
+		id encoding	= [NSString stringWithUTF8String:ivar_getTypeEncoding(ivar)]; 
+		id offset	= [NSNumber numberWithLong:ivar_getOffset(ivar)]; 
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			encoding,	@"encoding",
+			offset,		@"offset",
+			self,		@"class",
+			nil];
+			
+		[array addObject:hash];
+	}
+	
+	free(ivars);
+	return	array;
+}
+- (id)__ownIvars
+{
+	return [[self class] __ownIvars];
+}
++ (id)__ivars
+{
+	id classes	= [self __derivationPath];
+	id ivars	= [NSMutableArray array];
+	for (id class in classes)
+		[ivars addObjectsFromArray:[class __ownIvars]];
+	return	ivars;
+}
+- (id)__ivars
+{
+	return [[self class] __ivars];
+}
+
+//
+// Properties
+//
++ (id)__ownProperties
+{
+	unsigned int propertyCount;
+	objc_property_t* properties = class_copyPropertyList(self, &propertyCount);
+	
+	id array = [NSMutableArray array];
+	for (int i=0; i<propertyCount; i++)
+	{
+		objc_property_t property	= properties[i];
+		
+		id name			= [NSString stringWithUTF8String:property_getName(property)];
+		id attributes	= [NSString stringWithUTF8String:property_getAttributes(property)]; 
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			attributes,	@"attributes",
+			self,		@"class",
+			nil];
+		[array addObject:hash];
+	}
+	
+	free(properties);
+	return	array;
+}
+- (id)__ownProperties
+{
+	return [[self class] __ownProperties];
+}
++ (id)__properties
+{
+	id classes		= [self __derivationPath];
+	id properties	= [NSMutableArray array];
+	for (id class in classes)
+		[properties addObjectsFromArray:[class __ownProperties]];
+	return	properties;
+}
+- (id)__properties
+{
+	return [[self class] __properties];
+}
+
+//
+// Protocols
+//
++ (id)__ownProtocols
+{
+	unsigned int protocolCount;
+	Protocol** protocols = class_copyProtocolList(self, &protocolCount);
+	
+	id array = [NSMutableArray array];
+	for (int i=0; i<protocolCount; i++)
+	{
+		id name = [NSString stringWithUTF8String:protocol_getName(protocols[i])];
+		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
+			name,		@"name",
+			self,		@"class",
+			nil];
+		[array addObject:hash];
+	}
+	
+	free(protocols);
+	return	array;
+}
+- (id)__ownProtocols
+{
+	return [[self class] __ownProtocols];
+}
+
++ (id)__protocols
+{
+	id classes		= [self __derivationPath];
+	id protocols	= [NSMutableArray array];
+	for (id class in classes)
+		[protocols addObjectsFromArray:[class __ownProtocols]];
+	return	protocols;
+}
+- (id)__protocols
+{
+	return [[self class] __protocols];
+}
 
 @end

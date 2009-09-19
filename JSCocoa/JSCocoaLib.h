@@ -58,5 +58,8 @@
 
 + (id)rootclasses;
 + (id)classes;
++ (id)protocols;
++ (id)imageNames;
++ (id)runtimeReport;
 
 @end

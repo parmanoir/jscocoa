@@ -1893,11 +1893,24 @@ int	liveInstanceCount	= 0;
 {
 	return [JSCocoaLib rootclasses];
 }
-
 + (id)classes
 {
 	return [JSCocoaLib classes];
 }
++ (id)protocols
+{
+	return [JSCocoaLib protocols];
+}
++ (id)imageNames
+{
+	return [JSCocoaLib imageNames];
+}
++ (id)runtimeReport
+{
+	return [JSCocoaLib runtimeReport];
+}
+
+
 
 #pragma mark Distant Object Handling (DO)
 //
