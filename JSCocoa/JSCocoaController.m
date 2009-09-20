@@ -1912,6 +1912,10 @@ int	liveInstanceCount	= 0;
 {
 	return [JSCocoaLib imageNames];
 }
++ (id)methods
+{
+	return [JSCocoaLib methods];
+}
 + (id)runtimeReport
 {
 	return [JSCocoaLib runtimeReport];

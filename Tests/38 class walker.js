@@ -58,6 +58,13 @@
 //	log('__NSGlobalBlock__.ownMethods=' + __NSGlobalBlock__.__ownMethods)
 //	log('NSMutableArray.ownMethods=' + NSMutableArray.__ownMethods)
 
+	// All methods from all classes
+//	var m = JSCocoa.methods
+//	log('all methods=' + m)
+//var i = 0; 
+
+	// Too slow !
+//	log('all instance methods starting with set=' + m.filter(function (method) { i++; if (i%100==0) log(i + '/' + m.length); return method.type == 'instance' && method.name.match(/^set/) }))
 
 
 	//
@@ -72,6 +79,7 @@
 
 //	log('NSObject.subclassTree=\n' + NSObject.__subclassTree)
 	
+//	log(NSString.__subclasses)
 
 
 	//
@@ -120,6 +128,5 @@
 //	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }))
 	// Only method names
 //	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }).map(function(o){return o.name}))
-	
 	
 	

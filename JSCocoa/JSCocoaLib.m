@@ -366,6 +366,15 @@
 	return	array;
 }
 
++ (id)methods
+{
+	id classes = [self classes];
+	id methods = [NSMutableArray array];
+	for (id class in classes)
+		[methods addObjectsFromArray:[class __ownMethods]];
+	return methods;
+}
+
 //
 // Runtime report
 //	Report EVERYTHING

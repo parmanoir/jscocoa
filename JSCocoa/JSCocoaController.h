@@ -108,6 +108,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (id)classes;
 + (id)protocols;
 + (id)imageNames;
++ (id)methods;
 + (id)runtimeReport;
 
 //
