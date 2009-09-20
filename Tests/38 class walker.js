@@ -116,7 +116,10 @@
 //	log('runtime description=' + JSCocoa.runtimeReport)
 	
 	
-//	log(NSArray.__methods)
+	// Find all array methods starting with 'init'
+//	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }))
+	// Only method names
+//	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }).map(function(o){return o.name}))
 	
 	
 	
