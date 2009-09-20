@@ -116,4 +116,7 @@
 //	log('runtime description=' + JSCocoa.runtimeReport)
 	
 	
+//	log(NSArray.__methods)
+	
+	
 	

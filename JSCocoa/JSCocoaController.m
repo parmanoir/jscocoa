@@ -1498,25 +1498,32 @@ static id JSCocoaSingleton = NULL;
 #pragma mark Variadic call
 - (BOOL)isMethodVariadic:(id)methodName class:(id)class
 {
-	id className = [class description];
-	id xml = [[BridgeSupportController sharedController] queryName:className];
-	if (!xml)	return NSLog(@"isMethodVariadic for %@ called on unknown BridgeSupport class %@", methodName, class), NO;
+	// Go up the class tree until we find a variadic method or exhaust superclasses
+	while (class)
+	{
+		id className = [class description];
+		id xml = [[BridgeSupportController sharedController] queryName:className];
+		if (!xml)	return NSLog(@"isMethodVariadic for %@ called on unknown BridgeSupport class %@", methodName, class), NO;
 
-	// Get XML definition
-	id error;
-	// Clang will report a leak here, but NSXMLDocument auto releases itself if it fails loading
-	id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error];
-	if (error)	return	NSLog(@"(isMethodVariadic:class:) malformed xml while getting method %@ of class %@ : %@", methodName, class, error), NO;
+		// Get XML definition
+		id error;
+		// Clang will report a leak here, but NSXMLDocument auto releases itself if it fails loading
+		id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:&error];
+		if (error)	return	NSLog(@"(isMethodVariadic:class:) malformed xml while getting method %@ of class %@ : %@", methodName, class, error), NO;
+			
+		// Query method
+		id xpath = [NSString stringWithFormat:@"*[@selector=\"%@\" and @variadic=\"true\"]", methodName];
+		id nodes = [[xmlDocument rootElement] nodesForXPath:xpath error:&error];
+		if (error)	NSLog(@"isMethodVariadic:error: %@", error);
+
+		// It's a variadic method if XPath returned one result
+		BOOL	isVariadic = [nodes count] == 1;
+		[xmlDocument release];
+		if (isVariadic)	return YES;
 		
-	// Query method
-	id xpath = [NSString stringWithFormat:@"*[@selector=\"%@\" and @variadic=\"true\"]", methodName];
-	id nodes = [[xmlDocument rootElement] nodesForXPath:xpath error:&error];
-	if (error)	NSLog(@"isMethodVariadic:error: %@", error);
-
-	// It's a variadic method if XPath returned one result
-	BOOL	isVariadic = [nodes count] == 1;
-	[xmlDocument release];
-	return	isVariadic;
+		class = [class superclass];
+	}
+	return	NO;
 }
 
 - (BOOL)isFunctionVariadic:(id)functionName
@@ -2986,7 +2993,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			}
 		}
 
-		// Special case for NSMutableArray get
+		// Special case for NSMutableArray get and Javascript array methods
 		if ([privateObject.object isKindOfClass:[NSArray class]])
 		{
 			id array	= privateObject.object;
@@ -3006,6 +3013,33 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			
 			// If we have 'length', switch it to 'count'
 			if ([propertyName isEqualToString:@"length"])	propertyName = @"count";
+		
+			// NSArray bridge
+			id callee	= [privateObject object];
+			SEL sel		= NSSelectorFromString(propertyName);
+			if ([propertyName rangeOfString:@":"].location == NSNotFound && ![callee respondsToSelector:sel]
+				&& ![propertyName isEqualToString:@"valueOf"] 
+				&& ![propertyName isEqualToString:@"toString"] 
+			)
+			{
+				id script				= [NSString stringWithFormat:@"return Array.prototype.%@", propertyName];
+				JSStringRef scriptJS	= JSStringCreateWithUTF8CString([script UTF8String]);
+				JSObjectRef fn			= JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+				JSValueRef result		= JSObjectCallAsFunction(ctx, fn, NULL, 0, NULL, NULL);
+				JSStringRelease(scriptJS);
+				BOOL isJavascriptArrayMethod =  result ? !JSValueIsUndefined(ctx, result) : NO;
+
+				// Return the packaged Javascript function
+				if (isJavascriptArrayMethod)
+				{
+//					NSLog(@"*** array method : %@", propertyName);
+					JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+					private.type = @"jsFunction";
+					[private setJSValueRef:result ctx:ctx];
+					return	o;
+				}
+			}
 		}
 		
 		
