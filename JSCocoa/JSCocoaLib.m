@@ -318,7 +318,8 @@
 
 	for (int i=0; i<protocolCount; i++)
 	{
-		id array2	= [NSMutableArray array];
+		// array2 is modified by the following block
+		__block id array2	= [NSMutableArray array];
 		Protocol* p	= protocols[i];
 
 		// Common block for copying protocol method descriptions

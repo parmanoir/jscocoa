@@ -31,6 +31,8 @@
 	BOOL		isOutArgument;
 }
 
+- (NSString*)typeDescription;
+
 - (BOOL)setTypeEncoding:(char)encoding;
 - (BOOL)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr;
 - (void)setStructureTypeEncoding:(NSString*)encoding;
@@ -52,6 +54,7 @@
 + (NSString*)structureNameFromStructureTypeEncoding:(NSString*)structureTypeEncoding;
 + (NSString*)structureFullTypeEncodingFromStructureTypeEncoding:(NSString*)structureTypeEncoding;
 + (NSString*)structureFullTypeEncodingFromStructureName:(NSString*)structureName;
++ (NSString*)structureTypeEncodingDescription:(NSString*)structureTypeEncoding;
 
 + (BOOL)fromJSValueRef:(JSValueRef)value inContext:(JSContextRef)ctx typeEncoding:(char)typeEncoding fullTypeEncoding:(NSString*)fullTypeEncoding fromStorage:(void*)ptr;
 

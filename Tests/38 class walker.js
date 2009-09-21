@@ -4,7 +4,7 @@
 	// Exploring the runtime !
 	//
 
-
+//log('class walker 1')
 
 	//
 	// Class list
@@ -64,6 +64,7 @@
 //var i = 0; 
 
 	// Too slow !
+	// May be a split call problem. Activity Monitor sampling shows isMaybeSplitCall, trySplitCall
 //	log('all instance methods starting with set=' + m.filter(function (method) { i++; if (i%100==0) log(i + '/' + m.length); return method.type == 'instance' && method.name.match(/^set/) }))
 
 
@@ -130,3 +131,17 @@
 //	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }).map(function(o){return o.name}))
 	
 	
+//log('class walker 2')
+
+
+	//
+	// Method encoding explainer
+	//
+/*
+	var methods = NSView.__ownMethods
+	for (var i=0; i<methods.length; i++)
+	{
+		var method = methods[i]
+		log(method.name + ' explained=' + JSCocoa.explainMethodEncoding(method.encoding))
+	}
+*/

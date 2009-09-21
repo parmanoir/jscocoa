@@ -1920,6 +1920,16 @@ int	liveInstanceCount	= 0;
 {
 	return [JSCocoaLib runtimeReport];
 }
++ (id)explainMethodEncoding:(id)encoding
+{
+	id argumentEncodings	= [JSCocoaController parseObjCMethodEncoding:[encoding UTF8String]];
+	id explication			= [NSMutableArray array];
+	for (id arg in argumentEncodings)
+		[explication addObject:[arg typeDescription]
+		];
+	
+	return	explication;
+}
 
 
 

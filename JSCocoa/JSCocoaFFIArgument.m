@@ -70,6 +70,55 @@
 			isReturnValue, ptr];
 }
 
++ (NSString*)typeDescriptionForTypeEncoding:(char)typeEncoding fullTypeEncoding:(NSString*)fullTypeEncoding 
+{
+	switch (typeEncoding)
+	{
+		case	_C_VOID:	return	@"void";
+		case	_C_ID:		return	@"ObjC object";
+		case	_C_CLASS:	return	@"ObjC class";
+		case	_C_CHR:		return	@"char";
+		case	_C_UCHR:	return	@"unsigned char";
+		case	_C_SHT:		return	@"short";
+		case	_C_USHT:	return	@"unsigned short";
+		case	_C_INT:		return	@"int";
+		case	_C_UINT:	return	@"unsigned int";
+		case	_C_LNG:		return	@"long";
+		case	_C_ULNG:	return	@"unsigned long";
+		case	_C_LNG_LNG:	return	@"long long";
+		case	_C_ULNG_LNG:return	@"unsigned long long";
+		case	_C_FLT:		return	@"float";
+		case	_C_DBL:		return	@"double";
+		case	'{':
+		{
+			// Special case for getting raw JSValues to ObjC
+			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			if (isJSStruct)
+			{
+				return	@"(JSCocoa structure used to pass JSValueRef without conversion)";
+			}
+
+//			if (!JSValueIsObject(ctx, value))	return	NO;
+//			JSObjectRef object = JSValueToObject(ctx, value, NULL);
+//			void* p = ptr;
+//			id r = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
+//			if (!r)	return [NSString stringWithFormat:@"(unknown structure %@)", fullTypeEncoding];
+			return	[JSCocoaFFIArgument structureTypeEncodingDescription:fullTypeEncoding];
+		}
+		case	_C_SEL:		return	@"selector";
+		case	_C_CHARPTR:	return	@"char*";
+		case	_C_BOOL:	return	@"BOOL";
+		case	_C_PTR:		return	@"pointer";
+		case	_C_UNDEF:	return	@"(function pointer or block?)";
+	}
+	return	@"(unknown)";
+}
+
+- (NSString*)typeDescription
+{
+	return [[self class] typeDescriptionForTypeEncoding:typeEncoding fullTypeEncoding:structureTypeEncoding];
+}
+
 #pragma mark Getters / Setters
 
 //
@@ -501,7 +550,8 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues from ObjC to JS
-			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+//			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			BOOL isJSStruct = [fullTypeEncoding hasPrefix:@"{JSValueRefAndContextRef"];
 			if (isJSStruct)
 			{
 				JSValueRefAndContextRef*	jsStruct = (JSValueRefAndContextRef*)ptr;
@@ -903,7 +953,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 			continue;
 		}
 		if (*c == '=')	continue;
-	
+		
 		[types addObject:[NSString stringWithFormat:@"%c", *c]];
 
 		// Special case for pointers
@@ -931,6 +981,116 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	if (count) *count = c-c0;
 	if (closedBracesCount != openedBracesCount)		return NSLog(@"Could not parse structure type encodings for %@", structureTypeEncoding), nil;
 	return	types;
+}
+
+//
+// Given a structure encoding string, produce a human readable format
+//
++ (int)structureTypeEncodingDescription:(NSString*)structureTypeEncoding inString:(NSMutableString**)str
+{
+//	id types = [[[NSMutableArray alloc] init] autorelease];
+//	id str = [NSMutableString stringWithFormat:@"%@", [self structureNameFromStructureTypeEncoding:structureTypeEncoding]];
+	
+//	NSLog(@"describe2 %@", structureTypeEncoding);
+//	NSLog(@"describe2 %@", structureTypeEncoding);
+	
+	
+	
+	char* c = (char*)[structureTypeEncoding UTF8String];
+	char* c0 = c;
+	// Skip '{'
+	c += 1;
+	// Skip '_' if it's there
+	if (*c == '_') c++;
+	// Skip structureName, '='
+//	c += [private.structureName length]+1;
+	id structureName = [self structureNameFromStructureTypeEncoding:structureTypeEncoding];
+	c += [structureName length]+1;
+
+	int	openedBracesCount = 1;
+	int closedBracesCount = 0;
+	int propertyCount = 0;
+	for (; *c && closedBracesCount != openedBracesCount; c++)
+	{
+		if (*c == '{')	
+		{
+			[*str appendString:@"{"];
+			openedBracesCount++;
+		}
+		if (*c == '}')	
+		{
+			[*str appendString:@"}"];
+			closedBracesCount++;
+		}
+		// Parse name then type
+		if (*c == '"')
+		{
+			propertyCount++;
+			if (propertyCount > 1)	[*str appendString:@", "];
+			char* c2 = c+1;
+			while (c2 && *c2 != '"') c2++;
+			id propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
+			c = c2;
+			// Skip '"'
+			c++;
+			char encoding = *c;
+			[*str appendString:propertyName];
+			[*str appendString:@": "];
+			
+//			JSValueRef	valueJS = NULL;
+			if (encoding == '{')
+			{
+				[*str appendString:@"{"];
+				int parsed = [self structureTypeEncodingDescription:[NSString stringWithUTF8String:c] inString:str];
+				c += parsed;
+//				NSLog(@"parsed %@ (%d)", substr, [substr length]);
+			}
+			else
+			{
+				[*str appendString:@"("];
+				[*str appendString:[self typeDescriptionForTypeEncoding:encoding fullTypeEncoding:nil]];
+				[*str appendString:@")"];
+			}
+
+/*			
+			else
+			{
+				// Given a pointer to raw C structure data, convert its members to JS values
+				if (ptr)
+				{
+					// Align 
+					[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:encoding];
+					// Get value
+					[JSCocoaFFIArgument toJSValueRef:&valueJS inContext:ctx typeEncoding:encoding fullTypeEncoding:nil fromStorage:*ptr];
+					// Advance ptr
+					[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
+				}
+				else
+				// Given no pointer, get values from initialValues array. If not present, create undefined values
+				{
+					if (!convertedValueCount)	return 0;
+					if (initialValues && initialValueCount && *convertedValueCount < initialValueCount)	valueJS = initialValues[*convertedValueCount];
+					else																				valueJS = JSValueMakeUndefined(ctx);									
+				}
+				if (convertedValueCount)	*convertedValueCount = *convertedValueCount+1;
+			}
+*/
+//			JSStringRef	propertyNameJS = JSStringCreateWithCFString((CFStringRef)propertyName);
+//			JSObjectSetProperty(ctx, jsObject, propertyNameJS, valueJS, 0, NULL);
+//			JSStringRelease(propertyNameJS);
+		}
+	}
+	return	c-c0-1;
+}
++ (NSString*)structureTypeEncodingDescription:(NSString*)structureTypeEncoding
+{
+	id fullStructureTypeEncoding = [self structureFullTypeEncodingFromStructureTypeEncoding:structureTypeEncoding];
+	if (!fullStructureTypeEncoding)	return	[NSString stringWithFormat:@"(Could not describe struct %@)", structureTypeEncoding];
+
+	id str = [NSMutableString stringWithFormat:@"%@{", [self structureNameFromStructureTypeEncoding:fullStructureTypeEncoding]];
+	[self structureTypeEncodingDescription:fullStructureTypeEncoding inString:&str];
+	[str appendString:@"}"];
+	return	str;
 }
 
 
