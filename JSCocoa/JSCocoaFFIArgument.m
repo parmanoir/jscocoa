@@ -92,7 +92,7 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues to ObjC
-			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			BOOL isJSStruct = [fullTypeEncoding hasPrefix:@"{JSValueRefAndContextRef"];
 			if (isJSStruct)
 			{
 				return	@"(JSCocoa structure used to pass JSValueRef without conversion)";
@@ -418,7 +418,9 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues to ObjC
-			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+//			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
+			BOOL isJSStruct = [fullTypeEncoding hasPrefix:@"{JSValueRefAndContextRef"];
+
 			if (isJSStruct)
 			{
 				// Beware ! This context is not the global context and will be valid only for that call.
@@ -550,7 +552,6 @@
 		case	'{':
 		{
 			// Special case for getting raw JSValues from ObjC to JS
-//			BOOL isJSStruct = NSOrderedSame == [fullTypeEncoding compare:@"{JSValueRefAndContextRef" options:0 range:NSMakeRange(0, sizeof("{JSValueRefAndContextRef")-1)];
 			BOOL isJSStruct = [fullTypeEncoding hasPrefix:@"{JSValueRefAndContextRef"];
 			if (isJSStruct)
 			{

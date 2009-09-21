@@ -1503,8 +1503,13 @@ static id JSCocoaSingleton = NULL;
 	{
 		id className = [class description];
 		id xml = [[BridgeSupportController sharedController] queryName:className];
-		if (!xml)	return NSLog(@"isMethodVariadic for %@ called on unknown BridgeSupport class %@", methodName, class), NO;
-
+		// Go up if this class has no description
+		if (!xml)	
+		{
+			class = [class superclass];
+			continue;
+		}
+//NSLog(@"variadic %@ xml=%@", methodName, xml);
 		// Get XML definition
 		id error;
 		// Clang will report a leak here, but NSXMLDocument auto releases itself if it fails loading
@@ -1737,6 +1742,9 @@ static id JSCocoaSingleton = NULL;
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	id predicate = [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
 	files = [files filteredArrayUsingPredicate:predicate]; 
+	
+	// Execute in test order, not finder order
+	files = [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 //	NSLog(@"files=%@", files);
 
 	if ([files count] == 0)	return	[JSCocoaController logAndSay:@"no test files found"], 0;
@@ -3883,6 +3891,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	//	we may have a variadic call
 	//
 	BOOL isVariadic = NO;
+	// Possibly account for a missing terminating NULL in ObjC variadic method
+	BOOL sugarCheckVariadic = NO;
 	if (callAddressArgumentCount != argumentCount)	
 	{
 		if (methodName)		isVariadic = [[JSCocoaController controllerFromContext:ctx] isMethodVariadic:methodName class:[callee class]];
@@ -3892,6 +3902,14 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if (!isVariadic)
 		{
 			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
+		}
+		
+		// Sugar check : if last object is not NULL, account for it
+		if (isVariadic && callingObjC && argumentCount && !JSValueIsNull(ctx, arguments[argumentCount-1]))
+		{
+			// Will be tested during argument conversion
+			sugarCheckVariadic = YES;
+			argumentCount++;
 		}
 	}
 
@@ -3943,7 +3961,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 //				NSLog(@"superClass=%@ (old=%@) (%@) function=%x", superSelectorClass, [callee superclass], [callee class], function);
 			}
 		}
-	
+
 		// Setup arguments, unboxing or converting data
 		for (i=0; i<argumentCount; i++, idx++)
 		{
@@ -3959,7 +3977,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				arg		= [argumentEncodings objectAtIndex:idx+1];
 
 			// Convert argument
-			JSValueRef			jsValue	= arguments[i];
+			JSValueRef			jsValue	= sugarCheckVariadic && i == argumentCount-1 ? JSValueMakeNull(ctx) : arguments[i];
 			BOOL	shouldConvert = YES;
 			// Check type o modifiers
 			if ([arg typeEncoding] == '^')

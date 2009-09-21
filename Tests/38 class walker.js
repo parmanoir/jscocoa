@@ -137,11 +137,11 @@
 	//
 	// Method encoding explainer
 	//
-/*
+
 	var methods = NSView.__ownMethods
 	for (var i=0; i<methods.length; i++)
 	{
 		var method = methods[i]
-		log(method.name + ' explained=' + JSCocoa.explainMethodEncoding(method.encoding))
+//		log(method.name + ' explained=' + JSCocoa.explainMethodEncoding(method.encoding))
 	}
-*/
+

@@ -37,7 +37,7 @@
 	if (filtered[2] != 'hey')	throw 'NSArray function bridge failed (4)'
 	
 	// map
-	var array2 = NSMutableArray.arrayWithObjects(1, 2, 3)
+	var array2 = NSMutableArray.arrayWithObjects(1, 2, 3, null)
 	var mapped = array2.map(function (o) { return o*2 })
 //	log('array2=' + array2)
 //	log('array2 mapped=' + mapped)
