@@ -4,7 +4,7 @@ JSCocoa, a bridge from Javascript to Cocoa
 With JSCocoa, you can write Cocoa applications (almost) entirely in Javascript or use it as a Plugin engine (like [Acorn ](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) and [Spice](http://github.com/onecrayon/Spice-sugar)).
 JSCocoa uses WebKit's Javascript framework, [JavascriptCore](http://webkit.org/projects/javascript/).
 
-**JSCocoa is** a way to use Cocoa from Javascript. It works on the Mac (i386, x86_64, PPC), the iPhone and the iPhone simulator. You can write new Cocoa classes in Javascript, replace existing methods of classes by Javascript functions (swizzling them) and call Javascript functions on Cocoa objects (like calling Javascript's <code>filter</code> method on an <code>NSArray</code>, or use Javascript's regular expressions on <code>NSString</code>).
+**JSCocoa is** a way to use Cocoa from Javascript. It works on the Mac (i386, x86_64, PPC), the iPhone and the iPhone simulator. You can write new Cocoa classes in Javascript, replace existing methods of classes by Javascript functions (swizzling them) and call Javascript functions on Cocoa objects (call <code>filter</code> on an <code>NSArray</code>, or use Javascript regular expressions on <code>NSString</code> with <code>myNSString.match(/pattern/)</code>).
 
 JSCocoa can also be used as a replacement for the existing WebKit bridge, letting you use C functions, structs, and calling pretty much anything from your WebView. Access restriction can be setup by JSCocoa's delegate messages (<code>canGetProperty:ofObject:inContext:</code>, <code>canCallMethod:ofObject:argumentCount:arguments:</code>, etc.)
 
