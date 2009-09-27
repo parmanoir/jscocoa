@@ -1,10 +1,10 @@
 JSCocoa, a bridge from Javascript to Cocoa
 ==
 
-JSCocoa lets you use Cocoa in Javascript. You can write Cocoa applications (almost) entirely in Javascript, or use it as a Plugin engine, like [Acorn does](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html).
+With JSCocoa, you can write Cocoa applications (almost) entirely in Javascript or use it as a Plugin engine (like [Acorn ](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) and [Spice](http://github.com/onecrayon/Spice-sugar)).
 JSCocoa uses WebKit's Javascript framework, [JavascriptCore](http://webkit.org/projects/javascript/).
 
-**JSCocoa is** a way to use Cocoa from Javascript. It works on the Mac (i386, x86_64, PPC) and the iPhone and iPhone simulator. You can write new Cocoa classes in Javascript, replace existing methods of classes by Javascript functions (By swizzling them), and use Javascript functions on Cocoa objects (call Javascript's <code>filter</code> method on an <code>NSArray</code>).
+**JSCocoa is** a way to use Cocoa from Javascript. It works on the Mac (i386, x86_64, PPC) and the iPhone and iPhone simulator. You can write new Cocoa classes in Javascript, replace existing methods of classes by Javascript functions (swizzling them) and use Javascript functions on Cocoa objects (like calling Javascript's <code>filter</code> method on an <code>NSArray</code>).
 
 JSCocoa can also be used as a replacement for the existing WebKit bridge, letting you use C functions, structs, and calling pretty much anything from your WebView. Access restriction can be setup by JSCocoa's delegate messages (<code>canGetProperty:ofObject:inContext:</code>, <code>canCallMethod:ofObject:argumentCount:arguments:</code>). 
 
@@ -30,8 +30,8 @@ Contribute and discuss
 Who uses it ?
 --
 
+* [Spice-sugar](http://github.com/onecrayon/Spice-sugar) Spice.sugar allows the [Espresso text editor](http://macrabbit.com/espresso/) to be extended using JSCocoa
 * [Narwhal-jsc](http://github.com/tlrobinson/narwhal-jsc/) A JavascriptCore + optional JSCocoa module for [Narwhal](http://github.com/tlrobinson/narwhal/tree) (Server-side Javascript)
-* [JSCocoaLoader-sugar](http://github.com/onecrayon/JSCocoaLoader-sugar/) JSCocoaLoader.sugar allows the [Espresso text editor](http://macrabbit.com/espresso/) to be extended using JSCocoa
 * [JSTalk](http://github.com/ccgus/jstalk/) Gus Mueller, to let Cocoa applications be scripted in Javascript
 * [PluginManager](http://github.com/Grayson/pluginmanager/) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
 * [Elysium](http://lucidmac.com/products/elysium/) Matt Mower, to script Elysium, a MIDI sequencer
