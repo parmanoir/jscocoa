@@ -53,6 +53,8 @@
 //	log('NSView.methods=' + NSView.__methods)
 //	log('CALayer.methods=' + CALayer.__methods)
 
+//	log('CALayer.subclassTree=\n' + CALayer.__subclassTree)
+
 //	log('NSBlock.subclassTree=\n' + NSBlock.__subclassTree)
 //	log('NSBlock.ownMethods=' + NSBlock.__ownMethods)
 //	log('__NSGlobalBlock__.ownMethods=' + __NSGlobalBlock__.__ownMethods)
@@ -129,6 +131,7 @@
 //	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }))
 	// Only method names
 //	log(NSArray.__methods.filter(function (method) { return method.name.match(/^init/) }).map(function(o){return o.name}))
+//	log(NSObject.__methods.filter(function (method) { return method.framework.match(/AppKit/) } ))
 	
 	
 //log('class walker 2')
@@ -137,11 +140,11 @@
 	//
 	// Method encoding explainer
 	//
-
+/*
 	var methods = NSView.__ownMethods
 	for (var i=0; i<methods.length; i++)
 	{
 		var method = methods[i]
-//		log(method.name + ' explained=' + JSCocoa.explainMethodEncoding(method.encoding))
+		log(method.name + ' explained=' + JSCocoa.explainMethodEncoding(method.encoding))
 	}
-
+*/
