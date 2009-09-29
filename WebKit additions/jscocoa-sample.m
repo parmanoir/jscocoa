@@ -1,11 +1,17 @@
 //
-// Sample code to use JSCocoa from a existing web page in place of the existing WebKit bridge.
+// Sample code to use JSCocoa in a WebView instead of the existing WebKit bridge.
+// by Fabien Franzen on 20090906
 //
 // Init JSCocoa with initWithGlobalContext:[[webView mainFrame] globalContext]
-// The Javascript context is valid for th current page only.
-// Destroy and recreate JSCocoa upon WebFrameLoadDelegate.didClearWindowObject:forFrame:
 //
-// by Fabien Franzen on 20090906
+// Use JSCocoa via the global 'OSX' property :
+//	var objCDate = OSX.NSDate.alloc.init
+//	var point = new OSX.NSPoint(123, 456)
+//	var delegate = OSX.NSApplication.sharedApplication.delegate
+//	var array = delegate.testArray( ['hello', 'world', [4, 5, 6], 'end' ] )
+//
+// The Javascript context (JSGlobalContextRef) is only valid for the current webpage : it will be released when navigating to a new URL.
+// Destroy and recreate JSCocoa upon WebFrameLoadDelegate.didClearWindowObject:forFrame:
 //
 
 @interface Report : NSObject {
