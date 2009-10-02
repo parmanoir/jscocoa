@@ -39,6 +39,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 	JSGlobalContextRef	ctx;
     id					_delegate;
 	BOOL				useSafeDealloc;
+	BOOL				useSplitCall;
 }
 
 @property (assign) id delegate;
@@ -153,6 +154,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (void)setUseAutoCall:(BOOL)b;
 - (BOOL)useSafeDealloc;
 - (void)setUseSafeDealloc:(BOOL)b;
+- (BOOL)useSplitCall;
+- (void)setUseSplitCall:(BOOL)b;
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
 + (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;

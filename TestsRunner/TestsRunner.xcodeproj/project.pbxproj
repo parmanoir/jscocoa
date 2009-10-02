@@ -21,6 +21,7 @@
 		3D36E2C310522A5900132E23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2BF10522A5900132E23 /* InfoPlist.strings */; };
 		3D36E2C410522A5900132E23 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2C110522A5900132E23 /* MainMenu.xib */; };
 		3D36E2C710522A6F00132E23 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D36E2C610522A6F00132E23 /* JavaScriptCore.framework */; };
+		3D44EA621072FC7300F20BAD /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		3D36E2C010522A5900132E23 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3D36E2C210522A5900132E23 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D36E2C610522A6F00132E23 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
+		3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jslint-jscocoa.js"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* TestsRunner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestsRunner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -155,6 +157,7 @@
 				3D36E261105229E700132E23 /* BridgeSupportController.h */,
 				3D36E262105229E700132E23 /* BridgeSupportController.m */,
 				3D36E263105229E700132E23 /* class.js */,
+				3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */,
 				3D36E282105229E700132E23 /* JSCocoa.h */,
 				3D36E286105229E700132E23 /* JSCocoa_Prefix.pch */,
 				3D36E287105229E700132E23 /* JSCocoaController.h */,
@@ -217,6 +220,7 @@
 			files = (
 				3D36E2B710522A2100132E23 /* test.js in Resources */,
 				3D36E292105229E700132E23 /* class.js in Resources */,
+				3D44EA621072FC7300F20BAD /* jslint-jscocoa.js in Resources */,
 				3D36E2BC10522A4100132E23 /* Tests in Resources */,
 				3D36E2C310522A5900132E23 /* InfoPlist.strings in Resources */,
 				3D36E2C410522A5900132E23 /* MainMenu.xib in Resources */,

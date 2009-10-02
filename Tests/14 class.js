@@ -1,5 +1,8 @@
 
-//log('this leaks four')
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
 
 
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
@@ -38,7 +41,7 @@
 						
 	})
 	
-	var o = MyTestObjectNewClass.instance()
+	var o = MyTestObjectNewClass.instance
 	
 	// Test class overload
 	MyTestObjectNewClass.instanceMethodSignatureForSelector('respondsToSelector:')
@@ -73,11 +76,14 @@
 	hash['closureTest:'] = ['int', 'int', fn]
 	defineClass('MyTestObjectNewClass2 < NSObject', hash)
 	
-	var o = MyTestObjectNewClass2.instance()
+	var o = MyTestObjectNewClass2.instance
 	var r = o.closureTest(8)
 	
 //	JSCocoaController.log('r=' + r)
 	if (r != 13)	throw 'using a closure as instance method failed'
 
 	o = null
+	
+	
+	__jsc__.useSplitCall = useSplitCall
 	

@@ -204,6 +204,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif
 
 	// Load class kit
+	id lintPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"jslint-jscocoa" ofType:@"js"];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	[self evalJSFile:lintPath];
 	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
 
@@ -233,7 +235,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// JSCocoa registers 'safeDealloc' in place of 'dealloc' and calls it in the next run loop cycle. 
 	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
-	useSafeDealloc = YES;
+	useSafeDealloc	= YES;
+	// ObjJ syntax renders split call moot
+	useSplitCall	= NO;
 
 	return	self;
 }
@@ -406,7 +410,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Evaluate a file
 // 
-- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue withLintex:(BOOL)withLintex
+- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
 {
 	NSError*	error;
 	id script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
@@ -421,11 +425,10 @@ static id JSCocoaSingleton = NULL;
 	// Normal path, with macro expansion for class definitions
 	// OR
 	// Lintex path
-	id functionName = withLintex ? @"lintex" : @"expandJSMacros";
+	id functionName = @"expandJSMacros";
 
-	// Expand macros or lintex
+	// Expand macros
 	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
-	if (!hasFunction && [functionName isEqualToString:@"lintex"])	NSLog(@"lintex function not found to process %@", path);
 	if (hasFunction)
 	{
 		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:functionName withArguments:script, nil]];
@@ -434,6 +437,8 @@ static id JSCocoaSingleton = NULL;
 			return NSLog(@"%@ expansion failed on %@ (%@)", functionName, path, expandedScript), NO;
 
 		script = expandedScript;
+//		NSLog(@"===================================================================================");
+//		NSLog(@"%@", expandedScript);
 	}
 
 	//
@@ -466,11 +471,6 @@ static id JSCocoaSingleton = NULL;
 	return	YES;
 }
 
-- (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue
-{
-	return	[self evalJSFile:path toJSValueRef:returnValue withLintex:NO];
-}
-
 
 //
 // Evaluate a file, without caring about return result
@@ -478,11 +478,6 @@ static id JSCocoaSingleton = NULL;
 - (BOOL)evalJSFile:(NSString*)path
 {
 	return	[self evalJSFile:path toJSValueRef:nil];
-}
-
-- (BOOL)evalJSFileWithLintex:(NSString*)path
-{
-	return	[self evalJSFile:path toJSValueRef:nil withLintex:YES];
 }
 
 //
@@ -809,6 +804,14 @@ static id JSCocoaSingleton = NULL;
 	return	o;
 }
 
+//
+// Autocall
+//	Allow calling zero arg methods without parens
+//
+//	NSWorkspace.sharedWorkspace
+//		instead of
+//		NSWorkspace.sharedWorkspace()
+//
 - (BOOL)useAutoCall
 {
 	return	useAutoCall;
@@ -818,6 +821,12 @@ static id JSCocoaSingleton = NULL;
 	useAutoCall = b;
 }
 
+//
+// Safe dealloc
+//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
+//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
+//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
+//
 - (BOOL)useSafeDealloc
 {
 	return	useSafeDealloc;
@@ -825,6 +834,23 @@ static id JSCocoaSingleton = NULL;
 - (void)setUseSafeDealloc:(BOOL)b
 {
 	useSafeDealloc = b;
+}
+
+//
+// Split call
+//	Allows calling multi param ObjC messages with a jQuery-like syntax.
+//
+//	obj.do({ this : 'hello', andThat : 'world' })
+//		instead of
+//		obj.dothis_andThat_('hello', 'world')
+//
+- (BOOL)useSplitCall
+{
+	return	useSplitCall;
+}
+- (void)setUseSplitCall:(BOOL)b
+{
+	useSplitCall = b;
 }
 
 
@@ -2941,7 +2967,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 						if ([jsc useSafeDealloc])
 							[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
 					}
-					else	NSLog(@"safeDealloc could not find the context attached to %@.%x - allocate this object with instance(), or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
+					else	NSLog(@"safeDealloc could not find the context attached to %@.%x - allocate this object with instance, or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
 				}
 				
 			}
@@ -3128,8 +3154,11 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		{
 			id callee	= [privateObject object];
 			SEL sel		= NSSelectorFromString(propertyName);
+			
+			BOOL isInstanceCall = [propertyName isEqualToString:@"instance"];
+			
 			// Go for zero arg call
-			if ([propertyName rangeOfString:@":"].location == NSNotFound && [callee respondsToSelector:sel])
+			if ([propertyName rangeOfString:@":"].location == NSNotFound && ([callee respondsToSelector:sel] || isInstanceCall))
 			{
 				//
 				// Delegate canCallMethod, callMethod
@@ -3153,6 +3182,22 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 						if (delegateCall)	
 							return	delegateCall;
 					}
+				}
+
+				// instance
+				if (isInstanceCall)
+				{
+					// Manually call and box our object
+					id class	= [callee class];
+					id instance	= [[class alloc] init];
+					JSValueRef	returnValue;
+					[JSCocoaFFIArgument boxObject:instance toJSValueRef:&returnValue inContext:ctx];
+					// Release it, making the javascript box the sole retainer
+					// Nulling all references to this object will release the instance during Javascript GC					
+					JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, returnValue, NULL));
+					[private.object release];
+					
+					return	returnValue;
 				}
 
 				// Special case for alloc : objects 
@@ -3263,7 +3308,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			&& ![methodName isEqualToString:@"valueOf"] 
 			&& ![methodName isEqualToString:@"Super"]
 			&& ![methodName isEqualToString:@"Original"]
-			&& ![methodName isEqualToString:@"instance"])
+/*			&& ![methodName isEqualToString:@"instance"]*/)
 		{
 			if ([methodName rangeOfString:@"_"].location != NSNotFound)
 				[methodName replaceOccurrencesOfString:@"_" withString:@":" options:0 range:NSMakeRange(0, [methodName length])];
@@ -3272,6 +3317,20 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 
 			if (![callee respondsToSelector:NSSelectorFromString(methodName)])
 			{
+				// Instance check
+				if ([methodName hasPrefix:@"instance"])
+				{
+					id initMethodName = [NSString stringWithFormat:@"init%@", [methodName substringFromIndex:8]];
+					if ([callee instancesRespondToSelector:NSSelectorFromString(initMethodName)])
+					{
+						JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+						JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+						private.type = @"method";
+						private.methodName = methodName;
+						return o;
+					}
+				}
+			
 				//
 				// This may be a JS function
 				//
@@ -3320,7 +3379,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"method";
 		private.methodName = methodName;
-
+/*
 		// Special case for instance : setup a valueOf callback calling instance
 		if ([callee class] == callee && [propertyName isEqualToString:@"instance"])
 		{
@@ -3328,6 +3387,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			JSObjectSetProperty(ctx, o, jsName, object, JSCocoaInternalAttribute, NULL);
 			JSStringRelease(jsName);
 		}
+*/		
 		return	o;
 	}
 	
@@ -3735,6 +3795,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	BOOL	callingObjC = NO;
 	// Structure return (objc_msgSend_stret)
 	BOOL	usingStret	= NO;
+	// Calling instance... , replaced with init... and released, making the js object sole owner
+	BOOL	callingInstance	= NO;
 
 
 	// Get delegate
@@ -3778,12 +3840,13 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		}
 
 		// Instance call
+/*
 		if ([callee class] == callee && [methodName isEqualToString:@"instance"])
 		{
 			if (argumentCount > 1)	return	throwException(ctx, exception, @"Invalid argument count in instance call : must be 0 or 1"), NULL;
 			return	[callee instanceWithContext:ctx argumentCount:argumentCount arguments:arguments exception:exception];
 		}
-
+*/
 		// Check selector
 		if (![callee respondsToSelector:NSSelectorFromString(methodName)])
 		{
@@ -3792,7 +3855,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			//	set( { value : '5', forKey : 'hello' } )
 			//	-> setValue:forKey:
 			//
-			if (![callee respondsToSelector:NSSelectorFromString(methodName)])
+			if ([jsc useSplitCall])
 			{
 				id			splitMethodName		= privateObject.methodName;
 				id class = [callee class];
@@ -3812,34 +3875,48 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		Method method = class_getInstanceMethod([callee class], NSSelectorFromString(methodName));
 		if (!method)	method = class_getClassMethod([callee class], NSSelectorFromString(methodName));
 
-		// If we didn't find a method, try treating object as Javascript string, then try Distant Object
-		if (!method)	
+		// If we didn't find a method, try an instance call, then try treating object as Javascript string, then try Distant Object
+		if (!method)
 		{
-			// (First) Last chance before exception : try treating callee a Javascript string
-			if ([callee isKindOfClass:[NSString class]])
+			// Instance Check
+			if ([methodName hasPrefix:@"instance"])
 			{
-				id script = [NSString stringWithFormat:@"String.prototype.%@", methodName];
-				JSStringRef	jsScript = JSStringCreateWithUTF8CString([script UTF8String]);
-				JSValueRef result = JSEvaluateScript(ctx, jsScript, NULL, NULL, 1, NULL);
-				JSStringRelease(jsScript);
-				if (result && JSValueGetType(ctx, result) == kJSTypeObject)
-				{
-					JSStringRef string = JSStringCreateWithCFString((CFStringRef)callee);
-					JSValueRef stringValue = JSValueMakeString(ctx, string);
-					JSStringRelease(string);
-
-					JSObjectRef functionObject = JSValueToObject(ctx, result, NULL);
-					JSObjectRef jsThisObject = JSValueToObject(ctx, stringValue, NULL);
-					JSValueRef r =	JSObjectCallAsFunction(ctx, functionObject, jsThisObject, argumentCount, arguments, NULL);
-					return	r;
-				}
+				id initMethodName = [NSString stringWithFormat:@"init%@", [methodName substringFromIndex:8]];
+				id class		= [callee class];
+				method			= class_getInstanceMethod(class, NSSelectorFromString(initMethodName));
+				methodName		= initMethodName;
+				callee			= [class alloc];
+				callingInstance	= YES;
 			}
 			
-			// Last chance before exception : try calling DO
-			JSValueRef res = [jsc JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
-			if (res)	return	res;
-			
-			return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction : method %@ not found", methodName]), NULL;
+			if (!method)
+			{
+				// (First) Last chance before exception : try treating callee as a Javascript string
+				if ([callee isKindOfClass:[NSString class]])
+				{
+					id script = [NSString stringWithFormat:@"String.prototype.%@", methodName];
+					JSStringRef	jsScript = JSStringCreateWithUTF8CString([script UTF8String]);
+					JSValueRef result = JSEvaluateScript(ctx, jsScript, NULL, NULL, 1, NULL);
+					JSStringRelease(jsScript);
+					if (result && JSValueGetType(ctx, result) == kJSTypeObject)
+					{
+						JSStringRef string = JSStringCreateWithCFString((CFStringRef)callee);
+						JSValueRef stringValue = JSValueMakeString(ctx, string);
+						JSStringRelease(string);
+
+						JSObjectRef functionObject = JSValueToObject(ctx, result, NULL);
+						JSObjectRef jsThisObject = JSValueToObject(ctx, stringValue, NULL);
+						JSValueRef r =	JSObjectCallAsFunction(ctx, functionObject, jsThisObject, argumentCount, arguments, NULL);
+						return	r;
+					}
+				}
+				
+				// Last chance before exception : try calling DO
+				JSValueRef res = [jsc JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				if (res)	return	res;
+				
+				return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction : method %@ not found", methodName]), NULL;
+			}
 		}
 		
 		// Extract arguments
@@ -4024,7 +4101,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Get return value holder
 	id returnValue = [argumentEncodings objectAtIndex:0];
 	
-	
 	// Allocate return value storage if it's a pointer
 	if ([returnValue typeEncoding] == '^')
 		[returnValue allocateStorage];
@@ -4058,6 +4134,14 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	JSValueRef	jsReturnValue = NULL;
 	BOOL converted = [returnValue toJSValueRef:&jsReturnValue inContext:ctx];
 	if (!converted)	return	throwException(ctx, exception, [NSString stringWithFormat:@"Return value not converted in %@", methodName?methodName:functionName]), NULL;
+	
+	// Instance call : release object to make js object sole owner
+	if (callingInstance)
+	{
+		JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsReturnValue, NULL));
+		[private.object release];
+	}
+
 	
 	return	jsReturnValue;
 }

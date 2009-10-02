@@ -1,4 +1,7 @@
 
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
 
 	
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
@@ -12,7 +15,7 @@
 	var encoding = '*'
 	var encodingName = reverseEncodings[encoding]
 
-	var fn			= new Function ('a', 'b', 'c', 'return a+b+c')
+	var fn			= new Function('a', 'b', 'c', 'return a+b+c')
 	var fnName		= 'performSomeTest:withObject:andObject:'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName, encodingName]);
 	
@@ -45,3 +48,6 @@
 	if (r1 != 'helloworld!' || r1 != r2 || r1 != r3 || r1 != r4)	throw 'split call failed'
 	
 	o = null
+	
+	__jsc__.useSplitCall = useSplitCall
+	

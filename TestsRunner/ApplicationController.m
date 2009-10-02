@@ -29,6 +29,7 @@ JSCocoaController* jsc = nil;
 //	NSLog(@"sizeof(long)=%d", sizeof(long));
 //	NSLog(@"sizeof(CGFloat)=%d", sizeof(CGFloat));
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
+
 }
 
 - (void)applicationWillTerminate:(id)notif
@@ -278,14 +279,14 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	canSet		= NO;
 	hadError	= NO;
 	didSet		= NO;
-	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o = null"];
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o = null"];
 	if (!hadError)				return	@"delegate canSetProperty failed (1)";
 
 	//
 	// Test allowed setting
 	//
 	canSet		= YES;
-	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
 	if (!equalsButtonCell)		return	@"delegate canSetProperty failed (2)";
 	if (!equalsBezelStyle)		return	@"delegate canSetProperty failed (3)";
 
@@ -293,7 +294,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	// Test setting
 	//
 	customValueSet = NULL;
-	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
 	int bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
 	if (bezelStyle != 3)		return	@"delegate setProperty failed (1)";
 	
@@ -302,7 +303,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	// Test custom setting
 	//
 	didSet		= YES;
-	ret = [jsc evalJSString:@"var o = NSButtonCell.instance(); o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
+	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
 	bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
 //	NSLog(@"bezelStyle=%d", bezelStyle);
 	if (bezelStyle != 6)		return	@"delegate setProperty failed (2)";

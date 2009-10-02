@@ -38,7 +38,7 @@
 			if (w.document.getElementById('colorMe').style.backgroundColor != 'lime')	throw '(WebView) coloring failed'
 			if (w.document.getElementById('replaceMe').innerHTML != '8')				throw '(WebView) replacing content failed'
 
-			w.eval('function addMe(a, b) { return a+b}')
+			w['eval']('function addMe(a, b) { return a+b}')
 			if (w.addMe(3, 4) != 7)														throw '(WebView) adding a Javascript function failed'
 			
 			
@@ -70,7 +70,7 @@
 	// Add a WebView
 	var view = WebView.alloc.initWithFrame(contentView.frame)
 	view.release
-	var loadDelegate = WebViewLoadDelegate35.instance()
+	var loadDelegate = WebViewLoadDelegate35.instance
 	// WebView does NOT retain the delegate
 	view.frameLoadDelegate = loadDelegate
 	view.autoresizingMask = NSViewWidthSizable+NSViewHeightSizable

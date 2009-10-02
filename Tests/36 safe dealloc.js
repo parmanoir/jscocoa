@@ -1,6 +1,15 @@
 
+	//
+	// Safe dealloc
+	//	Allow -(void)dealloc to be overloaded. As dealloc is called during JS GC, no js code can be called then.
+	//	Overloaded dealloc will be called in the next run loop cycle.
+	//
 
 
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
 
 
 	var safe1Called = 0
@@ -53,8 +62,9 @@
 	
 
 	// Test safe dealloc
-	var o1 = SafeDeallocTest.instance()
-	var o2 = SafeDeallocTest2.instance()
+	var o1 = SafeDeallocTest.instance
+	var o2 = SafeDeallocTest2.instance
+	o1.safeDealloc = o2.safeDealloc = true
 	
 	// Need to remove this : needed to put __jsc__ ivar in instances
 //	o1.blaaaaaaaaaaah = 'hello'
@@ -90,8 +100,8 @@
 	if (!('bindingsAlreadyTested2' in this))
 	{
 	
-		var oSource = BindingsSafeDeallocSource.instance()
-		var oTarget = BindingsSafeDeallocTarget.instance()
+		var oSource = BindingsSafeDeallocSource.instance
+		var oTarget = BindingsSafeDeallocTarget.instance
 //		log('oSource=' + oSource + ' rc=' + oSource.retainCount)
 //		log('oTarget=' + oTarget + ' rc=' + oTarget.retainCount)
 
@@ -127,3 +137,6 @@
 
 
 //	throw ('bindings auto remove')
+
+
+	__jsc__.useSplitCall = useSplitCall

@@ -47,7 +47,7 @@
 						}]
 	})
 
-	var o = ArrayDictBridgeTest.instance()
+	var o = ArrayDictBridgeTest.instance
 	
 	o.callWithArray(['a', 'b', 7.89, 'c'])
 	o.callWithDict({ hello : 'world', count : 7.89 })

@@ -4,6 +4,9 @@
 	//	Call this.Original(arguments) to call original method.
 	//
 
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
 
 	// Test class
 	class ObjCClassTestSwizzle < NSObject
@@ -75,7 +78,7 @@
 
 
 	// Test extra methods
-	var o1 = ObjCClassTestSwizzle.instance()
+	var o1 = ObjCClassTestSwizzle.instance
 	var r = o1.add13(2)
 	if (r != 15)				throw 'swizzle : add method failed (1)'
 	
@@ -99,3 +102,5 @@
 	if (r != 9)					throw 'swizzle : class call failed (2)'
 
 	o1 = null
+
+	__jsc__.useSplitCall = useSplitCall

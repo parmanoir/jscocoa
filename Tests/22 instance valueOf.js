@@ -14,7 +14,7 @@
 	log('a')
 	var o1 = MyInstanceValueOfTest.instance
 	log('b')
-	var o2 = MyInstanceValueOfTest.instance()
+	var o2 = MyInstanceValueOfTest.instance
 	log('c')
 
 	var count = JSCocoaController.liveInstanceCount('MyInstanceValueOfTest')

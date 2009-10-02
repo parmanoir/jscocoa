@@ -1,3 +1,11 @@
+
+
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 	//
 	// new class syntax
 	//
@@ -71,13 +79,13 @@
 	//
 	// Test instance methods
 	//
-	var o1 = ObjCClassTest.instance()
+	var o1 = ObjCClassTest.instance
 	
 	var r = o1.add({ x : 3, andY : 5 })
 	if (r != 8)			throw 'new class syntax : add failed (1)'
 	
 	// Test derived add
-	var o2 = ObjCClassTest2.instance()
+	var o2 = ObjCClassTest2.instance
 
 	var passedAdd2 = false
 	var r = o2.add({ x : 3, andY : 5 })
@@ -108,8 +116,8 @@
 	//
 	// Test structures
 	//
-	NSMakeRect(5, 6, 7, 8)
-	NSMakeRect(1, 2, 3, 4), NSMakeRect(5, 6, 7, 8)
+//	NSMakeRect(5, 6, 7, 8)
+//	NSMakeRect(1, 2, 3, 4), NSMakeRect(5, 6, 7, 8)
 	var r = o1.add({ rect : NSMakeRect(1, 2, 3, 4), andRect: NSMakeRect(5, 6, 7, 8) })
 	if (r.origin.x != 6)		throw 'new class syntax : struct failed (1)'
 	if (r.origin.y != 8)		throw 'new class syntax : struct failed (2)'
@@ -140,3 +148,4 @@
 
 
 
+	__jsc__.useSplitCall = useSplitCall

@@ -21,7 +21,7 @@
 
 
 	// Check exactitude of a full predicate with a predicate built with arguments
-	var format = "(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*\.jscocoa\")"
+	var format = "(kMDItemDisplayName like[cdw] '*jscocoa*') and (kMDItemFSName like[c] \"*.jscocoa\")"
 	var p1 = NSPredicate.predicateWithFormat(format)
 //	var p2 = NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] %@) and (kMDItemFSName like[c] %@)", '*jscocoa*', '*.jscocoa', null)
 	var p2 = NSPredicate.predicateWithFormat("(kMDItemDisplayName like[cdw] %@) and (kMDItemFSName like[c] %@)", '*jscocoa*', '*.jscocoa')

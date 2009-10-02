@@ -19,6 +19,13 @@ NSDeviceRGBColorSpace];
 
 */
 
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
+
+
 	function	floatsEq(a, b)
 	{
 		if (Math.abs(a-b) < 0.001)	return	true
@@ -140,3 +147,5 @@ NSDeviceRGBColorSpace];
 	buffer2 = null
 
 
+
+	__jsc__.useSplitCall = useSplitCall

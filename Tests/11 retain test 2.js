@@ -21,12 +21,12 @@
 		
 		var o1 = newClass.alloc.init
 		o1.release
-		var o2 = newClass.instance()
+		var o2 = newClass.instance
 //		log('o1=' + o1 + ' rc=' + o1.retainCount)
 //		log('o2=' + o2 + ' rc=' + o2.retainCount)
 		
 
-		newClass.instance()
+		newClass.instance
 		
 //		JSCocoaController.logInstanceStats
 		var count1 = JSCocoaController.liveInstanceCount(SomeRetainCountTest)

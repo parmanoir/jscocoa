@@ -1,4 +1,9 @@
 
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 
 	/*
 	
@@ -43,7 +48,7 @@
 	}
 	
 	
-	var o1 = MyJSFunctionTest.instance()
+	var o1 = MyJSFunctionTest.instance
 	
 	var addResult1 = o1.custom({ add : 4, and : 5 })
 	var addResult2 = o1.jsAdd2(4, 5)
@@ -56,7 +61,7 @@
 	if (addResult2 != '*4_5$')		throw 'pure js call failed (2)'
 
 	// Test derived class
-	var o2 = MyJSFunctionTest2.instance()
+	var o2 = MyJSFunctionTest2.instance
 	var addResult1 = o2.custom({ add : 4, and : 5 })
 	var addResult2 = o2.jsAdd2(4, 5)
 	var addResult3 = o2.jsAdd3(4, 5)
@@ -65,3 +70,5 @@
 	if (addResult2 != '*4_5$')		throw 'pure js call failed in derived class (2)'
 	if (addResult3 != '*5_4$')		throw 'pure js call failed in derived class (3)'
 
+
+	__jsc__.useSplitCall = useSplitCall

@@ -1,4 +1,11 @@
 
+
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
 
@@ -57,3 +64,7 @@
 
 	o.release
 	o = null
+	
+	
+	__jsc__.useSplitCall = useSplitCall
+	

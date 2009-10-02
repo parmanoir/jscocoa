@@ -1,5 +1,11 @@
 
 
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 	var messageFromAction = null
 
 
@@ -49,10 +55,11 @@
 	var path = NSBundle.mainBundle.bundlePath + '/Contents/Resources/Tests/Resources/standalone window.nib'
 
 	// This will be the NIB's owner, it will receive outlets after loading
-	var owner = NibTestOwner.instance()
+	var owner = NibTestOwner.instance
 
 	// loadNibNamed does not allow path data, load with NSNib
-	var nib = NSNib.instance({withContentsOfURL:NSURL.fileURLWithPath(path)})
+//	var nib = NSNib.instance({withContentsOfURL:NSURL.fileURLWithPath(path)})
+	var nib = NSNib.instanceWithContentsOfURL(NSURL.fileURLWithPath(path))
 	
 	var nibObjects = hasObjCGC ? null : new outArgument
 	if (!nib.instantiateNibWithOwner_topLevelObjects(owner, nibObjects))	throw 'NIB not loaded ' + path
@@ -179,3 +186,4 @@
 	__jsc__.garbageCollect
 
 
+	__jsc__.useSplitCall = useSplitCall

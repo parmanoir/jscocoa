@@ -21,8 +21,8 @@
 		var encoding = encodingsToTest[i]
 		var encodingName = reverseEncodings[encoding]
 
-		var fn			= new Function ('a', 'b', 'return a+b+0.1')
-//		var fn			= new Function ('a', 'b', 'JSCocoaController.log("INADD (' + encoding + ') a="+a+" b=" + b); return a+b+0.1')
+		var fn			= new Function('a', 'b', 'return a+b+0.1')
+//		var fn			= new Function('a', 'b', 'JSCocoaController.log("INADD (' + encoding + ') a="+a+" b=" + b); return a+b+0.1')
 		var fnName		= 'test' + encoding + ':' + encoding + ':'
 		var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
@@ -76,7 +76,7 @@
 	var encoding = 'B'
 	var encodingName = reverseEncodings[encoding]
 
-	var fn			= new Function ('a', 'b', 'return a^b')
+	var fn			= new Function('a', 'b', 'return a^b')
 	var fnName		= 'test' + encoding + ':' + encoding + ':'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
@@ -99,7 +99,7 @@
 	var encoding = ':'
 	var encodingName = reverseEncodings[encoding]
 
-	var fn			= new Function ('a', 'b', 'return a+b')
+	var fn			= new Function('a', 'b', 'return a+b')
 	var fnName		= 'testSEL:SEL:'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 
@@ -115,7 +115,7 @@
 	var encoding = '*'
 	var encodingName = reverseEncodings[encoding]
 
-	var fn			= new Function ('a', 'b', 'return a+b')
+	var fn			= new Function('a', 'b', 'return a+b')
 	var fnName		= 'testCHARPTR:CHARPTR:'
 	var fnEncoding	= objc_encoding.apply(null, [encodingName, encodingName, encodingName]);
 

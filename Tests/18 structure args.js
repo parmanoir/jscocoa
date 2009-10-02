@@ -1,4 +1,10 @@
 
+
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
 
@@ -22,7 +28,7 @@
 						}]
 	})
 	
-	var o = StructureArgsTester.instance()
+	var o = StructureArgsTester.instance
 	
 	var r = o.testWith({x:1.23, struct:NSMakePoint(10, 20), y:4.56})
 	
@@ -33,3 +39,4 @@
 
 	o = null
 
+	__jsc__.useSplitCall = useSplitCall

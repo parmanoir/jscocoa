@@ -5,7 +5,7 @@
 /*
 
 
-	var o = NSView.instance()
+	var o = NSView.instance
 	o.frame.origin.x = 0
 //	o.frame.origin.x = o.frame.size.width + o.frame.size.height + 13
 

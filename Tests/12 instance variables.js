@@ -49,7 +49,7 @@
 	container2.myValue1 = 7.89
 
 //	JSCocoaController.log('container2.myValue1=' + container2.myValue1)
-	if (container2.myValue1 != 7.89)			throw "(4) Invalid instance variable"	
+	if (container2.myValue1 != 7.89)			throw "(4) Invalid instance variable"
 
 
 	// Test deletion
@@ -64,7 +64,7 @@
 
 	// This is dummy code, as Snow Leopard's JavascriptCore retains an object during this run loop cycle.
 	// This will force the release of InstanceVariableTester and InstanceVariableTester2 instances.
-	var blah = NSObject.instance()
+	var blah = NSObject.instance
 	if (('myValue1' in blah) != false)
 	{
 	}

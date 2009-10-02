@@ -1,5 +1,10 @@
 
 
+	// Split call disabled by default since ObjJ syntax
+	var useSplitCall = __jsc__.useSplitCall
+	__jsc__.useSplitCall = true
+
+
 
 //	JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
 
@@ -86,7 +91,7 @@
 	var testClassOverload1		= false
 	
 
-	var o1 = MyTestObjectNewClassNewMethod.instance()
+	var o1 = MyTestObjectNewClassNewMethod.instance
 		
 
 	// Test class overload
@@ -138,7 +143,7 @@
 	var testClassOverload2		= false
 
 
-	var o2 = MyTestObjectNewClassNewMethod2.instance()
+	var o2 = MyTestObjectNewClassNewMethod2.instance
 	
 	// Test class overload
 	MyTestObjectNewClassNewMethod2.instanceMethodSignatureForSelector('respondsToSelector:')
@@ -156,3 +161,5 @@
 
 	o1 = null
 	o2 = null
+
+	__jsc__.useSplitCall = useSplitCall

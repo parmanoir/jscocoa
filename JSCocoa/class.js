@@ -153,7 +153,7 @@
 		if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
 //		JSCocoaController.log('parentclass=' + parentClass)
 
-		var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
+		var newClass = JSCocoa.createClass_parentClass_(className, parentClassName)
 		for (var method in methods)
 		{
 			var isInstanceMethod = parentClass.instancesRespondToSelector(method)
@@ -165,8 +165,8 @@
 				var fn = methods[method]
 				if (!fn || (typeof fn) != 'function')	throw '(overloading) Method ' + method + ' not a function'
 
-				if (isInstanceMethod)	JSCocoa.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
-				else					JSCocoa.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
+				if (isInstanceMethod)	JSCocoa.overloadInstanceMethod_class_jsFunction_(method, newClass, fn)
+				else					JSCocoa.overloadClassMethod_class_jsFunction_(method, newClass, fn)
 			}
 			else
 			{
@@ -229,12 +229,12 @@
 			if (typeof setter != 'function')	throw 'outlet setter not a function (' + setter + ')'
 			fn = setter
 		}
-		JSCocoa.add({ instanceMethod : outletMethod, 'class' : newClass, jsFunction : fn, encoding : encoding })
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(outletMethod, newClass, fn, encoding)
 
 		var fn = new Function('return this.JSValueForJSName("_' + name + '")')
 		var encoding = objc_encoding('id')
 		
-		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(name, newClass, fn, encoding)					
 	}
 	
 	//
@@ -244,7 +244,7 @@
 	{
 		if (name.charAt(name.length-1) != ':')	name += ':'
 		var encoding = objc_encoding('void', 'id')
-		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })					
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(name, newClass, fn, encoding)					
 	}
 	
 	//
@@ -259,7 +259,7 @@
 			if (typeof getter != 'function')	throw 'key getter not a function (' + getter + ')'
 			fn = getter
 		}
-		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('id') })
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(name, newClass, fn, objc_encoding('id'))
 
 		// Set
 		var setMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
@@ -269,7 +269,7 @@
 			if (typeof setter != 'function')	throw 'key setter not a function (' + setter + ')'
 			fn = setter
 		}
-		JSCocoa.add({ instanceMethod : setMethod, 'class' : newClass, jsFunction : fn, encoding : objc_encoding('void', 'id') })
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(setMethod, newClass, fn, objc_encoding('void', 'id'))
 	}
 	
 	//
@@ -277,14 +277,14 @@
 	// 
 	function	class_add_instance_method(newClass, name, fn, encoding)
 	{
-		JSCocoa.add({ instanceMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
+		JSCocoa.addInstanceMethod_class_jsFunction_encoding_(name, newClass, fn, encoding)
 	}
 	//
 	// Vanilla class method add. Wrapper for JSCocoaController's addClassMethod
 	// 
 	function	class_add_class_method(newClass, name, fn, encoding)
 	{
-		JSCocoa.add({ classMethod : name, 'class' : newClass, jsFunction : fn, encoding : encoding })
+		JSCocoa.addClassMethod_class_jsFunction_encoding_(name, newClass, fn, encoding)
 	}
 	
 	//
@@ -292,11 +292,11 @@
 	//
 	function	class_swizzle_instance_method(newClass, name, fn)
 	{
-		JSCocoa.swizzle({ instanceMethod : name, 'class' : newClass, jsFunction : fn })
+		JSCocoa.swizzleInstanceMethod_class_jsFunction_(name, newClass, fn)
 	}
 	function	class_swizzle_class_method(newClass, name, fn)
 	{
-		JSCocoa.swizzle({ classMethod : name, 'class' : newClass, jsFunction : fn })
+		JSCocoa.swizzleClassMethod_class_jsFunction_(name, newClass, fn)
 	}
 	
 	//
@@ -364,7 +364,8 @@
 			// Get parent class
 			var parentClass = this[parentClassName]
 			if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
-			var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
+//			var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
+			var newClass = JSCocoa.createClass_parentClass_(className, parentClassName)
 		}
 
 
@@ -392,8 +393,8 @@
 				var fn = h.methods[method].fn
 				if (!fn || (typeof fn) != 'function')	throw 'Method ' + method + ' not a function'
 
-				if (isInstanceMethod)	JSCocoa.overload({ instanceMethod : method, 'class' : newClass, jsFunction : fn })
-				else					JSCocoa.overload({ classMethod : method, 'class' : newClass, jsFunction : fn })
+				if (isInstanceMethod)	JSCocoa.overloadInstanceMethod_class_jsFunction_(method, newClass, fn)
+				else					JSCocoa.overloadClassMethod_class_jsFunction_(method, newClass, fn)
 			}
 			else
 			{
@@ -401,10 +402,9 @@
 				var fn = h.methods[method].fn
 				if (!fn || (typeof fn) != 'function')	throw 'New method ' + method + ' not a function'
 
-//				log('encoding='  + encoding + ' class=' + newClass + ' method=' + method)
-					
 				var encodings = h.methods[method].encodingArray || h.methods[method].encoding.split(' ')
 				var encoding = objc_encoding.apply(null, encodings)
+//				log('encoding='  + encoding + ' class=' + newClass + ' method=' + method)
 				if (h.methods[method].type == 'class method')	class_add_class_method(newClass, method, fn, encoding)
 				else											class_add_instance_method(newClass, method, fn, encoding)
 			}
@@ -579,15 +579,16 @@
 	//
 	function	outArgument()
 	{
-		var o = JSCocoaOutArgument.instance()
+		var o = JSCocoaOutArgument.instance
 		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
 		return	o
 	}
 	
 	function	memoryBuffer(types)
 	{
-//		return	JSCocoaMemoryBuffer.instance()
-		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
+//		return	JSCocoaMemoryBuffer.instance
+//		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
+		return	JSCocoaMemoryBuffer.instanceWithTypes(types)
 	}
 
 
@@ -636,7 +637,7 @@
 		return str
 	}
 	
-	
+/*	
 	//
 	// expandJSMacros
 	//	convert ObjC-like class syntax to Javascript
@@ -723,7 +724,252 @@
 	{
 		return	'JSFunction(\'' + functionName + '\').fn = function ' + arguments
 	}
-	
+*/	
+
+
+	// JSLint
+	function	__logToken(token)
+	{
+		__lintTokens.push(token)
+	}
+	var __JSLINT = JSLintWithLogs({ logToken : __logToken })
+	var __jslint = __JSLINT()
+	var __lintTokens
+
+	function	expandJSMacros(script)
+	{
+		__lintTokens = []
+		var lines	= script.split('\n')
+		var options	= { forin : true, laxbreak : true, indent : true, evil : true }
+		var lintRes	= __jslint(lines, options)
+		
+		var str = 'LINT=' + lintRes
+		for (var i=0; i<__JSLINT.errors.length; i++)
+		{
+			var e = __JSLINT.errors[i]
+			if (!e)	continue
+			log('JSLint error (' + e.line + ', ' + e.character + ')=' + e.reason)
+			log(lines[e.line])
+			var str = ''
+			for (var j=0; j<e.character-1; j++) str += ' '
+			str += '^'
+			log(str)
+		}
+
+
+		var tokens = __lintTokens
+		var str = ''
+		var str2 = ''
+		
+		var currentParameterCount
+		var tokenStream		= []
+		var token, prevtoken= tokens[0]
+		for (var i=0; i<tokens.length; i++)
+		{
+			token = tokens[i]
+			var v = tv = token.rawValue
+			
+			var line = lines[token.line]
+			if (!line) continue
+			
+			if (token.id == '(endline)')
+			{
+				tokenStream.push('\n')
+				continue
+			}
+			
+			// Add whitespace - either the start of the line if we switched lines, or the span between this token and the previous one
+			var whitespace = prevtoken.line != token.line ? line.substr(0, token.from) : line.substr(prevtoken.character, token.from-prevtoken.character)
+			tokenStream.push(String(whitespace.match(/\s*/)))
+
+			prevtoken = token
+
+			// Handle ObjC classes
+			if (token.isObjCClassStart)
+			{
+				if (tokens[i+2].value == '<')
+				{
+					tokenStream.push("Class('" + tokens[i+1].value + ' < ' + tokens[i+3].value + "').definition = function ()")
+					i += 3
+				}
+				else
+				{
+					tokenStream.push("Class('" + tokens[i+1].value + "').definition = function ()")
+					i += 1
+				}
+				continue
+			}
+			// Handle ObjC methods
+			if (token.isObjCClassItemStart)
+			{
+				var methodToken = token
+				var dataHolder = token
+				var isSwizzle = false
+				if (token.value.toLowerCase() == 'swizzle')
+				{
+					methodToken = token = tokens[++i]
+					isSwizzle = true
+				}
+				// Method start
+				if (token.value == '-' || token.value == '+')
+				{
+					// Skip method definition
+					while (tokens[i+1] && tokens[i+1].value != '{')
+						i++
+
+					var str = "('" + dataHolder.objCMethodName + "').encodingArray([" + dataHolder.objCMethodEncodings + "]).fn = function (" + dataHolder.objCMethodParamNames + ")"
+					str = (isSwizzle ? 'Swizzle' : '') + (methodToken.value == '-' ? 'Method' : 'ClassMethod') + str
+					tokenStream.push(str)
+					continue
+				}
+				else
+				// Outlet
+				if (token.value == 'IBOutlet')
+				{
+					tokenStream.push("IBOutlet('" + tokens[i+1].value + "')")
+					if (tokens[i+2].value == '(')
+					{
+						tokenStream.push('.setter = function (' + tokens[i+3].value + ')')
+						i += 3
+					}
+					i += 1
+					continue
+				}
+				else
+				// Action
+				if (token.value == 'IBAction')
+				{
+					var actionName = tokens[i+1].value
+					
+					var paramName = 'sender'
+					if (tokens[i+2].value == '(')
+					{
+						paramName = tokens[i+3].value
+						i += 3
+					}
+
+					tokenStream.push("IBAction('" + actionName + "').fn = function (" + paramName + ")")
+					i += 1
+					continue
+				}
+				else
+				// Key
+				if (token.value == 'Key')
+				{
+					tokenStream.push("Key('" + tokens[i+1].value + "')")
+					i += 1
+					continue
+				}
+				else
+				// js function
+				if (token.isClassJSFunction)
+				{
+					tokenStream.push("JSFunction('" + token.jsFunctionName.rawValue + "').fn = ")
+					token.jsFunctionName.rawValue = ''
+				}
+			}
+			else
+			// String immediates, selectors
+			if (token.id == '@')
+			{
+				var nexttoken = tokens[i+1]
+				if (nexttoken.id == '(string)')
+				{
+					tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
+					i += 1
+					continue
+				}
+				else
+				{
+					tokenStream.push("'" + tokens[i+3].rawValue + "'")
+					i += 4
+					continue						
+				}
+			}
+			else
+			// If return
+			if (token.isIfReturn)
+			{
+				token.isIfReturn = false
+				
+				var j = i
+				var returnOpenerIndex = i-1
+				// Skip return tokens
+				while (tokens[j+1] && !tokens[j+1].isIfReturnOpener) j++
+				var ifReturnOpenerIndex = j+1
+				// Skip if tokens
+				while (tokens[j] && !tokens[j].isIfReturnCloser) j++
+				var ifReturnCloserIndex = j
+				
+				// Switch unless (...) to if (!(...))
+				if (tokens[ifReturnOpenerIndex].value == 'unless')
+				{
+					tokens[ifReturnOpenerIndex].rawValue = 'if'
+					tokens[ifReturnOpenerIndex+1].rawValue = '(!' + tokens[ifReturnOpenerIndex+1].rawValue
+					tokens[ifReturnCloserIndex].rawValue += ')'
+				}
+
+				// Splice : delete index, delete item count, replacement
+				var r = tokens.splice(i, ifReturnOpenerIndex-returnOpenerIndex-1)
+//					token.rawValue = '<b style="background-color: lime">' + token.rawValue + '</b>'
+
+				// Push delete item count and delete index on top of replacing tokens
+				r.unshift(0)
+				r.unshift(i+ifReturnCloserIndex-ifReturnOpenerIndex+1)
+				Array.prototype.splice.apply(tokens, r)
+
+				token = tokens[i]
+			}
+
+			var v = token.rawValue
+			//
+			// ObjC message handling
+			//
+			
+			// Skip '[' and ':'
+			if (token.isObjCCallOpener || token.isObjCParameterSeparator) continue
+
+			if (token.isObjCCallCloser && token.isObjCFirstCall) v = ''
+
+			// Instance : add '.' to get method
+			if (token.isObjCFirstCall)
+			{
+				currentParameterCount = token.objCParameterCountOpener
+				// Special case for 'class', must be bracketed ['class']
+				if (tokens[i+1].rawValue != 'class')
+					v += '.'
+			}
+			// Special case for class
+			if (token.isObjCCall && token.rawValue == 'class')	v = "['class']"
+			// First selector part : retrieve full selector name
+			if (token.isObjCFirstParam && currentParameterCount)
+			{
+				v = token.objCJSSelector
+				v += '('
+			}
+			// Selector part : ignore name and add ',' separator
+			if (token.isObjCMultiCall)
+			{
+				v = ''
+				if (!token.isObjCCallCloser) 
+					v += ','
+			}
+			// Ignore ']', add ')' if we're closing a parameter message
+			if (token.isObjCCallCloser)
+			{
+				if (!token.isObjCFirstCall)
+					v = ''
+				if (token.objCParameterCountCloser)
+					v = ')' + (v||'')
+			}
+			tokenStream.push(v)
+		}
+		var transformed = tokenStream.join('')
+//		log('*************')
+//		log(transformed)
+		return	transformed
+	}
+
 	//
 	// Localization
 	//
