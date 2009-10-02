@@ -57,7 +57,7 @@ Use straight Javascript syntax to call Cocoa.
 	// Alloc an object (no need to release)
 	var button = [NSButton instanceWithFrame:NSMakeRect(0, 0, 100, 40)]
 
-	// Setting
+	// Setting : an ObjC method starting with 'set' can be set like a Javascript property
 	var window = NSWorkspace.sharedWorkspace.activeApplication.keyWindow
 	// Instead of calling setTitle ...
 	window.setTitle('new title')
