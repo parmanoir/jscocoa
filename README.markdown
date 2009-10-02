@@ -47,13 +47,15 @@ What does it look like ?
 --
 Use straight Javascript syntax to call Cocoa.
 
-	// Get current application name
+	// Get current application name : dot syntax
 	var appName = NSWorkspace.sharedWorkspace.activeApplication.NSApplicationName
+	// The same with Objective-J syntax
+	var appName = [[[NSWorkspace sharedWorkspace] activeApplication] NSApplicationName]
 
 	// Alloc an object (need to release)
 	var button = NSButton.alloc.initWithFrame(NSMakeRect(0, 0, 100, 40))
 	// Alloc an object (no need to release)
-	var button = NSButton.instance({ withFrame:NSMakeRect(0, 0, 100, 40) }) 
+	var button = [NSButton instanceWithFrame:NSMakeRect(0, 0, 100, 40)]
 
 	// Setting
 	var window = NSWorkspace.sharedWorkspace.activeApplication.keyWindow
@@ -62,7 +64,9 @@ Use straight Javascript syntax to call Cocoa.
 	// ... set the 'title' property
 	window.title = 'new title'
 
-	// Call methods with jQuery-like syntax
+	// Call methods with Objective-J syntax
+	[obj callWithParam1:'Hello' andParam2:'World']
+	// Or with a jQuery-like syntax (need to be enabled with __jsc__.setUseSplitCall = true)
 	obj.call({ withParam1:'Hello', andParam2:'World' }) 
 	obj['callWithParam1:andParam2:']('Hello', 'World') 
 	obj.callWithParam1_andParam2('Hello', 'World' )
@@ -72,7 +76,7 @@ Use straight Javascript syntax to call Cocoa.
 	var 結果 = 追加する('こんにちは', '世界')
 	NSApplication.sharedApplication.keyWindow.title = 結果
 
-	// Define a new Javascript class usable by Cocoa (inspired by Cappucino)
+	// Write a new Cocoa class in Javascript (inspired by Cappucino)
 	class MyClass < NSObject
 	{
 		// Custom drawing, calling parent method
