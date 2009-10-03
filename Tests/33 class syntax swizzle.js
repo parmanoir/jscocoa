@@ -76,6 +76,19 @@
 		}
 	}
 
+	//
+	// Test swizzling of an existing class of an existing method
+	//	Disabled as it clogs logs
+/*
+	class NSButton
+	{
+		swizzle - (void)drawRect:(NSRect)rect
+		{
+			this.Original(arguments)
+			log('drawRect: called on button ' + this)
+		}
+	}
+*/
 
 	// Test extra methods
 	var o1 = ObjCClassTestSwizzle.instance

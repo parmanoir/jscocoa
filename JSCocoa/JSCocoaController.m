@@ -1322,15 +1322,21 @@ static id JSCocoaSingleton = NULL;
 {
 	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
 	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
-	SEL origSel_			= NSSelectorFromString(methodName);
-	Method origMethod		= class_getInstanceMethod(class, origSel_);
-	if (!origMethod)		return	NSLog(@"Method does not exist in instance swizzle %@.%@", class, methodName), NO;
+	SEL origSel_				= NSSelectorFromString(methodName);
+	Method origMethod			= class_getInstanceMethod(class, origSel_);
+	if (!origMethod)			return	NSLog(@"Method does not exist in instance swizzle %@.%@", class, methodName), NO;
 
 	// Prefix method name with "original"
-	id originalMethodName	= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
-	SEL altSel_				= NSSelectorFromString(originalMethodName);
+	id originalMethodName		= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
+	SEL altSel_					= NSSelectorFromString(originalMethodName);
+
+	// If method is already swizzled, reswizzle it to reset the class. 
+	// addMethod: will overwrite our first swizzled method, which is what we want.
+	if ([class instancesRespondToSelector:altSel_])	
+		method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
+
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
-	if (!b)					return NO;
+	if (!b)						return NO;
 
 	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
 	
@@ -1344,15 +1350,21 @@ static id JSCocoaSingleton = NULL;
 
 	// Always add method to existing class to make sure we're swizzling this class' method and not the parent's.
 	// Courtesy of Jonathan 'Wolf' Rentzsch's JRSwizzle http://github.com/rentzsch/jrswizzle/tree/master
-	SEL origSel_			= NSSelectorFromString(methodName);
-	Method origMethod		= class_getClassMethod(class, origSel_);
-	if (!origMethod)		return	NSLog(@"Method does not exist in class swizzle %@.%@", class, methodName), NO;
+	SEL origSel_				= NSSelectorFromString(methodName);
+	Method origMethod			= class_getClassMethod(class, origSel_);
+	if (!origMethod)			return	NSLog(@"Method does not exist in class swizzle %@.%@", class, methodName), NO;
 
 	// Prefix method name with "original"
-	id originalMethodName	= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
-	SEL altSel_				= NSSelectorFromString(originalMethodName);
+	id originalMethodName		= [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, methodName];
+	SEL altSel_					= NSSelectorFromString(originalMethodName);
+
+	// If method is already swizzled, reswizzle it to reset the class. 
+	// addMethod: will overwrite our first swizzled method, which is what we want.
+	if ([class respondsToSelector:altSel_])	
+		method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
+
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
-	if (!b)					return NO;
+	if (!b)						return NO;
 
 	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
 	

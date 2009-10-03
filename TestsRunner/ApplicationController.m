@@ -94,6 +94,12 @@ int runCount = 0;
 	//
 	// Test JSCocoa inited from a WebView
 	//
+	id webViewClass = objc_getClass("WebView");
+	if (!webViewClass)
+	{
+		NSLog(@"WebKit not loaded - don't test JSCocoa inited from a WebView");
+		return;
+	}
 
 	// Load nib
 	id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
