@@ -73,7 +73,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 
 
-@synthesize delegate=_delegate;
+@synthesize delegate=_delegate, useSafeDealloc, useSplitCall, useJSLint;
 
 	// Given a jsFunction, retrieve its closure (jsFunction's pointer address is used as key)
 	static	id	closureHash;
@@ -236,6 +236,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc	= YES;
+	// Yep !
+	useJSLint		= YES;
 	// ObjJ syntax renders split call moot
 	useSplitCall	= NO;
 
@@ -429,7 +431,7 @@ static id JSCocoaSingleton = NULL;
 
 	// Expand macros
 	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
-	if (hasFunction)
+	if (hasFunction && useJSLint)
 	{
 		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:functionName withArguments:script, nil]];
 		// Bail if expansion failed
@@ -821,39 +823,6 @@ static id JSCocoaSingleton = NULL;
 	useAutoCall = b;
 }
 
-//
-// Safe dealloc
-//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
-//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
-//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
-//
-- (BOOL)useSafeDealloc
-{
-	return	useSafeDealloc;
-}
-- (void)setUseSafeDealloc:(BOOL)b
-{
-	useSafeDealloc = b;
-}
-
-//
-// Split call
-//	Allows calling multi param ObjC messages with a jQuery-like syntax.
-//
-//	obj.do({ this : 'hello', andThat : 'world' })
-//		instead of
-//		obj.dothis_andThat_('hello', 'world')
-//
-- (BOOL)useSplitCall
-{
-	return	useSplitCall;
-}
-- (void)setUseSplitCall:(BOOL)b
-{
-	useSplitCall = b;
-}
-
-
 - (JSGlobalContextRef)ctx
 {
 	return	ctx;
@@ -875,36 +844,6 @@ static id JSCocoaSingleton = NULL;
 + (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx;
 {
 	NSLog(@"***For zero arg instance, use obj.instance() instead of obj.instance***");
-/*	
-	// It's an instance if it has a property 'thisObject', holding the class name
-	// value is an object holding the method name, 'instance' - its only use is storing 'thisObject'
-	JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
-
-	JSStringRef name = JSStringCreateWithUTF8CString("thisObject");
-	BOOL hasProperty =  JSObjectHasProperty(ctx, jsObject, name);
-	JSValueRef thisObjectValue = JSObjectGetProperty(ctx, jsObject, name, NULL);
-	if (hasProperty)	JSObjectDeleteProperty(ctx, jsObject, name, NULL);
-	JSStringRelease(name);
-	
-	if (!hasProperty)	return;
-
-	// Returning NULL will crash
-	if (!thisObjectValue)	return;
-	JSObjectRef thisObject = JSValueToObject(ctx, thisObjectValue, NULL);
-	if (!thisObject)		return;
-	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(thisObject);
-	if (!thisObject)		return;
-
-	NSLog(@"Instance autocall on class %@", [privateObject object]);
-
-	// Create new instance and patch it into object
-	id newInstance = [[[privateObject object] alloc] init];
-	JSCocoaPrivateObject* instanceObject = JSObjectGetPrivate(jsObject);
-	instanceObject.type = @"@";
-	[instanceObject setObject:newInstance];
-	// Make JS object sole owner
-	[newInstance release];
-*/	
 }
 
 //
@@ -3018,9 +2957,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
-	// Autocall instance
-	if ([propertyName isEqualToString:@"thisObject"])	return	NULL;
-	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 //	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
 
@@ -3391,15 +3327,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"method";
 		private.methodName = methodName;
-/*
-		// Special case for instance : setup a valueOf callback calling instance
-		if ([callee class] == callee && [propertyName isEqualToString:@"instance"])
-		{
-			JSStringRef jsName = JSStringCreateWithUTF8CString("thisObject");
-			JSObjectSetProperty(ctx, o, jsName, object, JSCocoaInternalAttribute, NULL);
-			JSStringRelease(jsName);
-		}
-*/		
+
 		return	o;
 	}
 	
@@ -3711,7 +3639,6 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 	// Special case for autocall : allow current js object to receive a custom valueOf method that will handle autocall
 	// And a thisObject property holding class for instance autocall
 	if ([propertyName isEqualToString:@"valueOf"])		return	false;
-	if ([propertyName isEqualToString:@"thisObject"])	return	false;
 	// Allow general setting on structs
 	if ([privateObject.type isEqualToString:@"struct"])	return	false;
 

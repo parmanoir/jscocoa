@@ -95,30 +95,31 @@ int runCount = 0;
 	// Test JSCocoa inited from a WebView
 	//
 	id webViewClass = objc_getClass("WebView");
-	if (!webViewClass)
+	if (webViewClass)
 	{
-		NSLog(@"WebKit not loaded - don't test JSCocoa inited from a WebView");
-		return;
+		// Load nib
+		id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
+		id nibURL	= [NSURL fileURLWithPath:nibPath];
+		id webViewNib = [[NSNib alloc] initWithContentsOfURL:nibURL];
+
+		// Instantiate nib with ourselves as owner
+		topObjects = nil;
+		[webViewNib instantiateNibWithOwner:self topLevelObjects:&topObjects];
+		[webViewNib release];
+		[topObjects retain];
+		[webViewUsedAsContextSource setFrameLoadDelegate:self];
+
+		id pageURL	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
+		[webViewUsedAsContextSource setMainFrameURL:pageURL];
+
+		// Init JSCocoa from WebView's globalContext
+		JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
+		jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	}
-
-	// Load nib
-	id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
-	id nibURL	= [NSURL fileURLWithPath:nibPath];
-	id webViewNib = [[NSNib alloc] initWithContentsOfURL:nibURL];
-
-	// Instantiate nib with ourselves as owner
-	topObjects = nil;
-	[webViewNib instantiateNibWithOwner:self topLevelObjects:&topObjects];
-	[webViewNib release];
-	[topObjects retain];
-	[webViewUsedAsContextSource setFrameLoadDelegate:self];
-
-	id pageURL	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
-	[webViewUsedAsContextSource setMainFrameURL:pageURL];
-
-	// Init JSCocoa from WebView's globalContext
-	JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
-	jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
+	else
+	{
+		NSLog(@"WebKit not loaded - cannot test JSCocoa inited from a WebView");
+	}
 
 
 	if (!b)	

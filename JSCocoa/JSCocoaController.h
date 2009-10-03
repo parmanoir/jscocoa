@@ -38,11 +38,33 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 	JSGlobalContextRef	ctx;
     id					_delegate;
+
+	//
+	// Safe dealloc
+	//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
+	//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
+	//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
+	//
 	BOOL				useSafeDealloc;
+
+	//
+	// Split call
+	//	Allows calling multi param ObjC messages with a jQuery-like syntax.
+	//
+	//	obj.do({ this : 'hello', andThat : 'world' })
+	//		instead of
+	//		obj.dothis_andThat_('hello', 'world')
+	//
 	BOOL				useSplitCall;
+
+	// JSLint : used for ObjJ syntax, class syntax, return if
+	BOOL				useJSLint;
 }
 
 @property (assign) id delegate;
+@property BOOL useSafeDealloc;
+@property BOOL useSplitCall;
+@property BOOL useJSLint;
 
 - (id)init;
 - (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
@@ -152,10 +174,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 - (BOOL)useAutoCall;
 - (void)setUseAutoCall:(BOOL)b;
-- (BOOL)useSafeDealloc;
-- (void)setUseSafeDealloc:(BOOL)b;
-- (BOOL)useSplitCall;
-- (void)setUseSplitCall:(BOOL)b;
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
 + (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
