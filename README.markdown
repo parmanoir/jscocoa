@@ -160,6 +160,8 @@ No framework, adding JSCocoa files into your project :
 
 Thanks !
 --
+* 280 North for the Objective-J syntax idea
+* Douglas Crockford - JSLint
 * Gus Mueller — Distant Object code
 * Jonathan 'Wolf' Rentzsch — JRSwizzle
 

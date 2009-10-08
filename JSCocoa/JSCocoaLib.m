@@ -311,8 +311,8 @@
 //
 + (id)protocols
 {
+#if NS_BLOCKS_AVAILABLE
 	id array = [NSMutableArray array];
-
 	unsigned int protocolCount;
 	Protocol** protocols = objc_copyProtocolList(&protocolCount);
 
@@ -365,6 +365,9 @@
 	}
 	free(protocols);
 	return	array;
+#else
+	return	nil;
+#endif
 }
 
 + (id)methods
@@ -576,6 +579,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 // Build a hash of className : [direct subclasses] then walk it down recursively.
 + (id)__subclasses
 {
+#if NS_BLOCKS_AVAILABLE
 	id classes		= [JSCocoaLib classes];
 	id subclasses	= [NSMutableArray array];
 	id subclassesHash	= [NSMutableDictionary dictionary];
@@ -599,12 +603,6 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	for (id className in subclassesHash)
 	{
 		id subclassesArray = [subclassesHash objectForKey:className];
-/*
-id b = ^(id a, id b)	{
-				return [[[a description] lowercaseString] compare:[[b description] lowercaseString]];
-			};
-NSLog(@"block=%@ (%@)", b, [b class]);
-*/
 		[subclassesArray sortUsingComparator:
 			^(id a, id b)	
 			{
@@ -615,8 +613,10 @@ NSLog(@"block=%@ (%@)", b, [b class]);
 	}
 	
 	populateSubclasses(self, subclasses, subclassesHash);
-	
 	return	subclasses;
+#else
+	return	nil;
+#endif
 }
 - (id)__subclasses
 {

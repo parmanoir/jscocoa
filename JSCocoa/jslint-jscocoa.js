@@ -804,7 +804,7 @@ JSLINT = (function () {
 		tx = function ()
 			{
 //				var a  = /^\s*([(){}\[.,:;'"~\?\]#@]|==?=?|\/(\*(global|extern|jslint|member|members)?|=|\/)?|\*[\/=]?|\+[+=]?|-[\-=]?|%=?|&[&=]?|\|[|=]?|>>?>?=?|<([\/=!]|\!(\[|--)?|<=?)?|\^=?|\!=?=?|[a-zA-Z\u00c0-\uffff_$][a-zA-Z0-9\u00c0-\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\.[0-9]*)?([eE][+\-]?[0-9]+)?)/
-				var r = "^\\s*([()}.,:;'\"~\\?\\]#@]|\\[\\+\\]|\\[|{\\+}|@selector|@|{|==?=?|\\/(\\*(global|extern|jslint|member|members)?|=|\\/)?|\\*[\\/=]?|\\+[+=]?|-[\\-=]?|%=?|&[&=]?|\\|[|=]?|>>?>?=?|<([\\/=!]|<=?)?|\\^=?|\\!=?=?|[a-zA-Z\\u00c0-\\uffff_$][a-zA-Z0-9\\u00c0-\\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\\.[0-9]*)?([eE][+\\-]?[0-9]+)?)"
+				var r = "^\\s*([()}.,:;'\"~\\?\\]#@]|\\[\\+\\]|\\[|{\\+}|@selector|@|ƒ|{|==?=?|\\/(\\*(global|extern|jslint|member|members)?|=|\\/)?|\\*[\\/=]?|\\+[+=]?|-[\\-=]?|%=?|&[&=]?|\\|[|=]?|>>?>?=?|<([\\/=!]|<=?)?|\\^=?|\\!=?=?|[a-zA-Z\\u00c0-\\uffff_$][a-zA-Z0-9\\u00c0-\\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\\.[0-9]*)?([eE][+\\-]?[0-9]+)?)"
 				return new RegExp(r)
 
 			}()
@@ -1992,14 +1992,11 @@ members)?
                 }
             }
 
-//			alert('token=' + token.value + ' nexttoken=' + nexttoken.value)
-		
             while (rbp < nexttoken.lbp) {
                 o = nexttoken.exps;
 				// ## As we don't force lines to end with a semi colon, break if we encounter a reserved word
 				if (nexttoken.reserved && nexttoken.line != token.line) break
                 advance();
-//alert(dumpHashNoFunction(token) + '\n$$$$$$$$$$$\n' + dumpHashNoFunction(nexttoken))
                 if (token.led) {
                     left = token.led(left);
                 } else {
@@ -4568,7 +4565,9 @@ members)?
         if (i) {
             addlabel(i, 'function');
         }
-        funct['(params)'] = functionparams();
+		// ## May omit params
+		if (nexttoken.value == '(')
+        	funct['(params)'] = functionparams();
         block(false);
         scope = s;
         funct = funct['(context)'];
@@ -4577,11 +4576,10 @@ members)?
     }
 
 
-    blockstmt('function', function () {
+	// ##
+	var functionBlockFunction = function () {
         if (inblock) {
-            warning(
-"Function statements cannot be placed in blocks. Use a function expression or move the statement to the top of the outer function.", token);
-
+            warning("Function statements cannot be placed in blocks. Use a function expression or move the statement to the top of the outer function.", token);
         }
         var i = identifier();
         adjacent(token, nexttoken);
@@ -4591,9 +4589,12 @@ members)?
             error(
 "Function statements are not invocable. Wrap the whole function invocation in parens.");
         }
-    });
+    }
+    blockstmt('function', functionBlockFunction);
+    blockstmt('ƒ', functionBlockFunction);
 
-    prefix('function', function () {
+	// ##
+	var functionPrefixFunction = function () {
         var i = optionalidentifier();
         if (i) {
             adjacent(token, nexttoken);
@@ -4605,7 +4606,10 @@ members)?
             warning("Be careful when making functions within a loop. Consider putting the function in a closure.");
         }
         return this;
-    });
+    }
+
+    prefix('function', functionPrefixFunction);
+    prefix('ƒ', functionPrefixFunction);
 
     blockstmt('if', function () {
         var t = nexttoken;
@@ -5018,7 +5022,7 @@ members)?
 
 		advance('{')
 		
-		var validTokens = { '-' : true, '+' : true, 'IBOutlet' : true, 'IBAction' : true, 'swizzle' : true, 'Swizzle' : true, 'Key' : true, 'function' : true }
+		var validTokens = { '-' : true, '+' : true, 'IBOutlet' : true, 'IBAction' : true, 'swizzle' : true, 'Swizzle' : true, 'Key' : true, 'function' : true, 'ƒ' : true }
 
 		var parsingClassDefinition = true
 		while (validTokens[nexttoken.value] && parsingClassDefinition)
@@ -5124,8 +5128,8 @@ members)?
 				advance()
 				if (token.type != '(identifier)')	warningAt('Key param must be an identifier', token.line, token.from)
 			}
-			// Key
-			else if (token.value == 'function')
+			// Javascript function
+			else if (token.value == 'function' || token.value == 'ƒ')
 			{
 				var jsfn = token
 				jsfn.isClassJSFunction = true

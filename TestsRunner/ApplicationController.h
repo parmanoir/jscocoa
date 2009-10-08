@@ -8,9 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "JSCocoa.h"
+#
 
-
-@interface ApplicationController : NSObject {
+@interface ApplicationController : NSObject <NSApplicationDelegate> {
 
 	IBOutlet	id webViewUsedAsContextSource;
 	IBOutlet	id window;
@@ -20,6 +20,8 @@
 	id topObjects;
 
 }
+- (void)applicationDidFinishLaunching:(NSNotification *)notification;
+- (void)applicationWillTerminate:(NSNotification *)notification;
 
 - (IBAction)runJSTests:(id)sender;
 - (IBAction)garbageCollect:(id)sender;

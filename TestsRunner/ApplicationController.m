@@ -15,7 +15,7 @@
 JSCocoaController* jsc = nil;
 
 //- (void)awakeFromNib
-- (void)applicationDidFinishLaunching:(id)notif
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	[JSCocoaController hazardReport];
 
@@ -24,6 +24,7 @@ JSCocoaController* jsc = nil;
 
 	[[NSApplication sharedApplication] setDelegate:self];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+
 	
 //	NSLog(@"sizeof(int)=%d", sizeof(int));
 //	NSLog(@"sizeof(long)=%d", sizeof(long));
@@ -32,7 +33,7 @@ JSCocoaController* jsc = nil;
 
 }
 
-- (void)applicationWillTerminate:(id)notif
+- (void)applicationWillTerminate:(NSNotification *)notification
 {
 	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);

@@ -784,6 +784,21 @@
 
 			prevtoken = token
 
+			// Handle shortcut function token
+			if (token.value == 'ƒ')
+			{
+//					alert(dumpHashNoFunction(token) + '\n************\n' + dumpHashNoFunction(prevtoken))
+				token.rawValue = 'function'
+				
+				// Add parens if they're missing
+				if (tokens[i+1].type == '(identifier)')
+				{
+					if (tokens[i+2].value != '(')	tokens[i+1].rawValue += '()'
+				}
+				else
+					if (tokens[i+1].value != '(')	tokens[i].rawValue += '()'
+			}
+
 			// Handle ObjC classes
 			if (token.isObjCClassStart)
 			{
