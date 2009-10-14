@@ -1916,11 +1916,7 @@ int	liveInstanceCount	= 0;
 
 
 
-#pragma mark Distant Object Handling (DO)
-//
-// Distant object handling, courtesy of Gus Mueller
-//
-//
+
 // JSCocoa : handle setting with callMethod
 //	object.width = 100
 //	-> 
@@ -1935,17 +1931,17 @@ int	liveInstanceCount	= 0;
 										[[propertyName substringWithRange:NSMakeRange(0,1)] capitalizedString], 
 										[propertyName substringWithRange:NSMakeRange(1, [propertyName length]-1)]];
 	
-    if ([self JSCocoa:controller callMethod:setterName ofObject:object argumentCount:1 arguments:&value inContext:localCtx exception:exception]) {
+    if ([self JSCocoa:controller callMethod:setterName ofObject:object privateObject:nil argumentCount:1 arguments:&value inContext:localCtx exception:exception]) {
         return YES;
     }
 	
     return	NO;
 }
-
+#pragma mark Distant Object Handling (DO)
 //
 // NSDistantObject call using NSInvocation
 //
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
 {
     SEL selector = NSSelectorFromString(methodName);
 	if (class_getInstanceMethod([callee class], selector) || class_getClassMethod([callee class], selector)) {
@@ -2039,8 +2035,19 @@ int	liveInstanceCount	= 0;
         [invocation invokeWithTarget:callee];
     }
     @catch (NSException * e) {
-        NSLog(@"Exception calling %@: %@", callee, [e reason]);
-        return JSValueMakeNull(localCtx);
+        NSLog(@"Exception while calling %@. %@", methodName, [e reason]);
+        
+        if ([[e reason] isEqualToString:@"connection went invalid while waiting for a reply"]) {
+            // whoops?
+            // also, how do we not look for some funky localized string here?
+            // also also, can we now make whatever is pointing to this value, nil?
+            
+            if (thisPrivateObject) {
+                NSLog(@"Connection terminated, removing reference to object");
+                thisPrivateObject.object = [NSNull null];
+                [thisPrivateObject setJSValueRef:JSValueMakeNull(localCtx) ctx:localCtx];
+            }
+        }
     }
 
 /*    
@@ -3129,9 +3136,9 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 						}
 					}
 					// Check if delegate handles calling
-					if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+					if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:privateObject:argumentCount:arguments:inContext:exception:)])
 					{
-						JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:propertyName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+						JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:propertyName ofObject:callee privateObject:privateObject argumentCount:0 arguments:NULL inContext:ctx exception:exception];
 						if (delegateCall)	
 							return	delegateCall;
 					}
@@ -3171,7 +3178,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				// If we didn't find a method, try Distant Object
 				if (!method)
 				{
-					JSValueRef res = [jsc JSCocoa:jsc callMethod:propertyName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+					JSValueRef res = [jsc JSCocoa:jsc callMethod:propertyName ofObject:callee privateObject:privateObject argumentCount:0 arguments:NULL inContext:ctx exception:exception];
 					if (res)	return	res;
 								
 					throwException(ctx, exception, [NSString stringWithFormat:@"Could not get property[%@ %@]", callee, propertyName]);
@@ -3541,7 +3548,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 				// Check if delegate handles calling
 				if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
 				{
-					JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:setterName ofObject:callee argumentCount:0 arguments:NULL inContext:ctx exception:exception];
+					JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:setterName ofObject:callee privateObject:privateObject argumentCount:0 arguments:NULL inContext:ctx exception:exception];
 					if (delegateCall)	return	!!delegateCall;
 				}
 			}
@@ -3776,9 +3783,9 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				}
 			}
 			// Check if delegate handles calling
-			if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+			if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:privateObject:argumentCount:arguments:inContext:exception:)])
 			{
-				JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:methodName ofObject:callee privateObject:thisPrivateObject argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
 				if (delegateCall)	return	delegateCall;
 			}
 		}
@@ -3856,7 +3863,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				}
 				
 				// Last chance before exception : try calling DO
-				JSValueRef res = [jsc JSCocoa:jsc callMethod:methodName ofObject:callee argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
+				JSValueRef res = [jsc JSCocoa:jsc callMethod:methodName ofObject:callee privateObject:thisPrivateObject argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
 				if (res)	return	res;
 				
 				return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction : method %@ not found", methodName]), NULL;

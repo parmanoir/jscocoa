@@ -225,7 +225,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 // Custom handler for calling
 //	Return YES to indicate you handled calling
 //	Return NO to let JSCocoa handle calling
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception;
 
 //
 // Getting global properties (classes, structures, C function names, enums via OSXObject_getProperty)
