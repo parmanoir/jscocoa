@@ -3546,7 +3546,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 					}
 				}
 				// Check if delegate handles calling
-				if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:argumentCount:arguments:inContext:exception:)])
+				if ([delegate respondsToSelector:@selector(JSCocoa:callMethod:ofObject:privateObject:argumentCount:arguments:inContext:exception:)])
 				{
 					JSValueRef delegateCall = [delegate JSCocoa:jsc callMethod:setterName ofObject:callee privateObject:privateObject argumentCount:0 arguments:NULL inContext:ctx exception:exception];
 					if (delegateCall)	return	!!delegateCall;

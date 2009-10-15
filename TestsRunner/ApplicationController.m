@@ -578,7 +578,7 @@ int dummyValue;
 	methodName	= _methodName;
 	return	canCallObjC;
 }
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"custom method call %@.%@", _object, _methodName);
 	object		= _object;
