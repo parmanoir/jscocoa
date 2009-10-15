@@ -115,6 +115,7 @@ int runCount = 0;
 
 		// Init JSCocoa from WebView's globalContext
 		JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
+//		NSLog(@"WebView contextGroup=%x", JSContextGetGroup(ctx));
 		jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	}
 	else

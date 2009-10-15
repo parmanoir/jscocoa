@@ -4,17 +4,20 @@
 	var	YES	= true
 	var NO	= false
 	
-	function	log(str)	{	JSCocoaController.log('' + str)	}
+	
+	if ('OSX' in this)
+	{
+		var JSCocoaController	= OSX.JSCocoaController
+		var NSApp				= null
+	}
+
+	
+	function	log(str)	{	__jsc__.log('' + str)	}
 	// This one is because I can't bring myself to not typing alert. 
 	function	alert(str)	{	log('********USE log(), not alert()*********'), log(str) }
 	
 	function	dumpHash(o)	{	var str = ''; for (var i in o) str += i + '=' + o[i] + '\n'; return str }
-
-	// A global variable named __jsc__ set by JSCocoaController in each context
-//	var jsc = JSCocoaController.hasSharedController ? JSCocoaController.sharedController : null
-	var jsc = __jsc__
-
-	//
+	
 	//	
 	//	Pretty print of ObjC type encodings
 	//	http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_13_section_9.html#//apple_ref/doc/uid/TP30001163-CH9-113054

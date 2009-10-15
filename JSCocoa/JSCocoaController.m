@@ -180,13 +180,11 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	{
 		ctx = _ctx;
 		JSGlobalContextRetain(ctx);
-		
 		JSObjectRef o = JSObjectMake(ctx, OSXObjectClass, NULL);
 		// Set a global var named 'OSX' which will fulfill the usual role of JSCocoa's global object
 		JSStringRef	jsName = JSStringCreateWithUTF8CString("OSX");
 		JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeDontDelete, NULL);
-		JSStringRelease(jsName);
-		
+		JSStringRelease(jsName);		
 	}
 
 	// Create a reference to ourselves, and make it read only, don't enum, don't delete
@@ -2572,11 +2570,18 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 			// Grab symbol
 			void* symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
 			if (!symbol)	return	NSLog(@"(OSX_getPropertyCallback) symbol %@ not found", propertyName), NULL;
-			NSString* str = *(NSString**)symbol;
+
+			// ObjC objects, like NSApp : pointer to NSApplication.sharedApplication
+			if ([[declared_type stringValue] isEqualToString:@"@"])
+			{
+				id o = *(id*)symbol;
+				return [JSCocoaController boxedJSObject:o inContext:ctx];
+			}
 
 			// Return symbol as a Javascript string
-			JSStringRef jsName = JSStringCreateWithUTF8CString([str UTF8String]);
-			JSValueRef jsString = JSValueMakeString(ctx, jsName);
+			NSString* str		= *(NSString**)symbol;
+			JSStringRef jsName	= JSStringCreateWithUTF8CString([str UTF8String]);
+			JSValueRef jsString	= JSValueMakeString(ctx, jsName);
 			JSStringRelease(jsName);
 			return	jsString;
 		}
