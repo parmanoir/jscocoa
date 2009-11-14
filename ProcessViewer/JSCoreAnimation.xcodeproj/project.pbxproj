@@ -16,6 +16,7 @@
 		3D15F54C0FC024A7009E31F4 /* JSCocoaPrivateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15F53B0FC024A7009E31F4 /* JSCocoaPrivateObject.m */; };
 		3D4CC7490E9B7CB600EF1F25 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4CC7480E9B7CB600EF1F25 /* JavaScriptCore.framework */; };
 		3D68AD510E841E1800C2EC5B /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D68AD500E841E1800C2EC5B /* main.js */; };
+		3D68EDE210AF201200E0C357 /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D68EDE110AF201200E0C357 /* jslint-jscocoa.js */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -47,6 +48,7 @@
 		3D15F53B0FC024A7009E31F4 /* JSCocoaPrivateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaPrivateObject.m; sourceTree = "<group>"; };
 		3D4CC7480E9B7CB600EF1F25 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
 		3D68AD500E841E1800C2EC5B /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = SOURCE_ROOT; };
+		3D68EDE110AF201200E0C357 /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jslint-jscocoa.js"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* JSCoreAnimation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSCoreAnimation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 				3D15F5140FC024A7009E31F4 /* BridgeSupportController.h */,
 				3D15F5150FC024A7009E31F4 /* BridgeSupportController.m */,
 				3D15F5160FC024A7009E31F4 /* class.js */,
+				3D68EDE110AF201200E0C357 /* jslint-jscocoa.js */,
 				3D15F52D0FC024A7009E31F4 /* JSCocoa.h */,
 				3D15F5320FC024A7009E31F4 /* JSCocoaController.h */,
 				3D15F5330FC024A7009E31F4 /* JSCocoaController.m */,
@@ -207,6 +210,7 @@
 			files = (
 				3D15F53D0FC024A7009E31F4 /* class.js in Resources */,
 				3D68AD510E841E1800C2EC5B /* main.js in Resources */,
+				3D68EDE210AF201200E0C357 /* jslint-jscocoa.js in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 			);

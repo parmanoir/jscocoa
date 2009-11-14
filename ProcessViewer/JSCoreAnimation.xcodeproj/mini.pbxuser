@@ -61,14 +61,19 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 265693391;
-			PBXWorkspaceStateSaveDate = 265693391;
+			PBXPerProjectTemplateStateSaveDate = 279912431;
+			PBXWorkspaceStateSaveDate = 279912431;
 		};
 		perUserProjectItems = {
-			3D15F6060FC030F8009E31F4 /* PBXTextBookmark */ = 3D15F6060FC030F8009E31F4 /* PBXTextBookmark */;
-			3DB871800FD628E200D20CE1 /* PBXTextBookmark */ = 3DB871800FD628E200D20CE1 /* PBXTextBookmark */;
-			3DB8718E0FD628F300D20CE1 /* PBXTextBookmark */ = 3DB8718E0FD628F300D20CE1 /* PBXTextBookmark */;
-			3DB8718F0FD628F300D20CE1 /* PBXTextBookmark */ = 3DB8718F0FD628F300D20CE1 /* PBXTextBookmark */;
+			3D15F6060FC030F8009E31F4 = 3D15F6060FC030F8009E31F4 /* PBXTextBookmark */;
+			3D68EDD310AF200B00E0C357 /* PBXTextBookmark */ = 3D68EDD310AF200B00E0C357 /* PBXTextBookmark */;
+			3D68EDD410AF200B00E0C357 /* PBXTextBookmark */ = 3D68EDD410AF200B00E0C357 /* PBXTextBookmark */;
+			3D68EDD510AF200B00E0C357 /* PBXTextBookmark */ = 3D68EDD510AF200B00E0C357 /* PBXTextBookmark */;
+			3D68EDE810AF201E00E0C357 /* PBXTextBookmark */ = 3D68EDE810AF201E00E0C357 /* PBXTextBookmark */;
+			3D68EDE910AF201E00E0C357 /* PBXTextBookmark */ = 3D68EDE910AF201E00E0C357 /* PBXTextBookmark */;
+			3DB871800FD628E200D20CE1 = 3DB871800FD628E200D20CE1 /* PBXTextBookmark */;
+			3DB8718E0FD628F300D20CE1 = 3DB8718E0FD628F300D20CE1 /* PBXTextBookmark */;
+			3DB8718F0FD628F300D20CE1 = 3DB8718F0FD628F300D20CE1 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D68AD3A0E841D9700C2EC5B /* Source Control */;
 		userBookmarkGroup = 3D210B390E9A8777000C62F5 /* PBXBookmarkGroup */;
@@ -100,10 +105,9 @@
 		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSWindow.h;
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {904, 7513}}";
+			sepNavIntBoundsRect = "{{0, 0}, {904, 7337}}";
 			sepNavSelRange = "{8245, 135}";
-			sepNavVisRange = "{6564, 4130}";
-			sepNavWindowFrame = "{{107, 82}, {963, 1007}}";
+			sepNavVisRange = "{6564, 4012}";
 		};
 	};
 	3D210B390E9A8777000C62F5 /* PBXBookmarkGroup */ = {
@@ -134,6 +138,9 @@
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
 		debuggerPlugin = GDBDebugging;
 		disassemblyDisplayState = 0;
 		dylibVariantSuffix = "";
@@ -146,6 +153,7 @@
 		name = JSCoreAnimation;
 		savedGlobals = {
 		};
+		showTypeColumn = 0;
 		sourceDirectories = (
 		);
 		variableFormatDictionary = {
@@ -156,27 +164,72 @@
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
 		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
 		};
 	};
 	3D68AD3B0E841D9700C2EC5B /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
 	};
-	3D68AD410E841DC800C2EC5B /* JSCocoaFFIArgument.m */ = {
-		isa = PBXFileReference;
-		fileEncoding = 4;
-		lastKnownFileType = sourcecode.c.objc;
-		name = JSCocoaFFIArgument.m;
-		path = "/Users/mini/Software Inexdo/JSCocoa/JSCocoa/JSCocoaFFIArgument.m";
-		sourceTree = "<absolute>";
-	};
 	3D68AD500E841E1800C2EC5B /* main.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1152, 5368}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1152, 5324}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 1511}";
+			sepNavVisRange = "{14016, 1751}";
 			sepNavWindowFrame = "{{268, 189}, {1211, 761}}";
 		};
+	};
+	3D68EDD310AF200B00E0C357 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
+		name = "main.js: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1511;
+		vrLoc = 0;
+	};
+	3D68EDD410AF200B00E0C357 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
+		name = "main.js: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1751;
+		vrLoc = 14016;
+	};
+	3D68EDD510AF200B00E0C357 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D15F6070FC030F8009E31F4 /* NSWindow.h */;
+		name = "NSWindow.h: 236";
+		rLen = 135;
+		rLoc = 8245;
+		rType = 0;
+		vrLen = 4012;
+		vrLoc = 6564;
+	};
+	3D68EDE810AF201E00E0C357 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D68AD500E841E1800C2EC5B /* main.js */;
+		name = "main.js: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1751;
+		vrLoc = 14016;
+	};
+	3D68EDE910AF201E00E0C357 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D15F6070FC030F8009E31F4 /* NSWindow.h */;
+		name = "NSWindow.h: 236";
+		rLen = 135;
+		rLoc = 8245;
+		rType = 0;
+		vrLen = 4012;
+		vrLoc = 6564;
 	};
 	3DAAC0B80E88575B004DA255 /* JSCocoaFFIArgument.m:443 */ = {
 		isa = PBXFileBreakpoint;
@@ -186,13 +239,14 @@
 		continueAfterActions = 0;
 		countType = 0;
 		delayBeforeContinue = 0;
-		fileReference = 3D68AD410E841DC800C2EC5B /* JSCocoaFFIArgument.m */;
+		fileReference = 3D15F5350FC024A7009E31F4 /* JSCocoaFFIArgument.m */;
 		functionName = "+toJSValueRef:inContext:withTypeEncoding:withStructureTypeEncoding:fromStorage:";
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 443;
 		location = JSCoreAnimation;
 		modificationTime = 264253493.408041;
+		originalNumberOfMultipleMatches = 0;
 		state = 2;
 	};
 	3DB871800FD628E200D20CE1 /* PBXTextBookmark */ = {
@@ -227,6 +281,7 @@
 	};
 	3DB871900FD628F300D20CE1 /* NSWindow.h */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
 		name = NSWindow.h;
 		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSWindow.h;
 		sourceTree = "<absolute>";

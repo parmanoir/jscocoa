@@ -226,7 +226,8 @@
 		var outletMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
 		var encoding = objc_encoding('void', 'id')
 
-		var fn = new Function('outlet', 'this.set({jsValue:outlet, forJsName : "_' + name + '"})')
+//		var fn = new Function('outlet', 'this.set({jsValue:outlet, forJsName : "_' + name + '"})')
+		var fn = new Function('outlet', 'this.setJSValue_forJSName(outlet, "_' + name + '")')
 		if (setter)	
 		{
 			if (typeof setter != 'function')	throw 'outlet setter not a function (' + setter + ')'
@@ -266,7 +267,8 @@
 
 		// Set
 		var setMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
-		var fn = new Function('v', 'this.set({jsValue:v, forJsName : "' + name + '"})')
+//		var fn = new Function('v', 'this.set({jsValue:v, forJsName : "' + name + '"})')
+		var fn = new Function('outlet', 'this.setJSValue_forJSName(v, "_' + name + '")')
 		if (setter)	
 		{
 			if (typeof setter != 'function')	throw 'key setter not a function (' + setter + ')'

@@ -74,6 +74,8 @@
 	if ([o class] != o['class'])										throw 'ObjJ syntax failed (class)'
 	
 	var r = [o wantInt:7 andNSArray:[[NSNumber numberWithDouble:1.23], [NSString stringWithString:'hello'], [NSArray arrayWithObjects:1, 2, 3], [4, 5, 6]] andFloat:8]
-	if (r != 7+8)													throw 'ObjJ syntax failed (8)'
+	if (r != 7+8)														throw 'ObjJ syntax failed (8)'
 
 	o = null
+	
+	

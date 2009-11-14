@@ -45,7 +45,6 @@ Are you missing on that list ? [Send me a mail !](mailto:parmanoir@gmail.com)
 
 What does it look like ?
 --
-Use straight Javascript syntax to call Cocoa.
 
 	// Get current application name : dot syntax
 	var appName = NSWorkspace.sharedWorkspace.activeApplication.NSApplicationName
@@ -141,15 +140,15 @@ This will start a controller, eval a file, call a Javascript method and get an O
 	[jsc release];
 
 
-Add it to your project
+Add JSCocoa to your project
 --
-Going the framework route :
+Use it as a framework :
 
 * Build JSCocoa/JSCocoa.xcodeproj
 * Add built JSCocoa.framework to your project
 * import <JSCocoa/JSCocoa.h>
 
-No framework, adding JSCocoa files into your project :
+Integrate its files directly into your project :
 
 * Drag the JSCocoa folder in your project
 * Delete irrelevant files (Info.plist, JSCocoa_Prefix.pch, English.lproj, project files)
@@ -160,8 +159,8 @@ No framework, adding JSCocoa files into your project :
 
 Thanks !
 --
-* 280 North for the Objective-J syntax idea
-* Douglas Crockford - JSLint
+* 280 North — Objective-J syntax idea
+* Douglas Crockford — JSLint
 * Gus Mueller — Distant Object code
 * Jonathan 'Wolf' Rentzsch — JRSwizzle
 

@@ -87,6 +87,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArgumentsArray:(NSArray*)arguments;
 - (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
+- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url;
 - (BOOL)setObject:(id)object withName:(id)name;
 - (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
 - (BOOL)removeObjectWithName:(id)name;

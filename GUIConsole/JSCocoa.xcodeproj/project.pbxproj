@@ -23,6 +23,7 @@
 		3D68A5D10E81698500C2EC5B /* CocoaNavJS.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D68A5CF0E81698500C2EC5B /* CocoaNavJS.js */; };
 		3D68A6FC0E81779F00C2EC5B /* CocoaNavJS.html in Resources */ = {isa = PBXBuildFile; fileRef = 3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */; };
 		3D68A85C0E81D61C00C2EC5B /* JSCocoaHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */; };
+		3D68EA6310AF0AA900E0C357 /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D68EA6210AF0AA900E0C357 /* jslint-jscocoa.js */; };
 		3D8858B90E70073F00166DAA /* CocoaNavJS.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8858B80E70073F00166DAA /* CocoaNavJS.xib */; };
 		3D8858D50E70079200166DAA /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8858D40E70079200166DAA /* MainMenu.xib */; };
 		3D8915680EA8F35C00BE4E70 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D8915670EA8F35C00BE4E70 /* WebKit.framework */; };
@@ -64,6 +65,7 @@
 		3D68A6FB0E81779F00C2EC5B /* CocoaNavJS.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = CocoaNavJS.html; sourceTree = "<group>"; };
 		3D68A85A0E81D61C00C2EC5B /* JSCocoaHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaHelper.h; sourceTree = "<group>"; };
 		3D68A85B0E81D61C00C2EC5B /* JSCocoaHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSCocoaHelper.m; sourceTree = "<group>"; };
+		3D68EA6210AF0AA900E0C357 /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jslint-jscocoa.js"; sourceTree = "<group>"; };
 		3D8435220E61A0D200056D71 /* JSCocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSCocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D8858B80E70073F00166DAA /* CocoaNavJS.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CocoaNavJS.xib; sourceTree = "<group>"; };
 		3D8858D40E70079200166DAA /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				3D15F3B90FC01C0A009E31F4 /* BridgeSupportController.h */,
 				3D15F3BA0FC01C0A009E31F4 /* BridgeSupportController.m */,
 				3D15F3BB0FC01C0A009E31F4 /* class.js */,
+				3D68EA6210AF0AA900E0C357 /* jslint-jscocoa.js */,
 				3D15F3D20FC01C0A009E31F4 /* JSCocoa.h */,
 				3D15F3D70FC01C0A009E31F4 /* JSCocoaController.h */,
 				3D15F3D80FC01C0A009E31F4 /* JSCocoaController.m */,
@@ -252,6 +255,7 @@
 			files = (
 				3DAA879D0E3A0CA8000CDB2A /* ObjCRuntime.bridgesupport in Resources */,
 				3D15F3E20FC01C0A009E31F4 /* class.js in Resources */,
+				3D68EA6310AF0AA900E0C357 /* jslint-jscocoa.js in Resources */,
 				3D08D07C0E65CED100B81E63 /* main.js in Resources */,
 				3D08D0EE0E65D89500B81E63 /* ClassTree.png in Resources */,
 				3D4FAC1C0E67990F005874A3 /* NSLogConsole.html in Resources */,

@@ -11,13 +11,14 @@
 
 int main(int argc, char *argv[])
 {
+/*
 #ifdef __LP64__
     printf("__LP64__!\n");
 #endif
-
+*/
 	id pool = [[NSAutoreleasePool alloc] init];
 	
-	id c = [JSCocoaController sharedController];
+	id c = [JSCocoaController new];
 	id mainJSFile = [NSString stringWithFormat:@"%@/Contents/Resources/main.js", [[NSBundle mainBundle] bundlePath]];
 	[c evalJSFile:mainJSFile];
 

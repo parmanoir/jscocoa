@@ -1,8 +1,5 @@
 
 
-	__jsc__.evalJSFile(NSBundle.mainBundle.bundlePath + '/Contents/Resources/class.js')
-	
-
 	//
 	// Application controller, our app delegate
 	//
@@ -14,7 +11,7 @@
 			
 			var path = NSBundle.mainBundle.bundlePath + '/Contents/Resources/Tests'
 			var r = __jsc__.runTests(path)
-			if (r) JSCocoaController.log('All tests OK')
+			if (r) log('All tests OK')
 		}
 		
 		IBAction garbageCollect
@@ -38,7 +35,6 @@
 		IBOutlet	inputScript
 		IBAction	runScript
 		{
-
 			// Take input from our text box outlet
 			var script = this.inputScript.stringValue
 			// Check if our first param is the script to be evaluated
@@ -46,8 +42,9 @@
 
 			var webView = NSLogConsole.sharedConsole.webView
 			webView.startCommand(script)
-			result = eval(String(script))
-			JSCocoaController.log(String(result))
+			result = eval(String([__jsc__ expandJSMacros:script url:null]))
+//			result = __jsc__.evalJSString(String(script))
+			log(String(result))
 			webView.endCommand
 		}
 		IBAction	clearConsole
@@ -71,7 +68,7 @@
 		{
 			if (!this.cocoaNavWindow)
 			{
-				JSCocoaController.sharedController.evalJSFile(NSBundle.mainBundle.pathForResource_ofType('CocoaNavJS', 'js'))
+				__jsc__.evalJSFile(NSBundle.mainBundle.pathForResource_ofType('CocoaNavJS', 'js'))
 				NSBundle.loadNibNamed_owner_('CocoaNavJS', this)
 			}
 			this.cocoaNavWindow.makeKeyAndOrderFront(this)
@@ -85,12 +82,12 @@
 		// Later : sample list
 		IBAction	openSamples
 		{
-			JSCocoaController.log('SAMPLES')
+			log('SAMPLES')
 		}
 							
 		// Later : inject in apps, like F-Script
 		IBAction	openInjector
 		{
-			JSCocoaController.log('INJECTOR')
+			log('INJECTOR')
 		}
 	}

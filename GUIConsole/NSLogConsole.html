@@ -198,10 +198,10 @@
 
 		<div class='description'>New window</div>
 		<!-- Switched w to a global var -->
-		<div class='action'>w = NSWindow.instance({withContentRect:NSMakeRect(100, 100, 200, 605), styleMask:NSTitledWindowMask+NSClosableWindowMask, backing:NSBackingStoreBuffered, defer:false});w.title='New window !'; w.orderFront(null)</div>
+		<div class='action'>w = [NSWindow instanceWithContentRect:NSMakeRect(100, 100, 200, 605) styleMask:NSTitledWindowMask+NSClosableWindowMask backing:NSBackingStoreBuffered defer:false]; w.title='New window !'; w.orderFront(null)</div>
 
 		<div class='description'>Add buttons to last created window</div>
-		<div class='action'>for (var i=0;i!=20; i++) { var b = NSButton.instance({withFrame:NSMakeRect(10, i*30+5, 100, 28)}); b.bezelStyle = i; w.contentView.addSubview(b); }</div>
+		<div class='action'>for (var i=0;i!=15; i++) { var b = [NSButton instanceWithFrame:NSMakeRect(10, i*30+5, 100, 28)]; b.bezelStyle = i; w.contentView.addSubview(b); }</div>
 	</div>
 	
 	<script>
