@@ -202,46 +202,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>3D68EB0110AF0E2200E0C357</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>JSCocoaController.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D68EB0210AF0E2200E0C357</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>JSCocoaController.h</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>3D68ED6210AF1F4D00E0C357</string>
-						<key>history</key>
-						<array>
-							<string>3D68ED1610AF1E5400E0C357</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {968, 907}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>597 142 968 948 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>3D68EAFB10AF0E2200E0C357</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>main.m</string>
@@ -256,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D68ED6310AF1F4D00E0C357</string>
+						<string>3D68EDFA10AF223700E0C357</string>
 						<key>history</key>
 						<array>
 							<string>3D68EAE710AF0D4500E0C357</string>
@@ -296,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D68ED6410AF1F4D00E0C357</string>
+						<string>3D68EDFB10AF223700E0C357</string>
 						<key>history</key>
 						<array>
 							<string>3D68EADA10AF0CF800E0C357</string>
@@ -620,7 +580,6 @@
 		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>3D68EB0110AF0E2200E0C357</string>
 	</array>
 	<key>WindowString</key>
 	<string>1396 755 358 423 0 0 1920 1178 </string>
@@ -992,14 +951,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>JSCocoaController.m</string>
+										<string>&lt;No Editor&gt;</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
