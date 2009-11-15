@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D7AD09210B084EA00C1453A /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D7AD09110B084EA00C1453A /* jslint-jscocoa.js */; };
 		3D9D7F7A0EF81A0100D71763 /* BridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9D7F700EF81A0100D71763 /* BridgeSupportController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D9D7F7B0EF81A0100D71763 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D7F710EF81A0100D71763 /* BridgeSupportController.m */; };
 		3D9D7F7C0EF81A0100D71763 /* JSCocoaController.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D9D7F720EF81A0100D71763 /* JSCocoaController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -32,6 +33,7 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* JSCocoa_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoa_Prefix.pch; sourceTree = "<group>"; };
+		3D7AD09110B084EA00C1453A /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jslint-jscocoa.js"; sourceTree = "<group>"; };
 		3D9D7F700EF81A0100D71763 /* BridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupportController.h; sourceTree = "<group>"; };
 		3D9D7F710EF81A0100D71763 /* BridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupportController.m; sourceTree = "<group>"; };
 		3D9D7F720EF81A0100D71763 /* JSCocoaController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSCocoaController.h; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				3D9D7F880EF81A0900D71763 /* class.js */,
+				3D7AD09110B084EA00C1453A /* jslint-jscocoa.js */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
 				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
 			);
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D9D7F890EF81A0900D71763 /* class.js in Resources */,
+				3D7AD09210B084EA00C1453A /* jslint-jscocoa.js in Resources */,
 				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

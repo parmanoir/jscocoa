@@ -152,22 +152,39 @@ void	NSLogPostLog(char* file, int line)
 
 - (void)updateLogWithFile:(char*)file lineNumber:(int)line
 {
+
+
+/*
+
+	This method gives this warning
+	2009-11-14 18:49:23.793 JSCocoa[6162:a0f] *** -[NSConcreteData initWithBytes:length:copy:freeWhenDone:bytesAreVM:]: absurd length: 18446744073709551615, maximum size: 9223372036854775808 bytes
+
+
+*/
+
 //	if (![window isVisible] && autoOpens)	[self open];
 	// Open a new handle to read new data
 	id f = [NSFileHandle fileHandleForReadingAtPath:logPath];
 	if (!f)	NSLog(@"Opening log at %@ failed", logPath);
-
+//printf("=====\n");
 	// Get file length
 	[f seekToEndOfFile];
 	unsigned long long length = [f offsetInFile];
+//	printf("length= %llu\n", length);
 
 	// Read data
 	[f seekToFileOffset:fileOffset];
+
+
+	unsigned long long length2 = [f offsetInFile];
+//	printf("length2= %llu\n", length2);
+
 	NSData* data = [f readDataToEndOfFile];
 	[self logData:data file:file lineNumber:line];
 	
 	// We'll read from that offset next time
 	fileOffset = length;
+//printf("+++++\n");
 }
 
 
