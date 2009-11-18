@@ -1285,6 +1285,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		JSValueRef jsValue	= JSObjectGetProperty(ctx, object, name, &exception);
 		if (exception)	return	NO;
 		if (![self unboxJSValueRef:jsValue toObject:&value inContext:ctx])	return	NO;
+		if (!value)	value = [NSValue valueWithPointer:NULL];
 		
 		// Add converted value to hash
 		id key				= (NSString*)JSStringCopyCFString(kCFAllocatorDefault, name);
