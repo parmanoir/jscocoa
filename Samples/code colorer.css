@@ -1,0 +1,408 @@
+		html, body
+		{
+			margin: 0;
+			padding: 0;
+			font-family: Lucida Grande;
+		}
+		pre, code
+		{
+			font-family: Monaco;
+			font-size: 8.2px;
+		}
+		body
+		{
+			font-size: 80%;
+			ebackground-color: rgb(255, 255, 240);
+		}
+		textarea
+		{
+			width: 100%;
+			height: 500px;
+			ecolor: rgba(255, 255, 255, 0.1);
+			background-color: transparent;
+			font-family: courier;
+			font-family: Andale Mono;
+			font-family: Monaco;
+			font-size: 7pt;
+		}
+		td
+		{
+			vertical-align: top;
+			width: 50%;
+		}
+		#highlighted, #fontWidthMeasurer, #whiteSpaceRevealer, #tracesContainer
+		{
+			position: relative;
+			white-space: pre-wrap;
+			font-family: monaco;
+			font-size: 7pt;
+			outline: none;
+		}
+		#highlighted
+		{
+			-webkit-user-modify: read-write;
+		}
+		#sourceContainer
+		{
+			height: 100%;
+			overflow-y: scroll;
+			position: relative;
+		}
+		
+		
+		.line
+		{
+			ebackground-color: #fafafa;
+			eposition: relative;
+			line-height: 1.3em;
+			min-height: 1.3em;
+		}
+		#selectedLine
+		{
+			background-color: lime;
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.8)), to(rgba(240, 240, 240, 0.8)));
+			border: solid 1px #bbb;
+			border-left: 0;
+			border-right: 0;
+			margin: -1px 0;
+			position: absolute;
+			width: 100%;
+		}
+		#selectedLinePosition
+		{
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			margin-right: 10px;
+			font-size: 50%;
+			opacity: 0.3;
+			z-index: 300;
+			cursor: pointer;
+		}
+		
+		#dumpHighlighted
+		{
+		}
+		#dump5
+		{
+			white-space: normal;
+		}
+		
+		
+		/* source styling */
+		.keyword
+		{
+			color: rgba(70, 98, 195, 1);
+			text-shadow: rgba(51, 28, 255, 0.9) 0px 0px 1px, rgba(91, 28, 255, 0.5) 0px 0px 0px;
+		}
+		.exps
+		{
+			color: red;
+		}
+		.number
+		{
+			color: green;
+		}
+		.string
+		{
+			color: purple;
+		}
+		.comment
+		{
+			color: rgb(83, 180, 255);
+			ecolor: #888;
+		}
+		/* lime !*/
+		.string
+		{
+			color: #0f0;
+			color: rgb(107, 166, 0);
+			background-color: rgb(223, 255, 186);
+			-webkit-border-radius: 2px;
+		}
+		.number
+		{
+			color: rgb(255, 115, 0);
+			background-color: rgba(255, 238, 165, 0.7);
+			-webkit-border-radius: 2px;
+		}
+		
+		.objcCall
+		{
+			color: #864;
+			color: #753;
+			text-shadow: rgba(255, 160, 128, .9) 0px 1px 4px;
+		}
+		.objcCallSelector
+		{
+			border-bottom: dotted 2px #fdc;
+			border-bottom: dotted 1px #ca8;
+		}
+		.objcCallBracket
+		{
+		}
+
+
+		.newline
+		{
+/*
+			white-space: normal;
+			white-space: wrap;
+			white-space: nowrap;
+*/
+			eborder: solid 3px red;
+			edisplay: inline-block;
+		}
+
+
+/*		
+		.newline:before
+		{
+			content: '¶';
+		}
+		.space:before
+		{
+			content: '·';
+		}
+		.tab:before
+		{
+			content: '→';
+		}
+*/
+/*
+		.newline, .space, .tab
+		{
+			color: rgb(83, 180, 255);
+			eposition: absolute;
+		}
+*/
+/*
+		.newline
+		{
+			display: inline-block; border: solid 1px red; height : 7px; width: 7px;
+			
+		}
+		.newline-normal
+		{
+			white-space: normal;
+			display: inline-block; border: solid 1px lime; height : 7px; width: 7px;
+			
+		}
+*/
+		/* source styling */
+
+
+		.tabspaceviewer
+		{
+			white-space: pre;
+			font-family: monaco;
+			font-size: 7pt;
+		}
+
+		.visualtab
+		{
+			background-color: red;
+			position: absolute;
+			display: inline-block;
+			border-left: solid 1px #ddd;
+			height: 800px;
+		}
+
+		.fakeTab
+		{
+/*
+			eborder: solid 1px red; 
+			height: 2px; 
+			background-color: lime;			
+*/
+		}
+		
+		#fontWidthMeasurer
+		{
+			position: absolute;
+			top: -30000px;
+		}
+		#rawSourceFromLineExtractor
+		{
+			display: none;
+		}
+/*		
+		.bubble
+		{
+			position: absolute; 
+			letter-spacing: 0px; 
+			width: 800px;
+			background-color: yellow;
+			position: absolute;
+			z-index: 100;
+		}
+*/
+		.bubble
+		{
+
+			padding: 1px 6px;
+			padding-bottom: 2px;
+
+			white-space: normal;
+
+			position: relative;
+			display: inline-block;
+			margin-bottom: 2em;
+			max-width: 160px;
+			z-index: 2;
+			margin-left: -14px;
+			margin-top: 2px;
+			
+			
+			font-family: helvetica neue;
+			font-family: gill sans;
+			font-family: lucida grande;
+			font-size: 9px;
+
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.2)), to(rgba(0, 0, 0, 0.2)));
+			background-color: red;
+
+			-webkit-border-radius: 5px;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 5px;
+
+			color: white;
+			text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 1px;
+			
+/*			
+			color: black;
+			border: solid 1px #bbb;
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.2)), to(rgba(0, 0, 0, 0.07)));
+			background-color: white;
+			text-shadow: rgba(0, 0, 0, 0.0005) 0px -1px 1px;
+			font-size: 10px;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 5px;
+*/
+/*
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.2)), to(rgba(0, 0, 0, 0.2)));
+			background-color: red;
+			text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 1px;
+			color: white;
+			efont-weight: bold;
+
+			-webkit-border-radius: 5px;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 5px;
+			
+			display: inline-block;
+			margin-bottom: 2em;
+			max-width: 160px;
+			emin-width: 80px;
+			position: relative;
+			z-index: 2;
+			margin-left: -14px;
+			margin-top: 2px;
+			ecolor: rgba(255, 255, 255, 0.9);
+			
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.2)), to(rgba(0, 0, 0, 0.2)));
+			background-color: #888;
+			color: black;
+			color: red;
+			background-color: #f80;
+
+			background: -webkit-gradient(linear, left top, left bottom, from(#f66), to(#f22));
+			color: white;
+			text-shadow: rgba(0, 0, 0, 0.3) 0px -1px 1px;
+			text-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;
+			color: black;
+			background-color: white;
+			background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#888));
+			background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fff));
+			border: solid 2px red;
+*/
+		}
+		.bubble b
+		{
+			margin: 0 2px;
+			font-family: monaco;
+			font-weight: normal;
+			efont-size: 150%;
+			evertical-align: -10%;
+			color: white;
+			color: #fd8;
+		}
+		.bubbleWrapper
+		{
+			position: absolute;
+			z-index: 8;
+		}
+		.bubbleArrow
+		{
+			position: absolute;
+			top: -21px;
+			top: -5px;
+			font-size: 40pt;
+			-webkit-transform: rotate(180deg);
+			color: red;
+			margin-left: -14px;
+			margin-top: 2px;
+			eborder: solid 1px lime;
+			ebackground-color: rgba(0, 255, 0, 0.5);
+			ez-index: 20;
+			height: 45px;
+			overflow: hidden;
+
+			font-size: 14pt;
+			-webkit-transform: rotate(90deg);
+			ez-index: 10;
+			ecolor: lime;
+			left: -16px;
+			top: -14px;
+		}
+
+
+
+		#lineNumbers
+		{
+			position: absolute;
+			width: 25px;
+			border-right: solid 1px #eee;
+			background-color: #f8f8f8;
+		}
+		#highlightedContainer
+		{
+			padding-left: 34px;
+			position: relative;
+		}
+		#highlighted, #highlightedContainer
+		{
+			position: relative;
+		}
+		
+		.lineNumber
+		{
+			font-size: 50%;
+			color: #ccc;
+			text-align: right;
+			padding-right: 1px;
+			position: relative;
+			z-index: 4;
+		}
+		.l10
+		{
+			color: #888;
+		}
+		
+		#whiteSpaceRevealer div
+		{
+			color: rgb(83, 180, 255);
+/*			color: #800; text-shadow: red 0px 0px 1px, red 0px 0px 0px, red 0px 0px 2px, red 0px 0px 2px;*/
+			position: absolute;
+		}
+		
+		.trace
+		{
+			-webkit-box-shadow: rgba(83, 180, 255, .9) 0px 0px 20px, rgba(83, 180, 255, .3) 0px 0px 20px;
+			-webkit-box-shadow: rgba(83, 180, 255, 0.6) 0px 0px 16px;
+			width: 1px; 
+			position: absolute; 
+			ebackground-color: #ddd;
+			margin-left: 2px;
+			clip: rect(-10px, 100000px, 100000px, 0px);
+			-webkit-transform: rotate(180deg);
+			border-right: solid 1px rgba(83, 180, 255, 0.2);
+			eopacity: 0.7;
+		}

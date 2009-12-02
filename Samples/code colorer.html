@@ -1,0 +1,2417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Code Colorer</title>
+<!--
+-->	
+	<link rel="stylesheet" href="code%20colorer.css" type="text/css" />
+	<style>
+		html
+		{
+			font-family: Lucida Grande;
+		}
+	
+		#coloredCodeContainer
+		{
+			position: relative;
+			white-space: pre-wrap;
+			font-family: monaco;
+			font-size: 7pt;
+			epadding: 1em;
+			eheight: 300px;
+			overflow: auto;
+			position: relative;
+			z-index: 4;
+		}
+		#coloredCode
+		{
+			outline: none;
+			position: relative;
+			z-index: 20;
+		}
+	
+		/*
+		*
+		* Dump styles
+		*
+		*/
+		td
+		{
+			vertical-align: top;
+		}
+		
+		.selectedLine
+		{
+			position: absolute;
+			width: 100%;
+			ebackground-color: red;
+			border: solid 1px #fc8;
+			border-left: 0;
+			border-right: 0;
+			margin-top: -2px;
+			background: -webkit-gradient(linear, left top, left bottom, from(#fec), to(#fda));
+			background: -webkit-gradient(linear, left top, left bottom, from(#ffd), to(#fec));
+			background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 208, 0.5)), to(rgba(255, 240, 192, 1.0) ) );
+		}
+		.selectedLinePosition
+		{
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			text-align: right;
+			color: #f80;
+			vertical-align: bottom;
+			margin-right: 4px;
+			efont-size: 70%;
+		}
+		
+		.selectionDump
+		{
+			width: 350px;
+		}
+		.selectionDump, .selectionDump td
+		{
+			border: solid 1px #aaa;
+		}
+		.selectionDump .header
+		{
+			font-weight: bold;
+		}
+		#undoStackDump
+		{
+			color: #8c0;
+		}
+		
+		.newline
+		{
+			/* cursor won't land an empty lines with white-space: normal */
+			/* but if normal, shift-selecting up stops on newline */
+			/* inline-block works OK */
+			white-space: normal;
+			edisplay: -webkit-inline-box; 
+		}
+		.newline-blank
+		{
+			white-space: pre;
+			/* border: solid 1px red; */
+		}
+		
+		.fakeTab
+		{
+			ewhite-space: normal;
+			edisplay: inline-block;
+			epadding-right: 20px;
+			emargin-right: 20px;
+			eborder: solid 1px red;
+
+			eletter-spacing: -4px;
+			eletter-spacing: -0.5em;
+			eletter-spacing: -0.5pt;
+			epadding-right: 40px;
+			emargin-right: -20px;
+			ebackground: -webkit-gradient(linear, left top, right top, from(#f44), to(#fcc));
+			ebackground: -webkit-gradient(linear, left top, right top, from(rgba(220, 245, 200, 0.81)), to(rgba(100, 255, 100, 0.81)));
+			
+			max-height: 1em;
+			eline-height: 0.2em;
+			overflow: none;
+		}
+		#warning
+		{
+			position: absolute;
+			color: red;
+			z-index: 1;
+		}
+		
+	</style>
+</head>
+<body>
+
+<ul><li>REMOVE STYLESHEET
+	<li>make an automated undo tester : random commands (including undo/redo) + consistency test : replay to initial state, then back to final
+		</ul>
+
+<div id='warning'></div>
+<table border='1' style='table-layout: fixed; width: 100%; height: 800px; height: 650px; height: 300px; overflow: auto;' cellPadding='0' cellSpacing='0'><tr>
+	<td>
+		<div id='coloredCodeContainer'><div id='coloredCode'></div></div>
+	</td>
+	<td style='width: 300px'>
+		<div id='birdView'></div>
+		<div id='selectionDump'>SELECTION DUMP</div>
+		<hr>
+		<div id='birdViewDump'>LOG ALL COMMANDS HERE. typing (typing count, line extent + sel) + move + undo/redo</div>
+		<div id='clockDump'>clock dump</div>
+		<hr>
+		<div id='undoStackDump'>UNDO DUMP</div>
+		<button onclick='undo()'>undo</button>
+		<button onclick='redo()'>redo</button>
+		<button onclick='paste()'>paste</button>
+		<button onclick='dumpUndoStack()'>dump undo</button>
+		<div id='orderDump'>order dump <br></div>
+		<div id='linesDump'>lines dump</div>
+	</td>
+</tr></table>
+
+	<textarea style='display: none'>
+// some text on the first line
+	function CheckBracketSpacing()
+	{
+		hello
+	}
+	
+abcd****1234+
+	2	3	4
+
+	var a = this.execute123('hello', world, 4)
+first line
+		second line
+			third line
+				fourth line
+					BIG BUG when careting to end of second line !
+
+// Doesn't stop on ponctuation except +
+a	*	1	+	4
+
+		this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! 
+
+this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! this is a long line! 
+
+// Stops on star, SKIPS 1234, then + 
+abcd****1234+
+
+abcd****1234  /////// zaeza ze+
+
+
+	5	6	7
+1	*		+
+abcd****1234+
+	4	2	+
+        1234+
+1	2	3	+
+abcd****1234+
+12	34	56	+
+abcd****1234+
+123	456	789	+
+		3	+
+		+	+
+1	+	*	+
+12	+	*	+
+123	+	*	+
+1234	+	+
+12345	+	+
+123456	+	+
+1234567	+	+
+12345678	+
+	
+</textarea>
+	//	List launched applications
+	var apps = [[NSWorkspace sharedWorkspace] launchedApplications]
+
+	for (var i=0; i<apps.length; i++)
+		// option-right from next EOL
+		log(apps[i].NSApplicationName)	
+
+
+	// Instead of using alloc/init and releasing ...
+	var url = [[NSURL alloc] initFileURLWithPath:"/tmp" isDirectory:true]
+	[url release]
+	// Replace 'init' in the method name with 'instance' to get an object managed by JavascriptCore
+	var url = [NSURL instanceFileURLWithPath:"/tmp" isDirectory:true]
+	// Mark object as collectable
+	url = null
+
+
+	// Mix and match ObjJ and Javascript syntax
+	var a = [NSArray arrayWithObjects:'hello', [7, 8, 9], 'world']
+	log('a[1][2]=' + [[a objectAtIndex:1] objectAtIndex:2])
+	log('a[1][1]=' + [a[1] objectAtIndex:1])
+	log('a[1][0]=' + a[1][0])
+
+
+	// Syntactic sugar for selector notation
+	var o = [SomeObject instance]
+	[o performSelector:@selector(doStuff:) withObject:anObject afterDelay:500]
+	
+	
+	//
+	// Define a Cocoa class in Javascript
+	//	It can then be used from Javascript or Cocoa (use it as a delegate class, create a new NSView, ...)
+	//
+	class MyObject < NSObject
+	{
+		// Find objects containing at least one capital letter
+		- (NSArray*)findObjectsInArray:(NSArray*)array
+		{
+			return array.filter(function (elt) { return elt.match(/[A-Z]/) })
+		}
+		// Use radix = 16 to parse hex
+		// Use radix = 36 to parse a Reddit story number
+		- (NSNumber*)parseNumberInString:(NSString*)str withRadix:(int)radix
+		{
+			return parseInt(str, radix)
+		}
+		// NSApplication delegate method
+		- (void)applicationWillBecomeActive:(NSNotification *)notification
+		{
+			log('Hello ! ' + notification.name)
+		}
+	}
+
+	// Instance our new class
+	var obj = [MyObject instance]
+	log([obj parseNumberInString:'9q5vm' withRadix:'36'])
+	// Register it as application delegate
+	[NSApplication sharedApplication].delegate = obj
+
+
+	//
+	// Swizzle a method from an existing class
+	//
+	class NSButton
+	{
+		swizzle - (void)drawRect:(NSRect)rect
+		{
+			// Call original method
+			this.Original(arguments)
+			log('drawRect: called on button ' + this)
+		}
+	}
+
+</textarea>
+
+	<pre id='dump'></pre>
+
+
+
+<table style='table-layout: fixed; width: 100%'><tr><td style='width: 480px'>
+<tr><td>
+	<pre id='dump2'></pre>
+<td>
+	<pre id='dump3'></pre>
+	<pre id='dump4'></pre>
+</tr></table>
+	<button onclick="clearDumps()">Clear</button>
+	<pre id='dump5'></pre>
+	<pre id='dump6'></pre>
+<!--
+	<script src="json2.js"></script>
+	<script src='showdown.js'></script>
+-->	
+	<script src="jslint-jscocoa.js"></script>
+
+		<script>
+		
+//			var MarkDownConverter = new Showdown.converter()
+
+			function	htmlEncode(str)
+			{
+//				return str
+				return str.replace(/</g, '&lt;')
+				return str.replace(/</g, '&lt;')
+				return str.replace(/</g, '&lt;')
+			}
+			function	getTickCount()
+			{
+				return (new Date).getTime()
+			}
+			function	dumpHash(o)
+			{
+				var str = ''
+				for (var i in o) str += i + '=' + (o[i]) + '\n'
+				return str
+			}
+			function	dumpHashNoFunction(o)
+			{
+				var str = ''
+				for (var i in o) { if (typeof o[i] == 'function') continue; str += i + '=' + (o[i].toString == 'toStringToken' in this ? ('*TOKEN*'+o[i].value + '*') : o[i]) + '\n' }
+				return str
+			}
+			function	newNodeAsChildOf(node, tagName)
+			{
+				var n2 = document.createElement(tagName||'DIV')
+				node.appendChild(n2)
+				return n2
+			}
+			function	log(str)
+			{
+				document.getElementById('warning').innerHTML += '<pre style="margin: 0">' + getTickCount() + ' ' + str + '</pre>'
+			}
+			
+
+			// Walkers
+			function nextNode(n)
+			{
+				if (n.firstChild)	return n.firstChild
+				while (n)
+				{
+					if (n.nextSibling)	return n.nextSibling
+					n = n.parentNode
+				}
+				return	null
+			}
+			function	previousNode(n)
+			{
+				if (n.previousSibling)
+				{
+					n = n.previousSibling
+					while (n && n.lastChild)
+						n = n.lastChild
+					return	n
+				}
+				n = n.parentNode
+				return	n
+			}
+			
+			
+
+
+
+
+
+
+
+
+			//
+			// Code colorer class
+			// 						
+			function	CodeColorer(editorNode, containerNode, birdViewNode)
+			{
+				this.initWithNodes(editorNode, containerNode, birdViewNode)
+			}
+			var CCp = CodeColorer.prototype
+			CCp.initWithNodes = function (editorNode, containerNode, birdViewNode)
+			{
+				this.editorNode		= editorNode
+				this.birdViewNode	= birdViewNode
+				this.containerNode	= containerNode
+/*
+><div id='bubbleContainer'></div><div id='lineNumbers'></div><div id='selectedLine'><div id='selectedLinePosition'></div></div><div id='highlightedContainer'><div id='tracesContainer'></div><div id='whiteSpaceRevealer'></div>
+*/			
+				this.editorNode.contentEditable = true
+				
+				this.bubbleContainer	= newNodeAsChildOf(this.containerNode)
+				this.lineNumbers		= newNodeAsChildOf(this.containerNode)
+				this.selectedLine		= newNodeAsChildOf(this.containerNode)
+				this.selectedLinePosition	= newNodeAsChildOf(this.selectedLine)
+				this.tracesContainer	= newNodeAsChildOf(this.containerNode)
+				this.whiteSpaceRevealer	= newNodeAsChildOf(this.containerNode)
+				
+				this.selectedLine.className	= 'selectedLine'
+				this.selectedLinePosition.className	= 'selectedLinePosition'
+
+
+				// Measure width of one character
+				this.charWidthMeasurer	= newNodeAsChildOf(this.containerNode)
+
+				// Undo
+				this.actionId = 0
+//				this.selectionStack = []
+				this.undoStack = []
+				this.redoStack = []
+				
+				// Create lint and register our logs
+				var logNames = ['logToken', 'logExtraSyntax']
+				var logs = {}
+				var self = this
+				for (var i=0; i<logNames.length; i++)	{
+					var name = logNames[i]
+					// Close name
+					logs[name] = function (name) { return function () { return self[name].apply(self, arguments) } }(name)
+				}
+				this.JSLINT = JSLintWithLogs(logs)
+				this.jslint = this.JSLINT()
+				
+				// Events
+				var self = this
+//				this.DOMCharacterDataModifiedListener = function () { return self.DOMCharacterDataModified.apply(self, arguments) }
+//				this.editorNode.addEventListener('DOMCharacterDataModified', this.DOMCharacterDataModifiedListener, false)
+
+//document.onselectionchange = function ()
+/*
+var self = this
+document.body.onselectstart = function ()
+{
+//	document.getElementById('linesDump').innerHTML = getTickCount() + ' selchange' + '<pre>' + dumpHash(self.rangeSelection) + '</pre>'
+	document.getElementById('selectionDump').innerHTML = getTickCount() + ' selchange' + '<pre>' + dumpHash(self.rangeSelection) + '</pre>'
+}
+*/
+				this.editorNode.onkeydown		= function () { return self.keydown.apply(self, arguments) }
+				this.editorNode.oncut			= function () { return self.cut.apply(self, arguments) }
+				this.editorNode.onpaste			= function () { return self.paste.apply(self, arguments) }
+				this.containerNode.onscroll		= function () { return self.scroll.apply(self, arguments) }
+				this.editorNode.onmousedown		= function () { return self.mousedown.apply(self, arguments) }
+				this.editorNode.onmousemove		= function () { return self.mousemove.apply(self, arguments) }
+				this.editorNode.onmouseup		= function () { return self.mouseup.apply(self, arguments) }
+				this.editorNode.onblur			= function () { return self.blur.apply(self, arguments) }
+//				this.postBrowserActionFunction	= function () { return self.postBrowserAction.apply(self, arguments) }
+				// Safari might execute two keydowns in a row instead of keydown + postkeydown. Used a counter to ensure order execution.
+//				this.postBrowserActionPending = 0
+				
+				// Keep last valid caret position. setting this.caret.text = newText deletes Safari's selection, querying caret after it will return the last known position
+				this.lastValidCaret = { line : 0, offset : 0 }
+				
+				// Holds isMoving, and when !isMoving, rangeText, lineCount, caretLineNumber, caretLineText, previousLineText, nextLineText
+				this.editState		= {}
+			}
+			
+			//
+			// Helpers
+			// 
+			CCp.warn = function (str)
+			{
+				document.getElementById('dump3').innerHTML = getTickCount() + '<br>' + '<span style="color: red">' + str + '</span>'
+			}
+			CCp.dumpLintErrors = function (errors)
+			{
+				var str = ''
+				for (var i=0; i<errors.length; i++)
+					if (errors[i]) str += '(' + errors[i].line + ',' + errors[i].character + ')=' + errors[i].reason + '\n'
+				return str
+			}
+			CCp.toString = function () {
+				return 'CodeColorer'
+			}
+			
+			//
+			// Text loading
+			//
+			CCp.loadText = function (text)
+			{
+				// Should remove \r
+				var lines = text.split('\n')
+				this.loadLines(lines)
+				this.caretSelection = { line : 0, offset : 0 }
+//				this.highlightSelectedLine()
+			}
+			CCp.loadLines = function (lines)
+			{
+				this.measureCharWidth()
+				var src = []
+				if (lines.length == 0) lines = ['']
+				for (var i=0; i<lines.length; i++)
+				{
+					var l = lines[i]
+					l = this.replaceTabsInLine(l)
+					l = '<div class="line">' + l + '\n</div>'
+					src.push(l)
+				}
+				this.editorNode.innerHTML = src.join('')
+			}
+			CCp.__defineGetter__('lineCount', function ()
+			{
+				return this.editorNode.childNodes.length
+			})
+			CCp.rawText = function ()
+			{
+				return this.editorNode.innerText
+			}
+
+			CCp.measureCharWidth = function ()
+			{
+				var str = '<span>*</span><br/>'
+				this.charWidthMeasurer.innerHTML = str
+				this.charWidth = this.charWidthMeasurer.firstChild.offsetWidth
+				this.charTabWidths = {}
+			}
+
+			CCp.textFromLine = function(line)
+			{
+				if (typeof line == 'number')
+					line = this.lineNodeFromLineNumber(line)
+				if (!line)	return null
+				var t = line.innerText
+				// When suppr-ing text from the end of line, Safari might delete newline - re-add it
+				if (!t.match(/\n/)) t += '\n'
+				return	t
+			}
+			CCp.setLineText = function (line, text)
+			{
+				var n = this.lineNodeFromLineNumber(line)
+				if (n) n.innerHTML = this.replaceTabsInLine(text)
+			}
+			
+			
+			//
+			// Line and offset computation
+			// 
+			CCp.lineNodeFromNode = function (startNode)
+			{
+				if (!startNode)		return log('lineNodeFromNode called with (null)'), null
+				var node = startNode
+				while (node)
+				{
+					if (node.nodeType == 1 && node.className == 'line')
+						return node
+					node = node.parentNode
+				}
+				if (!node)	
+					log('lineNodeFromNode found no line with startNode=' + startNode + '' + (startNode.nodeType==1?startNode.outerHTML:startNode.nodeValue).substr(0, 100))
+				return node
+			}
+			CCp.nodeIsInEditor = function (node)
+			{
+				while (node)
+				{
+					if (node == this.editorNode)	return true
+					node = node.parentNode
+				}
+			}
+			
+			CCp.lineNumberFromNode = function (node)
+			{
+				node = this.lineNodeFromNode(node)
+				if (!node)	return
+				var i = 0
+				node = node.previousSibling
+				while (node)
+				{
+					i++
+					node = node.previousSibling
+				}
+				return i
+			}
+			CCp.lineNodeFromLineNumber = function (i)
+			{
+				return this.editorNode.childNodes[i]
+			}
+			// Given a relative (node, offset), return an absolute offset in the matching line
+			CCp.caretFromNodeAndOffset = function (node, offset)
+			{
+//				if (!node)	return new Caret(0, 0, this)
+				var n = node
+				var offset2 = offset, lineNumber = this.lineNumberFromNode(n)
+				if (n.className != 'line')
+				{
+					n = previousNode(n)
+					while (n && n.className != 'line')
+					{
+						if (n.nodeType == 3) offset2 += n.nodeValue.length
+						n = previousNode(n)
+					}
+				}
+//				return	{ line : lineNumber, offset : offset2, isDiv : node.className == 'line' && offset == 0 }
+				var c = new Caret(lineNumber, offset2, this)
+				c.isDiv = node.className == 'line' && offset == 0
+				return c
+			}
+/*
+			// Given an absolute (line, offset), return an inner line node and offset
+			CCp.nodeAndOffsetFromLineAndOffset = function (line, offset, isDiv)
+			{
+				var lineNode		= this.lineNodeFromLineNumber(line)
+				if (isDiv && offset == 0)	return { node : lineNode, offset : offset }
+				var currentOffset	= 0
+				
+				var n = nextNode(lineNode)
+				while (n && n.className != 'line')
+				{
+					if (n.nodeType == 3)
+					{
+						var t = n.nodeValue
+						if (currentOffset + t.length >= offset)
+							return { node : n, offset : offset-currentOffset }
+						else
+							currentOffset += t.length
+					}
+					n = nextNode(n)
+				}
+				return { node : null, offset : undefined }
+			}
+*/
+
+			//
+			// Selection handling
+			// 
+			CCp.__defineGetter__('rawSelection', function ()
+			{
+				var s = getSelection()
+//				return [s.baseNode, s.baseOffset, s.extentNode, s.extentOffset]
+				return [s.anchorNode, s.anchorOffset, s.focusNode, s.focusOffset]
+			})
+			CCp.__defineSetter__('rawSelection', function (r)
+			{
+				getSelection().setBaseAndExtent(r[0], r[1], r[2], r[3])
+			})
+			
+			// Caret selection { line, offset }
+			CCp.__defineGetter__('caretSelection', function ()
+			{
+				return this.caretFromNodeAndOffset(getSelection().anchorNode, getSelection().anchorOffset)
+			})
+			CCp.__defineSetter__('caretSelection', function (s)
+			{
+				var line = this.lineNodeFromLineNumber(s.line)
+				var sel = getSelection()
+				sel.setPosition(line, 0)
+				for (var i=0; i<s.offset; i++)
+					sel.modify('move', 'right', 'character')
+			})
+
+			// Range selection { line, offset, line2, offset2 }
+			CCp.__defineGetter__('rangeSelection', function ()
+			{
+				var n = 'anchor'
+				var c1 = this.caretFromNodeAndOffset(getSelection()[n + 'Node'], getSelection()[n + 'Offset'])
+				var n = 'focus'
+				var c2 = this.caretFromNodeAndOffset(getSelection()[n + 'Node'], getSelection()[n + 'Offset'])
+				return { type : 'Range', line : c1.line, offset : c1.offset, line2 : c2.line, offset2 : c2.offset, CCp : this, 
+							select : function () { this.CCp.rangeSelection = this } }
+			})
+			CCp.__defineSetter__('rangeSelection', function (s)
+			{
+				var sel = getSelection()
+				this.caretSelection = { line : s.line, offset : s.offset }
+				var baseNode	= sel.baseNode
+				var baseOffset	= sel.baseOffset
+				this.caretSelection = { line : s.line2, offset : s.offset2 }
+				var extentNode	= sel.extentNode
+				var extentOffset= sel.extentOffset
+				sel.setBaseAndExtent(baseNode, baseOffset, extentNode, extentOffset)
+			})
+			
+			CCp.orderedLineNumbersFromRangeSelection = function (includeLastLine)
+			{
+				var c1 = this.caret, c2 = this.caret2
+				if (c1.lineNumber > c2.lineNumber) c1 = this.caret2, c2 = this.caret
+				var l1 = c1.lineNumber
+				var l2 = c2.lineNumber
+				if (!includeLastLine && c2.offset == 0) l2--
+				return { line : c1.lineNumber, offset : c1.offset, line2 : c2.lineNumber, offset2 : c2.offset, l1 : l1, l2 : l2 }
+			}
+			CCp.textFromRangeSelection = function(includeLastLine)
+			{
+				var lineNumbers = this.orderedLineNumbersFromRangeSelection(includeLastLine)
+				var text = ''
+
+				// When a whole line is selected, deleting it will move caret to the next line. Save it too.
+				var l2 = lineNumbers.l2
+				for (var i=lineNumbers.l1; i<=l2; i++)
+				{
+					var c = new Caret(i, 0, this)
+					text += c.text
+				}
+				return text
+			}
+/*
+			CCp.selectionOnStack = function()
+			{
+				if (!this.selectionStack.length)	return
+				return	this.selectionStack[this.selectionStack.length-1]
+			}
+			CCp.pushSelection = function ()
+			{
+				this.selectionStack.push(getSelection().type == 'Caret' ? this.caretSelection : this.rangeSelection)
+			}
+			CCp.popSelection = function ()
+			{
+				if (this.selectionStack.length == 0)	return log('popSelection exhausted selection stack')
+				var r = this.selectionStack.pop()
+				if (r.type == 'Caret')	this.caretSelection = r
+				else					this.rangeSelection = r
+			}
+*/
+/*
+			// Return position - offset differs from selection offset, as tabs will count for 1 to 4 chars
+			CCp.textPositionAsLineAndOffset = function ()
+			{
+				var sel	= getSelection()
+				var s	= this.lineAndOffsetFromNodeAndOffset(sel.baseNode, sel.baseOffset)
+				var line= this.lineNodeFromNode(sel.baseNode)
+				var str	= this.textFromLine(line).substr(0, s.offset)
+
+				var o = {}
+				this.replaceTabsInLine(str, null, null, o)
+				return { line : s.line, offset : o.totalWidth }
+			}
+*/
+
+			CCp.gatherLinesToLint = function ()
+			{
+				var lines = []
+				var f = this.editorNode.firstChild
+				while (f)
+				{
+					var text = this.textFromLine(f)
+					lines.push(text)
+					f = f.nextSibling
+				}
+				return lines
+			}
+			
+			CCp.lintLines = function (lines)
+			{
+				var options = { forin : true, laxbreak : true, indent : true }
+
+//### FIX INSTANCE VARS				
+				this.tokensByLine	= {}
+				this.functionLines	= []
+//				this.traceTokens	= []
+    			var res = this.jslint(lines, options)
+				return { tokens : this.tokensByLine, res : !!res, functionLines : this.functionLines, errors : this.JSLINT.errors }
+			}
+			
+			//
+			// Color code
+			// 
+			CCp.colorCode = function ()
+			{
+//					this.measureCharWidth()
+				
+				var t
+				var str = ''
+				var clock = function (c)
+				{
+					if (!c) t = getTickCount()
+					if (c) str += '<br>' + c + '=' + (getTickCount()-t) +  ' ms'
+				}
+				clock()
+				var lines = this.gatherLinesToLint()
+				str += 'linting ' + lines.length + ' lines'
+				clock('gather')
+
+				clock()
+				var lint = this.lintLines(lines.join(''))
+				clock('lint')
+				
+				if (!lint.res)	
+				{
+					this.warn('Lint error dump ... ' + getTickCount() + '\n' + this.dumpLintErrors(lint.errors))
+				}
+				else
+				{
+					document.getElementById('dump3').innerHTML = getTickCount() + ' <span style="color: lime; font-weight: bold">OK</span>'
+				}
+				
+				clock()
+				
+				//
+				// Color
+				//
+//				this.pushSelection()
+				var s = this.rangeSelection
+				var f = this.editorNode.firstChild
+				var i = 0
+				while (f)
+				{
+					var tokens = lint.tokens[i]
+					if (!tokens) tokens = []
+					var line = lines[i]
+					this.writeTokensToLine(f, tokens, line, i)
+					
+					f = f.nextSibling
+					i++
+				}
+				this.rangeSelection = s
+//				this.popSelection()
+				
+				clock('color')
+				document.getElementById('clockDump').innerHTML = str
+			}
+
+			//
+			//
+			// Write functions
+			// 
+			//
+			
+			// Replace tabs switched methods ...
+			//  fully deleting the tab with letter-spacing messes up caret AND selection indices when selecting a range (yields a baseOffset of 1 when a full line is selected)
+			CCp.replaceTabsInLine = function (line, html, customReplaceFunction, o)
+			{
+				if (!html)	html = htmlEncode(line)
+				var tabWidths = []
+				var tabWidths8 = []
+				function	countTabs(str, idx)
+				{
+					var length = (idx+deltaTabPosition) % tabWidth
+					length = tabWidth - length
+					// Add spaces to position (minus one to 'remove' the tab)
+					deltaTabPosition += length-1
+					
+					tabWidths.push(length)
+
+					var length8 = (idx+deltaTabPosition8) % 8
+					length8 = 8 - length8
+					// Add spaces to position (minus one to 'remove' the tab)
+					deltaTabPosition8 += length8-1
+					
+					tabWidths8.push(length8)
+				}
+
+				var tabIndex = 0
+				var charWidth = this.charWidth
+				var charTabWidths = this.charTabWidths
+				function	replaceTabs(str, idx)
+				{
+					// A tab is surrounded by a SPAN nulling its width (with negative letter-spacing) and padding it to the correct 4-size with charWidth (measured in charWidthMeasurer)
+					totalWidth += tabWidths[tabIndex]
+//					alert(tabWidths[tabIndex] + '\n' + tabWidths8[tabIndex])
+					var w1 = charWidth
+					var w2 = tabWidths[tabIndex]*charWidth
+
+
+					var w = tabWidths[tabIndex]*charWidth
+					var p = w
+					var ls = charWidth
+
+
+//alert(tabWidths8[tabIndex] + '\n\n*****\n' + dumpHash(charTabWidths))
+					var p = tabWidths[tabIndex]*charWidth-charTabWidths[tabWidths8[tabIndex]]
+					var ls = (charWidth-1)
+					
+					p = tabWidths[tabIndex]*charWidth-3
+//					p = 21
+//alert('letterspacing=' + ls + '\ntab width 4=' + tabWidths[tabIndex] + '\ntab character count=' + tabWidths8[tabIndex] + '\ntab pixel width=' + charTabWidths[tabWidths8[tabIndex]] + '\np=' + p + '\n\ncharTabWidths=\n' + dumpHash(charTabWidths))
+//alert(tabWidths8[tabIndex] + '\n*\n' + charTabWidths[tabWidths8[tabIndex]] + '\n*\n' + dumpHash(charTabWidths))
+					var style = 'letter-spacing: -' + ls + 'px; padding-right: ' + p + 'px'
+					style = ' display: inline-block'
+
+//ls = charWidth
+//p = 0
+//					var style = 'letter-spacing: -' + ls + 'px; margin-right: -' + (p) + 'px'
+
+//					var style = 'letter-spacing: -' + charWidth + 'px; emargin-right: -' + (p) + 'px'
+//					style = ''
+
+//					alert(style)
+//					var style = 'letter-spacing: -' + ls + 'px; margin-right: -' + (charTabWidths[tabWidths8[tabIndex]]) + 'px'
+					
+//var mr = -charTabWidths[tabWidths8[tabIndex]]
+//style = 'margin-right: ' + mr + 'px'
+					tabIndex++
+//style = ''	
+//style = 'letter-spacing: -' + charWidth + 'px'
+//alert(style)
+style = 'display: inline-block'
+style = 'white-space: normal; eborder-top: solid 1px red; padding-right: ' + w2 + 'px; '
+style = 'white-space: normal; letter-spacing: ' + w2 + 'px; border-left: solid 3px red; edisplay: inline-block'
+
+style = ''
+style = 'display: inline-table; width: 20px'
+
+
+
+style = 'display: -webkit-inline-box; width: ' + w + 'px'
+style = 'display: inline-block; width: ' + w + 'px; eheight: 7px; overflow: hidden'
+
+/* 
+	-webkit-box-align: alignment;
+baseline
+Elements are aligned with the baseline of the box.
+
+center
+Elements are aligned with the center of the box.
+
+end
+Elements are aligned with the end of the box.
+
+start
+Elements are aligned with the start of the box.
+
+stretch
+Elements are stretched to fill the box.
+
+
+*/
+
+//alert(style)
+//style='white-space: normal; margin-right: 10px'
+style = ''
+
+style = 'display: -webkit-inline-box; width: ' + w + 'px;' //' overflow: hidden; height: 1em'
+
+
+
+					return '<span class="fakeTab" style="' + style + '">	</span>'
+					
+//					return '<span class="fakeTab" style="letter-spacing: -' + w1 + 'px; padding-right: ' + w2 + 'px">	</span>'
+//					w1 = 0
+//					w2 = 100
+//					return '<span class="fakeTab" style="eletter-spacing: ' + w1 + 'px; padding-right: ' + w2 + 'px; white-space:normal; border: solid 1px red">	</span>'
+				}
+				var tabWidth = this.tabWidth()
+				var deltaTabPosition = 0
+				var deltaTabPosition8 = 0
+
+				// Count tabs
+				line.replace(/\t/g, countTabs)
+				// Total character width of line (counting a full tab as tabWidth())
+				var totalWidth = line.length - tabWidths.length
+				// Replace tabs
+				html = html.replace(/\t/g, customReplaceFunction ? function () { return customReplaceFunction(tabWidths[tabIndex++]) } : replaceTabs)
+//alert(html)				
+				// Output totalWidth
+				if (o)	o.totalWidth = totalWidth
+				return	html
+			}
+			CCp.tabWidth = function ()
+			{
+				return	4
+			}
+			
+			CCp.writeTokensToLine = function (node, tokens, line, lineNumber)
+			{
+				var i = 0
+				var lastIndex 	= 0
+				var str = ''
+				while (tokens[i])
+				{
+					var token = tokens[i]
+					// Skip endline
+					if (token.id == '(endline)')
+					{
+						i++
+						continue
+					}
+					
+					if (token.rawValue && token.from > lastIndex)
+					{
+						var space = line.substr(lastIndex, token.from-lastIndex)
+						str += htmlEncode(space)
+					}
+					var c = ''
+					var v = token.value
+					v = line.substr(token.from, token.character-token.from)
+					if (token.identifier) c = 'identifier-' + token.value
+					if (token.reserved) c = 'keyword'
+					if (token.id && !token.reserved) 
+					{
+						c = 'exps'
+					}
+					if (token.type == '(number)') c = 'number'
+					if (token.type == '(string)') 
+					{
+						c = 'string'
+					}
+					if (token.type == '(comment)') 
+					{
+						c = 'comment'
+//						alert(line + '*\ncharacter=' + token.character + '\nline.length=' + line.length + '\nv=' + v + '*')
+
+						// Single line markdown comment
+//						if (v.match(/^\/\/md/))
+//						{
+//							v = v.replace(/^\/\/md\s?/, '')
+//							v = MarkDownConverter.makeHtml(v)
+//							v = '<span class="markdown-singleline-container"><span class="markdown-singleline">' + v + '</span></span>'
+//							printEndLine = false
+//						}
+
+					}
+					if (token.isObjCCall)
+					{
+						c += ' objcCall'
+						if (!token.isObjCCallOpener && !token.isObjCCallCloser && !token.isObjCFirstCall)	
+							c+= ' objcCallSelector'
+						if (token.isObjCCallOpener || token.isObjCCallCloser)
+							c += ' objcCallBracket'
+					}
+					v = htmlEncode(v)
+					str += '<span class="' + c + '">' + v + '</span>'
+					lastIndex = token.character
+					i++
+				}
+				// Copy end of line
+				if (lastIndex < line.length)
+				{
+					var space = line.substr(lastIndex)
+					str += htmlEncode(space)
+				}
+
+				// TABS ! sized to any size you want.
+				str = this.replaceTabsInLine(line, str)
+//				if (lineNumber == 1)	alert(line.length + ' ' + (line == '\n'))
+//				if (line == '\n')	str = str.replace(/\n/, '<span class="newline-blank">\n</span>')
+//				else				str = str.replace(/\n/, '<span class="newline">\n</span>')
+				
+				// Blank lines are just a newline, non blank lines get their newline wiped out - it screws selection up. 
+				// (caret position wrong when going up, selecting end of line fails)
+				if (line.match(/^\n$/))	str = str.replace(/\n/, '<span class="newline-blank">\n</span>')
+				else					str = str.replace(/\n/, '')
+				
+//				if (lineNumber == 8)	alert(str + '\n*' + line + '*')
+//				str = str.replace(/\n/, '<span class="newline-blank">\n</span>')
+//				str = str.replace(/\n/, String.fromCharCode(0x200b))
+//				str = str.replace(/\n/, String.fromCharCode(0x0001))
+//				str = str.replace(/\n/, String.fromCharCode(0x0001))
+				
+				node.innerHTML = str
+			}
+			
+			//
+			// Logs
+			// 
+			CCp.logToken = function (token)
+			{
+/*
+				var el  = token.id == '(endline)' ? '\n' : ''
+				var id = token.id ? ('<span style="color: blue">(<b>' + token.id + '</b>)</span> ') : ''
+				document.getElementById('dump2').innerHTML += token.value + id + el
+*/
+//				if (this.lines[token.line])	token.rawValue = lines[token.line].substr(token.from, token.character-token.from)				
+//				else						token.rawValue = ''
+//				alert('handle rawvalue'), eaz()
+
+				var line = token.line
+				if (!this.tokensByLine[line])	this.tokensByLine[line] = []
+				this.tokensByLine[line].push(token)
+			}
+			
+			CCp.logExtraSyntax = function (syntaxName, token)
+			{
+//				alert(syntaxName)
+			}
+
+			
+			CCp.mousedown = function()
+			{
+				this.performAfterDelay('highlightSelectedLine')
+/*
+				var self = this
+				function h()
+				{
+					self.highlightSelectedLine()
+				}
+				setTimeout(h, 0)
+*/
+				this.closeEditAction()
+			}
+			CCp.mousemove = function()
+			{
+//				var self = this
+//				function h()		{		self.highlightSelectedLine()		}
+				this.performAfterDelay('highlightSelectedLine')
+//				setTimeout(h, 0)
+			}
+			
+			CCp.mouseup = function()
+			{
+			}
+			
+			CCp.blur = function ()
+			{
+//				var self = this
+//				function h()		{		self.highlightSelectedLine()		}
+				this.performAfterDelay('highlightSelectedLine')
+//				setTimeout(h, 0)
+			}
+			
+			
+			//
+			// Undo
+			// 
+/*			
+			function	EditAction()
+			{
+			}
+*/			
+			
+			CCp.newEditAction = function ()
+			{
+				this.closeEditAction()
+				this.actionId++
+//				var action	= new EditAction
+				var action	= {}
+				action.id	= this.actionId
+				action.text	= ''
+				action.rangeSelection = this.rangeSelection
+				this.undoStack.push(action)
+				this.redoStack = []
+				return action
+			}
+			
+			CCp.closeEditAction = function ()
+			{
+				if (!this.currentEditAction)	return
+
+				this.currentEditAction.endRangeSelection = this.rangeSelection
+				// Go up to check for modified lines
+				var text = ''
+				var line = this.lineNodeFromLineNumber(this.currentEditAction.lastLineVisited)
+				while (line && line.id == this.actionId)
+				{
+					this.currentEditAction.startLine = this.lineNumberFromNode(line)
+					text = this.textFromLine(line) + text
+					line = line.previousSibling
+				}
+				// Go down to check for modified lines
+				var line = this.lineNodeFromLineNumber(this.currentEditAction.lastLineVisited).nextSibling
+				while (line && line.id == this.actionId)
+				{
+					text += this.textFromLine(line)
+					line = line.nextSibling
+				}
+				// Register newText
+				this.currentEditAction.newText = text
+				this.currentEditAction.closed = true
+				this.currentEditAction = null
+
+				
+				
+//				return
+/*				
+//				if (this.currentEditingAction == 'typing')
+				{
+//					this.currentEditingAction = 'moving'
+					if (this.undoStack.length)
+					{
+						var action = this.currentEditAction
+						action.closed = true*/
+/*						
+						var text = ''
+						var lineChangedCount = action.newLineCount - action.backwardLineDeleteCount - action.forwardLineDeleteCount
+						var lineChangedCount = action.currentLine - action.lastDeletedBackwardLineNumber
+						lineChangedCount = Math.abs(lineChangedCount)
+						
+//						if (lineChangedCount < 1) lineChangedCount = 1
+//						alert(action.lastDeletedBackwardLineNumber + '\n' + lineChangedCount)
+						for (var i=action.lastDeletedBackwardLineNumber; i<=action.lastDeletedBackwardLineNumber+lineChangedCount; i++)
+							text += this.textFromLine(i)
+						action.newText = text
+						// Remove action if nothing was changed
+						if (action.isBlank)	this.undoStack.pop()
+						else
+						{
+							this.redoStack = []
+						}
+*/
+/*
+					}
+				}
+*/				
+				this.dumpUndoStack()
+			}
+			CCp.dumpUndoStack = function ()
+			{
+				if (this.undoStack.length)
+				{
+					var str = getTickCount() + ' actionCount=' + this.undoStack.length + ' redoActionCount=' + this.redoStack.length
+					for (var j=this.undoStack.length-1; j>=0; j--)
+					{
+						var action = this.undoStack[j]
+						str += '<br><b> ACTION ' + j  + '</b>  ' + (action.closed ? '' : ' ...IN PROGRESS') + ' ' + (action.isBlank ? '<b>isBlank</b>' : '')
+						str += '<br>startLine=' + action.startLine
+						try
+						{
+							str += '<br>text=' + (action.text.split('\n').length-1) + ' lines'
+							str += '<pre style="margin: 0; background-color: #eee">' + htmlEncode(action.text) + '</pre>'
+							str += 'newText=' + (action.newText.split('\n').length-1) + ' lines'
+							str += '<pre style="margin: 0; background-color: #eee">' + htmlEncode(action.newText) + '</pre>'
+						} catch (e) {}
+/*					
+						str += '<br>startedAtLine=' + action.startedAtLine
+						if (j == this.undoStack.length-1)
+							str += '<br>currentLine=' + action.currentLine
+						str += '<br>range=' + action.startLine + ',' + action.endLine
+						str += '<br>backwardLineDeleteCount=' + action.backwardLineDeleteCount
+						str += '<br>forwardLineDeleteCount=' + action.forwardLineDeleteCount
+						str += '<br>newLineCount=' + action.newLineCount
+						str += '<br>lastDeletedBackwardLineNumber=' + action.lastDeletedBackwardLineNumber
+						str += '<br>total line change count=' + (action.newLineCount - action.backwardLineDeleteCount - action.forwardLineDeleteCount)
+//						str += '<br>text=' + action.text.split('n').length
+						if (action.text)
+						{
+							str += '<br>text=' + (action.text.split('\n').length-1) + ' lines'
+							str += '<pre style="background-color: #eee">' + htmlEncode(action.text) + '</pre>'
+							str += '<br>newText=' + (action.newText.split('\n').length-1) + ' lines'
+							str += '<pre style="background-color: #eee">' + htmlEncode(action.newText) + '</pre>'
+						}
+*/
+					}
+					document.getElementById('undoStackDump').innerHTML = str
+				}
+			}
+			
+			CCp.undo = function ()
+			{
+				this.closeEditAction()
+				
+				if (!this.undoStack.length)	return
+				var action = this.undoStack.pop()
+				this.redoStack.push(action)
+
+				// Starting from lastDeletedBackwardLineNumber, delete newText.length lines
+				this.deleteTextAfterLineNumber(action.newText, action.startLine)
+				// Insert after lastDeletedBackwardLineNumber text lines
+				this.insertTextAfterLineNumber(action.text, action.startLine)
+				
+				// Reset selection
+				action.rangeSelection.select()
+				this.editState.rangeText = this.textFromRangeSelection(true)
+				this.highlightSelectedLine()
+			}
+			CCp.redo = function ()
+			{
+				if (!this.redoStack.length)	return
+				var action = this.redoStack.pop()
+				this.undoStack.push(action)
+				
+				// Starting from lastDeletedBackwardLineNumber, delete newText.length lines
+				this.deleteTextAfterLineNumber(action.text, action.startLine)
+				// Insert after lastDeletedBackwardLineNumber text lines
+				this.insertTextAfterLineNumber(action.newText, action.startLine)
+				
+				// Reset selection
+				action.endRangeSelection.select()
+				this.editState.rangeText = this.textFromRangeSelection(true)
+				this.highlightSelectedLine()
+			}
+			
+			
+			CCp.deleteTextAfterLineNumber = function (text, lineNumber)
+			{
+				var lineCount = text.match(/\n/g).length
+				for (var i=0; i<lineCount; i++)
+				{
+					var l = this.lineNodeFromLineNumber(lineNumber)
+					if (!l)	return log('deleteTextAfterLineNumber missing line ' + (lineNumber+i))
+					l.parentNode.removeChild(l)
+				}
+			}
+			CCp.insertTextAfterLineNumber = function (text, lineNumber)
+			{
+				var l = this.lineNodeFromLineNumber(lineNumber-1)
+				if (lineNumber && !l)	return this.warning('insertTextAfterLineNumber missing line ' + lineNumber)
+				
+				var lineCount = text.match(/\n/g).length
+				var splitText = text.split('\n')
+				
+				for (var i=0; i<lineCount; i++)
+					this.insertLineAfterLineNumber(splitText[i], lineNumber+i-1)
+			}
+			
+			CCp.insertLineAfterLineNumber = function (text, lineNumber)
+			{
+				var n2 = document.createElement('DIV')
+				n2.className = 'line'
+				n2.innerHTML = this.replaceTabsInLine(text + '\n')
+				n2.id = this.actionId
+
+				var l = this.lineNodeFromLineNumber(lineNumber)
+				if (l)	l.insertAdjacentElement('afterEnd', n2)
+				else	
+				{
+					if (!this.editorNode.firstChild)	this.editorNode.appendChild(n2)
+					else								this.editorNode.firstChild.insertAdjacentElement('beforeBegin', n2)
+				}
+			}
+			
+			
+			
+			//
+			// Events
+			// 
+			CCp.keyName = function (keyCode)
+			{
+				if (!this.keyNames)
+					this.keyNames = { 90 : 'undo', 37 : 'left', 39 : 'right', 38 : 'up', 40 : 'down', 9 : 'tab', 13 : 'newline', 8 : 'leftdelete', 46 : 'rightdelete' }
+				return this.keyNames[keyCode]
+			}
+			CCp.keyIs = function (keyCode, keyName)
+			{
+				return this.keyName(keyCode) == keyName
+			}
+			
+			
+			//
+			// Selection object
+			//
+/*
+			function	Selection(s)
+			{
+				for (var i in s)	this[i] = s[i]
+			}
+			var Sp = Selection.prototype
+			Sp.toString = function ()
+			{
+				if (!this.line2)	return this.line + ',' + this.offset
+				else				return this.line + ',' + this.offset + '->' + this.line2 + ',' + this.offset
+			}
+			Sp.select = function ()	
+			{
+				if (!('line2' in this))	this.CCp.caretSelection = this
+				else 					this.CCp.rangeSelection = this
+			}
+*/			
+			//
+			// Line object
+			// 
+			function	Line(line, CC)
+			{
+				this.line	= typeof line == 'Number' ? line : line.valueOf()
+				this.CC		= CC
+			}
+			var Lp = Line.prototype
+			Lp.valueOf = Lp.toString = function ()		{	return this.line	}
+			Lp.__defineGetter__('text', function ()		{	return this.CC.textFromLine(this.line)		})
+			Lp.__defineSetter__('text', function (text)	{	this.CC.lineNodeFromLineNumber(this.line).id = this.CC.actionId; return this.CC.setLineText(this.line, text)	})
+			Lp.__defineGetter__('isFirst', function ()	{	return this.line == 0 })
+			Lp.__defineGetter__('isLast', function ()	{	return this.line == this.CC.lineCount-1 })
+			Lp.__defineGetter__('node', function ()		{	return this.CC.lineNodeFromLineNumber(this.line) })
+			Lp.insertNewlineBelow = function ()
+			{
+				var n = this.CC.lineNodeFromLineNumber(this.line)
+				if (!n)	return log('Line.insertNewlineBelow : invalid line number ' + this.line)
+				var n2 = document.createElement('DIV')
+				n2.className = 'line'
+				n2.innerHTML = '\n'
+				n2.id = this.CC.actionId
+				n.insertAdjacentElement('afterEnd', n2)
+				return new Line(this.line+1, this.CC)
+			}
+			Lp.select = function ()	
+			{
+				this.CC.caretSelection = { line : this.line, offset : 0 }
+			}
+			
+			//
+			// Caret object
+			// 
+			function	Caret(line, offset, CC)
+			{
+				this.line	= new Line(line, CC)
+				this.offset	= offset
+				this.CC		= CC
+			}
+			
+			// Get, set text
+			var Cp = Caret.prototype
+			Cp.__defineGetter__('leftText', function ()		{	return this.line.text.substr(0, this.offset) })
+			Cp.__defineGetter__('rightText', function ()	{	return this.line.text.substr(this.offset)	})
+			Cp.__defineGetter__('text', function ()			{	return this.line.text })
+			Cp.__defineSetter__('text', function (text)		{	this.line.text = text })
+			Cp.__defineGetter__('lineNumber', function ()	{	return this.line.valueOf() })
+			
+			// Move
+			Cp.caretMoved = function (direction, grain)	{
+				var raw = this.CC.rawSelection
+				this.CC.caretSelection = { line : this.line, offset : this.offset }
+				getSelection().modify('move', direction, grain)
+				var s = this.CC.caretSelection
+				this.CC.rawSelection = raw
+				return new Caret(s.line, s.offset, this.CC)
+			}
+			Cp.__defineGetter__('leftChar', 	function () { return this.caretMoved('left', 'character')	})
+			Cp.__defineGetter__('rightChar', 	function () { return this.caretMoved('right', 'character')	})
+			// These only move one line at a time. Cocoa skips whitelines.
+			Cp.__defineGetter__('leftWord', 	function () { 
+				var caret2 = this._leftWord
+				if (caret2.lineNumber != this.lineNumber)	{
+					caret2 = this.previousLine.lineEnd
+					if (caret2._leftWord.lineNumber == caret2.lineNumber) caret2 = caret2._leftWord
+				}
+				return caret2
+			})
+			Cp.__defineGetter__('rightWord', 	function () { 
+				var caret2 = this._rightWord
+				if (caret2.lineNumber != this.lineNumber)	
+					caret2 = this.nextLine.skipRightWhite()
+				return caret2
+			})
+
+			Cp.__defineGetter__('_leftWord', 	function () { return this.caretMoved('left', 'word')	})
+			Cp.__defineGetter__('_rightWord', 	function () { return this.caretMoved('right', 'word')	})
+			Cp.__defineGetter__('previousLine', function () { return this.caretMoved('left', 'paragraphBoundary').caretMoved('left', 'character').caretMoved('left', 'paragraphBoundary')	})
+			Cp.__defineGetter__('nextLine',		function () { return this.caretMoved('right', 'paragraphBoundary').caretMoved('right', 'character')	})
+			// Safari mishandles these on lines with tabs, do it by hand
+			Cp.__defineGetter__('lineStart',	function () { return new Caret(this.line, 0, this.CC)	})
+			Cp.__defineGetter__('lineEnd',		function () { return new Caret(this.line, this.text.length-1, this.CC)	})
+			Cp.__defineGetter__('startOfLine',	function () { return this.lineStart	})
+			Cp.__defineGetter__('endOfLine',	function () { return this.lineEnd	})
+
+			Cp.__defineGetter__('isAtStartOfLine',	function () { return this.offset == 0	})
+			Cp.__defineGetter__('isAtEndOfLine',	function () { return this.offset == this.line.text.length-1	})
+
+
+			Cp.__defineGetter__('pageUp', 		function () { var c = this; for (var i=0; i<10; i++) c = c.previousLine; return c.skipRightWhite();	})
+			Cp.__defineGetter__('pageDown', 	function () { var c = this; for (var i=0; i<10; i++) c = c.nextLine; return c.skipRightWhite();	})
+			
+			Cp.select = function ()	
+			{
+				this.CC.caretSelection = { line : this.line, offset : this.offset }
+			}
+			Cp.selectTo = function (caret)
+			{
+				this.CC.rangeSelection = { line : this.line, offset : this.offset, line2 : caret.line, offset2 : caret.offset }
+			}
+			Cp.deleteLine = function ()
+			{
+				var n = this.CC.lineNodeFromLineNumber(this.lineNumber)
+				if (!n)	return log('Line.delete : invalid line number ' + this.line)
+				n.parentNode.removeChild(n)
+			}
+			
+			
+			Cp.skipRightWhite = function ()
+			{
+				var t = String(this.rightText.match(/^(\u0009|\u0020)*/)[0])
+				if (!t)	return this
+				var c = this
+				for (var i=0; i<t.length; i++)	c = c.caretMoved('right', 'character')
+				return c
+			}
+			Cp.isBefore = function (caret)
+			{
+				if (this.isEqualTo(caret)) return false;
+				if (caret.lineNumber < this.lineNumber)	return false
+				if (caret.lineNumber > this.lineNumber) return true
+				if (caret.offset > this.offset)			return true
+			}
+			Cp.isEqualTo = function (caret)	{ return caret.lineNumber == this.lineNumber && caret.offset == this.offset }
+			Cp.isAfter = function (caret)	{ if (this.isEqualTo(caret)) return false; return !this.isBefore(caret) }
+			Cp.deleteTo = function (caret)
+			{
+				var caret2 = this
+				if (caret2.isBefore(caret))	caret2 = caret, caret = this
+				caret.line.text = caret.leftText + caret2.rightText
+				var lineDeleteCount = caret2.lineNumber - caret.lineNumber
+				for (var i=0; i<lineDeleteCount; i++)	
+					caret.nextLine.deleteLine()
+				caret.select()
+			}
+			Cp.toString = function ()		{	return this.line + ',' + this.offset	}
+			
+			
+			
+			
+			
+			CCp.__defineGetter__('caret', function ()
+			{
+				// Only update caret when we have a selection
+				if (getSelection().anchorNode)		this.lastValidCaret = this.caretFromNodeAndOffset(getSelection().anchorNode, getSelection().anchorOffset)
+				return new Caret(this.lastValidCaret.line, this.lastValidCaret.offset, this)
+			})
+			CCp.__defineGetter__('caret2', function ()
+			{
+				var c = this.caretFromNodeAndOffset(getSelection().focusNode, getSelection().focusOffset)
+				return new Caret(c.line, c.offset, this)
+			})
+			
+
+			//
+			// Save current undoable state before an action
+			// 
+			CCp.saveUndoable = function ()
+			{
+				var sel = getSelection(), self = this, keyIs = function (keyName) { return self.keyIs(event.keyCode, keyName) }
+/*				
+				var tryCount = 10
+				while (this.postBrowserActionPending && tryCount)	
+				{
+					tryCount--
+					this.postBrowserActionFunction()
+				}
+*/				
+				// Flush any remaining actions
+				this.exhaustDelayedPerforms()
+				
+//				this.postBrowserActionPending++
+//				setTimeout(this.postBrowserActionFunction, 0)
+				this.performAfterDelay('postBrowserAction')
+
+				var caret = this.caret
+				this.editState = {
+					 isMoving		: keyIs('left') || keyIs('right') || keyIs('up') || keyIs('down')
+					,lineCount 		: this.lineCount
+					,caretLineNumber: caret.lineNumber
+					,caretLineText	: caret.text
+					,rangeSelection	: this.rangeSelection
+				}
+
+				var action = this.currentEditAction
+				if (this.editState.isMoving)	this.closeEditAction()
+
+				if (!this.editState.isMoving)
+				{
+					if (sel.type == 'Caret')
+					{
+						if (!caret.line.isFirst)	this.editState.previousLineText	= caret.previousLine.text	, this.editState.previousLineId = caret.previousLine.line.node.id
+						if (!caret.line.isLast)		this.editState.nextLineText		= caret.nextLine.text		, this.editState.nextLineId = caret.nextLine.line.node.id
+					}
+					else
+						this.editState.rangeText = this.textFromRangeSelection(true)
+				}
+			}
+			
+			CCp.keydown = function ()
+			{
+				document.getElementById('orderDump').innerHTML += 'kd '
+
+
+				//
+				// Setup
+				// 
+				var sel		= getSelection()
+
+
+/*
+				var line = this.lineNodeFromNode(sel.baseNode)
+//alert(line + '\n***\n' + line.outerHTML)
+				if (!line)
+				{
+					log('Caret is not in a DIV')
+					return
+				}
+*/
+						
+						function dumpSel()
+						{
+
+				var sel		= getSelection()
+//					if (sel.type == 'Range')
+					{
+//						this.editState.rangeText = this.textFromRangeSelection(true)
+						var a = sel.anchorNode
+						var b = sel.anchorOffset
+						var c = sel.extentNode
+						var d = sel.extentOffset
+						
+						var r = sel.getRangeAt(0)
+//						sel.setBaseAndExtent(a, b, c, d)
+//						sel.setPosition(a, b)
+//						sel.extend(c, d)
+//						sel.removeAllRanges()
+//						sel.addRange(r)
+						var str = getTickCount()
+
+						str += '<br>startContainer=' + r.startContainer
+						str += '<br>startOffset=' + r.startOffset
+						str += '<br>endContainer=' + r.endContainer
+						str += '<br>endOffset=' + r.startOffset
+						
+
+						r = r.cloneRange()
+//						alert(dumpHash(r))
+//						alert(r.setStart)
+//						if (this.lineNumberFromNode(r.endContainer) > this.line
+						
+						
+						var r = this.orderedLineNumbersFromRangeSelection(true)
+						str += '<br>r=<pre>' + dumpHash(r) + '</pre>'
+						
+						var s1 = this.caretFromNodeAndOffset(sel.anchorNode, sel.anchorOffset)
+						var s2 = this.caretFromNodeAndOffset(sel.extentNode, sel.extentOffset)
+						if (s1.line > s2.line)	var s3 = s1, s1 = s2, s2 = s3
+						str += '<br>s1=' + s1.line + ',' + s1.offset
+						str += '<br>s2=' + s2.line + ',' + s2.offset
+						r = document.createRange()
+						r.setStart(this.lineNodeFromLineNumber(s1.line), 0)
+						r.setEnd(this.lineNodeFromLineNumber(s2.line), 0)
+						
+
+						str += '<br>rangeText=<pre>' + String(r).replace(/\n/g, '<span style="color: red">*</span>\n') + '</pre>'
+						
+/*						
+						str += 'anchorEquals=' + (a == sel.anchorNode) + '<br>'
+						
+						str += '=' + r.startContainer
+						str += '<pre>***' + r + '***</pre>'
+*/						
+						document.getElementById('birdViewDump').innerHTML = str
+						}
+					}
+
+
+						var self = this
+//						alert(dumpSel)
+						setTimeout(function () { dumpSel.apply(self) }, 0)
+// return
+
+				var self	= this
+				var keyIs	= function (keyName) { return self.keyIs(event.keyCode, keyName) }
+				var keyName = this.keyName(event.keyCode)
+				var command	= !!event.metaKey
+				var shift	= !!event.shiftKey
+				var option	= !!event.altKey
+				var preventDefault = function () { event.preventDefault(); event.returnValue = false }
+
+
+				// Undo / redo
+				if (command && keyIs('undo') && !shift)	return preventDefault(), this.undo()
+				if (command && keyIs('undo') && shift)	return preventDefault(), this.redo()
+
+				// Not preventing this will delete our DIV line
+				if (keyIs('leftdelete') && this.caret.lineNumber == 0 && this.caret.offset == 0 && this.lineCount <= 1) 	return preventDefault()
+
+				// Post key down : let safari do its stuff and react after it
+//				var tryCount = 20
+//				while (this.postKeydownPending && tryCount)	tryCount--; this.postKeydownFunction()
+
+				this.saveUndoable()
+/*
+				if (this.postKeydownPending) this.postKeydownFunction()
+				this.postKeydownPending++
+				setTimeout(this.postKeydownFunction, 0)
+
+//				var wasMoving = this.editState.isMoving
+				var caret = this.caret
+				this.editState = {
+					 isMoving		: keyIs('left') || keyIs('right') || keyIs('up') || keyIs('down')
+					,lineCount 		: this.lineCount
+					,caretLineNumber: caret.lineNumber
+					,caretLineText	: caret.text
+					,rangeSelection	: this.rangeSelection
+				}
+				var action = this.currentEditAction
+				if (this.editState.isMoving)	this.closeEditAction()
+
+				if (!this.editState.isMoving)
+				{
+					if (!caret.line.isFirst)	this.editState.previousLineText	= caret.previousLine.text	, this.editState.previousLineId = caret.previousLine.line.node.id
+					if (!caret.line.isLast)		this.editState.nextLineText		= caret.nextLine.text		, this.editState.nextLineId = caret.nextLine.line.node.id
+					
+					if (sel.type == 'Range')
+					{
+						this.editState.rangeText = this.textFromRangeSelection(true)
+					}
+				}
+*/
+
+/*				
+				//###
+				var str = getTickCount()
+				str += '<br>keyCode=' + event.keyCode
+				str += '<br>isMoving=' + this.editState.isMoving + ' wasMoving=' + wasMoving
+				str += '<br>lineCount=' + this.editState.lineCount
+				str += '<br>caretLineNumber=' + this.editState.caretLineNumber
+				str += '<br>previousLineText=' + this.editState.previousLineText
+				str += '<br>caretLineText=' + this.editState.caretLineText
+				str += '<br>nextLineText=' + this.editState.nextLineText
+				this.keydownStr = str
+				//###
+*/				
+
+				// Selection extent
+				if (shift)
+				{
+					if (option && (keyIs('left') || keyIs('right')))	return preventDefault(), this.caret.selectTo(this.caret2[keyName + 'Word'])
+					if (option && (keyIs('up') || keyIs('down')))		return preventDefault(), this.caret.selectTo(this.caret2[keyName == 'down' ? 'pageDown' : 'pageUp'])
+					if (command && keyIs('right'))	return preventDefault(), this.caret.selectTo(this.caret2.lineNumber == this.caret.lineNumber && this.caret2.isAtEndOfLine ? this.caret2.nextLine.nextLine : this.caret2.nextLine)
+					if (command && keyIs('left'))	
+					{
+//						this.caret2.isAtStartOfLine ? (this.caret2.lineNumber == this.caret.lineNumber || this.caret2.lineNumber == this.caret.lineNumber+1 ? this.caret.selectTo(this.caret2.previousLine.startOfLine.skipRightWhite()) : this.caret.selectTo(this.caret2.previousLine.startOfLine)) : 
+/*
+						problem
+						
+							cmd right
+							-> selex right, nil pass FAIIIIIIIIIIL
+							
+							caret to end of line
+							cmd left
+							-> selex skip right, OK
+							cmd left
+							-> selex line start, OK
+							cmd left
+							-> selex prev line skip right, FAILLLLLLLLLLL
+*/							
+						
+						
+						if (this.caret2.isAtStartOfLine)
+						{
+							if (this.caret2.lineNumber == this.caret.lineNumber/* || this.caret2.lineNumber == this.caret.lineNumber+1*/)	this.caret.selectTo(this.caret2.previousLine.startOfLine)
+							else this.caret.selectTo(this.caret2.previousLine.startOfLine)
+						}
+						else
+						{
+							if ((this.caret.lineNumber == this.caret2.lineNumber) && this.caret2.isAfter(this.caret2.startOfLine.skipRightWhite()))
+								 this.caret.selectTo(this.caret2.startOfLine.skipRightWhite())
+							else this.caret.selectTo(this.caret2.startOfLine)
+						}
+						return preventDefault()
+					}
+				}
+
+				var caret = this.caret
+
+				if (sel.type == 'Range')
+				{
+					if (keyIs('tab'))
+					{
+						preventDefault()
+						this.editState.rangeText	= this.textFromRangeSelection(false)
+						this.currentEditAction		= this.newEditAction()
+						this.currentEditAction.name	= 'tab'
+						var lineNumbers				= this.orderedLineNumbersFromRangeSelection(false)
+						for (var i=lineNumbers.l1; i<=lineNumbers.l2; i++)
+						{
+							var c = new Caret(i, 0, this)
+							if (shift)	c.text = c.text.replace(/^\s/, '')
+							else		c.text = '\t' + c.text
+						}
+						this.rangeSelection = { line : lineNumbers.l1, offset : 0, line2 : lineNumbers.l2+1, offset2 : 0 }
+						return
+					}
+				}
+
+				// Caret manipulation
+				// Insert tab
+				if (keyIs('tab'))
+				{
+					preventDefault()
+					if (shift)	caret = caret.leftChar, caret.text = caret.leftText + caret.rightText.replace(/^\u0009/, ''), caret.select()
+					else		caret.text = caret.leftText + '\t' + caret.rightText, caret.rightChar.select()						
+				}
+				
+				// Insert newline
+				if (keyIs('newline'))
+				{
+					preventDefault()
+					var newline		= caret.line.insertNewlineBelow()
+					var leftSpace	= String(caret.leftText.match(/^(\u0009|\u0020)*/)[0])
+					newline.text	= leftSpace + caret.rightText
+					caret.line.text	= caret.leftText
+					var newCaret	= caret.nextLine
+					for (var i=0; i<leftSpace.length; i++) newCaret = newCaret.rightChar
+					newCaret.select()
+				}
+				
+				// Move
+				// Move to start of text (skipping whitespace, not to start of line), then to start of line, then to previous line
+				if (command && keyIs('left'))	preventDefault(), caret.isAtStartOfLine ? caret.previousLine.startOfLine.skipRightWhite().select() : (!caret.isAfter(caret.startOfLine.skipRightWhite()) ? caret.startOfLine.select() : caret.startOfLine.skipRightWhite().select())
+				if (command && keyIs('right'))	preventDefault(), caret.isAtEndOfLine ? caret.nextLine.skipRightWhite().select() : (/*caret.isBefore(caret.startOfLine.skipRightWhite()) ? caret.startOfLine.skipRightWhite().select() : */caret.endOfLine.select())
+				if (option && keyIs('up'))		preventDefault(), caret.pageUp.select()
+				if (option && keyIs('down'))	preventDefault(), caret.pageDown.select()
+				if (option && keyIs('left'))	preventDefault(), caret.leftWord.select()
+				if (option && keyIs('right'))	preventDefault(), caret.rightWord.select()
+				if (!option && !command && !shift)
+				{
+					if (keyIs('up'))
+					{
+//						preventDefault()
+					}
+					if (keyIs('down'))
+					{
+//						preventDefault()
+					}
+				}
+
+				// Delete forward and backward
+				var self = this
+				function deleteTo(c)
+				{
+					self.closeEditAction()
+					preventDefault()
+					self.rangeSelection = { line : self.caret.line, offset : self.caret.offset, line2 : c.line, offset2 : c.offset }
+					self.editState.rangeSelection = self.rangeSelection
+					self.editState.rangeText = self.textFromRangeSelection(true)
+					caret.deleteTo(c)
+				}
+				if (option && keyIs('leftdelete'))		deleteTo(caret.leftWord)
+				if (option && keyIs('rightdelete'))		deleteTo(caret.rightWord)
+				if (command && keyIs('leftdelete'))		deleteTo(caret.isAtStartOfLine ? caret.startOfLine.leftChar : !caret.isAfter(caret.startOfLine.skipRightWhite()) ? caret.startOfLine : caret.startOfLine.skipRightWhite())
+				if (command && keyIs('rightdelete'))	deleteTo(caret.isAtEndOfLine ? caret.endOfLine.rightChar : caret.endOfLine)
+			}
+			
+			
+			//
+			// post key down
+			// 
+			CCp.postBrowserAction = function ()
+			{
+				document.getElementById('orderDump').innerHTML += 'pkd '
+//				if (!this.postBrowserActionPending)	return
+
+				
+				this.postBrowserActionPending--
+				this.dumpUndoStack()
+				var sel = getSelection()
+
+				if (sel.type == 'None')	return
+
+				var str = ''
+
+				var self = this
+
+				this.birdViewNode.innerHTML = this.keydownStr
+				this.birdViewNode.innerHTML += str
+				
+				str += '<br>newLineCount=' + this.lineCount
+				str += '<br>newCaretLineNumber=' + this.caret.lineNumber
+//				if (this.editState.rangeText)
+				{
+					str += '<br>rangeText=<pre>' + this.editState.rangeText + '</pre>'
+				}
+				
+				var caret = this.caret
+				var mode = 'moving'
+				var typingAction
+				var lineChangeCount = this.lineCount - this.editState.lineCount
+
+				var reason
+				if (!this.editState.isMoving)
+				{
+					if (this.lineCount != this.editState.lineCount || this.caret.line.text != this.editState.caretLineText) mode = 'typing'
+					// If we were typing and now have a range selection, close it (handles actions like select all, check action name to not close tab actins)
+//					if (sel.type == 'Range' && this.currentEditAction && !this.currentEditAction.name)	this.closeEditAction()
+//				alert('k' + mode + '\n' + this.editState.caretLineText)
+/*
+					if (this.lineCount != this.editState.lineCount)	mode = 'typing', typingAction = this.lineCount > this.editState.lineCount ? 'added lines' : 'removed lines'
+					else
+					if (this.caret.line.text != this.editState.caretLineText)	mode = 'typing', reason = 'typed'
+*/
+				}
+
+				str += '<br>mode=' + mode
+				if (mode == 'typing')	str += ' reason=' + reason
+				str += '<br>caret=' + this.caret.line.node.innerText
+
+				if (mode == 'typing')	
+				{
+					if (!this.currentEditAction)	
+					{
+						this.currentEditAction = this.newEditAction()
+						this.currentEditAction.rangeSelection	= this.editState.rangeSelection
+					}
+					if (this.editState.rangeText)
+					{
+						str += '<br>HasRange=' + String(getSelection()).length
+						str += '<br>is collapsed=' + getSelection().isCollapsed
+						str += '<br>this.currentEditAction=' + this.currentEditAction
+						
+						this.caret.line.node.id		= this.actionId
+						this.currentEditAction.text	= this.editState.rangeText
+						this.currentEditAction.lastLineVisited	= this.caret.lineNumber
+						this.currentEditAction.rangeSelection	= this.editState.rangeSelection
+
+//						if (this.currentEditAction.name == 'tab')
+//							this.closeEditAction()
+					}
+					else
+					{
+						this.currentEditAction.lastLineVisited = this.caret.lineNumber
+						if (this.caret.line.node.id != this.currentEditAction.id && !this.currentEditAction.text)
+						{
+							this.currentEditAction.text = this.editState.caretLineText
+							this.caret.line.node.id = this.actionId
+						}
+						// Deleted a line
+						if (this.lineCount < this.editState.lineCount)
+						{
+							// Deleted previous line
+							if (this.editState.caretLineNumber > this.caret.lineNumber)
+							{
+								if (this.editState.previousLineId != this.actionId) this.currentEditAction.text = this.editState.previousLineText + this.currentEditAction.text
+							}
+							else
+							{
+								if (this.editState.nextLineId != this.actionId) this.currentEditAction.text += this.editState.nextLineText
+							}
+							this.caret.line.node.id = this.actionId
+						}
+						// Inserted a line
+						if (this.lineCount > this.editState.lineCount)
+						{
+							this.caret.previousLine.line.node.id = this.actionId
+						}
+						
+						
+						// Brace handling : indent after {, outdent after }
+						if (lineChangeCount == 1)
+						{
+							if (this.caret.previousLine.text.match(/^\s*\{/))
+							{
+								this.caret.text = this.caret.leftText + '\t' + this.caret.rightText
+								this.caret.rightChar.select()
+							}
+						}
+						if (this.caret.line.text.match(/^\s*\}/))
+						{
+							this.caret.text = this.caret.text.replace(/\s\}/, '}')
+							this.caret.leftChar.select()
+						}
+						
+					}
+				}
+//return				
+
+//				this.editState.rangeText = this.textFromRangeSelection(true)
+				
+				str += '<hr>'
+/*				
+				this.editState.mode = mode
+				
+//				if (this.editState.caretLineNumber == )
+				
+				
+				// Check editingForSure
+				var lineCount = this.lineCount
+				var lineCountChanged = lineCount != this.previousLineCount
+				str += '<br>lineCountChanged=' + (lineCountChanged  ? ('<b>YES</b> ' + this.previousLineCount + '->' + lineCount) : 'no')
+
+				// Check if linetext changed
+				var lineTextChanged = false
+				if (sel.baseNode)
+				{
+					var lineText 		= this.lineNodeFromNode(sel.baseNode).innerText
+				
+					lineTextChanged = lineText != this.previousLineText
+					str += '<br>lineTextChanged=' + (lineTextChanged ? '<b>YES</b>' : 'no')
+				}
+				str += '<br>Selection is range=' + (sel.type == 'Range' ? '<b>YES</b>' : 'no')
+				
+				var type = 'moving'
+				if (!this.movingForSure && (lineCountChanged || lineTextChanged)) type = '<b style="color: red; font-size: 150%">editing</b>'
+				str += '<br>TYPE=' + type
+*/				
+//				str += '<hr><pre>' + dumpSelection()
+/*
+				var s = this.selectionAsLineAndOffset()
+				str += '<br>line=' + s.line
+				str += '<br>lineCount=' + this.lineCount()
+*/
+				
+				this.birdViewNode.innerHTML += str
+				
+				
+//				this.previousLineCount = lineCount
+				
+				
+				
+				//
+				//
+				// 
+				// 
+				// 
+				// 
+				// 
+				
+				this.highlightSelectedLine()
+				if (sel.type == 'Range' || mode == 'moving') return
+				this.colorCode()
+			}
+/*			
+			CCp.DOMCharacterDataModified = function ()
+			{
+				// Called from keydown
+				if (this.postBrowserActionPending)	return
+//				if (!this.editState.savedDuringMouseUp)	return
+//				alert('k')
+//				alert(this.postBrowserActionPending)
+				document.getElementById('orderDump').innerHTML += ' <b>DOMMOD</b> '
+//				alert(dumpHash(this.editState) + ' ' + getSelection().type)
+				// Called from Character viewer, text has been saved during mouseup
+				var text = this.editState.rangeText// || this.editState.caretLineText
+//				alert(this.lineNodeFromNode(event.target).innerText)
+//				alert('***' + text + '\n****\n' + dumpHash(this.editState))
+//				alert(dumpHash(event))
+				this.saveUndoable()
+				if (getSelection().type == 'Caret')	this.editState.caretLineText = text
+				else								this.editState.rangeText = text
+				
+//				alert('state1=' + this.editState.rangeText)
+//				alert('state1b=' + text)
+			}
+*/
+			CCp.cut = function ()
+			{
+				// Called from keydown
+				if (this.postBrowserActionPending)	return
+				
+				this.saveUndoable()
+			}
+
+			//
+			// Override paste to create new lines and mark them (insertNewlineBelow() does this)
+			//	If we could reenter right after Webkit's paste, we'd just have to fixup existing text
+			// 
+			// http://developer.apple.com/documentation/AppleApplications/Conceptual/SafariJSProgTopics/Tasks/CopyAndPaste.html#//apple_ref/doc/uid/30001234
+			CCp.paste = function ()
+			{
+				this.saveUndoable()
+				this.currentEditAction		= this.newEditAction()
+				this.currentEditAction.text	= this.textFromRangeSelection(true)
+
+				var sel			= getSelection()
+				var clipboard	= event.clipboardData
+				var text		= clipboard.getData('Text')
+
+				// We'll handle paste as we need to create one DIV per line
+				event.preventDefault()
+				event.returnValue = false
+				
+				// Delete selection if we have a range
+				this.caret.deleteTo(this.caret2)
+				var rightText = this.caret.rightText
+				
+				var lines = clipboard.getData('Text').split('\n')
+				this.caret.line.text = this.caret.leftText + lines[0]
+				var line = this.caret.line
+				for (var i=1; i<lines.length; i++)
+				{
+					line = line.insertNewlineBelow()
+					line.text = lines[i]
+				}
+				var o = line.text.length-1
+				line.text = line.text.replace(/\n/g, '') + rightText
+				this.caretSelection = { line : line, offset : o }
+			}
+			
+			CCp.scroll = function ()
+			{
+				document.getElementById('selectionDump').innerHTML = getTickCount() + ' scroll'
+			}
+
+
+
+			
+			CCp.highlightSelectedLine = function ()
+			{
+				var sel			= getSelection()
+				if (sel.type == 'Range' || !this.nodeIsInEditor(sel.baseNode))	return this.selectedLine.style.visibility = 'hidden'
+
+				var line	= this.lineNodeFromNode(sel.baseNode)
+				this.selectedLine.style.visibility = ''
+				if (!line)	return
+
+				this.selectedLine.style.top		= line.offsetTop + 'px'
+				this.selectedLine.style.height	= (line.offsetHeight+1) + 'px'
+
+				var o = {}
+				this.replaceTabsInLine(this.caret.text.substr(0, this.caret.offset), null, null, o)
+				this.selectedLinePosition.innerHTML = (this.caret.lineNumber+1) + ',' + (o.totalWidth+1)
+			}
+			
+			//
+			// Register actions to be performed in the next run loop cycle
+			// 
+			CCp.performAfterDelay = function (fnName, delay)
+			{
+				if (!this.delayedPerformsCache)
+				{
+					this.delayedPerformsCache = {}
+					this.delayedPerformCount = 0
+				}
+				this.delayedPerformCount++
+				var self= this
+				var id
+				var fn	= function () { self[fnName].apply(self); delete self.delayedPerformsCache[id] }
+				id = setTimeout(fn, delay || 0)
+				this.delayedPerformsCache[id] = fn
+			}
+			
+			//
+			// (Called from Cocoa) 
+			//	Cocoa overrides WebHTMLView's keyDown, which call the original method then the browser handler,
+			//	then exhausts any actions. The browser's handler has changed state and CC can react to them.
+			//	This removes flicker, as CC is done after the browser's keydown has updated the page.
+			//
+			CCp.exhaustDelayedPerforms = function ()
+			{
+				if (!this.delayedPerformsCache)	return
+				for (var id in this.delayedPerformsCache)
+				{
+					this.delayedPerformsCache[id]()
+					clearTimeout(id)
+				}
+				this.delayedPerformsCache = {}
+			}
+
+
+
+			//
+			// Init a code colorer and load some text in it
+			//
+			var cc = new CodeColorer(	document.getElementById('coloredCode'), 
+										document.getElementById('coloredCodeContainer'), 
+										document.getElementById('birdView'))
+			
+			var textarea = document.getElementsByTagName('TEXTAREA')[0]
+
+
+			cc.loadText(textarea.value)
+
+//			var JSLINT = JSLintWithLogs({})
+//			cc.loadText(JSLINT.toString())
+			
+			
+			function	undo()
+			{
+				cc.undo()
+			}
+			function	redo()
+			{
+				cc.redo()
+			}
+			function	paste()
+			{
+				cc.paste()
+			}
+			function	dumpUndoStack()
+			{
+				cc.dumpUndoStack()
+			}
+
+
+
+			function	focusHighlighted()
+			{
+//				cc.editorNode.focus()
+//				getSelection().collapseToStart()				
+				cc.colorCode()
+			}
+			setTimeout(focusHighlighted, 10)
+			
+/*			
+			function	clearDumps()
+			{
+				document.getElementById('dump2').innerHTML = ' '
+				document.getElementById('dump3').innerHTML = ' '
+				document.getElementById('dump4').innerHTML = ' '
+				document.getElementById('dump5').innerHTML = ' '
+				document.getElementById('dump6').innerHTML = ' '
+			}
+*/
+
+
+			function	dumpSelection()
+			{
+					function dumpSelectionNode(name)
+					{
+						var node = sel[name + 'Node']
+						var offset = sel[name + 'Offset']
+						if (!node)	return str += name + '=(null)<br>'
+						var t = ''
+//						str += '\n' + name + '(' + offset + ')=' + (t)
+
+						str += '<tr><td style="color: blue">' + name + '<td>' + cc.lineNumberFromNode(node) + '<td>' + offset
+
+
+						var o = cc.caretFromNodeAndOffset(node, offset)
+						str += '<td>' + o.line + ',' + o.offset + ' &nbsp; l=' + (cc.textFromLine(cc.lineNodeFromNode(node)) || '').length
+
+							str += '<tr><td colSpan="4">'
+						if (node.nodeType == 3) 
+						{
+							t = node.nodeValue
+							str += '<span style="color:#a00">*</span>' + t.substr(0, offset) + '<span style="color:red">*</span>' + t.substr(offset) + '<span style="color:#a00">*</span>'
+							str += ' length=' + t.length
+						}
+						if (node.nodeType == 1) 
+						{
+//							t = node + '->' + htmlEncode(cc.textFromLine(node).substr(0, 80))
+							t = htmlEncode(cc.textFromLine(node).substr(0, 80))
+							var line = cc.lineNumberFromNode(node)
+							str += '<span style="color: lime">DIV</span> line=' + line + ' content=' + node.innerText
+						}
+
+//						str += '<span style="color: blue">' + (lineNumber+1) + ',' + (offset2+1) + ' <span style="efont-size: 50%; opacity: 0.5">' + lineNumber + ',' + offset2 +  '</span></span>'
+//						str += '<span style="color: blue">' + (lineNumber) + ',' + (offset2) + '</span>'
+						str += '<br><br>'
+					}
+				var sel = getSelection()
+				var str = '<table class="selectionDump" eborder="1" style="border-collapse: collapse; table-layout: fixed">'
+				str += '<tr class="header"><td>name</td><td>line</td><td>offset</td><td><nobr>line, lineoffset, length</nobr></td></tr>'
+					dumpSelectionNode('base')
+					dumpSelectionNode('anchor')
+					dumpSelectionNode('extent')
+					dumpSelectionNode('focus')
+					str += '</table>'
+/*
+				str += '<pre>' + dumpHash(sel) + '</pre>'
+				try
+				{
+				var r = sel.getRangeAt(0)
+				if (r)		str += '<hr><pre>' + dumpHash(r) + '</pre>'
+				} catch (e) {}
+*/				
+				return str
+			}
+
+
+
+
+			function ds()
+			{
+				document.getElementById('selectionDump').innerHTML = getTickCount() + '<br>' + dumpSelection()
+/*
+				cc.pushSelection2()
+				cc.popSelection2()
+				
+				var sel = getSelection()
+				function	saveSelectionPiece(name)
+				{
+					var node = sel[name + 'Node']
+					var offset = sel[name + 'Offset']
+					var line = cc.lineNumberFromNode()
+					var o1 = cc.lineAndOffsetFromNodeAndOffset(node, offset)
+					
+					var o2 = cc.nodeAndOffsetFromLineAndOffset(o1.line, o1.offset, o1.isDiv)
+					
+					document.getElementById('selectionDump').innerHTML += name + '(RAW)=' + node + ',' + offset + '<br>'
+					document.getElementById('selectionDump').innerHTML += name + '(lineOffset)=' + o1.line + ',' + o1.offset + ' '
+					document.getElementById('selectionDump').innerHTML += (o1.isDiv?'<b style="background-color: lime; color: red">DIV</b>':'') + '<br>'
+					document.getElementById('selectionDump').innerHTML += name + '(nodeOffset)=' + o2.node + ',' + o2.offset + '<br>'
+					var nodeEQ = (o2.node == node)
+					var offsetEQ = (o2.offset == offset)
+					document.getElementById('selectionDump').innerHTML += 'nodeEQ=' + nodeEQ + ' offsetEQ=' + offsetEQ + ' '
+					document.getElementById('selectionDump').innerHTML += (nodeEQ && offsetEQ) ? '<span style="color: lime">OK</span>' : '<span style="color: red">NO</span>'
+					document.getElementById('selectionDump').innerHTML += '<br>'
+//					return { lineNumber : line, isDIV : isDIV, }
+					return o1
+				}
+				var saved = {}
+				saved.base		= saveSelectionPiece('base')
+				saved.anchor	= saveSelectionPiece('anchor')
+				saved.extent	= saveSelectionPiece('extent')
+				saved.focus		= saveSelectionPiece('focus')
+*/				
+/*				
+				var n = document.getElementById('coloredCode').firstChild
+				sel.setBaseAndExtent(n, 0, n, 0)
+
+				var base = cc.nodeAndOffsetFromLineAndOffset(saved.base.line, saved.base.offset)
+				var extent = cc.nodeAndOffsetFromLineAndOffset(saved.extent.line, saved.extent.offset)
+				sel.setBaseAndExtent(base.node, base.offset, extent.node, extent.offset)
+*/
+
+/*
+				restoreSelectionPiece(name, o1)
+				{
+					var o2 = cc.nodeAndOffsetFromLineAndOffset(o1.line, o1.offset, o1.isDiv)
+					sel[name + 'Node'] = o2.node
+					sel[name + 'Offset'] = o2.offset
+				}
+				restoreSelectionPiece('base', saved.base)
+				restoreSelectionPiece('anchor', saved.anchor)
+				restoreSelectionPiece('extent', saved.extent)
+				restoreSelectionPiece('extent', saved.extent)
+*/				
+				
+//					dumpSelectionNode('base')
+//					dumpSelectionNode('anchor')
+//					dumpSelectionNode('extent')
+//					dumpSelectionNode('focus')
+				
+//				document.getElementById('selectionDump').innerHTML += '<br>PUSH / POP 2<br><br>'
+//				document.getElementById('selectionDump').innerHTML += getTickCount() + '<br>' + dumpSelection()
+			}
+			function	dumpLines()
+			{
+				var str = ''
+//				str += cc.editorNode
+				var lines = cc.editorNode.childNodes
+				for (var i=0; i<lines.length; i++)
+				{
+					var line = lines[i]
+					str += '<br>' + i + '=' + (line.id||'')
+				}
+				document.getElementById('linesDump').innerHTML = getTickCount() + '<br>' + str
+				
+				dumpUndoStack()
+			}
+//			setInterval(ds, 100), ds()
+//			setInterval(dumpLines, 100), dumpLines()
+//			setInterval(dumpUndoStack, 100)
+			
+//			alert('exhaust')
+		</script>
+
+<pre>
+	<h3 style='color: red; margin-top: -30px; font-weight: normal'>
+<!--
+* on typing : should only show upstream errors as collapsed bubbles, opening after typing a bit 
+	OR don't padd top errors, just bubble them up with zIndex, no padding (downwards arrow)
+* mousedown on DIV with one line : focus last line
+
+	everything on the same line : white-space: wrap
+	retour lign : white-space: pre-wrap
+
+* DO NOT LINT below a line where we typed ?
+* markdown : allow custom tags like &lt;ObjC&gt;NSView&lt;/ObjC&gt;, linking to google "innerText reference" site:apple.com, lucky=yes
+* css classes to highlight return (eg add an arrow), continue to indicate where the loop is continuing, break ... ?
+* BUG : ctrl+o
+	MOVE
+		ctrl+A line start
+		ctrl+E line end
+		ctrl+T invert pre and post caret chars, advance caret
+		ctrl+P move to end of previous line
+		ctrl+F advance caret
+		ctrl+B backwards caret
+		ctrl+N move to next line
+	EDIT
+		ctrl+Y yank - undelete last thing deleted
+		ctrl+O insert line in place
+		ctrl+Q ?????
+		ctrl+D front delete
+		ctrl+H backwards delete
+		ctrl+K delete to end of line
+		
+* before undo, or after move, call commitTypingTransaction() to save undo state		
+* handle oncut
+* keyboard selection from right to left seems to fail
+	-> my fault, disabling JS works
+
+* base, extent, anchor, focus
+	when dragging to a range
+		base, anchor mark selection start
+		extent, focus mark selection end
+	click
+		all 4 to the same value : caret
+	double click
+		base, extent keep caret value
+		anchor, focus move to highlight the word
+			anchor is where selection starts from : when using shift, it stays fixed to extend selection
+			focus is where selection expands from : when using shift, it moves to extend selection
+* undo start can be a line deletion !
+* also fix option move to end end start of line
+* check remove \n
+* cmd-left on first line doesn't work?
+* move with option : move first to start of line
+* option up/down for pageup / pagedown
+* mousedown messes up mouse selection (when starting from the middle of a line)
+* double, triple click selection fails
+* do cmd del and suppr
+* howto handle tab move ?
+* paste may break on being invoked from menu.	
+* detect insertion by Character Viewer
+	^DOMCharacterDataModified
+
+* BUG
+	* select all
+	* suppr
+	* backspace
+
+* BUG
+	* click ayer (eg text rouge)
+	* pert selexion, plantage innerHTML (just dev au dump ?)
+
+* bug while shift option left
+		}
+	
+	abcd****1234+
+	^start here, stops on }
+
+* register postWebAction and highlight as notifications to be exhausted by timeout or by Cocoa.
+
+
+-->
+* 4-click selection : menu to select fonction, block, .... move caret to start of function ...
+
+
+
+* sel.setBaseAndExtent(sel.baseNode, sel.baseOffset, sel.extentNode, sel.extentOffset)	
+	breaks selection anchor : when shift selecting, selection will always grow instead of being anchored.
+	(base and offset show up as switched in the dump)`
+	
+* option left, double click 'this.var' should not select 'this.var' but only 'this' or 'var'
+
+* need to hook up / down
+
+* do NOT intercept undo / redo in Cocoa, let Cocoa handle it
+
+* BUG
+	* type 
+	* click right pane
+	* click left pane
+	-> no node
+	
+* BUG
+	* newline
+	* tab
+	* space
+	-> no space !
+
+</body>
+</html>
