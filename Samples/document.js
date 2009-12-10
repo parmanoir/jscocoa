@@ -28,8 +28,6 @@ var doc
 
 		
 		IBOutlet webView
-		
-	
 	}
 
 
@@ -53,10 +51,24 @@ var doc
 //			doc.webView.windowScriptObject.evaluateWebScript('document.body.innerHTML="hello"')
 			doc.webView.windowScriptObject.evaluateWebScript('cc.exhaustDelayedPerforms()')
 		}
+
+
+		- (void)undo:(id)sender
+		{
+			log('undo')
+			log('view=' + this)
+			log('window=' + this.window)
+			log('windowController=' + this.window.windowController)
+			log('document=' + this.window.windowController.document)
+		}
 	}
 	
 	
 //	detect insertText
 //	editor : option to run XCode project (eg edit vec samples editor, then compile and run with XCode)
+
+	class	JSCocoaEditorWebView < WebView
+	{
+	}
 	
 	

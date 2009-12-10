@@ -474,6 +474,8 @@ static id JSCocoaSingleton = NULL;
 
 	// Expand macros
 	script = [self expandJSMacros:script url:nil];
+	if (!script)	
+		script = [NSString stringWithFormat:@"// Macro expansion failed on @%@", url ? url : @"(no script url)"];
 	
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -4078,7 +4080,26 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		void* storage = [returnValue storage];
 		if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 //		log_ffi_call(&cif, values, callAddress);
-		ffi_call(&cif, callAddress, storage, values);
+
+		if (callingObjC)
+		{
+			@try 
+			{
+				ffi_call(&cif, callAddress, storage, values);
+			}
+			@catch (NSException * e) 
+			{
+				if (effectiveArgumentCount > 0)	
+				{
+					free(args);
+					free(values);
+				}
+				[JSCocoaFFIArgument boxObject:e toJSValueRef:exception inContext:ctx];
+				return	NULL;
+			}
+		}
+		else
+			ffi_call(&cif, callAddress, storage, values);
 	}
 	
 	if (effectiveArgumentCount > 0)	

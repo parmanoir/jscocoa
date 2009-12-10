@@ -202,17 +202,25 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>3D9CDF800F76F1BA004EB118</string>
+				<string>3DB0E55810CF1A91003AA5EC</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>JSCocoaController.h</string>
+				<string>JSCocoaController.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>3D9CDF810F76F1BA004EB118</string>
+						<string>3DB0E55910CF1A91003AA5EC</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>JSCocoaController.h</string>
+						<string>JSCocoaController.m</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3DB0E55A10CF1A91003AA5EC</string>
+						<key>history</key>
+						<array>
+							<string>3DB0E55710CEF1CB003AA5EC</string>
+						</array>
 					</dict>
 					<key>SplitCount</key>
 					<string>1</string>
@@ -227,39 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>446 272 1124 748 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>3D9CDF7D0F76F1BA004EB118</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>JSCocoaFFIArgument.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>3D9CDF7E0F76F1BA004EB118</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>JSCocoaFFIArgument.h</string>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1124, 707}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>568 226 1124 748 0 0 1920 1178 </string>
+				<string>593 213 1124 748 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -295,6 +271,8 @@
 					<key>Tabs</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -309,7 +287,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>461</real>
+										<real>227</real>
 										<real>20</real>
 										<real>43</real>
 										<real>43</real>
@@ -334,13 +312,13 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>18</integer>
-											<integer>16</integer>
+											<integer>5</integer>
+											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 57}, {567, 314}}</string>
+									<string>{{0, 57}, {333, 334}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -350,11 +328,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{10, 27}, {584, 332}}</string>
+								<string>{{10, 27}, {350, 352}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>461</real>
+									<real>227</real>
 									<string>FileBuiltColumn</string>
 									<real>20</real>
 									<string>ErrorsColumn</string>
@@ -362,13 +340,13 @@
 									<string>WarningsColumn</string>
 									<real>43</real>
 								</array>
+								<key>RubberWindowFrame</key>
+								<string>-4 758 350 420 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -398,14 +376,10 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>1C37FBAC04509CD000000102</string>
-										<string>3D882F5410B0851300646148</string>
-										<string>3D882F5E10B0851C00646148</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>3</integer>
-											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -426,8 +400,6 @@
 									<string>MainColumn</string>
 									<real>333</real>
 								</array>
-								<key>RubberWindowFrame</key>
-								<string>1533 758 350 420 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -507,8 +479,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3D882F5F10B0851C00646148</string>
-				<string>3D882F6010B0851C00646148</string>
+				<string>3DB0E55410CEF1C7003AA5EC</string>
+				<string>3DB0E55510CEF1C7003AA5EC</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -544,12 +516,11 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>3D9CDF7D0F76F1BA004EB118</string>
-		<string>3D9CDF800F76F1BA004EB118</string>
+		<string>3DB0E55810CF1A91003AA5EC</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/JSCocoa/JSCocoa.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1533 758 350 420 0 0 1920 1178 </string>
+	<string>-4 758 350 420 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -763,7 +734,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>3D882F6310B0851C00646148</string>
+				<string>3DB0E55610CEF1C7003AA5EC</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

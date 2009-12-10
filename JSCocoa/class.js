@@ -257,7 +257,7 @@
 	function	class_add_key(newClass, name, getter, setter)
 	{
 		// Get
-		var fn = new Function('return this.JSValueForJSName("' + name + '")')
+		var fn = new Function('return this.JSValueForJSName("_' + name + '")')
 		if (getter)	
 		{
 			if (typeof getter != 'function')	throw 'key getter not a function (' + getter + ')'
@@ -268,7 +268,7 @@
 		// Set
 		var setMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
 //		var fn = new Function('v', 'this.set({jsValue:v, forJsName : "' + name + '"})')
-		var fn = new Function('outlet', 'this.setJSValue_forJSName(v, "_' + name + '")')
+		var fn = new Function('outlet', 'this.setJSValue_forJSName(outlet, "_' + name + '")')
 		if (setter)	
 		{
 			if (typeof setter != 'function')	throw 'key setter not a function (' + setter + ')'

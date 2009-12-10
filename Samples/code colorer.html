@@ -1629,8 +1629,8 @@ style = 'display: -webkit-inline-box; width: ' + w + 'px;' //' overflow: hidden;
 
 
 				// Undo / redo
-				if (command && keyIs('undo') && !shift)	return preventDefault(), this.undo()
-				if (command && keyIs('undo') && shift)	return preventDefault(), this.redo()
+//				if (command && keyIs('undo') && !shift)	return preventDefault(), this.undo()
+//				if (command && keyIs('undo') && shift)	return preventDefault(), this.redo()
 
 				// Not preventing this will delete our DIV line
 				if (keyIs('leftdelete') && this.caret.lineNumber == 0 && this.caret.offset == 0 && this.lineCount <= 1) 	return preventDefault()

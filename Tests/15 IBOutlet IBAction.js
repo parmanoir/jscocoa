@@ -8,7 +8,6 @@
 
 	var messageFromAction = null
 
-
 	defineClass('MyButtonTestingOutletAction < NSButton', 
 	{
 		'setState:' : 
@@ -104,7 +103,7 @@
 		var λέξη1 = 'εξόρυξης'
 		var λέξη2 = 'χρυσού'
 		owner.set({ value : λέξη1, forKey : 'myValue' })
-		
+
 		// Bind model (owner.myValue) to view (input1.value)
 		// This will copy model value to view value
 		owner.input1.bind({ '' : 'value', toObject : owner, withKeyPath : 'myValue', options : null})
