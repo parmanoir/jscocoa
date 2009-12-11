@@ -8,7 +8,7 @@
 	*/
 
 
-	var gotIntoCatchBlock
+	var gotIntoCatchBlock = false
 	try
 	{
 		log([[NSArray arrayWithObjects:@"a", @"b", nil] objectAtIndex:-1])
