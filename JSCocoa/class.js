@@ -747,7 +747,6 @@
 		var lines	= script.split('\n')
 		var options	= { forin : true, laxbreak : true, indent : true, evil : true }
 		var lintRes	= __jslint(lines, options)
-		
 		var str = 'LINT=' + lintRes
 		for (var i=0; i<__JSLINT.errors.length; i++)
 		{
@@ -987,6 +986,7 @@
 		var transformed = tokenStream.join('')
 //		log('*************')
 //		log(transformed)
+//		log('****' + script + '->' + transformed)
 		return	transformed
 	}
 

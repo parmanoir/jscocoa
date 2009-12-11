@@ -128,7 +128,7 @@ int runCount = 0;
 	{	
 		id str = [NSString stringWithFormat:@"FAILED %@", path];
 		[textField setStringValue:str];
-		NSLog(@"!!!!!!!!!!!FAIL %d from %@", runCount, path); 
+		NSLog(@"!!!!!!!!!!!FAIL runCount %d in %@", runCount, path); 
 		return; 
 	}
 	else	
@@ -237,6 +237,10 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	customValueCall		= NULL;
 	customValueReturn	= NULL;
 	customValueGetGlobal= NULL;
+	
+	// Test delegate without JSLint. If not, delegate get test will choke on lint(source.split('\n'))
+	BOOL useJSLint = jsc.useJSLint;
+	jsc.useJSLint = NO;
 	
 	// Add ourselves in the JS context
 	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
@@ -486,6 +490,9 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	if (JSValueToNumber([jsc ctx], ret, NULL) != 112)		return	@"delegate custom eval failed (3)";
 	if (![scriptToEval isEqualToString:@"2+2"])				return	@"delegate custom eval failed (4)";
 	customScript = nil;
+	
+	jsc.useJSLint = useJSLint;
+	
 
 	return	nil;
 }

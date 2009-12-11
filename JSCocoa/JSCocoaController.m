@@ -473,9 +473,10 @@ static id JSCocoaSingleton = NULL;
 	if (!script)	return	NULL;
 
 	// Expand macros
-	script = [self expandJSMacros:script url:nil];
-	if (!script)	
-		script = [NSString stringWithFormat:@"// Macro expansion failed on @%@", url ? url : @"(no script url)"];
+	id expandedScript = [self expandJSMacros:script url:nil];
+	if (!expandedScript)	
+		return [NSString stringWithFormat:@"Macro expansion failed on script %@ (%@)", script, url ? url : @"(no script url)"], NULL;
+	script = expandedScript;
 	
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -583,7 +584,6 @@ static id JSCocoaSingleton = NULL;
 	// Return if function is not of function type
 	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
 	if (!jsFunction)			return	NSLog(@"callJSFunctionNamed : %@ is not a function", name), NULL;
-
 	// Call !
 	return	[self callJSFunction:jsFunction withArguments:arguments];
 }
@@ -633,15 +633,15 @@ static id JSCocoaSingleton = NULL;
 	// OR
 	// Lintex path
 	id functionName = @"expandJSMacros";
-
 	// Expand macros
 	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
 	if (hasFunction && useJSLint)
 	{
-		id expandedScript = [self unboxJSValueRef:[self callJSFunctionNamed:functionName withArguments:script, nil]];
+		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, nil];
+		id expandedScript = [self unboxJSValueRef:v];
 		// Bail if expansion failed
 		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
-			return NSLog(@"%@ expansion failed on %@ (%@)", functionName, url, expandedScript), NO;
+			return NSLog(@"%@ expansion failed on script %@ (%@) ", functionName, script, url), NULL;
 
 		script = expandedScript;
 	}
@@ -1715,7 +1715,6 @@ static id JSCocoaSingleton = NULL;
 		[NSMakeCollectable(value) autorelease];
 	}
 	JSPropertyNameArrayRelease(jsNames);
-    
     [_delegate JSCocoa:self hadError:b onLineNumber:[line intValue] atSourceURL:sourceURL];
 }
 
@@ -4081,6 +4080,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
 //		log_ffi_call(&cif, values, callAddress);
 
+		// Catch exceptions when calling ObjC
 		if (callingObjC)
 		{
 			@try 
