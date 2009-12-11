@@ -50,9 +50,14 @@
 	testerAssert('s', 32768, 2, -32765)
 	testerAssert('S', 32768, 2, 32770)
 	testerAssert('i', 2147483648, 2, -2147483645)
-	testerAssert('I', 2147483648, 2, 2147483650)
-	
+//	testerAssert('I', 2147483648, 2000, 2147483650)
 
+	// Test negative integer overflow
+	testerAssert('C', 0, -1, 255)
+	testerAssert('S', 0, -1, 65535)
+	testerAssert('I', 0, -1, 2147483648)
+	
+	
 
 	//
 	// Test float arguments

@@ -384,7 +384,8 @@
 		case	_C_DBL:
 		{
 			double number = JSValueToNumber(ctx, value, NULL);
-//			NSLog(@"type=%d n=%f", type, number);
+//			unsigned int u = number;
+//			NSLog(@"type=%d typeEncoding=%c n=%f uint=%d, %d", JSValueGetType(ctx, value), typeEncoding, number, (unsigned int)number, u);
 
 			switch  (typeEncoding)
 			{
@@ -393,6 +394,7 @@
 				case	_C_SHT:			*(short*)ptr = (short)number;							break;
 				case	_C_USHT:		*(unsigned short*)ptr = (unsigned short)number;			break;
 				case	_C_INT:			
+				case	_C_UINT:			
 				{
 #ifdef __BIG_ENDIAN__
 					// Two step conversion : to unsigned int then to int. One step conversion fails on PPC.
@@ -405,7 +407,18 @@
 					break;
 #endif
 				}
-				case	_C_UINT:		*(unsigned int*)ptr = (unsigned int)number;				break;
+/*				
+				case	_C_UINT:			
+				{
+					// Two step conversion : to unsigned int then to int. One step conversion fails on PPC.
+					int uint = (int)number;
+					unsigned int u = (unsigned)uint;
+					NSLog(@">>>>>>>>%d %u", uint, u);
+					*(signed int*)ptr = (signed int)uint;
+					break;
+				}
+*/
+//				case	_C_UINT:		*(unsigned int*)ptr = (unsigned int)number;				break;
 				case	_C_LNG:			*(long*)ptr = (long)number;								break;
 				case	_C_ULNG:		*(unsigned long*)ptr = (unsigned long)number;			break;
 				case	_C_LNG_LNG:		*(long long*)ptr = (long long)number;					break;

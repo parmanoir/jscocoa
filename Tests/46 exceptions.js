@@ -11,7 +11,7 @@
 	var gotIntoCatchBlock = false
 	try
 	{
-		log([[NSArray arrayWithObjects:@"a", @"b", nil] objectAtIndex:-1])
+		log('Test 46 objectAtIndex=' + [[NSArray arrayWithObjects:@"a", @"b", nil] objectAtIndex:-1])
 	}
 	catch(e)
 	{
@@ -23,3 +23,4 @@
 	}
 	
 	if (!gotIntoCatchBlock)						throw 'NSArray range exception failed (3)'
+

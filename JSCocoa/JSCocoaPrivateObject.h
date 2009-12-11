@@ -47,10 +47,12 @@
 	
 	JSValueRef	jsValue;
 	JSContextRef	ctx;
+	JSContextGroupRef	contextGroup;
 	
 	BOOL		isAutoCall;
 	BOOL		retainObject;
-	BOOL		retainContext;
+	// Disabled because of a crash on i386. Release globalContext after everything.
+//	BOOL		retainContext;
 }
 
 @property (copy) NSString*	type;

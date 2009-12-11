@@ -3682,7 +3682,6 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 	[NSMakeCollectable(propertyName) autorelease];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
-//	NSLog(@"Deleting property %@", propertyName);
 
 	if (![privateObject.type isEqualToString:@"@"])	return false;
 

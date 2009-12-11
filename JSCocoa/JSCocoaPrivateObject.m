@@ -22,7 +22,7 @@
 	isAutoCall	= NO;
 	jsValue		= NULL;
 	retainObject	= YES;
-	retainContext	= NO;
+//	retainContext	= NO;
 	rawPointer	= NULL;
 	ctx			= NULL;
 	
@@ -47,9 +47,14 @@
 		JSValueUnprotect(ctx, jsValue);
 		[JSCocoaController downJSValueProtectCount];
 	}
+/*
 	if (retainContext)
-		JSGlobalContextRelease((JSGlobalContextRef)ctx);
-	
+	{
+		NSLog(@"releasing %x", ctx);
+		JSContextGroupRelease(contextGroup);
+//		JSGlobalContextRelease((JSGlobalContextRef)ctx);
+	}
+*/	
 	// Release properties
 	[type release];
 	[xml release];
@@ -138,9 +143,11 @@
 	}
 	jsValue = v;
 	ctx		= c;
+//	contextGroup = JSContextGetGroup(c);
+//	JSContextGroupRetain(contextGroup);
+//	JSGlobalContextRetain((JSGlobalContextRef)ctx);
 	JSValueProtect(ctx, jsValue);
-	JSGlobalContextRetain((JSGlobalContextRef)c);
-	retainContext = YES;
+//	retainContext = YES;
 	[JSCocoaController upJSValueProtectCount];
 }
 

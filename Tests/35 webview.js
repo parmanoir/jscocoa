@@ -1,4 +1,6 @@
 
+	// this is very fragile on i386. x86_64 works fine.
+
 
 	//
 	// Load Webkit
@@ -18,7 +20,6 @@
 		{
 			// Global context is frame's window object
 			var w = sender.mainFrame.globalContext
-
 
 			var n = w.document.body
 			
@@ -44,18 +45,19 @@
 			
 
 			n = null
-			w = null
+//			w = null
 
 			loadDelegate = null
 			window = null
-			
-			// This will close the window right now
+			// ## This will close the window right now
+			__jsc__.garbageCollect
+			// Release the globalContext last
+			w = null
 			__jsc__.garbageCollect
 
 			completeDelayedTest('35 webview', true)
 		}
 	}
-	
 
 	// Build a window
 	var rect = new NSRect(100, 100, 400, 400)
