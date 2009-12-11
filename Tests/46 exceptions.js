@@ -8,15 +8,18 @@
 	*/
 
 
-
+	var gotIntoCatchBlock
 	try
 	{
 		log([[NSArray arrayWithObjects:@"a", @"b", nil] objectAtIndex:-1])
 	}
 	catch(e)
 	{
-//		log('got an ObjC exception' + e.name + '\n' + e.reason)
+		gotIntoCatchBlock = true
+//		log('got an ObjC exception ' + e.name + '\n' + e.reason)
 		
 		if (e.name != 'NSRangeException')		throw 'NSArray range exception failed (1)'
 		if (!e.reason.match(/objectAtIndex/))	throw 'NSArray range exception failed (2)'
 	}
+	
+	if (!gotIntoCatchBlock)						throw 'NSArray range exception failed (3)'
