@@ -4229,10 +4229,11 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		{
 			id methodName = privateObject.methodName;
 			BOOL callingSwizzled = [methodName isEqualToString:@"Original"];
-			if (argumentCount != 1)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants one argument array", methodName]), NULL;
+			if (argumentCount != 1 && argumentCount != 3)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants (arguments) or (arguments, selector, argarray)", methodName]), NULL;
+			int originalArgumentCount = argumentCount;
 
 			// Get argument object
-			JSObjectRef argumentObject = JSValueToObject(ctx, arguments[0], NULL);
+			JSObjectRef argumentObject = JSValueToObject(ctx, arguments[argumentCount == 3 ? 2 : 0], NULL);
 			
 			// Get argument count
 			JSStringRef	jsLengthName = JSStringCreateWithUTF8CString("length");
@@ -4251,6 +4252,9 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			argumentCount = superArgumentCount;
 			
 			// Get method name and associated class (need class for obj_msgSendSuper)
+			if (originalArgumentCount == 3)
+				argumentObject = JSValueToObject(ctx, arguments[0], NULL);
+
 			JSStringRef	jsCalleeName = JSStringCreateWithUTF8CString("callee");
 			JSValueRef	jsCalleeValue = JSObjectGetProperty(ctx, argumentObject, jsCalleeName, NULL);
 			JSStringRelease(jsCalleeName);
@@ -4263,6 +4267,15 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 				return	throwException(ctx, exception, @"Super couldn't find parent method"), NULL;
 			}
 			superSelectorClass = [[[JSCocoaController controllerFromContext:ctx] classForJSFunction:jsCallee] superclass];
+
+			// Retrieve selector for [super someMethod:...] call
+			if (originalArgumentCount == 3)
+			{
+				JSStringRef resultStringJS = JSValueToStringCopy(ctx, arguments[1], NULL);
+				superSelector = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+				JSStringRelease(resultStringJS);
+				if (callingSwizzled)	superSelector = [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, superSelector];
+			}			
 			
 			// Swizzled handling : we're just changing the selector
 			if (callingSwizzled)

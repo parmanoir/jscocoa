@@ -4245,6 +4245,10 @@ members)?
 		firstToken.isObjCCallOpener = true
 		firstToken.isObjCCall		= true
 		
+		var isObjCSuperCall			= (token.value == 'original' || token.value == 'super')
+		token.isObjCSuperCall		= isObjCSuperCall
+		nexttoken.isObjCSuperCall	= isObjCSuperCall
+
 		function	advanceParameterName()
 		{
 			advance()
@@ -4299,8 +4303,9 @@ members)?
 			firstMessagePart.objCJSSelector = jsselector
 		
 		if (nexttoken.value != ']')	warning('ObjC call not closed')
-		nexttoken.isObjCCallCloser = true
-		nexttoken.isObjCCall = true
+		nexttoken.isObjCCallCloser	= true
+		nexttoken.isObjCCall		= true
+		nexttoken.isObjCSuperCall	= isObjCSuperCall
 		instanceToken.objCParameterCountOpener	= parameterCount
 		nexttoken.objCParameterCountCloser		= parameterCount
 		// Mark expression as valid standalone (skip warning in parse(), 'Expected an assignment or function call and instead saw an expression')
@@ -5168,7 +5173,8 @@ members)?
     reserve('goto');
     reserve('import');
     reserve('let');
-    reserve('super');
+	// ## We use this for ObjJ super call
+//    reserve('super');
 
     function jsonValue() {
         function jsonObject() {

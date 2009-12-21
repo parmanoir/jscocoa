@@ -953,9 +953,10 @@
 			// Instance : add '.' to get method
 			if (token.isObjCFirstCall)
 			{
+				if (token.isObjCSuperCall)	v = 'this.' + (token.value=='super'?'Super':'Original') + '(arguments, '
 				currentParameterCount = token.objCParameterCountOpener
 				// Special case for 'class', must be bracketed ['class']
-				if (tokens[i+1].rawValue != 'class')
+				if (tokens[i+1].rawValue != 'class' && !token.isObjCSuperCall)
 					v += '.'
 			}
 			// Special case for class
@@ -964,6 +965,7 @@
 			if (token.isObjCFirstParam && currentParameterCount)
 			{
 				v = token.objCJSSelector
+				if (token.isObjCSuperCall)	v = "'" + v.replace(/_/g, ':') + "', new Array"
 				v += '('
 			}
 			// Selector part : ignore name and add ',' separator
@@ -980,6 +982,7 @@
 					v = ''
 				if (token.objCParameterCountCloser)
 					v = ')' + (v||'')
+				if (token.isObjCSuperCall) v += ')'
 			}
 			tokenStream.push(v)
 		}

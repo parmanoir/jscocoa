@@ -6,6 +6,11 @@
 	
 	class ObjCClassInnerJSFunctionTest < NSObject
 	{
+		- (id)init
+		{
+			var o = this.Super(arguments)
+			return o
+		}
 		// Standard ObjC instance method
 		- (int)addOne:(int)one andTwo:(int)two
 		{
