@@ -762,9 +762,9 @@
 
 
 		var tokens = __lintTokens
-		var str = ''
+
+		var str	= ''
 		var str2 = ''
-		
 		var currentParameterCount
 		var tokenStream		= []
 		var token, prevtoken= tokens[0]
@@ -791,7 +791,6 @@
 			// Handle shortcut function token
 			if (token.value == 'ƒ')
 			{
-//					alert(dumpHashNoFunction(token) + '\n************\n' + dumpHashNoFunction(prevtoken))
 				token.rawValue = 'function'
 				
 				// Add parens if they're missing
@@ -806,7 +805,7 @@
 			// Handle ObjC classes
 			if (token.isObjCClassStart)
 			{
-				if (tokens[i+2].value == '<')
+				if (tokens[i+2].value == '<' || tokens[i+2].value == ':')
 				{
 					tokenStream.push("Class('" + tokens[i+1].value + ' < ' + tokens[i+3].value + "').definition = function ()")
 					i += 3
@@ -816,6 +815,31 @@
 					tokenStream.push("Class('" + tokens[i+1].value + "').definition = function ()")
 					i += 1
 				}
+				if (token.value == 'implementation')	tokenStream.push('{\n')
+				continue
+			}
+			// Class var list @implementation Class : ParentClass { var list }
+			if (token.isObjCVarList)
+			{
+				while (token && token.value != '}')
+				{
+					i++
+					token = tokens[i]
+					if (!token)	return false
+				}
+				i++
+				continue
+			}
+			// Class category
+			if (token.isObjCCategory)
+			{
+				while (token && token.value != ')')
+				{
+					i++
+					token = tokens[i]
+					if (!token)	return false
+				}
+				i++
 				continue
 			}
 			// Handle ObjC methods
@@ -891,6 +915,14 @@
 			// String immediates, selectors
 			if (token.id == '@')
 			{
+				if (tokens[i+1].value == 'implementation')	continue
+				if (tokens[i+1].value == 'end')	
+				{
+					i++
+					tokenStream.push('}\n')
+					continue
+				}
+				
 				var nexttoken = tokens[i+1]
 				if (nexttoken.id == '(string)')
 				{
@@ -930,7 +962,6 @@
 
 				// Splice : delete index, delete item count, replacement
 				var r = tokens.splice(i, ifReturnOpenerIndex-returnOpenerIndex-1)
-//					token.rawValue = '<b style="background-color: lime">' + token.rawValue + '</b>'
 
 				// Push delete item count and delete index on top of replacing tokens
 				r.unshift(0)

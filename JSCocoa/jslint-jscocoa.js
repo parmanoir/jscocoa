@@ -3989,9 +3989,13 @@ members)?
 		}
 		else
 		{
-			logExtraSyntax('@', token)
-			if (token.id != '(string)')
-				warningAt('ObjC string immediate : Expected a Javascript string here', token.line, token.from)
+			if (token.value == 'implementation')	parseObjJClass('@implementation')
+			else
+			{
+				logExtraSyntax('@', token)
+				if (token.id != '(string)')
+					warningAt('ObjC string immediate : Expected a Javascript string here', token.line, token.from)
+			}
 		}
 	})
 
@@ -4274,6 +4278,7 @@ members)?
 			// Remaining parameters
 			while (nexttoken && nexttoken.value != ']')
 			{
+				if (nexttoken.id === '(end)')	return warningAt('Unexpected end of ObjC call "' + token.value + '"', token.line, token.from)
 				// Handle variadic calls : must be comma list, last values before ]
 				if (nexttoken.value == ',')
 				{
@@ -5005,27 +5010,53 @@ members)?
 
 
 	// ## JSCocoa class syntax
-    stmt('class', function () {
-	
+    function parseObjJClass(style) {
 		// Protect against inner definitions
 		if (parsingClass)	return warningAt('Inner classes are not of this world', token.line, token.from)
 		parsingClass = true
-	
+		
 		logExtraSyntax('class', token)
 		token.isObjCClassStart = true
-		
-		var className = advance()
-		if (token.type != '(identifier)')	warningAt('Class name must be an identifier', token.line, token.from)
+//		if (style == '@implementation')	advance()
+//		alert(token.value + ' '  + '' + '\n' + dumpHash(token))
+		advance()
+		var className = token
+		if (className.type != '(identifier)')	warningAt('Class name must be an identifier', token.line, token.from)
 		// If we have a '<', we're deriving from the following class.
 		// If not, we're just adding methods to the class.
-		if (nexttoken.value == '<')
+		if (nexttoken.value == '<' || nexttoken.value == ':')
 		{
-			advance('<')
-			var parentClassName = advance()
+			if (style == '@implementation')	advance(':')
+			else							advance('<')
+			var parentClassName = token
+			advance()
 			if (token.type != '(identifier)')	warningAt('Parent class name must be an identifier', token.line, token.from)
 		}
+		else
+		// Category
+		if (nexttoken.value == '(')
+		{
+			advance('(')
+			token.isObjCCategory = true
+			advance()
+			if (token.type != '(identifier)')	warningAt('Category name must be an identifier', token.line, token.from)
+			advance(')')
+		}
+		// Parse class params
+		if (style == '@implementation' && nexttoken.value == '{')	
+		{
+			advance('{')
+			token.isObjCVarList = true
+			// Pretty basic for now : skipping everything
+			while (nexttoken && nexttoken.value != '}')
+			{
+				if (nexttoken.id === '(end)')	return warningAt('Unexpected end of ObjC call "' + token.value + '"', token.line, token.from)
+				advance()
+			}
+			advance('}')
+		}
 
-		advance('{')
+		if (style != '@implementation')	advance('{')
 		
 		var validTokens = { '-' : true, '+' : true, 'IBOutlet' : true, 'IBAction' : true, 'swizzle' : true, 'Swizzle' : true, 'Key' : true, 'function' : true, 'ƒ' : true }
 
@@ -5155,9 +5186,11 @@ members)?
 //		alert(dumpHash(token))
 //		logClassStart(token)
 		
-		advance('}')
+		if (style == '@implementation')	advance('@'), advance('end')
+		else							advance('}')
 		parsingClass = false
-    });
+    }
+	stmt('class', parseObjJClass);
 
 
     reserve('void');
@@ -5375,7 +5408,9 @@ members)?
                     jsonmode = true;
                     jsonValue();
                     break;*/
-                case '@':
+/*					
+	// ## Don't handle css classes as @implementation is valid ObjJ syntax
+              case '@':
                 case '*':
                 case '#':
                 case '.':
@@ -5395,7 +5430,7 @@ members)?
                     advance(';');
                     styles();
                     break;
-
+*/
                 default:
                     if (option.adsafe && option.fragment) {
                         error("Expected '{a}' and instead saw '{b}'.",
