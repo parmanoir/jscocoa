@@ -148,6 +148,15 @@ int runCount = 0;
 			[textField setStringValue:str];
 		}
 	}
+	
+	//
+	// Test autocall-less ObjJ
+	//
+	b = [jsc useAutoCall];
+	[jsc setUseAutoCall:NO];
+	id str = [jsc toString:[jsc evalJSString:@"[JSCocoa runningArchitecture]"]];
+	[jsc setUseAutoCall:b];
+	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
 }
 
 //

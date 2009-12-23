@@ -759,6 +759,8 @@
 			str += '^'
 			log(str)
 		}
+		var useAutoCall = __jsc__.useAutoCall
+		if (typeof useAutoCall === 'function') useAutoCall = __jsc__.useAutoCall()
 
 
 		var tokens = __lintTokens
@@ -993,11 +995,16 @@
 			// Special case for class
 			if (token.isObjCCall && token.rawValue == 'class')	v = "['class']"
 			// First selector part : retrieve full selector name
-			if (token.isObjCFirstParam && currentParameterCount)
+			if (token.isObjCFirstParam)
 			{
-				v = token.objCJSSelector
-				if (token.isObjCSuperCall)	v = "'" + v.replace(/_/g, ':') + "', new Array"
-				v += '('
+				if (currentParameterCount)
+				{
+					v = token.objCJSSelector
+					if (token.isObjCSuperCall)	v = "'" + v.replace(/_/g, ':') + "', new Array"
+					v += '('
+				}
+				else
+					if (!useAutoCall)	v += '()'
 			}
 			// Selector part : ignore name and add ',' separator
 			if (token.isObjCMultiCall)
