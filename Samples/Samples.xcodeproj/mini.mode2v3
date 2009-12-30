@@ -202,6 +202,46 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>3D41613710E3C62C0011785C</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>code colorer.html</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>3D41613810E3C62C0011785C</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>code colorer.html</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>3D41613B10E3C62C0011785C</string>
+						<key>history</key>
+						<array>
+							<string>3D41613910E3C62C0011785C</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1047, 1077}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>497 60 1047 1118 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>3D815AAA10C48E500015B843</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>code colorer.html</string>
@@ -216,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D41606510E15A330011785C</string>
+						<string>3D41613D10E3C62C0011785C</string>
 						<key>history</key>
 						<array>
 							<string>3D41591D10D279980011785C</string>
@@ -256,7 +296,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D41606610E15A330011785C</string>
+						<string>3D41613E10E3C62C0011785C</string>
 						<key>history</key>
 						<array>
 							<string>3D41592010D279980011785C</string>
@@ -275,7 +315,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>668 250 880 727 0 0 1920 1178 </string>
+				<string>628 266 880 727 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -296,7 +336,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D41606710E15A330011785C</string>
+						<string>3D41613F10E3C62C0011785C</string>
 						<key>history</key>
 						<array>
 							<string>3D41592110D279980011785C</string>
@@ -351,6 +391,8 @@
 					<key>Tabs</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -603,8 +645,9 @@
 		<string>3D81595910C4897F0015B843</string>
 		<string>3D815A5F10C48BC50015B843</string>
 		<string>3D815AAA10C48E500015B843</string>
-		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/Samples/Samples.xcodeproj</string>
+		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>3D41613710E3C62C0011785C</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 759 446 419 0 0 1920 1178 </string>

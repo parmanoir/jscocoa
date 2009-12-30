@@ -182,7 +182,7 @@
 				8DC2EF520486A6940098B216 /* Resources */,
 				8DC2EF540486A6940098B216 /* Sources */,
 				8DC2EF560486A6940098B216 /* Frameworks */,
-				3D9D81610EF8A80600D71763 /* Copy to Library Frameworks */,
+				3D9D81610EF8A80600D71763 /* Copy to Library Frameworks (commented) */,
 			);
 			buildRules = (
 			);
@@ -226,19 +226,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3D9D81610EF8A80600D71763 /* Copy to Library Frameworks */ = {
+		3D9D81610EF8A80600D71763 /* Copy to Library Frameworks (commented) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy to Library Frameworks";
+			name = "Copy to Library Frameworks (commented)";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -d \"/Library/Frameworks/JSCocoa.framework\" ]; then\n  rm -R \"/Library/Frameworks/JSCocoa.framework\"\nfi\ncp -R \"${TARGET_BUILD_DIR}/JSCocoa.framework\" \"/Library/Frameworks\"\n\n\n";
+			shellScript = "#if [ -d \"/Library/Frameworks/JSCocoa.framework\" ]; then\n#  rm -R \"/Library/Frameworks/JSCocoa.framework\"\n#fi\n#cp -R \"${TARGET_BUILD_DIR}/JSCocoa.framework\" \"/Library/Frameworks\"\n\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -318,6 +318,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				OTHER_LDFLAGS = "-lffi";
 				PREBINDING = NO;
@@ -334,6 +335,7 @@
 				GCC_ENABLE_OBJC_GC = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lffi";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;

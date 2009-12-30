@@ -58,12 +58,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 281997762;
-			PBXWorkspaceStateSaveDate = 281997762;
-		};
-		perUserProjectItems = {
-			3DB0E55710CEF1CB003AA5EC /* PBXBookmark */ = 3DB0E55710CEF1CB003AA5EC /* PBXBookmark */;
-			3DB0E55A10CF1A91003AA5EC /* PBXTextBookmark */ = 3DB0E55A10CF1A91003AA5EC /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 283843570;
+			PBXWorkspaceStateSaveDate = 283843570;
 		};
 		sourceControlManager = 3D9D7F5E0EF819CB00D71763 /* Source Control */;
 		userBuildSettings = {
@@ -117,10 +113,10 @@
 	};
 	3D9D7F730EF81A0100D71763 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1065, 49346}}";
-			sepNavSelRange = "{14565, 16}";
-			sepNavVisRange = "{13370, 1901}";
-			sepNavWindowFrame = "{{593, 157}, {1124, 804}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1065, 50149}}";
+			sepNavSelRange = "{14631, 0}";
+			sepNavVisRange = "{13218, 2058}";
+			sepNavWindowFrame = "{{382, 110}, {1124, 804}}";
 		};
 	};
 	3D9D7F740EF81A0100D71763 /* JSCocoaFFIArgument.h */ = {
@@ -149,9 +145,9 @@
 	};
 	3D9D7F780EF81A0100D71763 /* JSCocoaPrivateObject.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {923, 825}}";
-			sepNavSelRange = "{235, 14}";
-			sepNavVisRange = "{0, 694}";
+			sepNavIntBoundsRect = "{{0, 0}, {564, 1078}}";
+			sepNavSelRange = "{1104, 0}";
+			sepNavVisRange = "{709, 539}";
 		};
 	};
 	3D9D7F790EF81A0100D71763 /* JSCocoaPrivateObject.m */ = {
@@ -177,20 +173,6 @@
 			sepNavVisRange = "{0, 168}";
 			sepNavWindowFrame = "{{30, 374}, {1124, 804}}";
 		};
-	};
-	3DB0E55710CEF1CB003AA5EC /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
-	};
-	3DB0E55A10CF1A91003AA5EC /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9D7F730EF81A0100D71763 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 445";
-		rLen = 16;
-		rLoc = 14565;
-		rType = 0;
-		vrLen = 1901;
-		vrLoc = 13370;
 	};
 	3DC8AA590EFE08F700FC1F31 /* JSCocoaLib.h */ = {
 		uiCtxt = {
