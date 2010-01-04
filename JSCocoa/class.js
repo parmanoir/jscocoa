@@ -56,6 +56,10 @@
 
 	function	objc_unary_encoding(encoding)
 	{
+//		if (encoding.indexOf('<') != -1)	log('KKKKKKKKKKK' + encoding)
+		encoding = encoding.replace(/<\w+>/, '').toString()
+
+
 		// Structure arg
 		if (encoding.indexOf(' ') != -1 && encoding.indexOf(' *') == -1)
 		{
@@ -166,7 +170,7 @@
 			if (isOverload)
 			{
 				var fn = methods[method]
-				if (!fn || (typeof fn) != 'function')	throw '(overloading) Method ' + method + ' not a function'
+				if (!fn || (typeof fn) != 'function')	throw '(overloading) Method ' + method + ' not a function - when overloading, omit encodings as they will be inferred from the existing method'
 
 				if (isInstanceMethod)	JSCocoa.overloadInstanceMethod_class_jsFunction_(method, newClass, fn)
 				else					JSCocoa.overloadClassMethod_class_jsFunction_(method, newClass, fn)
@@ -201,6 +205,11 @@
 					// Extract method
 					var fn = encodings.pop()
 					if (!fn || (typeof fn) != 'function')	throw 'New method ' + method + ' not a function'
+					
+					var selectorArgumentCount	= (method.match(/:/g) || []).length
+					var encodingsArgumentCount	= encodings.length-1
+					if (selectorArgumentCount != encodingsArgumentCount)
+						throw 'Argument count mismatch in defining ' + className + '.' + method + ' — encoding array has ' + encodingsArgumentCount + ', selector has ' + selectorArgumentCount
 					
 					var encoding = objc_encoding.apply(null, encodings)
 					class_add_instance_method(newClass, method, fn, encoding)

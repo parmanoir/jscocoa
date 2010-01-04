@@ -271,6 +271,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
+											<integer>5</integer>
+											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -333,7 +335,6 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>1C37FBAC04509CD000000102</string>
-										<string>3D3813B010EB1BF3000A1668</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
@@ -437,8 +438,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3D3813B610EB1BF6000A1668</string>
-				<string>3D3813B710EB1BF6000A1668</string>
+				<string>3D2465D010EC389700109003</string>
+				<string>3D2465D110EC389700109003</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -473,6 +474,8 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>3D2465D210EC389700109003</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/JSCocoa/JSCocoa.xcodeproj</string>
 	</array>
@@ -691,7 +694,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>3D3813B910EB1BF6000A1668</string>
+				<string>3D2465CA10EC389600109003</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -844,12 +847,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>&lt;No Editor&gt;</string>
+										<string>JSCocoaController.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -858,7 +863,7 @@
 										<key>Frame</key>
 										<string>{{0, 0}, {984, 389}}</string>
 										<key>RubberWindowFrame</key>
-										<string>59 312 984 815 0 0 1920 1178 </string>
+										<string>732 352 984 815 0 0 1920 1178 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXNavigatorGroup</string>
@@ -882,7 +887,7 @@
 								<key>Frame</key>
 								<string>{{0, 394}, {984, 380}}</string>
 								<key>RubberWindowFrame</key>
-								<string>59 312 984 815 0 0 1920 1178 </string>
+								<string>732 352 984 815 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXProjectFindModule</string>
@@ -905,13 +910,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>3DD39A8B10174DAD00EA8B1D</string>
-				<string>3DD39A8C10174DAD00EA8B1D</string>
+				<string>3D2465CE10EC389600109003</string>
+				<string>3D2465CF10EC389600109003</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
 			<key>WindowString</key>
-			<string>59 312 984 815 0 0 1920 1178 </string>
+			<string>732 352 984 815 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>1C530D57069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>

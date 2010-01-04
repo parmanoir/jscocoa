@@ -1,5 +1,13 @@
 
 
+	/*
+
+		DefineClass is deprecated by the ObjJ syntax.		
+	
+	
+	*/
+
+
 	// Split call disabled by default since ObjJ syntax
 	var useSplitCall = __jsc__.useSplitCall
 	__jsc__.useSplitCall = true
@@ -12,6 +20,7 @@
 	var testAdd					= false
 	defineClass('MyTestObjectNewClass < NSObject', 
 	{
+		// We're overloading an existing method : don't specify encoding as it will be infered from the parent class' method.
 		'performSelector:withObject:' : 
 						function(sel, object)
 						{
@@ -27,6 +36,7 @@
 							testClassOverload = true
 							return	r
 						}
+		// We're adding a new method : specify encodings
 		,'someMethod:' :
 						['id', 'id', function (o)
 						{

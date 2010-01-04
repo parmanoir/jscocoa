@@ -36,6 +36,13 @@
 		{
 			return 'world'
 		}
+
+		// Check protocol indicator's generated encoding 
+		- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)item
+		{
+			return false
+		}
+		
 	@end
 
 	var o = [ObjJClassSyntax1 instance]
@@ -49,6 +56,11 @@
 
 	if ([o hello] != 'hello')			throw 'ObjJ compat syntax failed (3)'
 	if ([o world] != 'world')			throw 'ObjJ compat syntax failed (4)'
+	
+	
+	// Protocol indicator
+	var protocolMethodSignature = [JSCocoa typeEncodingOfMethod:'validateUserInterfaceItem:' class:'ObjJClassSyntax2']
+	if (protocolMethodSignature != 'B@:@')	throw 'ObjJ compat syntax failed (5)'
 
 	o = null
 

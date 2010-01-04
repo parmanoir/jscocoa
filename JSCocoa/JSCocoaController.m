@@ -4077,7 +4077,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	{
 		void* storage = [returnValue storage];
 		if ([returnValue ffi_type] == &ffi_type_void)	storage = NULL;
-//		log_ffi_call(&cif, values, callAddress);
 
 		// Catch exceptions when calling ObjC
 		if (callingObjC)
@@ -4124,7 +4123,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		[private.object release];
 	}
 
-	
 	return	jsReturnValue;
 }
 
@@ -4315,10 +4313,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 // Creating new structures with Javascript's new operator
 //
 //	// Zero argument call : fill with undefined
-//	var p = new NSPoint					returns { origin : { x : undefined, y : undefined }, size : { width : undefined, height : undefined } }
+//	var p = new NSRect					returns { origin : { x : undefined, y : undefined }, size : { width : undefined, height : undefined } }
 //
 //	// Initial values argument call : fills structure with arguments[] contents — THROWS exception if arguments.length != structure.elementCount 
-//	var p = new NSPoint(1, 2, 3, 4)		returns { origin : { x : 1, y : 2 }, size : { width : 3, height : 4 } }
+//	var p = new NSRect(1, 2, 3, 4)		returns { origin : { x : 1, y : 2 }, size : { width : 3, height : 4 } }
 //
 static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception)
 {
