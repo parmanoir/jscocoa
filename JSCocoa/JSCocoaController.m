@@ -742,7 +742,16 @@ static id JSCocoaSingleton = NULL;
 	return	YES;
 }
 
+// ## privately used by memread, memwrite
+- (void)writeObject:(id)o toAddress:(void*)ptr
+{
+	*(id*)ptr = o;
+}
 
+- (id)readObjectFromAddress:(void*)ptr
+{
+	return *(id*)ptr;
+}
 
 
 
@@ -3662,7 +3671,10 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 
 	// Special case for autocall : allow current js object to receive a custom valueOf method that will handle autocall
 	// And a thisObject property holding class for instance autocall
-	if ([propertyName isEqualToString:@"valueOf"])		return	false;
+	if ([propertyName isEqualToString:@"valueOf"])			return	false;
+	// An out argument allocates pointer storage when calling stuff like gl version.
+	// JSCocoa needs to set a custom javascript property to recognize out arguments.
+	if ([propertyName isEqualToString:@"isOutArgument"])	return	false;
 	// Allow general setting on structs
 	if ([privateObject.type isEqualToString:@"struct"])	return	false;
 
@@ -4024,20 +4036,26 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				// If holding a JSCocoaOutArgument, allocate custom storage
 				if (JSValueGetType(ctx, jsValue) == kJSTypeObject)
 				{
-					id unboxed = nil;
-					[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&unboxed inContext:ctx];
-					if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
+					JSStringRef	jsName = JSStringCreateWithUTF8CString("isOutArgument");
+					BOOL isOutArgument = JSValueToBoolean(ctx, JSObjectGetProperty(ctx, JSValueToObject(ctx, jsValue, NULL), jsName, NULL));
+					JSStringRelease(jsName);
+					if (isOutArgument)
 					{
-						if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
-						shouldConvert = NO;
-						[arg setIsOutArgument:YES];
-					}
-					if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
-					{
-						JSCocoaMemoryBuffer* buffer = unboxed;
-						[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:[buffer pointerForIndex:0]];
-						shouldConvert = NO;
-						[arg setIsOutArgument:YES];
+						id unboxed = nil;
+						[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&unboxed inContext:ctx];
+						if (unboxed && [unboxed isKindOfClass:[JSCocoaOutArgument class]])
+						{
+							if (![(JSCocoaOutArgument*)unboxed mateWithJSCocoaFFIArgument:arg])	return	throwException(ctx, exception, [NSString stringWithFormat:@"Pointer argument %@ not handled", [arg pointerTypeEncoding]]), NULL;
+							shouldConvert = NO;
+							[arg setIsOutArgument:YES];
+						}
+						if (unboxed && [unboxed isKindOfClass:[JSCocoaMemoryBuffer class]])
+						{
+							JSCocoaMemoryBuffer* buffer = unboxed;
+							[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:[buffer pointerForIndex:0]];
+							shouldConvert = NO;
+							[arg setIsOutArgument:YES];
+						}
 					}
 				}
 

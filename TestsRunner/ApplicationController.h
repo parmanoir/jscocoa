@@ -18,6 +18,8 @@
 	
 	JSCocoa* jsc2;
 	id topObjects;
+	
+	NSError*	testNSError;
 
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
@@ -34,5 +36,11 @@
 - (id)testDelegate;
 - (int)dummyValue;
 
+- (NSError*)testNSError;
 
+
+@end
+
+@interface NSErrorTest : NSObject
+- (BOOL)someMethodReturningAnError:(NSError**)error;
 @end

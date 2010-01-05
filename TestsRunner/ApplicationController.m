@@ -25,6 +25,7 @@ JSCocoaController* jsc = nil;
 	[[NSApplication sharedApplication] setDelegate:self];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 
+	testNSError = nil;
 	
 //	NSLog(@"sizeof(int)=%d", sizeof(int));
 //	NSLog(@"sizeof(long)=%d", sizeof(long));
@@ -35,6 +36,8 @@ JSCocoaController* jsc = nil;
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+	if (testNSError)	[testNSError release];
+
 	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
@@ -716,5 +719,31 @@ int dummyValue;
 	[window makeKeyAndOrderFront:nil];
 	[textField setStringValue:@"All tests ran OK"];
 }
+
+- (NSError*)testNSError
+{
+	return	testNSError;
+}
+
+- (BOOL)callbackNSErrorWithClass:(NSErrorTest*)o
+{
+	if (testNSError)	
+	{
+		[testNSError release];
+		testNSError = nil;
+	}
+	NSError* error = nil;
+//	NSLog(@"calling with pointer %x", &error);
+	BOOL r = [o someMethodReturningAnError:&error];
+	
+	if (error)
+	{
+		testNSError = error;
+		[testNSError retain];
+	}
+	
+	return	r;
+}
+
 
 @end

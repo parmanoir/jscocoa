@@ -41,9 +41,30 @@ var doc
 
 		- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 		{
-			log('there****************>>>>>>>>>>')
+			log('there****************>>>>>>>>>>validateUserInterfaceItem'+anItem)
 			return	YES;
 		}
+
+		- (NSUndoManager *)undoManager
+		{
+			log('asking manager')
+			if (!this._undoManager) this._undoManager = [NSUndoManager instance]
+			return this._undoManager
+		}
+/*		
+		- (BOOL)hasUndoManager
+		{
+			log('hasUndoManager')
+			return YES
+		}
+*/		
+
+- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
+{
+	log('save')
+	return true
+}
+		
 		
 		IBOutlet webView
 	}
@@ -54,7 +75,7 @@ var doc
 		swizzle - (void)keyDown:(id)sender
 		{
 			this.Original(arguments)
-			
+/*			
 //			log(this)
 
 			var v = this
@@ -67,7 +88,16 @@ var doc
 //			this.webView.webScriptObject.evaluateWebScript('document.body.innerHTML="hello"')
 //log('d='+ doc.webView)
 //			doc.webView.windowScriptObject.evaluateWebScript('document.body.innerHTML="hello"')
-			doc.webView.windowScriptObject.evaluateWebScript('cc.exhaustDelayedPerforms()')
+*/
+
+			var page = this._frame.globalContext
+			page.cc.exhaustDelayedPerforms()
+//			doc.webView.windowScriptObject.evaluateWebScript('cc.exhaustDelayedPerforms()')
+			
+
+			var doc = this.window.windowController.document
+			[doc updateChangeCount:0]
+			
 		}
 
 
@@ -81,17 +111,25 @@ var doc
 			log('document=' + this.window.windowController.document)
 */			
 			var doc = this.window.windowController.document
+			this._frame.globalContext.cc.undo()
 //			doc.undo()
 		}
 		- (void)redo:(id)sender
 		{
 			var doc = this.window.windowController.document
+			this._frame.globalContext.cc.redo()
 //			doc.undo()
 		}
 
 		swizzle- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)item
 		{
+			var cc = this._frame.globalContext.cc
+			log('cc=' + cc)
+			if (item.action == 'undo:')	return cc.undoStack.length > 0
+			if (item.action == 'redo:')	return cc.redoStack.length > 0
+/*
 			log('there*******************+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++' + item + '=' + item.action)
+
 			log('===' + this.webView)
 			log('===' + this._webView)
 			log('===' + this.frame)
@@ -99,7 +137,8 @@ var doc
 			log('===' + this.frameView)
 			log('===' + this._frameView)
 			log('===' + this._frame.globalContext.document)
-			return	NO;
+*/
+			return	this.Original(arguments)
 		}
 	}
 	

@@ -56,12 +56,12 @@
 
 	function	objc_unary_encoding(encoding)
 	{
-//		if (encoding.indexOf('<') != -1)	log('KKKKKKKKKKK' + encoding)
 		encoding = encoding.replace(/<\w+>/, '').toString()
 
 
 		// Structure arg
-		if (encoding.indexOf(' ') != -1 && encoding.indexOf(' *') == -1)
+//		if (encoding.indexOf(' ') != -1 && encoding.indexOf('*') == -1)
+		if (encoding.match(/struct \w+/))
 		{
 			var structureName = encoding.split(' ')[1]
 			var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(structureName)
@@ -82,7 +82,7 @@
 			if (!(encoding in encodings))	
 			{
 				// Pointer to an ObjC object ?
-				var match = encoding.match(/^(\w+)\s*\*$/)
+				var match = encoding.match(/^(\w+)\s*(\*+)$/)
 				if (match)
 				{
 					var className = match[1]
@@ -95,7 +95,11 @@
 					//
 					//	BUT if both expressions each use their own box, comparison will come negative
 					//
-					if (className in this && this[className]['class'] == this[className])	return '@'
+					if (className in this && this[className]['class'] == this[className])	
+					{
+						// ** is a pointer to class
+						return match[2].toString().length > 1 ? '^' : '@'
+					}
 				}
 				// Structure ?
 				var structureEncoding = JSCocoaFFIArgument.structureFullTypeEncodingFromStructureName(encoding)
@@ -594,7 +598,9 @@
 	function	outArgument()
 	{
 		var o = JSCocoaOutArgument.instance
-		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
+		o.isOutArgument = true
+//		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
+		if (arguments.length == 2)	o.mateWithMemoryBuffer_atIndex_(arguments[0], arguments[1])
 		return	o
 	}
 	
@@ -602,7 +608,9 @@
 	{
 //		return	JSCocoaMemoryBuffer.instance
 //		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
-		return	JSCocoaMemoryBuffer.instanceWithTypes(types)
+		var o = JSCocoaMemoryBuffer.instanceWithTypes(types)
+		o.isOutArgument = true
+		return	o
 	}
 
 
@@ -1071,4 +1079,18 @@
 		return r
 	}
 	
+	
+	//
+	// Memory read / write
+	//	only objects for now, may add type later
+	//
+	function	memwrite(address, object, type /* not used */)
+	{
+		__jsc__.writeObject_toAddress(object, address)
+	}
+
+	function	memread(address, type /* not used */)
+	{
+		return __jsc__.readObjectFromAddress(address)
+	}
 	
