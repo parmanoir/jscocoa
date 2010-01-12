@@ -14,6 +14,14 @@
 	var minor = new outArgument
 	NSOpenGLGetVersion(major, minor)
 	log('major=' + major + ' minor=' + minor)
+	
+	outArgument value can be accessed with .outValue
+	
+		var error = new outArgument
+		var r = [@"hello" writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:error]
+		-> error.outValue == NSError (if any)
+	
+	
 
 */
 

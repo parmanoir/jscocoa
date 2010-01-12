@@ -742,19 +742,6 @@ static id JSCocoaSingleton = NULL;
 	return	YES;
 }
 
-// ## privately used by memread, memwrite
-- (void)writeObject:(id)o toAddress:(void*)ptr
-{
-	*(id*)ptr = o;
-}
-
-- (id)readObjectFromAddress:(void*)ptr
-{
-	return *(id*)ptr;
-}
-
-
-
 #pragma mark Loading Frameworks
 - (BOOL)loadFrameworkWithName:(NSString*)name
 {
@@ -1075,7 +1062,6 @@ static id JSCocoaSingleton = NULL;
 	IMP deallocJSImp = method_getImplementation(deallocJS);
 	if (!hasHash)
 	{
-	
 		// Alloc debug
 		Method m = class_getClassMethod(JSCocoaMethodHolderClass, @selector(allocWithZone:));
 		class_addMethod(objc_getMetaClass(className), @selector(allocWithZone:), method_getImplementation(m), method_getTypeEncoding(m));	
@@ -2840,9 +2826,7 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	// Holding a native JS value ? Return it
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	if ([thisPrivateObject.type isEqualToString:@"jsValueRef"])	
-	{
 		return [thisPrivateObject jsValueRef];
-	}
 
 	// External jsValueRef from WebView
 	if ([thisPrivateObject.type isEqualToString:@"externalJSValueRef"])	
@@ -2862,7 +2846,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		return	JSValueMakeNumber(ctx, [thisPrivateObject.object doubleValue]);
 
 	// Convert to string
-//	id toString = [NSString stringWithFormat:@"JSCocoaPrivateObject type=%@", thisPrivateObject.type];
 	id toString = [thisPrivateObject description];
 	
 	// Object
@@ -2872,9 +2855,16 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		if ([thisPrivateObject.object isKindOfClass:[JSCocoaOutArgument class]])
 		{
 			JSValueRef outValue = [(JSCocoaOutArgument*)thisPrivateObject.object outJSValueRefInContext:ctx];
+			if (!outValue)
+			{
+				JSStringRef	jsName = JSStringCreateWithUTF8CString("Unitialized outArgument");
+				JSValueRef r = JSValueMakeString(ctx, jsName);
+				JSStringRelease(jsName);
+				return r;
+			}
 			// Holding an object ? Call valueOf on it
 			if (JSValueGetType(ctx, outValue) == kJSTypeObject)
-				return	valueOfCallback(ctx, NULL, JSValueToObject(ctx, outValue, NULL), 0, NULL, NULL);
+				return valueOfCallback(ctx, NULL, JSValueToObject(ctx, outValue, NULL), 0, NULL, NULL);
 			// Return raw JSValueRef
 			return outValue;
 		}
@@ -3754,7 +3744,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// Return an exception if calling on NULL
 	if ([thisPrivateObject object] == NULL && !privateObject.xml)	return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : call with null object"), NULL;
 
-	// Call setup : calling ObjC or C requires
 	// Function address
 	void* callAddress = NULL;
 

@@ -46,12 +46,27 @@
 //
 - (JSValueRef)outJSValueRefInContext:(JSContextRef)ctx
 {
-//	[[NSGarbageCollector defaultCollector] disable];
 	JSValueRef jsValue = NULL;
 	[arg toJSValueRef:&jsValue inContext:ctx];
-//	[[NSGarbageCollector defaultCollector] enable];
 	return	jsValue;
 }
+
+// Called from Javascript to extract the resulting value as an object (valueOfCallback returns a string)
+- (JSValueRefAndContextRef)outValue
+{
+	JSValueRefAndContextRef r;
+
+	id	jsc = nil;
+	object_getInstanceVariable(self, "__jsCocoaController", (void**)&jsc);
+	if (!jsc)	return r;
+	
+	r.ctx	= [jsc ctx];
+	r.value	= [self outJSValueRefInContext:r.ctx];
+
+	return r;
+}
+
+
 
 //
 //	JSCocoaOutArgument holds a JSCocoaFFIArgument around.
@@ -59,7 +74,6 @@
 //	
 - (BOOL)mateWithJSCocoaFFIArgument:(JSCocoaFFIArgument*)_arg
 {
-//	NSLog(@"outArgument %x starting up encoding=%c(%@)", self, [_arg typeEncoding], [_arg pointerTypeEncoding]);
 	// If holding a memory buffer, use its pointer
 	if (buffer)
 	{
@@ -67,14 +81,17 @@
 		[arg retain];
 		void* ptr = [buffer pointerForIndex:bufferIndex];
 		if (!ptr)	return	NO;
-//		NSLog(@"mating encoding ***%c***%c***(pointerTypeEncoding=%@) on arg %x", [arg typeEncoding], [buffer typeAtIndex:bufferIndex], [arg pointerTypeEncoding], _arg);
-//		[arg setTypeEncoding:[buffer typeAtIndex:bufferIndex] withCustomStorage:ptr];
 		[arg setTypeEncoding:[arg typeEncoding] withCustomStorage:ptr];
 		return	YES;
 	}
 
 	// Standard pointer
-	if (![_arg allocatePointerStorage])	return	NO;
+	void* p = [_arg allocatePointerStorage];
+	if (!p)	return	NO;
+	
+	// Zero out storage
+	*(void**)p = NULL;
+	
 
 	arg	= _arg;
 	[arg retain];
@@ -152,9 +169,10 @@
 //
 // Returns pointer for index without any padding
 //
-- (void*)pointerForIndex:(int)index
+- (void*)pointerForIndex:(unsigned int)index
 {
 	const char* types = [typeString UTF8String];
+	if (index >= [typeString length])	return NULL;
 	void* pointedValue = buffer;
 	for (int i=0; i<index; i++)
 	{
@@ -164,35 +182,51 @@
 	return	pointedValue;
 }
 
-- (char)typeAtIndex:(int)index
+- (char)typeAtIndex:(unsigned int)index
 {
 	if (index >= [typeString length])	return '\0';
 	return	[typeString UTF8String][index];
 }
 
-- (int)typeCount
+- (unsigned int)typeCount
 {
 	return	[typeString length];
 }
 
+-(BOOL)referenceObject:(id)o usingPointerAtIndex:(unsigned int)index
+{
+	if ([self typeAtIndex:index] != '^')	return NO;
+	
+	void* v = *(void**)[self pointerForIndex:index];
+	*(id*)v = o;
+	return YES;
+}
+
+- (id)dereferenceObjectAtIndex:(unsigned int)index
+{
+	if ([self typeAtIndex:index] != '^')	return nil;
+	void* v = *(void**)[self pointerForIndex:index];
+	return	*(id*)v;
+}
 
 //
 // Using JSValueRefAndContextRef as input to get the current context in which to create the return value
 //
-- (JSValueRef)valueAtIndex:(int)index inContext:(JSContextRef)ctx
+- (JSValueRef)valueAtIndex:(unsigned int)index inContext:(JSContextRef)ctx
 {
 	char	typeEncoding = [self typeAtIndex:index];
 	void*	pointedValue = [self pointerForIndex:index];
-
+	if (!pointedValue)	return JSValueMakeUndefined(ctx);
 	JSValueRef returnValue;
 	[JSCocoaFFIArgument toJSValueRef:&returnValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	returnValue;
 }
 
-- (BOOL)setValue:(JSValueRef)jsValue atIndex:(int)index inContext:(JSContextRef)ctx;
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(unsigned int)index inContext:(JSContextRef)ctx;
 {
 	char	typeEncoding = [self typeAtIndex:index];
 	void*	pointedValue = [self pointerForIndex:index];
+	if (!pointedValue)	return NO;
 //NSLog(@"JSCocoaMemoryBuffer.setValue at %d", index);
 	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	YES;

@@ -32,6 +32,12 @@ JSCocoaController* jsc = nil;
 //	NSLog(@"sizeof(CGFloat)=%d", sizeof(CGFloat));
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 
+/*	
+	id error = nil;
+	id url = [NSURL fileURLWithPath:@"/non/existent"];
+	BOOL b = [@"hello" writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:&error];
+	NSLog(@"++++++++ %d %@", b, error);
+*/
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -735,7 +741,7 @@ int dummyValue;
 	NSError* error = nil;
 //	NSLog(@"calling with pointer %x", &error);
 	BOOL r = [o someMethodReturningAnError:&error];
-	
+
 	if (error)
 	{
 		testNSError = error;

@@ -47,7 +47,7 @@ var doc
 
 		- (NSUndoManager *)undoManager
 		{
-			log('asking manager')
+//			log('asking manager')
 			if (!this._undoManager) this._undoManager = [NSUndoManager instance]
 			return this._undoManager
 		}
@@ -59,10 +59,45 @@ var doc
 		}
 */		
 
+- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError 
+{
+	log('hep')
+	return	NO
+}
+
+
 - (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
 {
+/*
 	log('save')
-	return true
+	log('outError=' + outError)
+*/	
+/*	
+    NSString *localizedDescription = [mainBundle localizedStringForKey:[NSString stringWithFormat:@"description%ld", (long)code] value:@"Sketch could not complete the operation because an unknown error occurred. (IWASHERE)" table:@"SKTError"];
+    NSString *localizedFailureReason = [mainBundle localizedStringForKey:[NSString stringWithFormat:@"failureReason%ld", (long)code] value:@"An unknown error occurred. (IWASHERE)" table:@"SKTError"];
+    NSDictionary *errorUserInfo = [NSDictionary dictionaryWithObjectsAndKeys:localizedDescription, NSLocalizedDescriptionKey, localizedFailureReason, NSLocalizedFailureReasonErrorKey, nil];
+*/
+/*
+	var info = {}
+	log('==' + NSLocalizedDescriptionKey)
+	log('==' + NSLocalizedFailureReasonErrorKey)
+	info[NSLocalizedDescriptionKey] = '111111111111111'
+	info[NSLocalizedFailureReasonErrorKey] = '22222222222222222222'
+	memwrite(outError, [NSError errorWithDomain:NSCocoaErrorDomain code:0909 userInfo:info])
+	log('==' + memread(outError))
+	return false
+*/
+//	NSString 
+
+
+	var b = [@'hello' writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
+
+		var e = new outArgument
+log('url=' + absoluteURL)
+	var b = [NSString.stringWithString('hello') writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
+	log('saved')
+	log('e=' + e)
+	return b
 }
 		
 		

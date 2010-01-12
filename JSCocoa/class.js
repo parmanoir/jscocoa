@@ -597,17 +597,20 @@
 	//
 	function	outArgument()
 	{
-		var o = JSCocoaOutArgument.instance
+		// Derive to store some javascript data in the internal hash
+		if (!('outArgument2' in this))
+			JSCocoa.createClass_parentClass_('JSCocoaOutArgument2', 'JSCocoaOutArgument')
+
+		var o = JSCocoaOutArgument2.instance
 		o.isOutArgument = true
-//		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
 		if (arguments.length == 2)	o.mateWithMemoryBuffer_atIndex_(arguments[0], arguments[1])
+
 		return	o
 	}
+
 	
 	function	memoryBuffer(types)
 	{
-//		return	JSCocoaMemoryBuffer.instance
-//		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
 		var o = JSCocoaMemoryBuffer.instanceWithTypes(types)
 		o.isOutArgument = true
 		return	o
@@ -943,10 +946,12 @@
 				}
 				
 				var nexttoken = tokens[i+1]
+				// This can start a message : [@'hello' writeTo...]
 				if (nexttoken.id == '(string)')
 				{
 					tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
-					i += 1
+					// Delete string token
+					nexttoken.rawValue = ''
 					continue
 				}
 				else
@@ -1078,19 +1083,3 @@
 		for (var i in this) r.push(i)
 		return r
 	}
-	
-	
-	//
-	// Memory read / write
-	//	only objects for now, may add type later
-	//
-	function	memwrite(address, object, type /* not used */)
-	{
-		__jsc__.writeObject_toAddress(object, address)
-	}
-
-	function	memread(address, type /* not used */)
-	{
-		return __jsc__.readObjectFromAddress(address)
-	}
-	

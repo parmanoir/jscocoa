@@ -45,11 +45,11 @@
 //- (id)initWithTypes:(id)types andValues:(id)values;
 //- (id)initWithMemoryBuffers:(id)buffers;
 
-- (void*)pointerForIndex:(int)index;
-- (char)typeAtIndex:(int)index;
-- (JSValueRef)valueAtIndex:(int)index inContext:(JSContextRef)ctx;
-- (BOOL)setValue:(JSValueRef)jsValue atIndex:(int)index inContext:(JSContextRef)ctx;
-- (int)typeCount;
+- (void*)pointerForIndex:(unsigned int)index;
+- (char)typeAtIndex:(unsigned int)index;
+- (JSValueRef)valueAtIndex:(unsigned int)index inContext:(JSContextRef)ctx;
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(unsigned int)index inContext:(JSContextRef)ctx;
+- (unsigned int)typeCount;
 
 @end
 
