@@ -53,6 +53,21 @@
 			
 			return	true
 		}
+
+		- (BOOL)someMethodReturningAnError3:(NSError**)outError
+		{
+			// Test a error written to an outArgument passed to us
+			var url = [NSURL fileURLWithPath:@"/non/existent"];
+			[@"hello" writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:outError];
+			errorFromTest3 = outError.dereferencedObject
+
+			return	true
+		}
+
+		- (BOOL)someMethodReturningAnError3:(NSError**)outError andInt:(int*)a
+		{
+			return	false
+		}
 	
 	@end
 	
@@ -96,9 +111,28 @@
 	[o someMethodReturningAnError2:null]
 
 
+/*
+	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError:' class:'ApplicationController'])
+	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError2:andInt:' class:'ApplicationController'])
+	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError3:andInt:' class:'NSErrorCallback'])
+*/
+
+	// Test with null pointer
+	var errorFromTest3 = null
+
+	var oa = new outArgument
+	[o someMethodReturningAnError3:oa]
+
+	var error2 = oa.outValue
+	if (!errorFromTest3)							throw 'NSError** failed (5)'
+	if (!error2)									throw 'NSError** failed (6)'
+	if (error2.domain != errorFromTest3.domain)		throw 'NSError** failed (7)'
+	if (error2.code != errorFromTest3.code)			throw 'NSError** failed (7)'
+
+
 	// Test method signature : NSError** should be encoded with a pointer
 	var sig = [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError:' class:'NSErrorCallback']
-	if (sig != 'B@:^')								throw 'NSError** signature failed'
+	if (sig != 'B@:^@')								throw 'NSError** signature failed'
 	
 	
 	

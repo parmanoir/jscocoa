@@ -95,10 +95,18 @@
 					//
 					//	BUT if both expressions each use their own box, comparison will come negative
 					//
+					var starCount = match[2].toString().length
 					if (className in this && this[className]['class'] == this[className])	
 					{
 						// ** is a pointer to class
-						return match[2].toString().length > 1 ? '^' : '@'
+						return starCount > 1 ? '^@' : '@'
+					}
+					else
+					if (starCount == 1)
+					{
+						var rawEncoding = encoding.replace(/\*/, '')
+						rawEncoding = encodings[rawEncoding]
+						if (rawEncoding)	return '^' + rawEncoding
 					}
 				}
 				// Structure ?
@@ -689,10 +697,6 @@
 
 			// Replace js functions
 			script = script.replace(/^\s*js\s+function\s+(\w+)(.*)$/gm, expandJSMacros_ReplaceJSFunctions)
-			
-//			log('****************')
-//			log('\n' + script)
-//			log('****************')
 		}
 		return	script
 	}
@@ -1047,9 +1051,7 @@
 			tokenStream.push(v)
 		}
 		var transformed = tokenStream.join('')
-//		log('*************')
-//		log(transformed)
-//		log('****' + script + '->' + transformed)
+//		log('Transformed' + script + '->' + transformed)
 		return	transformed
 	}
 

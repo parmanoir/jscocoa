@@ -751,5 +751,16 @@ int dummyValue;
 	return	r;
 }
 
+- (BOOL)signatureTestWithError:(NSError**)error
+{
+	return NO;
+}
+
+- (BOOL)signatureTestWithError2:(NSError**)error andInt:(int*)a
+{
+	return NO;
+}
+
+
 
 @end
