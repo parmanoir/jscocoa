@@ -9,7 +9,7 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>????</string>
+				<string>jscocoa</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
@@ -49,5 +49,31 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.5</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.netscape.javascript-source</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>JSCocoa Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.jscocoa.jscocoa-source</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://github.com/parmanoir/jscocoa</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>jscocoa</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/x-jscocoa</string>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

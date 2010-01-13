@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D987B8610FD7AE0003E5446</string>
+						<string>3D987C9F10FE6DBC003E5446</string>
 						<key>history</key>
 						<array>
 							<string>3D6B0E9C10F310350068A059</string>
@@ -271,6 +271,8 @@
 					<key>Tabs</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -308,17 +310,18 @@
 										<string>2A37F4AFFDCFA73011CA2CEA</string>
 										<string>2A37F4B8FDCFA73011CA2CEA</string>
 										<string>2A37F4C3FDCFA73011CA2CEA</string>
+										<string>19C28FB0FE9D524F11CA2CBB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>13</integer>
-											<integer>1</integer>
+											<integer>31</integer>
+											<integer>26</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {429, 333}}</string>
+									<string>{{0, 39}, {429, 333}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -523,9 +526,9 @@
 		<string>3D9870B310F32E72003E5446</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/Samples/Samples.xcodeproj</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>3D815A5F10C48BC50015B843</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/Samples/Samples.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 759 446 419 0 0 1920 1178 </string>

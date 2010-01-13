@@ -206,6 +206,7 @@
 {
 	if ([self typeAtIndex:index] != '^')	return nil;
 	void* v = *(void**)[self pointerForIndex:index];
+	if (!v)	return NULL;
 	return	*(id*)v;
 }
 

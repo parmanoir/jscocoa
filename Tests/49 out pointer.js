@@ -21,7 +21,7 @@
 			var readBackError1 = [b dereferenceObjectAtIndex:0]
 			if (readBackError1 != error)					throw 'NSError** read/write failed (1)'
 
-			// Try reading it via JSCocoaPrivateObject
+			// Read it via JSCocoaPrivateObject
 			var readBackError2 = outError.dereferencedObject
 			if (readBackError1 != readBackError2)			throw 'NSError** read/write failed (2)' 
 			
@@ -36,6 +36,22 @@
 			if (readBackError4 != error)					throw 'NSError** read/write failed (4)'
 			
 			return	res
+		}
+	
+		- (BOOL)someMethodReturningAnError2:(NSError**)outError
+		{
+			// Make sure we don't crash with anull pointer
+			var o = outError.dereferencedObject
+			if (o != null)									throw 'NSError** read/write failed (5)'
+		
+			// Init a memory buffer from pointer
+			var b = new memoryBuffer('^')
+			b[0] = outError
+
+			var readBackError = [b dereferenceObjectAtIndex:0]
+			if (readBackError != null)						throw 'NSError** read/write failed (6)'
+			
+			return	true
 		}
 	
 	@end
@@ -75,6 +91,9 @@
 	var errorFromDelegate = [delegate testNSError]
 	if (errorFromDelegate.domain != errorDomain)	throw 'NSError** failed (3)'
 	if (errorFromDelegate.code != errorCode)		throw 'NSError** failed (4)'
+	
+	// Test with null pointer
+	[o someMethodReturningAnError2:null]
 
 
 	// Test method signature : NSError** should be encoded with a pointer

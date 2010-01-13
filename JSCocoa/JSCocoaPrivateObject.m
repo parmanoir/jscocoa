@@ -184,7 +184,7 @@
 
 - (id)dereferencedObject
 {
-	if (![type isEqualToString:@"rawPointer"])	return nil;
+	if (![type isEqualToString:@"rawPointer"] || !rawPointer)	return nil;
 	return *(void**)rawPointer;
 }
 
