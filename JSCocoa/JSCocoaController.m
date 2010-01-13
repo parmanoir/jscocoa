@@ -2989,6 +2989,7 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 
 	if ([privateObject.type isEqualToString:@"@"])
 	{
+call:		
 		//
 		// Delegate canGetProperty, getProperty
 		//
@@ -3127,7 +3128,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 			SEL sel		= NSSelectorFromString(propertyName);
 			
 			BOOL isInstanceCall = [propertyName isEqualToString:@"instance"];
-			
 			// Go for zero arg call
 			if ([propertyName rangeOfString:@":"].location == NSNotFound && ([callee respondsToSelector:sel] || isInstanceCall))
 			{
@@ -3218,7 +3218,6 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 				
 				// Get return value holder
 				id returnValue = [argumentEncodings objectAtIndex:0];
-				
 				
 				// Allocate return value storage if it's a pointer
 				if ([returnValue typeEncoding] == '^')
@@ -3353,6 +3352,10 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 
 		return	o;
 	}
+
+
+//			NSLog(@"THERE ! asking %@ %@", propertyName, privateObject.type);
+		
 	
 	
 	// Struct + rawPointer valueOf
@@ -3366,9 +3369,33 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	}
 
 
-	// If we have an external Javascript context, query it
+	// Pointer ops
+	//	* If we have an external Javascript context, query it
+	//	* Handle pointer reference / dereference with JSCocoaFFIArgument
 	if ([privateObject.type isEqualToString:@"rawPointer"])
 	{
+		BOOL responds = NO;
+		id methodName = propertyName;
+		responds = [privateObject respondsToSelector:NSSelectorFromString(propertyName)];
+		if (!responds)
+		{
+			methodName = [NSString stringWithFormat:@"%@:", methodName];
+			responds = [privateObject respondsToSelector:NSSelectorFromString(methodName)];
+		}
+		if ([privateObject.type isEqualToString:@"rawPointer"] && responds)
+		{
+			// When calling a method with arguments, this will be used to get the instance on which to call
+			id callee = privateObject;
+			privateObject.object = callee;
+			// Box the private object
+			privateObject = [[JSCocoaPrivateObject new] autorelease];
+			privateObject.object = callee;
+			privateObject.type = @"@";
+			propertyName = methodName;
+			goto call;
+		}
+
+
 		if ([[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
 		{
 			JSGlobalContextRef globalContext = [privateObject rawPointer];
@@ -3770,7 +3797,9 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	// ObjC setup
 	//
 	id callee = NULL, methodName = NULL, functionName = NULL;
-	if ([privateObject.type isEqualToString:@"method"] && [thisPrivateObject.type isEqualToString:@"@"])
+	
+	// Calls can be made on boxed ObjC objects AND JSCocoaPrivateObjects
+	if ([privateObject.type isEqualToString:@"method"] && ([thisPrivateObject.type isEqualToString:@"@"] || [thisPrivateObject.object class] == [JSCocoaPrivateObject class]))
 	{
 		callingObjC	= YES;
 		callee		= [thisPrivateObject object];

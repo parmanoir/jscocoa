@@ -182,6 +182,20 @@
 				];
 }
 
+- (id)dereferencedObject
+{
+	if (![type isEqualToString:@"rawPointer"])	return nil;
+	return *(void**)rawPointer;
+}
+
+- (BOOL)referenceObject:(id)o
+{
+	if (![type isEqualToString:@"rawPointer"])	return NO;
+//	void* v = *(void**)rawPointer;
+	*(id*)rawPointer = o;
+	return	YES;
+}
+
 
 @end
 

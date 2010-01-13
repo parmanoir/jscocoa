@@ -9,13 +9,32 @@
 	
 		- (BOOL)someMethodReturningAnError:(NSError**)outError
 		{
+//			log('outError=' + outError)
+		
+			// Init a memory buffer from pointer
 			var b = new memoryBuffer('^')
 			b[0] = outError
 
+			// Reference error in this pointer ( *outError = error )
 			[b referenceObject:error usingPointerAtIndex:0]
-			var errorReadBack = [b dereferenceObjectAtIndex:0]
+			// Read it back
+			var readBackError1 = [b dereferenceObjectAtIndex:0]
+			if (readBackError1 != error)					throw 'NSError** read/write failed (1)'
 
-			if (errorReadBack != error)					throw 'NSError** read/write failed'
+			// Try reading it via JSCocoaPrivateObject
+			var readBackError2 = outError.dereferencedObject
+			if (readBackError1 != readBackError2)			throw 'NSError** read/write failed (2)' 
+			
+			// null error out
+			outError.referenceObject(null)
+			var readBackError3 = outError.dereferencedObject
+			if (readBackError3 != null)						throw 'NSError** read/write failed (3)' 
+
+			// Write error via JSCocoaPrivateObject
+			outError.referenceObject(error)
+			var readBackError4 = outError.dereferencedObject
+			if (readBackError4 != error)					throw 'NSError** read/write failed (4)'
+			
 			return	res
 		}
 	
