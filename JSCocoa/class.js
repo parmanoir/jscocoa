@@ -47,7 +47,7 @@
 		,'pointer'		: '^'
 		,'charpointer'	: '*'
 		
-		,'BOOL'			: 'B'
+		,'BOOL'			: 'c'
 		,'NSInteger'	: 'i'
 	}
 	var reverseEncodings = {}

@@ -143,6 +143,7 @@
 	}
 	jsValue = v;
 	ctx		= c;
+	NSLog(@">>>>>>>>>>>>>setExternalJSValueRef");
 //	contextGroup = JSContextGetGroup(c);
 //	JSContextGroupRetain(contextGroup);
 //	JSGlobalContextRetain((JSGlobalContextRef)ctx);

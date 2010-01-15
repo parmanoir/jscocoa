@@ -1277,16 +1277,15 @@ static id JSCocoaSingleton = NULL;
 
 	// If method is already swizzled, reswizzle it to reset the class. 
 	// addMethod: will overwrite our first swizzled method, which is what we want.
-	if ([class instancesRespondToSelector:altSel_])	
-		method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
+	// ^NO — the swizzled method might have been deallocated, so just overwrite altSel's implementation with origSel's
+	if ([class instancesRespondToSelector:altSel_])
+		method_setImplementation(class_getInstanceMethod(class, altSel_), class_getMethodImplementation(class, origSel_));
 
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
 	if (!b)						return NO;
 
 	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
-	
 	method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
-	
 	return	YES;
 }
 + (BOOL)swizzleClassMethod:(NSString*)methodName class:(Class)class jsFunction:(JSValueRefAndContextRef)valueAndContext
@@ -1306,15 +1305,13 @@ static id JSCocoaSingleton = NULL;
 	// If method is already swizzled, reswizzle it to reset the class. 
 	// addMethod: will overwrite our first swizzled method, which is what we want.
 	if ([class respondsToSelector:altSel_])	
-		method_exchangeImplementations(class_getInstanceMethod(class, origSel_), class_getInstanceMethod(class, altSel_));
+		method_setImplementation(class_getInstanceMethod(class, altSel_), class_getMethodImplementation(class, origSel_));
 
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
 	if (!b)						return NO;
 
 	class_addMethod(class, origSel_, class_getMethodImplementation(class, origSel_), method_getTypeEncoding(origMethod));
-	
 	method_exchangeImplementations(class_getClassMethod(class, origSel_), class_getClassMethod(class, altSel_));
-
 	return	YES;
 }
 
@@ -1740,7 +1737,7 @@ static id JSCocoaSingleton = NULL;
 //		NSLog(@">>>EVALED %d, %@", evaled, filePath);
 		if (!evaled)	
 		{
-			id error = [NSString stringWithFormat:@"test %@ failed", file];
+			id error = [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
 			[JSCocoaController logAndSay:error];
 			return NO;
 		}

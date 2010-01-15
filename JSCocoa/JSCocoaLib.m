@@ -150,6 +150,7 @@
 	// Malloc
 //	NSLog(@"mallocing %d bytes for %@", bufferSize, typeString);
 	buffer = malloc(bufferSize);
+	memset(buffer, bufferSize, 1);
 	
 	return	self;
 }
@@ -198,6 +199,7 @@
 	if ([self typeAtIndex:index] != '^')	return NO;
 	
 	void* v = *(void**)[self pointerForIndex:index];
+	if (!v)	return NO;
 	*(id*)v = o;
 	return YES;
 }

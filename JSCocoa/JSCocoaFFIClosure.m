@@ -45,8 +45,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		JSValueUnprotect(ctx, jsFunction);
 		[JSCocoaController downJSValueProtectCount];
 	}
-
-//	NSLog(@"killing closure %x", self);
 	//
 	// A strange crash reporting ??? as the source address is a deleted closure being called (happens with the bindings mechanism)
 	//
@@ -56,14 +54,13 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 }
 - (void)dealloc
 {
+//	NSLog(@"deallocing closure %x IMP=%x", self, closure);
 	[self cleanUp];
-//	NSLog(@"ClosureDealloc %x", self);
 	[super dealloc];
 }
 - (void)finalize
 {
 	[self cleanUp];
-//	NSLog(@"ClosureDealloc %x", self);
 	[super finalize];
 }
 
@@ -129,7 +126,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	// Protect function from GC
 	JSValueProtect(ctx, jsFunction);
 	[JSCocoaController upJSValueProtectCount];
-	
+
 	return	(IMP)closure;
 #else
 	return	NULL;

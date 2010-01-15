@@ -17,6 +17,7 @@
 
 			// Reference error in this pointer ( *outError = error )
 			[b referenceObject:error usingPointerAtIndex:0]
+
 			// Read it back
 			var readBackError1 = [b dereferenceObjectAtIndex:0]
 			if (readBackError1 != error)					throw 'NSError** read/write failed (1)'
@@ -43,7 +44,8 @@
 			// Make sure we don't crash with anull pointer
 			var o = outError.dereferencedObject
 			if (o != null)									throw 'NSError** read/write failed (5)'
-		
+
+
 			// Init a memory buffer from pointer
 			var b = new memoryBuffer('^')
 			b[0] = outError
@@ -64,6 +66,7 @@
 			return	true
 		}
 
+		// This exists to check how pointers are handled by the method signature
 		- (BOOL)someMethodReturningAnError3:(NSError**)outError andInt:(int*)a
 		{
 			return	false
@@ -112,9 +115,10 @@
 
 
 /*
-	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError:' class:'ApplicationController'])
-	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError2:andInt:' class:'ApplicationController'])
-	log('>>>>>>SIG' + [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError3:andInt:' class:'NSErrorCallback'])
+	log('>>>>>>SIG ' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError:' class:'ApplicationController'])
+	log('>>>>>>SIG ' + [JSCocoa typeEncodingOfMethod:'signatureTestWithError2:andInt:' class:'ApplicationController'])
+	log('>>>>>>SIG ' + [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError3:andInt:' class:'NSErrorCallback'])
+	log('>>>>>>SIG ' + [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError:' class:'NSErrorCallback'])
 */
 
 	// Test with null pointer
@@ -131,10 +135,11 @@
 
 
 	// Test method signature : NSError** should be encoded with a pointer
-	var sig = [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError:' class:'NSErrorCallback']
-	if (sig != 'B@:^@')								throw 'NSError** signature failed'
+	var actualSig	= [JSCocoa typeEncodingOfMethod:'someMethodReturningAnError:' class:'NSErrorCallback']
+	var expectedSig	= 'c@:^@'
+	if (actualSig != expectedSig)					throw 'NSError** signature failed — expected ' + expectedSig + ', got ' + actualSig
 	
-	
+
 	
 	o = null
 	

@@ -60,7 +60,7 @@
 	
 	// Protocol indicator
 	var protocolMethodSignature = [JSCocoa typeEncodingOfMethod:'validateUserInterfaceItem:' class:'ObjJClassSyntax2']
-	if (protocolMethodSignature != 'B@:@')	throw 'ObjJ compat syntax failed (5)'
+	if (protocolMethodSignature != 'c@:@')	throw 'ObjJ compat syntax failed (5)'
 
 	o = null
 

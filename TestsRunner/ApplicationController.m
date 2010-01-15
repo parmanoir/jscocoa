@@ -105,6 +105,12 @@ int runCount = 0;
 	// Test JSCocoa inited from a WebView
 	//
 	id webViewClass = objc_getClass("WebView");
+	// Manually load WebKit if it's not yet loaded
+	if (!webViewClass) 
+	{
+		[jsc loadFrameworkWithName:@"WebKit"];
+		webViewClass = objc_getClass("WebView");
+	}
 	if (webViewClass)
 	{
 		// Load nib
@@ -756,7 +762,7 @@ int dummyValue;
 	return NO;
 }
 
-- (BOOL)signatureTestWithError2:(NSError**)error andInt:(int*)a
+- (bool)signatureTestWithError2:(NSError**)error andInt:(char)a
 {
 	return NO;
 }
