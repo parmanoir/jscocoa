@@ -799,14 +799,13 @@
 			token = tokens[i]
 			var v = tv = token.rawValue
 			
-			var line = lines[token.line]
-			if (!line) continue
-			
 			if (token.id == '(endline)')
 			{
 				tokenStream.push('\n')
 				continue
 			}
+			var line = lines[token.line]
+			if (!line) continue
 			
 			// Add whitespace - either the start of the line if we switched lines, or the span between this token and the previous one
 			var whitespace = prevtoken.line != token.line ? line.substr(0, token.from) : line.substr(prevtoken.character, token.from-prevtoken.character)

@@ -425,14 +425,6 @@ static id JSCocoaSingleton = NULL;
 
 	// Expand macros
 	script = [self expandJSMacros:script url:path];
-	NSLog(@"******************");
-	NSLog(@"******************");
-	NSLog(@"******************");
-	NSLog(@"%@", script);
-	NSLog(@"******************");
-	NSLog(@"******************");
-	NSLog(@"******************");
-	
 
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
