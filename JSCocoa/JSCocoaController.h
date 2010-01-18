@@ -284,6 +284,7 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 //void* malloc_autorelease(size_t size);
 
 id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATION;
+JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx);
 
 
 //

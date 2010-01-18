@@ -425,7 +425,15 @@ static id JSCocoaSingleton = NULL;
 
 	// Expand macros
 	script = [self expandJSMacros:script url:path];
+	NSLog(@"******************");
+	NSLog(@"******************");
+	NSLog(@"******************");
+	NSLog(@"%@", script);
+	NSLog(@"******************");
+	NSLog(@"******************");
+	NSLog(@"******************");
 	
+
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
 	//
@@ -1731,7 +1739,7 @@ static id JSCocoaSingleton = NULL;
 	for (id file in files)
 	{
 		id filePath = [NSString stringWithFormat:@"%@/%@", path, file];
-//		NSLog(@">>>evaling %@", filePath);
+		NSLog(@">>>evaling %@", filePath);
 //		BOOL evaled = [self evalJSFile:filePath];
 		id evaled = [self performSelector:sel withObject:filePath];
 //		NSLog(@">>>EVALED %d, %@", evaled, filePath);
@@ -2808,6 +2816,19 @@ JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextR
 			if (!o)		return	JSValueMakeNull(externalCtx);
 			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
 			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	return	JSValueMakeNull(externalCtx);
+/*
+			NSLog(@"+++++++++++object moving out %x ctx=%x externalCtx=%x innerCtx=%x", [privateObject jsValueRef], ctx, externalCtx, [privateObject ctx]);
+			return	JSValueMakeNumber(externalCtx, 22);
+
+JSValueProtect([privateObject ctx], [privateObject jsValueRef]);
+		JSStringRef s = JSValueToStringCopy(externalCtx, [privateObject jsValueRef], NULL);
+		NSString* str = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, s);
+		JSStringRelease(s);
+		NSLog(@"+++%@+++", str);
+	
+
+return	JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
+*/
 			return	[privateObject jsValueRef];
 		}
 	}
@@ -2823,7 +2844,10 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	// Holding a native JS value ? Return it
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	if ([thisPrivateObject.type isEqualToString:@"jsValueRef"])	
+	{
+		NSLog(@"returning a NATIVE JSVALUEREF");
 		return [thisPrivateObject jsValueRef];
+	}
 
 	// External jsValueRef from WebView
 	if ([thisPrivateObject.type isEqualToString:@"externalJSValueRef"])	
@@ -3349,11 +3373,6 @@ call:
 
 		return	o;
 	}
-
-
-//			NSLog(@"THERE ! asking %@ %@", propertyName, privateObject.type);
-		
-	
 	
 	// Struct + rawPointer valueOf
 	if (/*[privateObject.type isEqualToString:@"struct"] &&*/ ([propertyName isEqualToString:@"valueOf"] || [propertyName isEqualToString:@"toString"]))
@@ -3391,7 +3410,6 @@ call:
 			propertyName = methodName;
 			goto call;
 		}
-
 
 		if ([[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
 		{
@@ -4193,7 +4211,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 				return JSValueMakeNull(ctx);
 			}
 
-			// Retrieve 'this' : either the global external object (window), or a previous 
+			// Retrieve 'this' : either the global external object (window), or a result from previous calll
 			JSObjectRef externalThisObject;
 			JSCocoaPrivateObject* privateThis		= JSObjectGetPrivate(thisObject);
 			if ([privateThis jsValueRef])	externalThisObject = JSValueToObject(externalCtx, [privateThis jsValueRef], NULL);

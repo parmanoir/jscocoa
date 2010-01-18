@@ -22,9 +22,10 @@
 	isAutoCall	= NO;
 	jsValue		= NULL;
 	retainObject	= YES;
-//	retainContext	= NO;
 	rawPointer	= NULL;
 	ctx			= NULL;
+//	retainContext = NO;
+	externalJSValueIndex = 0;
 	
 	
 	[JSCocoaController upJSCocoaPrivateObjectCount];
@@ -34,18 +35,30 @@
 - (void)cleanUp
 {
 	[JSCocoaController downJSCocoaPrivateObjectCount];
-//	if (object)	NSLog(@"GO for JSCocoaPrivateObject release (%@) %x %d", [object class], object, [object retainCount]);
-//	if (object)	[JSCocoaController downBoxedJSObjectCount:object];
 	if (object && retainObject)
 	{
 		[JSCocoaController downBoxedJSObjectCount:object];
-//		NSLog(@"released !");
 		[object release];
 	}
 	if (jsValue)		
 	{
-		JSValueUnprotect(ctx, jsValue);
+		if (!externalJSValueIndex) JSValueUnprotect(ctx, jsValue);
 		[JSCocoaController downJSValueProtectCount];
+
+		// If holding a value from an external context, remove it from the GC-safe hash and release context.
+		if (externalJSValueIndex)	
+		{
+			JSStringRef scriptJS = JSStringCreateWithUTF8CString("delete __gcprotect[arguments[0]]");
+			JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+			JSStringRelease(scriptJS);
+			JSValueRef jsNumber = JSValueMakeNumber(ctx, externalJSValueIndex);
+			JSValueRef exception = NULL;
+			JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&jsNumber, &exception);
+			JSGlobalContextRelease((JSGlobalContextRef)ctx);
+			
+			if (exception)
+				NSLog(@"Got an exception while trying to release externalJSValueRef %x of context %x", jsValue, ctx);
+		}
 	}
 /*
 	if (retainContext)
@@ -143,12 +156,21 @@
 	}
 	jsValue = v;
 	ctx		= c;
-	NSLog(@">>>>>>>>>>>>>setExternalJSValueRef");
-//	contextGroup = JSContextGetGroup(c);
-//	JSContextGroupRetain(contextGroup);
-//	JSGlobalContextRetain((JSGlobalContextRef)ctx);
-	JSValueProtect(ctx, jsValue);
-//	retainContext = YES;
+
+	// Register value in a hash to protect it from GC. This sucks but JSValueProtect() fails.
+	JSStringRef scriptJS = JSStringCreateWithUTF8CString("if (!('__gcprotect' in this)) { __gcprotect = {}; __gcprotectidx = 1; } __gcprotect[__gcprotectidx] = arguments[0]; return __gcprotectidx++ ");
+	JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+	JSStringRelease(scriptJS);
+	
+	JSValueRef exception = NULL;
+	JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&jsValue, &exception);
+	if (exception)	return;
+
+	// Use hash index as key, will be used to remove value from hash upon deletion.
+	externalJSValueIndex = (unsigned int)JSValueToNumber(ctx, result, &exception);
+	if (exception)	return;
+
+	JSGlobalContextRetain((JSGlobalContextRef)ctx);
 	[JSCocoaController upJSValueProtectCount];
 }
 

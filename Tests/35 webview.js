@@ -20,12 +20,14 @@
 		{
 			// Global context is frame's window object
 			var w = sender.mainFrame.globalContext
+			
+//			log('globalContext=' + w)
 
 			var n = w.document.body
 			
 			// Paint the first P
-//			w.document.body.firstChild.nextSibling.style.backgroundColor = 'lime'
-//			w.document.body.childNodes[1].style.backgroundColor = 'lime'
+			w.document.body.firstChild.nextSibling.style.backgroundColor = 'lime'
+			w.document.body.childNodes[1].style.backgroundColor = 'lime'
 
 			w.document.getElementById('hideMe').style.display = 'none'
 			w.document.getElementById('showMe').style.display = 'block'
@@ -33,7 +35,6 @@
 
 			var n = w.document.getElementById('replaceMe')
 			w.replaceNodeValue(n, 8)
-			
 			if (w.document.getElementById('hideMe').style.display != 'none')			throw '(WebView) hiding div failed'
 			if (w.document.getElementById('showMe').style.display != 'block')			throw '(WebView) revealing div failed'
 			if (w.document.getElementById('colorMe').style.backgroundColor != 'lime')	throw '(WebView) coloring failed'
@@ -43,19 +44,25 @@
 			if (w.addMe(3, 4) != 7)														throw '(WebView) adding a Javascript function failed'
 			
 			
-
 			n = null
-//			w = null
 
 			loadDelegate = null
 			window = null
 			// ## This will close the window right now
 			__jsc__.garbageCollect
 			// Release the globalContext last
-			w = null
+//			w = null
 			__jsc__.garbageCollect
 
 			completeDelayedTest('35 webview', true)
+		}
+		- (void)webView:(WebView *)sender willCloseFrame:(WebFrame *)frame
+		{
+//			log('willClose')
+		}
+		- (void)webView:(WebView *)webView didClearWindowObject:(WebScriptObject *)windowObject forFrame:(WebFrame *)frame
+		{
+//			log('didClear')
 		}
 	}
 

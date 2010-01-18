@@ -47,6 +47,7 @@
 	
 	JSValueRef	jsValue;
 	JSContextRef	ctx;
+	unsigned int	externalJSValueIndex;
 	// (test) when storing JSValues from a WebView, used to retain the WebView's context.
 	// Disabled for now. Just make sure the WebView has a longer life than the vars
 	// it's using.

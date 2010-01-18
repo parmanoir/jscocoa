@@ -34,10 +34,53 @@
 
 		function	replaceNodeValue(node, value)
 		{
-			node.innerHTML = value
+//			if (node && ('nodeType' in node)) 
+				node.innerHTML = value
 //			throw new String('>>> throwing from webview')
+//return { 'hello' : 'world' }
+/*
+return { 'hello' : 'world' }
+return 1.23
+return undefined
+return null
+return 'hello'
+*/
 		}
 //		replaceNodeValue(document.body, 'hello')
+	</script>
+	
+	<a href='http://google.com'>Google</a>
+	<p>
+	<div id='dump'>
+	</div>
+	
+	<script>
+		function	d()
+		{
+			var str = (new Date).getTime()
+			
+			try
+			{
+				var str2 = ''
+				var count = 0
+				for (var i in __gcprotect) count++
+				
+				str2 += '<br>__gcprotect live=' + count
+				str2 += '<br>__gcprotectidx-1=' + (__gcprotectidx-1)
+				str2 += '<br>alive=' + Math.round(10000*(count/(__gcprotectidx-1)))/100 + '%'
+				
+				str += str2
+			}
+			catch (e)
+			{
+				str += ' __gcprotect dump failed'
+			}
+			
+			document.getElementById('dump').innerHTML = str
+		}
+		
+		setInterval(d, 100)
+	
 	</script>
 	
 </body>
