@@ -71,6 +71,10 @@ int runCount = 0;
 
 - (IBAction)runJSTests:(id)sender
 {
+	[jsc release];
+	jsc = [JSCocoa new];
+	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
+
 	[textField setStringValue:@"Running Tests ..."];
 
 	// Clean up notifications registered by previously run tests
@@ -111,8 +115,9 @@ int runCount = 0;
 		[jsc loadFrameworkWithName:@"WebKit"];
 		webViewClass = objc_getClass("WebView");
 	}
-	if (webViewClass)
+	if (webViewClass && 1)
 	{
+//		NSLog(@"Testing initing from a WebView");
 		// Load nib
 		id nibPath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] bundlePath], @"/Contents/Resources/Tests/Resources/inited from WebView.nib"];
 		id nibURL	= [NSURL fileURLWithPath:nibPath];
@@ -130,7 +135,7 @@ int runCount = 0;
 
 		// Init JSCocoa from WebView's globalContext
 		JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
-//		NSLog(@"WebView contextGroup=%x", JSContextGetGroup(ctx));
+//		NSLog(@"WebView contextGroup=%x context=%x", JSContextGetGroup(ctx), ctx);
 		jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	}
 	else
@@ -167,12 +172,38 @@ int runCount = 0;
 	//
 	// Test autocall-less ObjJ
 	//
+	#warning commented autocall less
+//return;
 	b = [jsc useAutoCall];
 	[jsc setUseAutoCall:NO];
+//	[jsc setUseJSLint:NO];
+//	[jsc evalJSString:@"[JSCocoa runningArchitecture]"];
+//	[jsc evalJSString:@"JSCocoa.runningArchitecture()"];
+
 	id str = [jsc toString:[jsc evalJSString:@"[JSCocoa runningArchitecture]"]];
+//	id str = [jsc toString:[jsc evalJSString:@"JSCocoa.runningArchitecture()"]];
 	[jsc setUseAutoCall:b];
+	[jsc setUseJSLint:YES];
 	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
 }
+
+
+- (IBAction)_runJSTestsContinuously:(id)sender
+{
+	[self runJSTests:nil];
+	if (runningContinuously) [self performSelector:@selector(_runJSTestsContinuously:) withObject:nil afterDelay: 0.1];
+}
+
+- (IBAction)runJSTestsContinuously:(id)sender
+{
+	runningContinuously = YES;
+	[self performSelector:@selector(_runJSTestsContinuously:) withObject:nil afterDelay: 0.1];
+}
+- (IBAction)stopContinuousJSTestsRun:(id)sender
+{
+	runningContinuously = NO;
+}
+
 
 //
 // GC
@@ -707,11 +738,16 @@ int dummyValue;
 	return [NSDictionary dictionaryWithObjectsAndKeys:@"world", @"Hello", nil];
 }
 
+//
+// Test37 - JSCocoa inited from a WebView — called back when the webpage has finished.
+//
 - (void)finishTest37:(BOOL)b
 {
 	if (!b)	return;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 	
+	#warning commented jsc2
+//	[jsc2 unlinkAllReferences];
 	[jsc2 release];
 	for (id o in topObjects)
 		[o release];
@@ -725,6 +761,14 @@ int dummyValue;
 	NSLog(@"****************");
 */	
 }
+
+BOOL	bindingsAlreadyTested = NO;
+BOOL	bindingsAlreadyTested2 = NO;
+
+- (BOOL)bindingsAlreadyTested				{	return	bindingsAlreadyTested;	}
+- (BOOL)bindingsAlreadyTested2				{	return	bindingsAlreadyTested2;	}
+- (void)setBindingsAlreadyTested:(BOOL)b	{	bindingsAlreadyTested	= b;	}
+- (void)setBindingsAlreadyTested2:(BOOL)b	{	bindingsAlreadyTested2	= b;	}
 
 - (void)allTestsRanOK
 {

@@ -20,12 +20,16 @@
 	id topObjects;
 	
 	NSError*	testNSError;
+	
+	BOOL		runningContinuously;
 
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
 - (IBAction)runJSTests:(id)sender;
+- (IBAction)runJSTestsContinuously:(id)sender;
+- (IBAction)stopContinuousJSTestsRun:(id)sender;
 - (IBAction)garbageCollect:(id)sender;
 - (IBAction)logInstanceStats:(id)sender;
 - (IBAction)logBoxedObjects:(id)sender;

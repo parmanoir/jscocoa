@@ -54,7 +54,7 @@
 			JSValueRef jsNumber = JSValueMakeNumber(ctx, externalJSValueIndex);
 			JSValueRef exception = NULL;
 			JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&jsNumber, &exception);
-			JSGlobalContextRelease((JSGlobalContextRef)ctx);
+//			JSGlobalContextRelease((JSGlobalContextRef)ctx);
 			
 			if (exception)
 				NSLog(@"Got an exception while trying to release externalJSValueRef %x of context %x", jsValue, ctx);
@@ -170,7 +170,7 @@
 	externalJSValueIndex = (unsigned int)JSValueToNumber(ctx, result, &exception);
 	if (exception)	return;
 
-	JSGlobalContextRetain((JSGlobalContextRef)ctx);
+//	JSGlobalContextRetain((JSGlobalContextRef)ctx);
 	[JSCocoaController upJSValueProtectCount];
 }
 

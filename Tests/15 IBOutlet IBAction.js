@@ -97,7 +97,7 @@
 	//	PROBLEM : upon second call, fails in valueForKey, calling and old closure ([owner myValue] ?)
 	//	-> only test once.
 	//
-	if (!('bindingsAlreadyTested' in this))
+	if (!('bindingsAlreadyTested' in this) && !NSApplication.sharedApplication.delegate.bindingsAlreadyTested)
 	{
 		// Test bindings
 		var λέξη1 = 'εξόρυξης'
@@ -128,6 +128,7 @@
 		JSCocoaController.log('(skipping bindings test)')
 	}
 	bindingsAlreadyTested = true
+	NSApplication.sharedApplication.delegate.bindingsAlreadyTested = true
 	//
 	// No longer needed as I somehow fixed it ! :)
 	//	20090321 : HA ! YOU WISH - added one time check back.

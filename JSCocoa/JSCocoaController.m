@@ -83,6 +83,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	static	id	jsFunctionClasses;
 	// Given a class, return the parent class implementing JSCocoaHolder method
 	static	id	jsClassParents;
+	// List of all ObjC classes written in Javascript
+	static	id	jsClasses;
 	
 	// Given a class + methodName, retrieve its jsFunction
 	static	id	jsFunctionHash;
@@ -120,14 +122,15 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	{
 		if (!sharedInstanceStats)	
 		{
-			sharedInstanceStats = [[NSMutableDictionary alloc] init];
-			closureHash			= [[NSMutableDictionary alloc] init];
-			jsFunctionSelectors	= [[NSMutableDictionary alloc] init];
-			jsFunctionClasses	= [[NSMutableDictionary alloc] init];
-			jsFunctionHash		= [[NSMutableDictionary alloc] init];
-			splitCallCache		= [[NSMutableDictionary alloc] init];
-			jsClassParents		= [[NSMutableDictionary alloc] init];
-			boxedObjects		= [[NSMutableDictionary alloc] init];
+			sharedInstanceStats = [NSMutableDictionary new];
+			closureHash			= [NSMutableDictionary new];
+			jsFunctionSelectors	= [NSMutableDictionary new];
+			jsFunctionClasses	= [NSMutableDictionary new];
+			jsFunctionHash		= [NSMutableDictionary new];
+			splitCallCache		= [NSMutableDictionary new];
+			jsClassParents		= [NSMutableDictionary new];
+			boxedObjects		= [NSMutableDictionary new];
+			jsClasses			= [NSMutableArray new];
 
 			useAutoCall			= YES;
 			isSpeaking			= YES;
@@ -179,7 +182,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	else
 	{
 		ctx = _ctx;
-		JSGlobalContextRetain(ctx);
+		//JSGlobalContextRetain(ctx);
 		JSObjectRef o = JSObjectMake(ctx, OSXObjectClass, NULL);
 		// Set a global var named 'OSX' which will fulfill the usual role of JSCocoa's global object
 		JSStringRef	jsName = JSStringCreateWithUTF8CString("OSX");
@@ -202,12 +205,15 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif
 
 	// Load class kit
+	#warning commented
+	if (!_ctx)
+	{
 	useJSLint		= NO;
 	id lintPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"jslint-jscocoa" ofType:@"js"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	[self evalJSFile:lintPath];
 	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
-
+}
 
 	// Add allKeys method to Javascript hash : { a : 1, b : 2, c : 3 }.allKeys() = ['a', 'b', 'c']
 
@@ -239,6 +245,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	useJSLint		= YES;
 	// ObjJ syntax renders split call moot
 	useSplitCall	= NO;
+	ownsContext		= NO;
 
 	return	self;
 }
@@ -246,6 +253,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (id)init
 {
 	id o = [self initWithGlobalContext:nil];
+	ownsContext = YES;
 	return	o;
 }
 
@@ -278,7 +286,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
             hashObjectClass = nil;
         }
         
-        // we need to nil these all out, since they are static
+        // We need to nil these all out, since they are static
         // and if we make another JSCocoaController after this- they will
         // still be around and that's kinda bad (like crashing bad).
 		[sharedInstanceStats release];
@@ -297,9 +305,23 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
         jsClassParents = nil;
 		[boxedObjects release];
         boxedObjects = nil;
+		
+		// Remove classes : go backwards to remove child classes first
+		int c = [jsClasses count]-1;
+		while (c >= 0)
+		{
+			id class = [[jsClasses objectAtIndex:c] pointerValue];
+			objc_disposeClassPair(class);
+			c--;
+		}
+
+		[jsClasses release];
+		jsClasses = nil;
+		
+		
 	}
 
-	JSGlobalContextRelease(ctx);
+	if (ownsContext)	JSGlobalContextRelease(ctx);
 }
 
 - (oneway void)release
@@ -473,10 +495,7 @@ static id JSCocoaSingleton = NULL;
 	if (!script)	return	NULL;
 
 	// Expand macros
-	id expandedScript = [self expandJSMacros:script url:nil];
-	if (!expandedScript)	
-		return [NSString stringWithFormat:@"Macro expansion failed on script %@ (%@)", script, url ? url : @"(no script url)"], NULL;
-	script = expandedScript;
+	script = [self expandJSMacros:script url:url];
 	
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -1099,6 +1118,7 @@ static id JSCocoaSingleton = NULL;
 		c = [c superclass];
 	}
 	[jsClassParents setObject:c forKey:[NSString stringWithUTF8String:className]];
+	[jsClasses addObject:[NSValue valueWithPointer:class]];
 	return	class;
 }
 
@@ -1229,6 +1249,8 @@ static id JSCocoaSingleton = NULL;
 	if (fn)
 	{
 		// First addMethod : use class_addMethod to set closure
+		class_replaceMethod(class, selector, fn, encoding);
+/*
 		if (!class_addMethod(class, selector, fn, encoding))
 		{
 			// After that, we need to patch the method's implementation to set closure
@@ -1236,6 +1258,7 @@ static id JSCocoaSingleton = NULL;
 			if (!method)	method = class_getClassMethod(class, selector);
 			method_setImplementation(method, fn);
 		}
+*/
 		// Register selector for jsFunction 
 		[jsFunctionSelectors setObject:methodName forKey:keyForFunction];
 		[jsFunctionClasses setObject:class forKey:keyForFunction];
@@ -1731,7 +1754,7 @@ static id JSCocoaSingleton = NULL;
 	for (id file in files)
 	{
 		id filePath = [NSString stringWithFormat:@"%@/%@", path, file];
-		NSLog(@">>>evaling %@", filePath);
+//		NSLog(@">>>evaling %@", filePath);
 //		BOOL evaled = [self evalJSFile:filePath];
 		id evaled = [self performSelector:sel withObject:filePath];
 //		NSLog(@">>>EVALED %d, %@", evaled, filePath);

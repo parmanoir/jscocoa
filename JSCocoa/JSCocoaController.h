@@ -37,6 +37,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
+	BOOL				ownsContext;
     id					_delegate;
 
 	//
@@ -59,6 +60,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 	// JSLint : used for ObjJ syntax, class syntax, return if
 	BOOL				useJSLint;
+	
 }
 
 @property (assign) id delegate;

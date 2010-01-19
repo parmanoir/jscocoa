@@ -97,9 +97,8 @@
 		Key targetValue
 	}
 
-	if (!('bindingsAlreadyTested2' in this))
+	if (!('bindingsAlreadyTested2' in this) && !NSApplication.sharedApplication.delegate.bindingsAlreadyTested2)
 	{
-	
 		var oSource = BindingsSafeDeallocSource.instance
 		var oTarget = BindingsSafeDeallocTarget.instance
 //		log('oSource=' + oSource + ' rc=' + oSource.retainCount)
@@ -122,6 +121,7 @@
 		oTarget = null
 	}
 	bindingsAlreadyTested2 = true
+	NSApplication.sharedApplication.delegate.bindingsAlreadyTested2 = true
 	
 	// Force GC to trigger safe dealloc
 	__jsc__.garbageCollect
