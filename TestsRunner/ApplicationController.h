@@ -22,6 +22,8 @@
 	NSError*	testNSError;
 	
 	BOOL		runningContinuously;
+	// If we cycle context each time, we can test bindings each time.
+	BOOL		cyclingContext;
 
 }
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
@@ -42,6 +44,7 @@
 
 - (NSError*)testNSError;
 
+- (void)disposeClass:(NSString*)className;
 
 @end
 

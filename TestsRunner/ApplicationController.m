@@ -32,6 +32,7 @@ JSCocoaController* jsc = nil;
 //	NSLog(@"sizeof(CGFloat)=%d", sizeof(CGFloat));
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 
+	cyclingContext = NO;
 /*	
 	id error = nil;
 	id url = [NSURL fileURLWithPath:@"/non/existent"];
@@ -63,6 +64,16 @@ JSCocoaController* jsc = nil;
 #endif	
 }
 
+- (void)cycleContext
+{
+	cyclingContext = YES;
+	[self disposeClass:@"NSKVONotifying_BindingsSafeDeallocSource"];
+	[self disposeClass:@"NSKVONotifying_NibTestOwner"];
+	[jsc release];
+	jsc = [JSCocoa new];
+	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
+}
+
 
 //
 // Run unit tests + delegate tests
@@ -71,9 +82,7 @@ int runCount = 0;
 
 - (IBAction)runJSTests:(id)sender
 {
-	[jsc release];
-	jsc = [JSCocoa new];
-	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
+	[self cycleContext];
 
 	[textField setStringValue:@"Running Tests ..."];
 
@@ -765,8 +774,8 @@ int dummyValue;
 BOOL	bindingsAlreadyTested = NO;
 BOOL	bindingsAlreadyTested2 = NO;
 
-- (BOOL)bindingsAlreadyTested				{	return	bindingsAlreadyTested;	}
-- (BOOL)bindingsAlreadyTested2				{	return	bindingsAlreadyTested2;	}
+- (BOOL)bindingsAlreadyTested				{	if (cyclingContext)	return	NO; return	bindingsAlreadyTested;	}
+- (BOOL)bindingsAlreadyTested2				{	if (cyclingContext)	return	NO; return	bindingsAlreadyTested2;	}
 - (void)setBindingsAlreadyTested:(BOOL)b	{	bindingsAlreadyTested	= b;	}
 - (void)setBindingsAlreadyTested2:(BOOL)b	{	bindingsAlreadyTested2	= b;	}
 
@@ -811,6 +820,12 @@ BOOL	bindingsAlreadyTested2 = NO;
 	return NO;
 }
 
+- (void)disposeClass:(NSString *)className
+{
+	id c = objc_getClass([className UTF8String]);
+	if (!c)	return;
+	objc_disposeClassPair(c);
+}
 
 
 @end
