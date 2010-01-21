@@ -182,16 +182,10 @@ int runCount = 0;
 	//
 	// Test autocall-less ObjJ
 	//
-	#warning commented autocall less
-//return;
 	b = [jsc useAutoCall];
 	[jsc setUseAutoCall:NO];
-//	[jsc setUseJSLint:NO];
-//	[jsc evalJSString:@"[JSCocoa runningArchitecture]"];
-//	[jsc evalJSString:@"JSCocoa.runningArchitecture()"];
 
 	id str = [jsc toString:[jsc evalJSString:@"[JSCocoa runningArchitecture]"]];
-//	id str = [jsc toString:[jsc evalJSString:@"JSCocoa.runningArchitecture()"]];
 	[jsc setUseAutoCall:b];
 	[jsc setUseJSLint:YES];
 	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
@@ -756,8 +750,6 @@ int dummyValue;
 	if (!b)	return;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 	
-	#warning commented jsc2
-//	[jsc2 unlinkAllReferences];
 	[jsc2 release];
 	for (id o in topObjects)
 		[o release];

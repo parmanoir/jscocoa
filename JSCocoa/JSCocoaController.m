@@ -203,15 +203,14 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif
 
 	// Load class kit
-	#warning commented
 	if (!_ctx)
 	{
-	useJSLint		= NO;
-	id lintPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"jslint-jscocoa" ofType:@"js"];
-	if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	[self evalJSFile:lintPath];
-	id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
-	if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
-}
+		useJSLint		= NO;
+		id lintPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"jslint-jscocoa" ofType:@"js"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	[self evalJSFile:lintPath];
+		id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
+	}
 
 	// Add allKeys method to Javascript hash : { a : 1, b : 2, c : 3 }.allKeys() = ['a', 'b', 'c']
 
@@ -2839,23 +2838,22 @@ JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextR
 			if (!o)		return	JSValueMakeNull(externalCtx);
 			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
 			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	return	JSValueMakeNull(externalCtx);
-/*
-			NSLog(@"+++++++++++object moving out %x ctx=%x externalCtx=%x innerCtx=%x", [privateObject jsValueRef], ctx, externalCtx, [privateObject ctx]);
-			return	JSValueMakeNumber(externalCtx, 22);
-
-JSValueProtect([privateObject ctx], [privateObject jsValueRef]);
-		JSStringRef s = JSValueToStringCopy(externalCtx, [privateObject jsValueRef], NULL);
-		NSString* str = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, s);
-		JSStringRelease(s);
-		NSLog(@"+++%@+++", str);
-	
-
-return	JSValueToObject(externalCtx, [privateObject jsValueRef], NULL);
-*/
 			return	[privateObject jsValueRef];
 		}
 	}
 	return JSValueMakeNull(externalCtx);
+}
+
+JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
+{
+	if (JSValueIsUndefined(externalCtx, value))	return JSValueMakeUndefined(ctx);
+	if (JSValueIsNull(externalCtx, value))	return JSValueMakeNull(ctx);
+	
+	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+	private.type = @"externalJSValueRef";
+	[private setExternalJSValueRef:value ctx:externalCtx];
+	return	o;	
 }
 
 
@@ -3438,12 +3436,14 @@ call:
 			JSGlobalContextRef globalContext = [privateObject rawPointer];
 //			NSLog(@"global contextObject=%x", JSContextGetGlobalObject(globalContext));
 			JSValueRef r = JSObjectGetProperty(globalContext, JSContextGetGlobalObject(globalContext), propertyNameJS, NULL);
-
+/*
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"externalJSValueRef";
 			[private setExternalJSValueRef:r ctx:globalContext];
 			return	o;
+*/
+			return boxedValueFromExternalContext(globalContext, r, ctx);
 		}
 	}
 
@@ -3460,12 +3460,14 @@ call:
 			throwException(ctx, exception, [NSString stringWithFormat:@"(WebView) %@", s]);
 			return JSValueMakeNull(ctx);
 		}
-
+/*
 		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"externalJSValueRef";
 		[private setExternalJSValueRef:r ctx:externalCtx];
 		return	o;
+*/
+		return boxedValueFromExternalContext(externalCtx, r, ctx);		
 	}
 
 
@@ -4266,11 +4268,14 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			}
 
 			// Box result from WebView
+/*
 			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"externalJSValueRef";
 			[private setExternalJSValueRef:ret ctx:externalCtx];
 			return	o;
+*/			
+			return boxedValueFromExternalContext(externalCtx, ret, ctx);
 		}
 	}
 

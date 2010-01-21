@@ -23,6 +23,10 @@
 
 			var n = w.document.body
 			
+			//
+			// Manipulate nodes and check results
+			//
+			
 			// Paint the first P
 			w.document.body.firstChild.nextSibling.style.backgroundColor = 'lime'
 			w.document.body.childNodes[1].style.backgroundColor = 'lime'
@@ -41,11 +45,35 @@
 			w['eval']('function addMe(a, b) { return a+b}')
 			if (w.addMe(3, 4) != 7)														throw '(WebView) adding a Javascript function failed'
 			
-			
+			// Check for proper argument conversion while calling
 			var externalString = w.externalString
 			var nsString = [NSString stringWithString:externalString]
 			if (externalString != 'Hello world from WebView !')							throw '(WebView) external string failed'
 			if (nsString != 'Hello world from WebView !')								throw '(WebView) external string to NSString conversion failed'
+
+			// Getting and setting properties from null and undefined values must fail
+			// These must be returned as raw javascript values in this context, not boxed in a JSCocoaPrivateObject with externalJSValueRef
+			var externalUndefined = w.externalUndefined
+
+			var wentThrough1 = false
+			try			{	externalUndefined.hello()	} 
+			catch (e) 	{	wentThrough1 = true			}
+			if (!wentThrough1)															throw '(WebView) external get failed'
+			
+			var wentThrough2 = false
+			try			{	externalUndefined.someValue = 1.23	} 
+			catch (e) 	{	wentThrough2 = true					}
+			if (!wentThrough2)															throw '(WebView) external set failed'
+
+			var wentThrough3 = false
+			try			{	externalUndefined.call()	} 
+			catch (e) 	{	wentThrough3 = true			}
+			if (!wentThrough3)															throw '(WebView) external call failed'
+
+			var wentThrough4 = false
+			try			{	var n = new externalUndefined	} 
+			catch (e) 	{	wentThrough4 = true				}
+			if (!wentThrough4)															throw '(WebView) external new failed'
 			
 			n = null
 

@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D259FEA1107EB98001DF2B5</string>
+						<string>3D25A0BA11086A35001DF2B5</string>
 						<key>history</key>
 						<array>
 							<string>3D259C39110705ED001DF2B5</string>
@@ -235,7 +235,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>404 214 880 727 0 0 1920 1178 </string>
+				<string>474 451 880 727 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -521,12 +521,14 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>3D25A0341107EE6B001DF2B5</string>
+		<string>3D259FFF1107EC45001DF2B5</string>
 		<string>3D259C43110705ED001DF2B5</string>
 		<string>3D259C44110705ED001DF2B5</string>
-		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>/Users/mini/Software Inexdo/JSCocoa/Samples/Samples.xcodeproj</string>
+		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3D815A5F10C48BC50015B843</string>
 	</array>
 	<key>WindowString</key>
@@ -881,7 +883,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D54069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>

@@ -23,7 +23,13 @@ var doc
 			
 			this.webView.mainFrameURL = url
 			this.webView.frameLoadDelegate = this
-			
+
+if (this.text)
+{
+	var cc = this.webView.mainFrame.globalContext.cc
+	log('CC=' + cc)
+	cc.text = this.text
+}			
 			doc = this
 		}
 		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
@@ -61,8 +67,12 @@ var doc
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError 
 {
-	log('hep')
-	return	NO
+	var e = null
+	this.text = [NSString stringWithContentsOfURL:absoluteURL encoding:NSUTF8StringEncoding error:e]
+//	this.webView.mainFrame.globalContext.cc
+//	cc.text = str
+	log('save data, wait for window to open')
+	return	YES
 }
 
 
@@ -94,7 +104,7 @@ var doc
 		
 		var str = this.webView.mainFrame.globalContext.cc.text
 //		log(typeof str)
-		var str = [NSString stringWithString:str.valueOf()]
+		var str = [NSString stringWithString:str]
 		
 		var e = null
 		var b = [str writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
