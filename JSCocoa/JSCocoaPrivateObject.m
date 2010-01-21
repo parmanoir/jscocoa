@@ -197,12 +197,17 @@
 {
 	id extra = @"";
 	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%x) %@", rawPointer, declaredType];
-	return [NSString stringWithFormat:@"<%@: %x holding %@%@>",
+	return	[NSString stringWithFormat:@"<%@: %x holding %@%@>",
 				[self class], 
 				self, 
 				type,
 				extra
 				];
+}
+
++ (id)description
+{
+	return @"<JSCocoaPrivateObject class>";
 }
 
 - (id)dereferencedObject

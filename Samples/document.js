@@ -66,8 +66,8 @@ var doc
 }
 
 
-- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
-{
+		- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
+		{
 /*
 	log('save')
 	log('outError=' + outError)
@@ -89,8 +89,18 @@ var doc
 */
 //	NSString 
 
-
-	var b = [@'hello' writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
+//		log('wv=' + this.webView)
+//		log('frame=' + this.webView.mainFrame.globalContext.cc.text)
+		
+		var str = this.webView.mainFrame.globalContext.cc.text
+//		log(typeof str)
+		var str = [NSString stringWithString:str.valueOf()]
+		
+		var e = null
+		var b = [str writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
+		return b
+/*
+		var b = [@'hello' writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
 
 		var e = new outArgument
 log('url=' + absoluteURL)
@@ -98,7 +108,8 @@ log('url=' + absoluteURL)
 	log('saved')
 	log('e=' + e)
 	return b
-}
+*/	
+		}
 		
 		
 		IBOutlet webView
@@ -158,6 +169,8 @@ log('url=' + absoluteURL)
 
 		swizzle- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)item
 		{
+			log('this=' +this)
+			log('this._frame=' + this._frame)
 			var cc = this._frame.globalContext.cc
 			log('cc=' + cc)
 			if (item.action == 'undo:')	return cc.undoStack.length > 0
@@ -180,9 +193,9 @@ log('url=' + absoluteURL)
 	
 //	detect insertText
 //	editor : option to run XCode project (eg edit vec samples editor, then compile and run with XCode)
-
+/*
 	class	JSCocoaEditorWebView < WebView
 	{
 	}
-	
+*/	
 	

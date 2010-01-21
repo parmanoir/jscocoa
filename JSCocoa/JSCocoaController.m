@@ -26,8 +26,6 @@ static	void		jsCocoaObject_getPropertyNames(JSContextRef, JSObjectRef, JSPropert
 static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
 
-// valueOf() is called by Javascript on objects, eg someObject + ' someString'
-static	JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
 // Set on valueOf callback property of objects
 #define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
 
@@ -1756,8 +1754,18 @@ static id JSCocoaSingleton = NULL;
 		id filePath = [NSString stringWithFormat:@"%@/%@", path, file];
 //		NSLog(@">>>evaling %@", filePath);
 //		BOOL evaled = [self evalJSFile:filePath];
-		id evaled = [self performSelector:sel withObject:filePath];
-//		NSLog(@">>>EVALED %d, %@", evaled, filePath);
+		
+		id evaled = nil;
+		@try 
+		{
+			evaled = [self performSelector:sel withObject:filePath];
+//			NSLog(@">>>EVALED %d, %@", evaled, filePath);
+		}
+		@catch (id e) 
+		{
+			NSLog(@"(Test exception from %@) %@", file, e);
+			evaled = nil;
+		}
 		if (!evaled)	
 		{
 			id error = [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
@@ -2860,7 +2868,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	if ([thisPrivateObject.type isEqualToString:@"jsValueRef"])	
 	{
-		NSLog(@"returning a NATIVE JSVALUEREF");
 		return [thisPrivateObject jsValueRef];
 	}
 
@@ -3992,6 +3999,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	BOOL isVariadic = NO;
 	// Possibly account for a missing terminating NULL in ObjC variadic method
 	BOOL sugarCheckVariadic = NO;
+	// ### This is a bad way to go about it, selector name should be checked for variadic-ness. 
+	// ### [NSArray arrayWithObjects:'hello'] will match argument count but is not a correct variadic call, missing a trailing NULL.
 	if (callAddressArgumentCount != argumentCount)	
 	{
 		if (methodName)		isVariadic = [[JSCocoaController controllerFromContext:ctx] isMethodVariadic:methodName class:[callee class]];
@@ -4151,7 +4160,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			{
 				ffi_call(&cif, callAddress, storage, values);
 			}
-			@catch (NSException * e) 
+			@catch (NSException* e) 
 			{
 				if (effectiveArgumentCount > 0)	
 				{

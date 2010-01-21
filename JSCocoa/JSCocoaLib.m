@@ -209,6 +209,9 @@
 	if ([self typeAtIndex:index] != '^')	return nil;
 	void* v = *(void**)[self pointerForIndex:index];
 	if (!v)	return NULL;
+
+	id o = *(id*)v;
+	return o;
 	return	*(id*)v;
 }
 
@@ -230,7 +233,6 @@
 	char	typeEncoding = [self typeAtIndex:index];
 	void*	pointedValue = [self pointerForIndex:index];
 	if (!pointedValue)	return NO;
-//NSLog(@"JSCocoaMemoryBuffer.setValue at %d", index);
 	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	YES;
 }

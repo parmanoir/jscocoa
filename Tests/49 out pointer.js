@@ -1,5 +1,4 @@
 
-
 	//
 	// Write something at some address
 	//	In particular, return an NSError in a method

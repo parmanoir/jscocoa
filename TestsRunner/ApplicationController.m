@@ -45,6 +45,8 @@ JSCocoaController* jsc = nil;
 {
 	if (testNSError)	[testNSError release];
 
+	[self disposeShadowBindingsClasses];
+
 	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
@@ -67,8 +69,7 @@ JSCocoaController* jsc = nil;
 - (void)cycleContext
 {
 	cyclingContext = YES;
-	[self disposeClass:@"NSKVONotifying_BindingsSafeDeallocSource"];
-	[self disposeClass:@"NSKVONotifying_NibTestOwner"];
+	[self disposeShadowBindingsClasses];
 	[jsc release];
 	jsc = [JSCocoa new];
 	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
@@ -825,6 +826,12 @@ BOOL	bindingsAlreadyTested2 = NO;
 	id c = objc_getClass([className UTF8String]);
 	if (!c)	return;
 	objc_disposeClassPair(c);
+}
+
+- (void)disposeShadowBindingsClasses
+{
+	[self disposeClass:@"NSKVONotifying_BindingsSafeDeallocSource"];
+	[self disposeClass:@"NSKVONotifying_NibTestOwner"];
 }
 
 

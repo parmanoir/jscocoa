@@ -58,7 +58,7 @@
 	
 	BOOL		isAutoCall;
 	BOOL		retainObject;
-	// Disabled because of a crash on i386. Release globalContext after everything.
+	// Disabled because of a crash on i386. Release globalContext last.
 //	BOOL		retainContext;
 }
 

@@ -288,6 +288,8 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATION;
 JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx);
 
+// valueOf() is called by Javascript on objects, eg someObject + ' someString'
+JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
 
 //
 // From PyObjC : when to call objc_msgSend_stret, for structure return

@@ -45,6 +45,7 @@
 - (NSError*)testNSError;
 
 - (void)disposeClass:(NSString*)className;
+- (void)disposeShadowBindingsClasses;
 
 @end
 

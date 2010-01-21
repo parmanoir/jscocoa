@@ -1149,14 +1149,15 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 //
 + (BOOL)unboxJSValueRef:(JSValueRef)value toObject:(id*)o inContext:(JSContextRef)ctx
 {
-//	if (!o)	return NSLog(@"unboxJSValueRef called with null"), NO;
-	/*
-		Boxing
-		
-		string	-> NSString
-		null	-> nil	(no box)
-		number	-> NSNumber
-	*/
+	//
+	//	Boxing
+	//	
+	//	string	-> NSString
+	//	null	-> nil	(no box)
+	//	number	-> NSNumber
+	//	[]		-> NSMutableArray
+	//	{}		-> NSMutableDictionary
+	//
 	
 	// null
 	if (!value || JSValueIsNull(ctx, value) || JSValueIsUndefined(ctx, value))
@@ -1219,8 +1220,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	if (!JSValueIsObject(ctx, value))	
 		return	NO;
 
-//	[JSCocoaController ensureJSValueIsObjectAfterInstanceAutocall:value inContext:ctx];
-	
 	JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	// Pure js hashes and arrays are converted to NSArray and NSDictionary
@@ -1239,9 +1238,27 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 		else			return	[self unboxJSHash:jsObject toObject:o inContext:ctx];
 	}
 	// ## Hmmm ? CGColorRef is returned as a pointer but CALayer.foregroundColor asks an objc object (@)
-//	NSLog(@"unboxing private %@", private);
-	if ([private.type isEqualToString:@"rawPointer"])	*(id*)o = [private rawPointer];
-	else												*(id*)o = [private object];
+/*
+	if ([private.type isEqualToString:@"rawPointer"])			*(id*)o = [private rawPointer];
+	else														*(id*)o = [private object];
+*/
+
+	id obj = [private object];
+	
+	if ([private.type isEqualToString:@"rawPointer"])			*(id*)o = [private rawPointer];
+	else if (obj)															*(id*)o = obj;
+	else	if ([private.type isEqualToString:@"externalJSValueRef"])
+	{
+		// Convert external jsValues by calling valueOf
+		JSValueRef v = valueOfCallback(ctx, NULL, JSValueToObject(ctx, value, NULL), 0, NULL, NULL);
+		return [self unboxJSValueRef:v toObject:o inContext:ctx];
+	}
+	else
+	{
+	NSLog(@"********* %@", private.type);
+		*(id*)o = nil;
+	}
+
 	return	YES;
 }
 

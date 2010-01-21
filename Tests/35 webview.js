@@ -9,8 +9,6 @@
 	if (!loadedWebKit)
 		var loaded = __jsc__.loadFrameworkWithName('WebKit')
 
-
-
 	//
 	// Frame load delegate
 	//
@@ -43,6 +41,11 @@
 			w['eval']('function addMe(a, b) { return a+b}')
 			if (w.addMe(3, 4) != 7)														throw '(WebView) adding a Javascript function failed'
 			
+			
+			var externalString = w.externalString
+			var nsString = [NSString stringWithString:externalString]
+			if (externalString != 'Hello world from WebView !')							throw '(WebView) external string failed'
+			if (nsString != 'Hello world from WebView !')								throw '(WebView) external string to NSString conversion failed'
 			
 			n = null
 
