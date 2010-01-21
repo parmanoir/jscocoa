@@ -19,6 +19,7 @@ static	JSValueRef	OSXObject_getProperty(JSContextRef, JSObjectRef, JSStringRef, 
 static	void		jsCocoaObject_initialize(JSContextRef, JSObjectRef);
 static	void		jsCocoaObject_finalize(JSObjectRef);
 static	JSValueRef	jsCocoaObject_callAsFunction(JSContextRef, JSObjectRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
+//static	bool		jsCocoaObject_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName);
 static	JSValueRef	jsCocoaObject_getProperty(JSContextRef, JSObjectRef, JSStringRef, JSValueRef*);
 static	bool		jsCocoaObject_setProperty(JSContextRef, JSObjectRef, JSStringRef, JSValueRef, JSValueRef*);
 static	bool		jsCocoaObject_deleteProperty(JSContextRef, JSObjectRef, JSStringRef, JSValueRef*);
@@ -152,6 +153,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	JSClassDefinition jsCocoaObjectDefinition	= kJSClassDefinitionEmpty;
 	jsCocoaObjectDefinition.initialize			= jsCocoaObject_initialize;
 	jsCocoaObjectDefinition.finalize			= jsCocoaObject_finalize;
+//	jsCocoaObjectDefinition.hasProperty			= jsCocoaObject_hasProperty;
 	jsCocoaObjectDefinition.getProperty			= jsCocoaObject_getProperty;
 	jsCocoaObjectDefinition.setProperty			= jsCocoaObject_setProperty;
 	jsCocoaObjectDefinition.deleteProperty		= jsCocoaObject_deleteProperty;
@@ -2837,7 +2839,23 @@ JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextR
 			JSObjectRef o = JSValueToObject(ctx, value, NULL);
 			if (!o)		return	JSValueMakeNull(externalCtx);
 			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
-			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	return	JSValueMakeNull(externalCtx);
+			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	
+			{
+				id o = [privateObject object];
+				if ([o isKindOfClass:[NSString class]])
+				{
+					JSStringRef jsName	= JSStringCreateWithUTF8CString([o UTF8String]);
+					JSValueRef jsString	= JSValueMakeString(externalCtx, jsName);
+					JSStringRelease(jsName);
+					return		jsString;
+				}
+				if ([o isKindOfClass:[NSNumber class]])
+				{
+					return		JSValueMakeNumber(externalCtx, [o doubleValue]);
+				}
+//				NSLog(@"Object (%@) converted to undefined", o );
+				return	JSValueMakeUndefined(externalCtx);
+			}
 			return	[privateObject jsValueRef];
 		}
 	}
@@ -2846,9 +2864,8 @@ JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextR
 
 JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef value, JSContextRef ctx)
 {
-	if (JSValueIsUndefined(externalCtx, value))	return JSValueMakeUndefined(ctx);
-	if (JSValueIsNull(externalCtx, value))	return JSValueMakeNull(ctx);
-	
+	if (JSValueGetType(externalCtx, value) < kJSTypeObject)	return valueFromExternalContext(externalCtx, value, ctx);
+
 	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 	private.type = @"externalJSValueRef";
@@ -3005,6 +3022,24 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 
 }
 
+/*
+//
+// Not needed as getProperty can return NULL to indicate property inexistance.
+//
+//	log('doesNotExist' in object)
+//		getProperty returning undefined would mean the key is defined and has an undefined value.
+//		getProperty therefore returns NULL and the in operator returns false.
+//		-> hasProperty not needed.
+//
+static bool jsCocoaObject_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS)
+{
+	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
+	[NSMakeCollectable(propertyName) autorelease];
+	NSLog(@"hasProperty %@", propertyName);
+	return jsCocoaObject_getProperty(ctx, object, propertyNameJS, NULL);
+	return YES;
+}
+*/
 
 //
 // getProperty
@@ -3430,29 +3465,17 @@ call:
 			propertyName = methodName;
 			goto call;
 		}
-
-		if ([[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
-		{
-			JSGlobalContextRef globalContext = [privateObject rawPointer];
-//			NSLog(@"global contextObject=%x", JSContextGetGlobalObject(globalContext));
-			JSValueRef r = JSObjectGetProperty(globalContext, JSContextGetGlobalObject(globalContext), propertyNameJS, NULL);
-/*
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-			private.type = @"externalJSValueRef";
-			[private setExternalJSValueRef:r ctx:globalContext];
-			return	o;
-*/
-			return boxedValueFromExternalContext(globalContext, r, ctx);
-		}
 	}
 
 	// External WebView value
-	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
+	if ([privateObject.type isEqualToString:@"externalJSValueRef"] || [[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
 	{
-		JSContextRef externalCtx = [privateObject ctx];
-		JSValueRef r = JSObjectGetProperty(externalCtx, JSValueToObject(externalCtx, [privateObject jsValueRef], NULL), propertyNameJS, exception);
-
+		JSValueRef externalValue = [privateObject jsValueRef];
+		JSContextRef externalCtx = externalValue ? [privateObject ctx] : [privateObject rawPointer];
+		JSObjectRef externalObject = externalValue ? JSValueToObject(externalCtx, externalValue, NULL) : JSContextGetGlobalObject(externalCtx);
+		
+		if (!JSObjectHasProperty(externalCtx, externalObject, propertyNameJS))	return NULL;
+		JSValueRef r = JSObjectGetProperty(externalCtx, externalObject, propertyNameJS, exception);
 		// If WebView had an exception, re-throw it in our context
 		if (exception && *exception)	
 		{
@@ -3460,14 +3483,8 @@ call:
 			throwException(ctx, exception, [NSString stringWithFormat:@"(WebView) %@", s]);
 			return JSValueMakeNull(ctx);
 		}
-/*
-		JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-		private.type = @"externalJSValueRef";
-		[private setExternalJSValueRef:r ctx:externalCtx];
-		return	o;
-*/
-		return boxedValueFromExternalContext(externalCtx, r, ctx);		
+		JSValueRef r2 = boxedValueFromExternalContext(externalCtx, r, ctx);
+		return r2;
 	}
 
 
@@ -3701,12 +3718,13 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 	}
 
 	// External WebView value
-	if ([privateObject.type isEqualToString:@"externalJSValueRef"])
+	if ([privateObject.type isEqualToString:@"externalJSValueRef"] || [[privateObject rawPointerEncoding] isEqualToString:@"^{OpaqueJSContext=}"])
 	{
-		JSContextRef externalCtx = [privateObject ctx];
 		JSValueRef externalValue = [privateObject jsValueRef];
-		JSObjectRef externalObject = JSValueToObject(externalCtx, externalValue, NULL);
+		JSContextRef externalCtx = externalValue ? [privateObject ctx] : [privateObject rawPointer];
+		JSObjectRef externalObject = externalValue ? JSValueToObject(externalCtx, externalValue, NULL) : JSContextGetGlobalObject(externalCtx);
 		if (!externalObject)	return	false;
+
 		JSValueRef convertedValue = valueToExternalContext(ctx, jsValue, externalCtx);
 		JSObjectSetProperty(externalCtx, externalObject, propertyNameJS, convertedValue, kJSPropertyAttributeNone, exception);
 
@@ -4268,13 +4286,6 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			}
 
 			// Box result from WebView
-/*
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
-			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-			private.type = @"externalJSValueRef";
-			[private setExternalJSValueRef:ret ctx:externalCtx];
-			return	o;
-*/			
 			return boxedValueFromExternalContext(externalCtx, ret, ctx);
 		}
 	}

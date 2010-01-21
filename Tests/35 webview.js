@@ -75,6 +75,20 @@
 			catch (e) 	{	wentThrough4 = true				}
 			if (!wentThrough4)															throw '(WebView) external new failed'
 			
+			
+			// Send NSString, NSNumber, NSDictionary, NSHash in the WebView
+			var str = [NSString stringWithString:'Hello welt']
+			w.str = str
+			if (w.str != str)															throw '(WebView) NSString conversion failed'
+
+			var i = [NSNumber numberWithInt:123]
+			w.i = i
+			if (w.i != i)																throw '(WebView) NSNumber conversion failed'
+			
+			
+			if ('undefinedVariable' in w)												throw '(WebView) undefined var should be undefined (1)'
+			if ('undefinedVariable' in w.document)										throw '(WebView) undefined var should be undefined (2)'
+			
 			n = null
 
 			loadDelegate = null

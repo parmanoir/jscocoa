@@ -1002,14 +1002,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 //
 + (int)structureTypeEncodingDescription:(NSString*)structureTypeEncoding inString:(NSMutableString**)str
 {
-//	id types = [[[NSMutableArray alloc] init] autorelease];
-//	id str = [NSMutableString stringWithFormat:@"%@", [self structureNameFromStructureTypeEncoding:structureTypeEncoding]];
-	
-//	NSLog(@"describe2 %@", structureTypeEncoding);
-//	NSLog(@"describe2 %@", structureTypeEncoding);
-	
-	
-	
 	char* c = (char*)[structureTypeEncoding UTF8String];
 	char* c0 = c;
 	// Skip '{'
@@ -1065,33 +1057,6 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 				[*str appendString:[self typeDescriptionForTypeEncoding:encoding fullTypeEncoding:nil]];
 				[*str appendString:@")"];
 			}
-
-/*			
-			else
-			{
-				// Given a pointer to raw C structure data, convert its members to JS values
-				if (ptr)
-				{
-					// Align 
-					[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:encoding];
-					// Get value
-					[JSCocoaFFIArgument toJSValueRef:&valueJS inContext:ctx typeEncoding:encoding fullTypeEncoding:nil fromStorage:*ptr];
-					// Advance ptr
-					[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
-				}
-				else
-				// Given no pointer, get values from initialValues array. If not present, create undefined values
-				{
-					if (!convertedValueCount)	return 0;
-					if (initialValues && initialValueCount && *convertedValueCount < initialValueCount)	valueJS = initialValues[*convertedValueCount];
-					else																				valueJS = JSValueMakeUndefined(ctx);									
-				}
-				if (convertedValueCount)	*convertedValueCount = *convertedValueCount+1;
-			}
-*/
-//			JSStringRef	propertyNameJS = JSStringCreateWithCFString((CFStringRef)propertyName);
-//			JSObjectSetProperty(ctx, jsObject, propertyNameJS, valueJS, 0, NULL);
-//			JSStringRelease(propertyNameJS);
 		}
 	}
 	return	c-c0-1;

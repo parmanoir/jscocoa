@@ -1411,16 +1411,16 @@ members)?
                                 }
 								else
 								{
-//									alert('2' + s)
 									// ##
 									// All comment lines but the last one go through here
-									var c = lines[line].substr(from).length-1
+									var c = lines[line].substr(from).length
 									if (commentLineIndex == 0) c += firstCommentPrefix.length
 									if (!logTokenLock)	
 									{
-										var t = { type : '(comment)', line : line, from : from, value : firstCommentPrefix + s, character : c }
+										var t = { type : '(comment)', line : line, from : from, value : firstCommentPrefix + s, character : c+from }
 										t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
 										logToken(t)
+										logToken( { id : '(endline)' } )
 									}
 									from = 0
 								}

@@ -11,7 +11,7 @@ var doc
 		
 		- (void)windowControllerDidLoadNib:(NSWindowController *) aController
 		{
-			log('webView=' + this.webView)
+			log('****windowControllerDidLoadNib: webView=' + this.webView)
 			
 //			this.webView.mainFrameURL = 'http://www.google.com'
 
@@ -24,20 +24,25 @@ var doc
 			this.webView.mainFrameURL = url
 			this.webView.frameLoadDelegate = this
 
+			doc = this
+		}
+		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
+		{
+			log('****didFinishLoadForFrame:')
+			this.page = this.webView.mainFrame.globalContext
+//			this.webView.mainFrame.globalContext.eval('document.body.style.backgroundColor = "red"')
+//			this.webView.mainFrame.globalContext.document.body.style.backgroundColor = 'blue'
+			this.page.cc.captureUndo = false
+
+
 if (this.text)
 {
 	var cc = this.webView.mainFrame.globalContext.cc
 	log('CC=' + cc)
 	cc.text = this.text
+//	cc.text = '54545'
 }			
-			doc = this
-		}
-		- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
-		{
-			this.page = this.webView.mainFrame.globalContext
-//			this.webView.mainFrame.globalContext.eval('document.body.style.backgroundColor = "red"')
-//			this.webView.mainFrame.globalContext.document.body.style.backgroundColor = 'blue'
-			this.page.cc.captureUndo = false
+
 		}
 
 		- (void)undo:(id)sender
