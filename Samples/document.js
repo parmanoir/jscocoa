@@ -9,8 +9,10 @@ var doc
 			return 'MyDocument'
 		}
 		
-		- (void)windowControllerDidLoadNib:(NSWindowController *) aController
+		- (void)windowControllerDidLoadNib:(NSWindowController *) controller
 		{
+			log('===' + controller.shouldCascadeWindows + '==' + controller + ' document=' + controller.document + ' window=' + controller.window + ' self=' + this)
+		
 			log('****windowControllerDidLoadNib: webView=' + this.webView)
 			
 //			this.webView.mainFrameURL = 'http://www.google.com'
@@ -55,13 +57,14 @@ if (this.text)
 			log('there****************>>>>>>>>>>validateUserInterfaceItem'+anItem)
 			return	YES;
 		}
-
+/*
 		- (NSUndoManager *)undoManager
 		{
 //			log('asking manager')
 			if (!this._undoManager) this._undoManager = [NSUndoManager instance]
 			return this._undoManager
 		}
+*/		
 /*		
 		- (BOOL)hasUndoManager
 		{
@@ -81,8 +84,9 @@ if (this.text)
 }
 
 
-		- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
-		{
+//		- (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
+- (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError 
+	{
 /*
 	log('save')
 	log('outError=' + outError)
@@ -113,6 +117,8 @@ if (this.text)
 		
 		var e = null
 		var b = [str writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
+		
+//		this.Super(arguments)
 		return b
 /*
 		var b = [@'hello' writeToURL:absoluteURL atomically:YES encoding:NSUTF8StringEncoding error:e]
@@ -133,44 +139,25 @@ log('url=' + absoluteURL)
 
 	class	WebHTMLView
 	{
+
 		swizzle - (void)keyDown:(id)sender
 		{
 			this.Original(arguments)
-/*			
-//			log(this)
-
-			var v = this
-			while (v)
-			{
-				log('v=' + v)
-				v = v.superview
-			}
-			log('=====')
-//			this.webView.webScriptObject.evaluateWebScript('document.body.innerHTML="hello"')
-//log('d='+ doc.webView)
-//			doc.webView.windowScriptObject.evaluateWebScript('document.body.innerHTML="hello"')
-*/
 
 			var page = this._frame.globalContext
 			page.cc.exhaustDelayedPerforms()
-//			doc.webView.windowScriptObject.evaluateWebScript('cc.exhaustDelayedPerforms()')
-			
 
 			var doc = this.window.windowController.document
 			[doc updateChangeCount:0]
 			
+			log('update to page(this). and doc(this).')
+			
+			log('check we have OUR webview')
+			
 		}
-
 
 		- (void)undo:(id)sender
 		{
-/*
-			log('undo')
-			log('view=' + this)
-			log('window=' + this.window)
-			log('windowController=' + this.window.windowController)
-			log('document=' + this.window.windowController.document)
-*/			
 			var doc = this.window.windowController.document
 			this._frame.globalContext.cc.undo()
 //			doc.undo()
@@ -190,19 +177,9 @@ log('url=' + absoluteURL)
 			log('cc=' + cc)
 			if (item.action == 'undo:')	return cc.undoStack.length > 0
 			if (item.action == 'redo:')	return cc.redoStack.length > 0
-/*
-			log('there*******************+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++' + item + '=' + item.action)
-
-			log('===' + this.webView)
-			log('===' + this._webView)
-			log('===' + this.frame)
-			log('===' + this._frame)
-			log('===' + this.frameView)
-			log('===' + this._frameView)
-			log('===' + this._frame.globalContext.document)
-*/
 			return	this.Original(arguments)
 		}
+
 	}
 	
 	

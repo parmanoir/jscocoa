@@ -28,15 +28,19 @@
 {
 	self = [super init];
 	
-	paths			= [[NSMutableArray alloc] init];
-	xmlDocuments	= [[NSMutableArray alloc] init];
-	hash			= [[NSMutableDictionary alloc] init];
+	paths				= [[NSMutableArray alloc] init];
+	xmlDocuments		= [[NSMutableArray alloc] init];
+	hash				= [[NSMutableDictionary alloc] init];
+	variadicSelectors	= [[NSMutableDictionary alloc] init];
+	variadicFunctions	= [[NSMutableDictionary alloc] init];
 	
 	return	self;
 }
 
 - (void)dealloc
 {
+	[variadicFunctions release];
+	[variadicSelectors release];
 	[hash release];
 	[paths release];
 	[xmlDocuments release];
@@ -98,7 +102,7 @@
 				c++;
 				for (; *c && !foundEndTag; c++)
 				{
-					if (*c == '<')					foundOpenTag = YES;
+					if (*c == '<')			foundOpenTag = YES;
 					else	
 					if (*c == '/')
 					{
@@ -116,6 +120,44 @@
 							}
 						}
 					}
+					else
+					// Variadic parsing
+					if (c[0] == 'v' && c[1] == 'a' && c[2] == 'r')
+					{
+						if (strncmp(c, "variadic", 8) == 0)
+						{
+							// Skip to tag start
+							char* c0 = c;
+							for (; *c0 != '<'; c0--);
+
+							// Variadic method
+							if (c0[1] == 'm')
+							{
+								c = c0;
+								id name = nil;
+								// Extract selector name
+								for (; *c != '>'; c++)
+								{
+									if (c[0] == ' ' && c[1] == 's' && c[2] == 'e' && c[3] == 'l')
+									{
+										for (; *c && *c != '\''; c++);
+										c++;
+										c0 = c;
+										for (; *c && *c != '\''; c++);
+										name = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
+									}
+								}
+								[variadicSelectors setValue:@"true" forKey:name];
+//								NSLog(@"SELECTOR %@", name);
+							}
+							else
+							// Variadic function
+							{
+								[variadicFunctions setValue:@"true" forKey:name];
+//								NSLog(@"function %@", name);
+							}
+						}
+					}
 				}
 				
 				c0 = tagStart;
@@ -128,7 +170,7 @@
 		}
 	}
 //	double t1 = CFAbsoluteTimeGetCurrent();
-//	NSLog(@"%f %@", t1-t0, [path lastPathComponent]);
+//	NSLog(@"BridgeSupport %@ parsed in %f", [[path lastPathComponent] stringByDeletingPathExtension], t1-t0);
 #ifdef __OBJC_GC__
 	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:originalC];
 #endif
@@ -161,6 +203,17 @@
 	}
 	return	NSNotFound;
 }
+
+- (NSMutableDictionary*)variadicSelectors
+{
+	return variadicSelectors;
+}
+
+- (NSMutableDictionary*)variadicFunctions
+{
+	return variadicFunctions;
+}
+
 
 - (NSString*)queryName:(NSString*)name
 {

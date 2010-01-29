@@ -76,6 +76,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSGlobalContextRef)ctx;
 + (void)hazardReport;
 + (NSString*)runningArchitecture;
++ (void)updateCustomCallPaths;
 
 //
 // Evaluation

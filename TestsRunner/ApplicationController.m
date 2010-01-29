@@ -19,8 +19,9 @@ JSCocoaController* jsc = nil;
 {
 	[JSCocoaController hazardReport];
 
-	jsc = [JSCocoa new];
-	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
+	jsc = nil;
+//	jsc = [JSCocoa new];
+//	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
 
 	[[NSApplication sharedApplication] setDelegate:self];
 	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];

@@ -51,8 +51,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 // Appended to swizzled method names
 #define OriginalMethodPrefix	@"original"
-
-
+	
+	
 
 
 
@@ -108,6 +108,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Controller count
 	static	int		controllerCount = 0;
 
+	// Hash used to quickly check for variadic methods, Original, Super, toString, valueOf ...
+	NSMutableDictionary*	customCallPaths;
+	BOOL					customCallPathsCacheIsClean;
+
 //
 // Init
 //
@@ -130,6 +134,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 			jsClassParents		= [NSMutableDictionary new];
 			boxedObjects		= [NSMutableDictionary new];
 			jsClasses			= [NSMutableArray new];
+			customCallPathsCacheIsClean = NO;
+			customCallPaths	= nil;			
 
 			useAutoCall			= YES;
 			isSpeaking			= YES;
@@ -304,6 +310,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
         jsClassParents = nil;
 		[boxedObjects release];
         boxedObjects = nil;
+		[customCallPaths release];
+		customCallPaths = nil;
+		
 		
 		// Remove classes : go backwards to remove child classes first
 		int c = [jsClasses count]-1;
@@ -316,9 +325,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 		[jsClasses release];
 		jsClasses = nil;
-		
-		
 	}
+	
 
 	if (ownsContext)	JSGlobalContextRelease(ctx);
 }
@@ -456,6 +464,8 @@ static id JSCocoaSingleton = NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
 	}
 	
+	if (!customCallPathsCacheIsClean)	[JSCocoa updateCustomCallPaths];
+	
 	// Convert script and script URL to js strings
 //	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
 	// Using CreateWithUTF8 yields wrong results on PPC
@@ -504,6 +514,8 @@ static id JSCocoaSingleton = NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:canEvaluateScript:)] && ![_delegate JSCocoa:self canEvaluateScript:script])	return	NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
 	}
+
+	if (!customCallPathsCacheIsClean)	[JSCocoa updateCustomCallPaths];
 	
 	JSStringRef		scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef		exception	= NULL;
@@ -551,6 +563,8 @@ static id JSCocoaSingleton = NULL;
 			[JSCocoaFFIArgument toJSValueRef:&jsArguments[i] inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:NULL fromStorage:&argument];
 		}
 	}
+
+	if (!customCallPathsCacheIsClean)	[JSCocoa updateCustomCallPaths];
 
 	JSValueRef exception = NULL;
 	JSValueRef returnValue = JSObjectCallAsFunction(ctx, jsFunction, NULL, argumentCount, jsArguments, &exception);
@@ -792,10 +806,28 @@ static id JSCocoaSingleton = NULL;
 	/*address = */dlopen([extraLibPath UTF8String], RTLD_LAZY);
 	// Don't fail if we didn't load the extra dylib as it is optional
 //	if (!address)	return	NSLog(@"Did not load extra framework dylib %@", path), NO;
+
+	customCallPathsCacheIsClean = NO;
 	
 	return	YES;
 }
 
++ (void)updateCustomCallPaths
+{
+	if (customCallPaths)	[customCallPaths release];
+	customCallPaths = [NSMutableDictionary new];
+	
+	[customCallPaths addEntriesFromDictionary:[[BridgeSupportController sharedController] variadicFunctions]];
+	[customCallPaths addEntriesFromDictionary:[[BridgeSupportController sharedController] variadicSelectors]];
+
+	[customCallPaths setObject:@"true" forKey:@"Original"];
+	[customCallPaths setObject:@"true" forKey:@"Super"];
+	[customCallPaths setObject:@"true" forKey:@"toString"];
+	[customCallPaths setObject:@"true" forKey:@"valueOf"];
+	
+	customCallPathsCacheIsClean = YES;
+//	NSLog(@"%@", customCallPaths);
+}
 
 
 # pragma mark Unsorted methods
@@ -3820,7 +3852,7 @@ static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
 //
 
 // This uses libffi to call C and ObjC.
-static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, JSValueRef** argumentsToFree)
+static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, JSValueRef arguments[], JSValueRef* exception, NSString* superSelector, Class superSelectorClass, BOOL isVariadic, JSValueRef** argumentsToFree)
 {
 	JSCocoaPrivateObject* privateObject		= JSObjectGetPrivate(function);
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
@@ -4016,13 +4048,17 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	//	If argument count doesn't match descripted argument count, 
 	//	we may have a variadic call
 	//
-	BOOL isVariadic = NO;
 	// Possibly account for a missing terminating NULL in ObjC variadic method
+	//		-> allows calling 
+	//			[NSArray arrayWithObjects:'hello', 'world']
+	//		instead of
+	//			[NSArray arrayWithObjects:'hello', 'world', null]
+	//
 	BOOL sugarCheckVariadic = NO;
-	// ### This is a bad way to go about it, selector name should be checked for variadic-ness. 
-	// ### [NSArray arrayWithObjects:'hello'] will match argument count but is not a correct variadic call, missing a trailing NULL.
-	if (callAddressArgumentCount != argumentCount)	
+	// Check if selector or method names matches a known variadic method. This may be a false positive ...
+	if (isVariadic)	
 	{
+		// ... so we check further.
 		if (methodName)		isVariadic = [[JSCocoaController controllerFromContext:ctx] isMethodVariadic:methodName class:[callee class]];
 		else				isVariadic = [[JSCocoaController controllerFromContext:ctx] isFunctionVariadic:functionName];
 		
@@ -4031,7 +4067,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		{
 			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
 		}
-		
 		// Sugar check : if last object is not NULL, account for it
 		if (isVariadic && callingObjC && argumentCount && !JSValueIsNull(ctx, arguments[argumentCount-1]))
 		{
@@ -4292,8 +4327,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 
 	// Javascript custom methods
 	id methodName = privateObject.methodName;
+	
+	BOOL isVariadic = NO;
 	// Possible optimization if more custom methods are handled
-//	if ([customCallPaths valueForKey:methodName])
+	if ([customCallPaths valueForKey:methodName])
 	{
 		if ([methodName isEqualToString:@"toString"] || [methodName isEqualToString:@"valueOf"])
 		{
@@ -4387,11 +4424,13 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			if ([superSelector isEqualToString:@"safeDealloc"] && superSelectorClass == [NSObject class])
 				return	JSValueMakeUndefined(ctx);
 		}
+		else
+			isVariadic = YES;
 	}
 
 	JSValueRef* functionArguments	= superArguments ? superArguments : (JSValueRef*)arguments;
 	JSValueRef*	argumentsToFree		= NULL;
-	JSValueRef jsReturnValue = jsCocoaObject_callAsFunction_ffi(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, &argumentsToFree);
+	JSValueRef jsReturnValue = jsCocoaObject_callAsFunction_ffi(ctx, function, thisObject, argumentCount, functionArguments, exception, superSelector, superSelectorClass, isVariadic, &argumentsToFree);
 	
 	if (superArguments)		free(superArguments);
 	if (argumentsToFree)	free(argumentsToFree);

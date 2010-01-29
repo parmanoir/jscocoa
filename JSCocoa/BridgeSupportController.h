@@ -17,6 +17,8 @@
 	NSMutableArray*			xmlDocuments;
 
 	NSMutableDictionary*	hash;
+	NSMutableDictionary*	variadicSelectors;
+	NSMutableDictionary*	variadicFunctions;
 }
 
 + (id)sharedController;
@@ -24,6 +26,9 @@
 - (BOOL)loadBridgeSupport:(NSString*)path;
 - (BOOL)isBridgeSupportLoaded:(NSString*)path;
 - (NSUInteger)bridgeSupportIndexForString:(NSString*)string;
+
+- (NSMutableDictionary*)variadicSelectors;
+- (NSMutableDictionary*)variadicFunctions;
 
 /*
 - (NSString*)query:(NSString*)name withType:(NSString*)type;
