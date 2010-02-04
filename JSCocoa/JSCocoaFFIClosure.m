@@ -142,7 +142,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
 	JSObjectRef jsFunctionObject = JSValueToObject(ctx, jsFunction, NULL);
 	JSValueRef	exception = NULL;
-	
 
 	// ## Only objC for now. Need to test C function pointers.
 	
