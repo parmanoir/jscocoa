@@ -4016,7 +4016,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	//
 	if (!callingObjC)
 	{
-		if (!privateObject.xml)	return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : no xml in object = nothing to call (Autocall problem ? To call object.method(), remove the parens if autocall is ON)") , NULL;
+		if (!privateObject.xml)	return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : no xml in object = nothing to call (Autocall problem ? To call argless objCobject.method(), remove the parens if autocall is ON)") , NULL;
 //		NSLog(@"C encoding=%@", privateObject.xml);
 		argumentEncodings = [JSCocoaController parseCFunctionEncoding:privateObject.xml functionName:&functionName];
 		// Grab symbol

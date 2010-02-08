@@ -840,7 +840,7 @@
 					tokenStream.push("Class('" + tokens[i+1].value + "').definition = function ()")
 					i += 1
 				}
-				if (token.value == 'implementation')	tokenStream.push('{\n')
+				if (token.value == '@implementation')	tokenStream.push('{\n')
 				continue
 			}
 			// Class var list @implementation Class : ParentClass { var list }
@@ -937,32 +937,102 @@
 				}
 			}
 			else
-			// String immediates, selectors
+			// String immediates
 			if (token.id == '@')
 			{
-				if (tokens[i+1].value == 'implementation')	continue
-				if (tokens[i+1].value == 'end')	
-				{
-					i++
-					tokenStream.push('}\n')
-					continue
-				}
-				
 				var nexttoken = tokens[i+1]
 				// This can start a message : [@'hello' writeTo...]
-				if (nexttoken.id == '(string)')
+				tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
+				// Delete string token
+				nexttoken.rawValue = ''
+				continue
+			}
+			else
+			// Selectors
+			if (token.id == '@selector')
+			{
+				tokenStream.push("'" + tokens[i+2].rawValue + "'")
+				i += 3
+				continue						
+			}
+			else
+			// Class definition ending
+			if (token.value == '@end')
+			{
+				i++
+				tokenStream.push('}\n')
+				continue
+			}
+			else
+			// setValueForKey shortcut
+			if (token.id == '@=')
+			{
+				function	backtrack(stream, tokenIndex, search)
 				{
-					tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
-					// Delete string token
-					nexttoken.rawValue = ''
-					continue
+					var i = tokenIndex
+					var match
+					var matchIndex
+					var counterpart
+					var leftCount	= 0
+					var rightCount	= 0
+					for (; i>0; i--)
+					{
+						// Look for token
+						if (!match && search[stream[i]])
+						{
+							match = stream[i]
+							if (typeof search[stream[i]] == 'string')	counterpart = search[stream[i]]
+							matchIndex = i
+							if (!counterpart)	return { left : i, right : tokenIndex }
+						}
+						if (stream[i] == match)			rightCount++
+						if (stream[i] == counterpart)	leftCount++
+						if (leftCount > 0 && leftCount == rightCount)	return { left : i, right : matchIndex }
+					}
+					return { left : -1, right : -1 }
 				}
-				else
+				
+				function	trackRightFromOperator(stream, tokenIndex, operator)
 				{
-					tokenStream.push("'" + tokens[i+3].rawValue + "'")
-					i += 4
-					continue						
+					var right = operator.right
+					var lastToken
+					while (right)
+					{
+						lastToken = right
+						right = right.rightParen || right.right
+					}
+					if (!lastToken)	return -1
+					var l = stream.length-1
+					for (; tokenIndex<l; tokenIndex++)
+						if (stream[tokenIndex] == lastToken)	return tokenIndex
+					return -1
 				}
+				
+				var idx1 = backtrack(tokenStream, tokenStream.length-1, { '.' : true, ']' : '[' })
+				var idx2 = trackRightFromOperator(tokens, i, token)
+				var left = tokenStream[idx1.left]
+				var right= tokens[idx2]
+
+				// Reconstruct key name
+				var key = ''
+				for (var j=idx1.left+1; j<idx1.right; j++)
+				{
+					if (left == '[')	key += tokenStream[j]
+					else
+						if (!tokenStream[j].match(/(\/\*)|^\s*$/))	
+							key += "'" + tokenStream[j] + "'"
+				}
+
+				// Delete key from output stream
+				for (var j=idx1.left; j<=idx1.right; j++)
+					tokenStream[j] = ''
+				
+				// Patch key in input stream
+				tokens.splice(idx2+1, 0, { rawValue : ' ,' + key + ')', line : right.line })
+
+				// Convert @= to setValue:forKey:
+				tokenStream.push('.setValue_forKey_(')
+				continue
 			}
 			else
 			// If return

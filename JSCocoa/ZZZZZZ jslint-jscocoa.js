@@ -804,11 +804,11 @@ JSLINT = (function renamedJSLint () {
 		tx = function ()
 			{
 //				var a  = /^\s*([(){}\[.,:;'"~\?\]#@]|==?=?|\/(\*(global|extern|jslint|member|members)?|=|\/)?|\*[\/=]?|\+[+=]?|-[\-=]?|%=?|&[&=]?|\|[|=]?|>>?>?=?|<([\/=!]|\!(\[|--)?|<=?)?|\^=?|\!=?=?|[a-zA-Z\u00c0-\uffff_$][a-zA-Z0-9\u00c0-\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\.[0-9]*)?([eE][+\-]?[0-9]+)?)/
-//				var r = "^\\s*([()}.,:;'\"~\\?\\]#@]|\\[\\+\\]|\\[|{\\+}|@implementation|@end|@selector|@|ƒ|{|==?=?|\\/(\\*(global|extern|jslint|member|members)?|=|\\/)?|\\*[\\/=]?|\\+[+=]?|-[\\-=]?|%=?|&[&=]?|\\|[|=]?|>>?>?=?|<([\\/=!]|<=?)?|\\^=?|\\!=?=?|[a-zA-Z\\u00c0-\\uffff_$][a-zA-Z0-9\\u00c0-\\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\\.[0-9]*)?([eE][+\\-]?[0-9]+)?)"
+//				var r = "^\\s*([()}.,:;'\"~\\?\\]#@]|\\[\\+\\]|\\[|{\\+}|@selector|@|ƒ|{|==?=?|\\/(\\*(global|extern|jslint|member|members)?|=|\\/)?|\\*[\\/=]?|\\+[+=]?|-[\\-=]?|%=?|&[&=]?|\\|[|=]?|>>?>?=?|<([\\/=!]|<=?)?|\\^=?|\\!=?=?|[a-zA-Z\\u00c0-\\uffff_$][a-zA-Z0-9\\u00c0-\\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\\.[0-9]*)?([eE][+\\-]?[0-9]+)?)"
 				var r = "^\\s*([()}.,:;'\"~\\?\\]#]|\\[\\+\\]|\\[|{\\+}|@=|@implementation|@end|@selector|@|ƒ|{|==?=?|\\/(\\*|=|\\/)?|\\*[\\/=]?|\\+[+=]?|-[\\-=]?|%=?|&[&=]?|\\|[|=]?|>>?>?=?|<([\\/=!]|<=?)?|\\^=?|\\!=?=?|[a-zA-Z\\u00c0-\\uffff_$][a-zA-Z0-9\\u00c0-\\uffff_$]*|[0-9]+([xX][0-9a-fA-F]+|\\.[0-9]*)?([eE][+\\-]?[0-9]+)?)"
 				return new RegExp(r)
 
-			}(),
+			}()
 /*
         tx = 
 ^\s*([(){}\[.,:;'"~\?\]#@]
@@ -1958,20 +1958,6 @@ members)?
 */
     function parse(rbp, initial) {
         var left, o;
-
-		// ## Allow return a, b
-		function	maybeParseCommas()
-		{
-			if (rbp > 20 || skipCommas)	return
-			while (nexttoken.value == ',')
-			{
-				advance(',')
-           		parse(rbp)
-			}
-		}
-		var skipCommas = initial == 'singleExpression'
-		if (skipCommas) initial = undefined
-
 		// ## notify of expression parsing start
 		logParseStart(rbp, initial)
         if (nexttoken.id === '(end)') {
@@ -1998,8 +1984,6 @@ members)?
 "A leading decimal point can be confused with a dot: '.{a}'.",
                             token, nexttoken.value);
                     advance();
-					// ## 
-					maybeParseCommas()
 					// ## notify of expression parsing end
 					logParseEnd(rbp, initial)
                     return token;
@@ -2010,9 +1994,6 @@ members)?
             }
 
             while (rbp < nexttoken.lbp) {
-				// Don't allow [ on a next line as it might start an ObjC call
-				if (token.line != nexttoken.line && nexttoken.id == '[')	break;
-
                 o = nexttoken.exps;
 				// ## As we don't force lines to end with a semi colon, break if we encounter a reserved word
 				if (nexttoken.reserved && nexttoken.line != token.line) break
@@ -2034,14 +2015,9 @@ members)?
             }
 */
         }
-
-		// ##
-		maybeParseCommas()
-
 		// ## notify of expression parsing end
 		logParseEnd(rbp, initial)
 
-		
         return left;
     }
 
@@ -2549,7 +2525,7 @@ members)?
                 advance(';');
             } else {
 				var s = statement()
-//				logStatement(s)
+				logStatement(s)
                 a.push(s);
             }
         }
@@ -2603,9 +2579,7 @@ members)?
 
 
     function countMember(m) {
-	// ## Causing errors while linting jslint. Disabled for now.
-
-        if (0 && membersOnly && membersOnly[m] !== true) {
+        if (membersOnly && membersOnly[m] !== true) {
             warning("Unexpected /*member '{a}'.", nexttoken, m);
         }
         if (typeof member[m] === 'number') {
@@ -3868,7 +3842,7 @@ members)?
     delim(':').reach = true;
     delim(',');
     delim('#');
-//    delim('@');
+    delim('@');
     reserve('else');
     reserve('case').reach = true;
     reserve('catch');
@@ -3899,9 +3873,6 @@ members)?
     bitwiseassignop('<<=', 'assignshiftleft', 20);
     bitwiseassignop('>>=', 'assignshiftright', 20);
     bitwiseassignop('>>>=', 'assignshiftrightunsigned', 20);
-
-    assignop('@=', 'objCSetValueForKey', 20);
-
     infix('?', function (left, that) {
         that.left = left;
         that.right = parse(10);
@@ -3982,44 +3953,51 @@ members)?
     infix('[+]', 'arrayAdd', 120);
     infix('{+}', 'hashAdd', 120);
 
-	// Handle @ prefix for NSStrings
+	// Handle @ prefix for NSStrings, plus @selector
 	prefix('@', function ()
 	{
+//		log('t=' + token.value)
+//		var c = parse(155)
 		advance()
 		var c = token
-		if (token.id != '(string)')
-			warningAt('ObjC string immediate : Expected a Javascript string here', token.line, token.from)
-
-	})
-
-	// Handle @selector
-	prefix('@selector', function ()
-	{
-		var c = token
-		logExtraSyntax('@selector', token)
-		token.id = token.value
-		disableLogToken()
-		advance('(')		
-		var from = nexttoken.from
-		var line = nexttoken.line
-		var selector = ''
-		while (nexttoken && nexttoken.value != ')' && line == nexttoken.line)
+		if (c && c.value == 'selector')
 		{
-			advance()
-			selector += token.value
+			logExtraSyntax('@selector', token)
+			token.id = token.value
+			disableLogToken()
+			advance('(')		
+
+			var from = nexttoken.from
+			var line = nexttoken.line
+			var selector = ''
+			while (nexttoken && nexttoken.value != ')' && line == nexttoken.line)
+			{
+				advance()
+				selector += token.value
+			}
+			// Wrong but better than nothing
+			if (!selector.match(/^[\w:]+/))
+				warningAt('Invalid selector', line, from )
+			
+			var t = { value : selector, type : '(string)', from : from, character : token.character, line : line }
+			t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
+			logToken(t)
+			nexttoken.rawValue = lines[nexttoken.line] ? lines[nexttoken.line].substr(nexttoken.from, nexttoken.character-nexttoken.from) : ''
+			logToken(nexttoken)
+
+			enableLogToken()
+			advance(')')
 		}
-		// Wrong but better than nothing
-		if (!selector.match(/^[\w:]+/))
-			warningAt('Invalid selector', line, from )
-
-		var t = { value : selector, type : '(string)', from : from, character : token.character, line : line }
-		t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
-		logToken(t)
-		nexttoken.rawValue = lines[nexttoken.line] ? lines[nexttoken.line].substr(nexttoken.from, nexttoken.character-nexttoken.from) : ''
-		logToken(nexttoken)
-
-		enableLogToken()
-		advance(')')
+		else
+		{
+			if (token.value == 'implementation')	parseObjJClass('@implementation')
+			else
+			{
+				logExtraSyntax('@', token)
+				if (token.id != '(string)')
+					warningAt('ObjC string immediate : Expected a Javascript string here', token.line, token.from)
+			}
+		}
 	})
 
 
@@ -4099,7 +4077,7 @@ members)?
         }
         adjacent(token, nexttoken);
 /*
-		// ## Allow paramless constructors
+		// ## I like my paramless constructors without parens
         if (nexttoken.id !== '(') {
             warning("Missing '()' invoking a constructor.");
         }
@@ -4172,7 +4150,6 @@ members)?
     }, 160, true);
 
     infix('(', function (left, that) {
-		var left = token
         abut(prevtoken, token);
         nospace();
         var n = 0,
@@ -4199,8 +4176,7 @@ members)?
         }
         if (nexttoken.id !== ')') {
             for (;;) {
-				// ## singleExpression
-                p[p.length] = parse(10, 'singleExpression');
+                p[p.length] = parse(10);
                 n += 1;
                 if (nexttoken.id !== ',') {
                     break;
@@ -4208,15 +4184,7 @@ members)?
                 comma();
             }
         }
-		var lasttoken = token
         advance(')');
-
-		// ##
-		var right = token
-		left.right = right
-		right.left = left
-		lasttoken.rightParen = right
-
         if (option.immed && left.id === 'function' && nexttoken.id !== ')') {
             warning("Wrap the entire immediate function invocation in parens.",
                 that);
@@ -4249,17 +4217,9 @@ members)?
     }, 155, true).exps = true;
 
     prefix('(', function () {
-		var left = token
         nospace();
         var v = parse(0);
-		var lasttoken = token
         advance(')', this);
-		// ##
-		var right = token
-		left.right = right
-		right.left = left
-		lasttoken.rightParen = right
-		
         nospace(prevtoken, token);
         if (option.immed && v.id === 'function') {
             if (nexttoken.id === '(') {
@@ -4495,8 +4455,7 @@ members)?
                 countMember(i);
                 advance(':');
                 nonadjacent(token, nexttoken);
-				// ## Don't allow comma expressions (a, b, c)
-                parse(10, 'singleExpression');
+                parse(10);
                 if (nexttoken.id === ',') {
                     comma();
                     if (nexttoken.id === ',' || nexttoken.id === '}') {
@@ -4554,8 +4513,7 @@ members)?
                     error("Variable {a} was not declared correctly.",
                             nexttoken, nexttoken.value);
                 }
-				// ## 'var'
-                value = parse(0, 'singleExpression');
+                value = parse(0);
                 name.first = value;
             }
             if (nexttoken.id !== ',') {
@@ -4632,8 +4590,7 @@ members)?
 	// ##
 	var functionBlockFunction = function () {
         if (inblock) {
-			// ## Allowed !
-//            warning("Function statements cannot be placed in blocks. Use a function expression or move the statement to the top of the outer function.", token);
+            warning("Function statements cannot be placed in blocks. Use a function expression or move the statement to the top of the outer function.", token);
         }
         var i = identifier();
         adjacent(token, nexttoken);
@@ -4954,8 +4911,6 @@ members)?
         if (funct['(breakage)'] === 0) {
             warning("Unexpected '{a}'.", nexttoken, this.value);
         }
-		// ## Allow missing semicolon
-        if (this.line !== nexttoken.line)	return
         nolinebreak(this);
         if (nexttoken.id !== ';') {
             if (token.line === nexttoken.line) {
@@ -4976,8 +4931,6 @@ members)?
         if (funct['(breakage)'] === 0) {
             warning("Unexpected '{a}'.", nexttoken, this.value);
         }
-		// ## Allow missing semicolon
-        if (this.line !== nexttoken.line)	return
         nolinebreak(this);
         if (nexttoken.id !== ';') {
             if (token.line === nexttoken.line) {
@@ -5033,7 +4986,6 @@ members)?
         if (nexttoken.id !== ';' && !nexttoken.reach /*## only parse what's on current line */ && token.line == nexttoken.line) {
             nonadjacent(token, nexttoken);
             parse(20);
-/*
 			// ## Allow multiple expression return
 			// return a(), b(), 'hello'
 			while (nexttoken.value == ',')
@@ -5041,7 +4993,6 @@ members)?
 				advance(',')
             	parse(20)
 			}
-*/
 			// ## Maybe if return
 			if (isIfReturn())		parseIfReturn()
         }
@@ -5057,6 +5008,8 @@ members)?
         reachable('throw');
     });
 
+
+
 	// ## JSCocoa class syntax
     function parseObjJClass(style) {
 		// Protect against inner definitions
@@ -5065,6 +5018,8 @@ members)?
 		
 		logExtraSyntax('class', token)
 		token.isObjCClassStart = true
+//		if (style == '@implementation')	advance()
+//		alert(token.value + ' '  + '' + '\n' + dumpHash(token))
 		advance()
 		var className = token
 		if (className.type != '(identifier)')	warningAt('Class name must be an identifier', token.line, token.from)
@@ -5217,6 +5172,7 @@ members)?
 				jsfn.isClassJSFunction = true
         		var i = identifier()
 				jsfn.jsFunctionName = token
+//				alert('token=' + token.value)
 				doFunction(i)
 			}
 			else
@@ -5226,20 +5182,16 @@ members)?
 			}
 		}
 		
-		if (style == '@implementation')	
-		{
-			// Advance only checks token.id, @end is stored in token.value
-			if (nexttoken.value == '@end')	nexttoken.id = nexttoken.value
-			advance('@end')
-		}
+//		block(false)
+//		advance('(identifier)')
+//		alert(dumpHash(token))
+//		logClassStart(token)
+		
+		if (style == '@implementation')	advance('@'), advance('end')
 		else							advance('}')
 		parsingClass = false
-	}
+    }
 	stmt('class', parseObjJClass);
-
-    stmt('@implementation', function () {
-		parseObjJClass('@implementation')
-    })
 
 
     reserve('void');
@@ -5286,7 +5238,6 @@ members)?
                         o[nexttoken.value] = true;
                     }
                     advance();
-//##
                     advance(':');
                     jsonValue();
                     if (nexttoken.id !== ',') {
@@ -5458,9 +5409,9 @@ members)?
                     jsonmode = true;
                     jsonValue();
                     break;*/
-/*
+/*					
 	// ## Don't handle css classes as @implementation is valid ObjJ syntax
-                case '@':
+              case '@':
                 case '*':
                 case '#':
                 case '.':
