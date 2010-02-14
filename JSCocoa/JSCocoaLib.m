@@ -454,6 +454,7 @@
 	{
 		id class = [classList objectAtIndex:i];
 		id className = [class description];
+		NSLog(@"%d/%d %@", i, (classCount-1), className);
 
 		id superclass		= [class superclass];
 		id superclassName	= superclass ? [NSString stringWithUTF8String:class_getName(superclass)] : nil;
@@ -475,9 +476,10 @@
 				protocols,	@"protocols",
 				imageNames,	@"imageNames",
 				nil];
-	
-	return dict;
 */
+	// This happens on the ObjC side, NOT in jsc.	
+	// There are 2500 classes to dump, this takes a while.
+	// The memory hog is also on the ObjC side, happening during [dict description]
 	return	@"Disabled for now, as the resulting hash hangs the app while goring memory";
 }
 

@@ -56,9 +56,6 @@
 	if (r1 != someNewValue)	throw	'setter 1 failed - got ' + r1 + ', expecting ' + someNewValue + '.'
 	if (r2 != someNewValue)	throw	'setter 2 failed - got ' + r2 + ', expecting ' + someNewValue + '.'
 	
-	// ## FISHY FAIL
-//	if (String(r2) != someNewValue)	throw	'(String) setter failed - got ' + r2 + ', expecting ' + someNewValue + '.'
-	
 	// Try auto setter
 	var someNewValue = 'bonjour monde !'
 	o.myValue = someNewValue

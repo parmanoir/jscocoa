@@ -826,6 +826,11 @@
 				else
 					if (tokens[i+1].value != '(')	tokens[i].rawValue += '()'
 			}
+			else if (token.value == '__FILE__' || token.value == '__LINE__')
+			{
+				var v = token.value == '__FILE__' ? 'sourceURL' : 'line'
+				token.rawValue = 'function(){try{throw{}}catch(e){return e.' + v + '}}()'
+			}
 
 			// Handle ObjC classes
 			if (token.isObjCClassStart)
