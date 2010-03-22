@@ -492,6 +492,15 @@
 @implementation NSObject(ClassWalker)
 
 //
+// Class name (description might have been overriden, and classes don't seem to travel well over NSDistantObject)
+//
+- (id)__className
+{	
+	return [[self class] description];
+}
+
+
+//
 // Returns which framework containing the class
 //
 + (id)__classImage

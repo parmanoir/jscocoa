@@ -4009,8 +4009,8 @@ members)?
 			selector += token.value
 		}
 		// Wrong but better than nothing
-		if (!selector.match(/^[\w:]+/))
-			warningAt('Invalid selector', line, from )
+//		if (!selector.match(/^[\w:]+/))
+//			warningAt('Invalid selector', line, from )
 
 		var t = { value : selector, type : '(string)', from : from, character : token.character, line : line }
 		t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
@@ -4297,7 +4297,7 @@ members)?
 		function	advanceParameterName()
 		{
 			advance()
-			if (!token.value.match(/^[a-zA-Z_]\w*/))	warningAt('Invalid selector name "' + token.value + '"', token.line, token.from)
+//			if (!token.value.match(/^[a-zA-Z_]\w*/))	warningAt('Invalid selector name "' + token.value + '"', token.line, token.from)
 		}
 		
 		var instanceToken		= token
