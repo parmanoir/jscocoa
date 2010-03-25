@@ -3122,7 +3122,8 @@ call:
 		}
 
 		// Special case for NSMutableArray get and Javascript array methods
-		if ([privateObject.object isKindOfClass:[NSArray class]])
+//		if ([privateObject.object isKindOfClass:[NSArray class]])
+		if ([privateObject.object respondsToSelector:@selector(objectAtIndex:)])
 		{
 			id array	= privateObject.object;
 			id scan		= [NSScanner scannerWithString:propertyName];
@@ -3172,7 +3173,8 @@ call:
 		
 		
 		// Special case for NSMutableDictionary get
-		if ([privateObject.object isKindOfClass:[NSDictionary class]])
+//		if ([privateObject.object isKindOfClass:[NSDictionary class]])
+		if ([privateObject.object respondsToSelector:@selector(objectForKey:)])
 		{
 			id dictionary	= privateObject.object;
 			id o = [dictionary objectForKey:propertyName];
@@ -3570,10 +3572,11 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 		}
 
 		// Special case for NSMutableArray set
-		if ([privateObject.object isKindOfClass:[NSArray class]])
+//		if ([privateObject.object isKindOfClass:[NSArray class]])
+		if ([privateObject.object respondsToSelector:@selector(replaceObjectAtIndex:withObject:)])
 		{
 			id array	= privateObject.object;
-			if (![array respondsToSelector:@selector(replaceObjectAtIndex:withObject:)])	return	throwException(ctx, exception, @"Calling set on a non mutable array"), false;
+//			if (![array respondsToSelector:@selector(replaceObjectAtIndex:withObject:)])	return	throwException(ctx, exception, @"Calling set on a non mutable array"), false;
 			id scan		= [NSScanner scannerWithString:propertyName];
 			NSInteger propertyIndex;
 			// Is asked property an int ?
@@ -3594,10 +3597,11 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 
 
 		// Special case for NSMutableDictionary set
-		if ([privateObject.object isKindOfClass:[NSDictionary class]])
+//		if ([privateObject.object isKindOfClass:[NSDictionary class]])
+		if ([privateObject.object respondsToSelector:@selector(setObject:forKey:)])
 		{
 			id dictionary	= privateObject.object;
-			if (![dictionary respondsToSelector:@selector(setObject:forKey:)])	return	throwException(ctx, exception, @"Calling set on a non mutable dictionary"), false;
+//			if (![dictionary respondsToSelector:@selector(setObject:forKey:)])	return	throwException(ctx, exception, @"Calling set on a non mutable dictionary"), false;
 
 			id property = NULL;
 			if ([JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&property inContext:ctx])

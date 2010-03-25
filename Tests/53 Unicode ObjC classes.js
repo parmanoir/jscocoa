@@ -23,6 +23,13 @@
 		return 一 + 二
 	}
 	
+	- (id)だけを追加する:(id)一
+	{
+		return [NSNumber numberWithInt:[一 intValue] + 1]
+	}
+	
+	
+	
 	@end
 	
 	

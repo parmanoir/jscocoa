@@ -1220,7 +1220,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	}
 	else
 	{
-	NSLog(@"********* %@", private.type);
+//	NSLog(@"********* %@", private.type);
 		*(id*)o = nil;
 	}
 

@@ -190,6 +190,18 @@ int runCount = 0;
 	[jsc setUseAutoCall:b];
 	[jsc setUseJSLint:YES];
 	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
+	
+/*	
+	id class = objc_getClass([@"ファイナンス" UTF8String]);
+	id o = [class new];
+	NSLog(@"japanese class=%@", class);
+	NSLog(@"japanese instance=%@", o);
+	NSLog(@"japanese selector=%s", NSSelectorFromString(@"だけを追加する:"));
+	
+//	id r = [o performSelector:NSSelectorFromString(@"だけを追加する:") withObject:[NSNumber numberWithInt:7]];
+	id r = [o performSelector:[@"だけを追加する:" UTF8String] withObject:[NSNumber numberWithInt:7]];
+	NSLog(@"r=%@", r);
+*/
 }
 
 

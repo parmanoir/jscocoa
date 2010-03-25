@@ -63,18 +63,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 290944725;
-			PBXWorkspaceStateSaveDate = 290944725;
-		};
-		perUserProjectItems = {
-			3DD49EBE112DB1AB00F02725 = 3DD49EBE112DB1AB00F02725 /* PBXTextBookmark */;
-			3DD49EBF112DB1AB00F02725 = 3DD49EBF112DB1AB00F02725 /* PBXTextBookmark */;
-			3DD49EC0112DB1AB00F02725 = 3DD49EC0112DB1AB00F02725 /* PBXTextBookmark */;
-			3DD49EC1112DB1AB00F02725 = 3DD49EC1112DB1AB00F02725 /* PBXTextBookmark */;
-			3DD49EC2112DB1AB00F02725 = 3DD49EC2112DB1AB00F02725 /* PBXTextBookmark */;
-			3DEDB10A112902F70034F12E = 3DEDB10A112902F70034F12E /* PBXTextBookmark */;
-			3DEDB10C112902F70034F12E = 3DEDB10C112902F70034F12E /* PBXTextBookmark */;
-			3DEDB10D112902F70034F12E = 3DEDB10D112902F70034F12E /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 291222667;
+			PBXWorkspaceStateSaveDate = 291222667;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
@@ -215,7 +205,7 @@
 	};
 	3D36E28E105229E700132E23 /* JSCocoaLib.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 8998}}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 9020}}";
 			sepNavSelRange = "{12311, 0}";
 			sepNavVisRange = "{11008, 1955}";
 			sepNavWindowFrame = "{{748, 112}, {968, 1004}}";
@@ -270,10 +260,10 @@
 	};
 	3D36E2B910522A2600132E23 /* ApplicationController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 9097}}";
-			sepNavSelRange = "{437, 0}";
-			sepNavVisRange = "{3, 2423}";
-			sepNavWindowFrame = "{{638, 76}, {968, 1004}}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 9366}}";
+			sepNavSelRange = "{5554, 37}";
+			sepNavVisRange = "{4445, 2028}";
+			sepNavWindowFrame = "{{340, 70}, {968, 1004}}";
 		};
 	};
 	3D36E2BD10522A4E00132E23 /* TestsRunner-Info.plist */ = {
@@ -291,9 +281,9 @@
 	};
 	3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {988, 61061}}";
-			sepNavSelRange = "{196269, 0}";
-			sepNavVisRange = "{53223, 4073}";
+			sepNavIntBoundsRect = "{{0, 0}, {988, 62370}}";
+			sepNavSelRange = "{155954, 0}";
+			sepNavVisRange = "{154686, 2583}";
 			sepNavWindowFrame = "{{718, 4}, {1047, 1174}}";
 		};
 	};
@@ -313,86 +303,6 @@
 		modificationTime = 287900304.432925;
 		originalNumberOfMultipleMatches = 1;
 		state = 0;
-	};
-	3DD49EBE112DB1AB00F02725 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 552";
-		rLen = 0;
-		rLoc = 13412;
-		rType = 0;
-		vrLen = 2036;
-		vrLoc = 12969;
-	};
-	3DD49EBF112DB1AB00F02725 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E28E105229E700132E23 /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 500";
-		rLen = 0;
-		rLoc = 12311;
-		rType = 0;
-		vrLen = 1955;
-		vrLoc = 11008;
-	};
-	3DD49EC0112DB1AB00F02725 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
-		name = "ApplicationController.m: 21";
-		rLen = 0;
-		rLoc = 437;
-		rType = 0;
-		vrLen = 2423;
-		vrLoc = 3;
-	};
-	3DD49EC1112DB1AB00F02725 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E262105229E700132E23 /* BridgeSupportController.m */;
-		name = "BridgeSupportController.m: 56";
-		rLen = 0;
-		rLoc = 1011;
-		rType = 0;
-		vrLen = 1925;
-		vrLoc = 258;
-	};
-	3DD49EC2112DB1AB00F02725 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 75";
-		rLen = 59;
-		rLoc = 2461;
-		rType = 0;
-		vrLen = 2538;
-		vrLoc = 7223;
-	};
-	3DEDB10A112902F70034F12E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
-		name = "ApplicationController.m: 21";
-		rLen = 0;
-		rLoc = 437;
-		rType = 0;
-		vrLen = 2423;
-		vrLoc = 3;
-	};
-	3DEDB10C112902F70034F12E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E262105229E700132E23 /* BridgeSupportController.m */;
-		name = "BridgeSupportController.m: 56";
-		rLen = 0;
-		rLoc = 1011;
-		rType = 0;
-		vrLen = 1925;
-		vrLoc = 258;
-	};
-	3DEDB10D112902F70034F12E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 75";
-		rLen = 59;
-		rLoc = 2461;
-		rType = 0;
-		vrLen = 2538;
-		vrLoc = 7223;
 	};
 	8D1107260486CEB800E47090 /* TestsRunner */ = {
 		activeExec = 0;
