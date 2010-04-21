@@ -1104,7 +1104,11 @@
 					v += '('
 				}
 				else
-					if (!useAutoCall)	v += '()'
+				{
+					if (token.isObjCSuperCall)	v = "'" + v + "'" + ', new Array()'
+					else
+					if (!useAutoCall)			v += '()'
+				}
 			}
 			// Selector part : ignore name and add ',' separator
 			if (token.isObjCMultiCall)

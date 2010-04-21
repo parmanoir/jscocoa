@@ -33,6 +33,10 @@
 	//
 	class ObjJSuperTest1 < NSObject
 	{
+		- (int)paramLessMethod
+		{
+			return 3
+		}
 		- (int)method1:(int)a and2:(int)b
 		{
 			wentThrough1 = true
@@ -42,6 +46,10 @@
 	
 	class ObjJSuperTest2 < ObjJSuperTest1
 	{
+		- (int)paramLessMethod
+		{
+			return 4 + [super paramLessMethod]
+		}
 		- (int)superTestWith:(int)a and:(int)b
 		{
 			return [super method1:a and2:b]
@@ -67,6 +75,8 @@
 	if (r != (10+5+1+10+5+10))			throw 'ObjJ super syntax failed (3)'
 	if (!wentThrough1 || !wentThrough2)	throw 'ObjJ super syntax failed (4)'
 
+	var r = [o paramLessMethod]
+	if (r != 7)							throw 'ObjJ super syntax failed (5)'
 
 	//
 	// Swizzle test

@@ -6,4 +6,6 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
+
+#define JSCOCOA
 #import "JSCocoaController.h"

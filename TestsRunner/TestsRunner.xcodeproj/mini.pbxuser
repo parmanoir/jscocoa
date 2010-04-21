@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeArchitecturePreference = x86_64;
+		activeArchitecturePreference = i386;
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 3D36E247105229B500132E23 /* TestsRunner */;
 		activeSDKPreference = macosx10.6;
@@ -10,7 +10,6 @@
 			8D1107260486CEB800E47090 /* TestsRunner */,
 		);
 		breakpoints = (
-			3D8FBF9E111910C700F6CF40 /* JSCocoaFFIClosure.m:143 */,
 		);
 		codeSenseManager = 3D36E257105229C200132E23 /* Code sense */;
 		executables = (
@@ -63,8 +62,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 291222667;
-			PBXWorkspaceStateSaveDate = 291222667;
+			PBXPerProjectTemplateStateSaveDate = 293547043;
+			PBXWorkspaceStateSaveDate = 293547043;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
@@ -134,9 +133,9 @@
 	};
 	3D36E263105229E700132E23 /* class.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 12991}}";
-			sepNavSelRange = "{24634, 0}";
-			sepNavVisRange = "{22870, 2337}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 12793}}";
+			sepNavSelRange = "{31953, 0}";
+			sepNavVisRange = "{30748, 2065}";
 			sepNavWindowFrame = "{{712, 82}, {968, 1004}}";
 		};
 	};
@@ -158,10 +157,10 @@
 	};
 	3D36E288105229E700132E23 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 51480}}";
-			sepNavSelRange = "{2461, 59}";
-			sepNavVisRange = "{7223, 2538}";
-			sepNavWindowFrame = "{{809, 96}, {968, 1004}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1074, 51139}}";
+			sepNavSelRange = "{152426, 15}";
+			sepNavVisRange = "{152168, 1784}";
+			sepNavWindowFrame = "{{224, 116}, {968, 1004}}";
 		};
 	};
 	3D36E289105229E700132E23 /* JSCocoaFFIArgument.h */ = {
@@ -189,9 +188,9 @@
 	};
 	3D36E28C105229E700132E23 /* JSCocoaFFIClosure.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {821, 2321}}";
+			sepNavIntBoundsRect = "{{0, 0}, {470, 2486}}";
 			sepNavSelRange = "{2995, 0}";
-			sepNavVisRange = "{2882, 1836}";
+			sepNavVisRange = "{2882, 563}";
 			sepNavWindowFrame = "{{108, 156}, {880, 783}}";
 		};
 	};
@@ -221,9 +220,9 @@
 	};
 	3D36E290105229E700132E23 /* JSCocoaPrivateObject.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {905, 2519}}";
-			sepNavSelRange = "{4212, 25}";
-			sepNavVisRange = "{3102, 1794}";
+			sepNavIntBoundsRect = "{{0, 0}, {1006, 2541}}";
+			sepNavSelRange = "{1975, 0}";
+			sepNavVisRange = "{1668, 401}";
 			sepNavWindowFrame = "{{517, 100}, {964, 962}}";
 		};
 	};
@@ -286,23 +285,6 @@
 			sepNavVisRange = "{154686, 2583}";
 			sepNavWindowFrame = "{{718, 4}, {1047, 1174}}";
 		};
-	};
-	3D8FBF9E111910C700F6CF40 /* JSCocoaFFIClosure.m:143 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 3D36E28C105229E700132E23 /* JSCocoaFFIClosure.m */;
-		functionName = "-calledByClosureWithArgs:returnValue:";
-		hitCount = 0;
-		ignoreCount = 0;
-		lineNumber = 143;
-		modificationTime = 287900304.432925;
-		originalNumberOfMultipleMatches = 1;
-		state = 0;
 	};
 	8D1107260486CEB800E47090 /* TestsRunner */ = {
 		activeExec = 0;
