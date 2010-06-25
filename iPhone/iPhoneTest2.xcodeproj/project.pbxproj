@@ -33,6 +33,7 @@
 		3DA390190EA7523300CB6F74 /* BridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA390130EA7523300CB6F74 /* BridgeSupportController.m */; };
 		3DB582150EA17CAC00EB80D9 /* JavascriptCore-dlsym.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB5820C0EA17CAC00EB80D9 /* JavascriptCore-dlsym.m */; };
 		3DB582770EA1814000EB80D9 /* iPhoneMain.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB582760EA1814000EB80D9 /* iPhoneMain.js */; };
+		3DCB6EE211D5504F00385AE2 /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DCB6EE111D5504F00385AE2 /* jslint-jscocoa.js */; };
 		3DED293F103B970D0093C660 /* BurksPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED293E103B970D0093C660 /* BurksPool.m */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		3DB582130EA17CAC00EB80D9 /* JSStringRefCF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSStringRefCF.h; sourceTree = "<group>"; };
 		3DB582140EA17CAC00EB80D9 /* JSValueRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSValueRef.h; sourceTree = "<group>"; };
 		3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = iPhoneMain.js; path = ../iPhoneMain.js; sourceTree = "<group>"; };
+		3DCB6EE111D5504F00385AE2 /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "jslint-jscocoa.js"; path = "../JSCocoa/jslint-jscocoa.js"; sourceTree = SOURCE_ROOT; };
 		3DED293D103B970D0093C660 /* BurksPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BurksPool.h; path = ../JSCocoa/iPhone/BurksPool.h; sourceTree = SOURCE_ROOT; };
 		3DED293E103B970D0093C660 /* BurksPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BurksPool.m; path = ../JSCocoa/iPhone/BurksPool.m; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				3DA390130EA7523300CB6F74 /* BridgeSupportController.m */,
 				3DA390140EA7523300CB6F74 /* BridgeSupportController.h */,
 				3D9BA7DA0EB10DC9005F9A76 /* class.js */,
+				3DCB6EE111D5504F00385AE2 /* jslint-jscocoa.js */,
 			);
 			name = JSCocoa;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			files = (
 				3D9BA7DB0EB10DC9005F9A76 /* class.js in Resources */,
 				3DB582770EA1814000EB80D9 /* iPhoneMain.js in Resources */,
+				3DCB6EE211D5504F00385AE2 /* jslint-jscocoa.js in Resources */,
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* iPhoneTest2ViewController.xib in Resources */,
 				3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */,

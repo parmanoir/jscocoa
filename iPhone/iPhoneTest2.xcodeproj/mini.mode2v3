@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3C1820111A517F000BC234</string>
+						<string>3DCB6EEA11D5506A00385AE2</string>
 						<key>history</key>
 						<array>
-							<string>3D3C181F111A517F000BC234</string>
+							<string>3D3C1820111A517F000BC234</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -256,10 +256,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3C1821111A517F000BC234</string>
+						<string>3DCB6EEB11D5506A00385AE2</string>
 						<key>history</key>
 						<array>
-							<string>3D8FBFE2111A4CC800F6CF40</string>
+							<string>3D3C1821111A517F000BC234</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -296,10 +296,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D3C1823111A517F000BC234</string>
+						<string>3DCB6EEC11D5506A00385AE2</string>
 						<key>history</key>
 						<array>
-							<string>3D8FBFE4111A4CC800F6CF40</string>
+							<string>3D3C1823111A517F000BC234</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -351,8 +351,6 @@
 					<key>Tabs</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -386,8 +384,6 @@
 									<array>
 										<string>29B97314FDCFA39411CA2CEA</string>
 										<string>3DB581EF0EA17C9000EB80D9</string>
-										<string>3DED2940103B97130093C660</string>
-										<string>3D97DA5710425AAA00E2E233</string>
 										<string>3DB5820B0EA17CAC00EB80D9</string>
 										<string>080E96DDFE201D6D7F000001</string>
 										<string>29B97315FDCFA39411CA2CEA</string>
@@ -399,13 +395,12 @@
 									<array>
 										<array>
 											<integer>26</integer>
-											<integer>25</integer>
 											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 387}, {328, 338}}</string>
+									<string>{{0, 318}, {328, 338}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -427,13 +422,13 @@
 									<string>WarningsColumn</string>
 									<real>43</real>
 								</array>
-								<key>RubberWindowFrame</key>
-								<string>1575 754 345 424 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -463,11 +458,17 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>1C37FBAC04509CD000000102</string>
+										<string>3DCB6ED911D5503500385AE2</string>
+										<string>3DCB6EDA11D5503500385AE2</string>
+										<string>3DCB6EE911D5506A00385AE2</string>
 										<string>1C37FAAC04509CD000000102</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
+											<integer>15</integer>
+											<integer>11</integer>
+											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -488,6 +489,8 @@
 									<string>MainColumn</string>
 									<real>328</real>
 								</array>
+								<key>RubberWindowFrame</key>
+								<string>1575 754 345 424 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -571,8 +574,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>3D3C1808111A5059000BC234</string>
-				<string>3D3C1809111A5059000BC234</string>
+				<string>3DCB6EDB11D5503500385AE2</string>
+				<string>3DCB6EDC11D5503500385AE2</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -607,8 +610,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D5B069F1CE1000CFCEE</string>
-		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>3D6744581048F1EB007EF0EA</string>
 		<string>3D8FBFDE111A4CC800F6CF40</string>
@@ -832,7 +833,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>3D3C180C111A5059000BC234</string>
+				<string>3DCB6EE011D5503500385AE2</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
