@@ -101,5 +101,3 @@
 	globalObject	= null
 
 
-
-

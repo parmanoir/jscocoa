@@ -3281,7 +3281,7 @@ call:
 					return	returnValue;
 				}
 
-				// Special case for alloc : objects 
+				// Special case for alloc autocall — do not retain alloced result as it might crash (eg [[NSLocale alloc] retain] fails in ObjC)
 				if ([propertyName isEqualToString:@"alloc"])
 				{
 					id allocatedObject = [callee alloc];
@@ -3923,6 +3923,17 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				if (delegateCall)	return	delegateCall;
 			}
 		}
+		// Special case for alloc autocall — do not retain alloced result as it might crash (eg [[NSLocale alloc] retain] fails in ObjC)
+		if (!useAutoCall && argumentCount == 0 && [methodName isEqualToString:@"alloc"])
+		{
+			id allocatedObject = [callee alloc];
+			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
+			private.type = @"@";
+			[private setObjectNoRetain:allocatedObject];
+			return	jsObject;		
+		}
+		
 
 		// Instance call
 /*

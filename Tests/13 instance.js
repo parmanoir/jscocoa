@@ -31,3 +31,21 @@
 
 	__jsc__.useSplitCall = useSplitCall
 
+
+
+	//
+	// Test NSLocale alloc
+	//
+
+	var a = NSLocale.alloc.initWithLocaleIdentifier('fr_FR')
+	a.release
+
+	__jsc__.useAutoCall = false
+	
+	var a = NSLocale.alloc().initWithLocaleIdentifier('fr_FR')
+	
+	if (!a.isKindOfClass(NSLocale))			throw "(8) Non autocall alloc failed"
+	if (a.localeIdentifier() != 'fr_FR')	throw "(9) Non autocall alloc failed"
+	a.release()
+	
+	__jsc__.useAutoCall = true
