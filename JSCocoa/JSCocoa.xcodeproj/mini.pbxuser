@@ -58,8 +58,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 283916420;
-			PBXWorkspaceStateSaveDate = 283916420;
+			PBXPerProjectTemplateStateSaveDate = 299781383;
+			PBXWorkspaceStateSaveDate = 299781383;
 		};
 		sourceControlManager = 3D9D7F5E0EF819CB00D71763 /* Source Control */;
 		userBuildSettings = {
@@ -203,10 +203,9 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 924;
-		location = TestsRunner;
 		modificationTime = 268440243.536476;
-		originalNumberOfMultipleMatches = 0;
-		state = 1;
+		originalNumberOfMultipleMatches = 1;
+		state = 0;
 	};
 	3DF7D4620EFC3B0600F2DCCD /* JSCocoaController.m:937 */ = {
 		isa = PBXFileBreakpoint;
@@ -221,10 +220,9 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		lineNumber = 937;
-		location = TestsRunner;
 		modificationTime = 268440243.536642;
-		originalNumberOfMultipleMatches = 0;
-		state = 1;
+		originalNumberOfMultipleMatches = 1;
+		state = 0;
 	};
 	8DC2EF4F0486A6940098B216 /* JSCocoa */ = {
 		activeExec = 0;

@@ -48,4 +48,6 @@
 	if (a.localeIdentifier() != 'fr_FR')	throw "(9) Non autocall alloc failed"
 	a.release()
 	
+	var a = NSLocale.instanceWithLocaleIdentifier('fr_FR')
+	
 	__jsc__.useAutoCall = true

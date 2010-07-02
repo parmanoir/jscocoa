@@ -761,6 +761,7 @@
 	{
 		__lintTokens.push(token)
 	}
+	if (!('JSLintWithLogs' in this))	JSLintWithLogs = function () { return function () {} }
 	var __JSLINT = JSLintWithLogs({ logToken : __logToken })
 	var __jslint = __JSLINT()
 	var __lintTokens

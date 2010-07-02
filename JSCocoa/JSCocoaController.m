@@ -504,7 +504,9 @@ static id JSCocoaSingleton = NULL;
 	if (!script)	return	NULL;
 
 	// Expand macros
-	script = [self expandJSMacros:script url:url];
+	id expandedScript = [self expandJSMacros:script url:url];
+	if (expandedScript)
+		script = expandedScript;
 	
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -514,6 +516,9 @@ static id JSCocoaSingleton = NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:canEvaluateScript:)] && ![_delegate JSCocoa:self canEvaluateScript:script])	return	NULL;
 		if ([_delegate respondsToSelector:@selector(JSCocoa:willEvaluateScript:)])	script = [_delegate JSCocoa:self willEvaluateScript:script];
 	}
+	
+	if (!script)
+		return NSLog(@"evalJSString has nothing to eval"), NULL;	
 
 	if (!customCallPathsCacheIsClean)	[JSCocoa updateCustomCallPaths];
 	
