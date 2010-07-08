@@ -438,6 +438,19 @@ static id JSCocoaSingleton = NULL;
 #pragma mark Script evaluation
 
 //
+// Quick eval of strings and functions returning ObjC objects
+//
+- (id)eval:(NSString*)script		{	return [self toObject:[self evalJSString:script]];				}
+- (id)callFunction:(NSString*)name	{	return [self toObject:[self callJSFunctionNamed:name withArgumentsArray:nil]];	}
+- (id)callFunction:(NSString*)name withArguments:(NSArray*)arguments	{	return [self toObject:[self callJSFunctionNamed:name withArgumentsArray:arguments]];	}
+- (BOOL)hasFunction:(NSString*)name	{	return [self hasJSFunctionNamed:name];	}
+
+
+//
+// Eval of strings, functions, files, returning JavascriptCore objects
+//
+
+//
 // Evaluate a file
 // 
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue

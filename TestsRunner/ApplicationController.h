@@ -41,6 +41,7 @@
 
 - (id)testDelegate;
 - (int)dummyValue;
+- (id)testCallAPI;
 
 - (NSError*)testNSError;
 

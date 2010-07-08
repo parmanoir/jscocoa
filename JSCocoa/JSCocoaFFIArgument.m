@@ -413,7 +413,7 @@
 					// Two step conversion : to unsigned int then to int. One step conversion fails on PPC.
 					int uint = (int)number;
 					unsigned int u = (unsigned)uint;
-					NSLog(@">>>>>>>>%d %u", uint, u);
+					NSLog(@"%d %u", uint, u);
 					*(signed int*)ptr = (signed int)uint;
 					break;
 				}

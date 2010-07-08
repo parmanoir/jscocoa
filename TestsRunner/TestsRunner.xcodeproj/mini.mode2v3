@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D39306B11DE54A40058F520</string>
+						<string>3D39308B11DE57490058F520</string>
 						<key>history</key>
 						<array>
 							<string>3D39301311DE52B40058F520</string>
@@ -256,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>3D39306E11DE54A40058F520</string>
+						<string>3D39308C11DE57490058F520</string>
 						<key>history</key>
 						<array>
 							<string>3D39301611DE52F20058F520</string>
@@ -570,9 +570,10 @@
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D54069F1CE1000CFCEE</string>
 		<string>3D39306C11DE54A40058F520</string>
-		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 		<string>1C530D5B069F1CE1000CFCEE</string>
 		<string>3DF3F45411DC1AEA00E55FFB</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>/Users/mini/Software Inexdo/JSCocoa/TestsRunner/TestsRunner.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1352 736 449 442 0 0 1920 1178 </string>
@@ -942,14 +943,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>54 custom indexed access.js</string>
+										<string>ApplicationController.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -970,6 +969,8 @@
 							<string>417pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1005,8 +1006,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>3DF3F53011DC267D00E55FFB</string>
-				<string>3DF3F53111DC267D00E55FFB</string>
+				<string>3D39308D11DE57490058F520</string>
+				<string>3D39308E11DE57490058F520</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
@@ -1015,7 +1016,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C530D57069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>Identifier</key>

@@ -81,6 +81,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Evaluation
 //
+- (id)eval:(NSString*)script;
+- (id)callFunction:(NSString*)name;
+- (id)callFunction:(NSString*)name withArguments:(NSArray*)arguments;
+- (BOOL)hasFunction:(NSString*)name;
+
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
 - (JSValueRef)evalJSString:(NSString*)script;

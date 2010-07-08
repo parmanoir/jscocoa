@@ -114,6 +114,11 @@ int runCount = 0;
 		path = error;
 	}
 	jsc.delegate = nil;
+	
+	//
+	// Test api
+	//
+	[self testCallAPI];
 
 
 	//
@@ -567,6 +572,50 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	
 
 	return	nil;
+}
+
+- (id)testCallAPI
+{
+/*
+	// This works but is tested only with NSLog
+
+	id jscocoa = jsc;
+	id str;
+	str = @"2+2";
+	NSLog(@"str=%@", [jscocoa eval:str]);
+	str = @"2+'hello'";
+	NSLog(@"str=%@", [jscocoa eval:str]);
+
+	str = @"function hello(a, b) { return a + b } hello('bonjour', 'monde')";
+	NSLog(@"str=%@", [jscocoa eval:str]);
+	str = @"function dummyReturn() { return 'dummy!' }";
+	NSLog(@"str=%@", [jscocoa eval:str]);
+
+	str = @"dummyReturn";
+	NSLog(@"call(%@)=%@", str, [jscocoa callFunction:str]);
+
+	str = @"hello";
+	NSLog(@"call(%@)=%@", str, [jscocoa callFunction:str withArguments:[NSArray arrayWithObjects:[NSNumber numberWithInt:100], [NSNumber numberWithInt:113], nil]]);
+	str = @"hello";
+	NSLog(@"call(%@)=%@", str, [jscocoa callFunction:str withArguments:[NSArray arrayWithObjects:[NSNumber numberWithFloat:1.23], [NSNumber numberWithFloat:4.56], nil]]);
+
+
+	str = @"hello";
+	NSLog(@"hasFunction(%@)=%d", str, [jscocoa hasFunction:str]);
+	str = @"hello23";
+	NSLog(@"hasFunction(%@)=%d", str, [jscocoa hasFunction:str]);
+	
+	str = @"function returnArray() { return [1, 2, [3], 'hello', [4, [5], [6, [7, 8]], 9]] }";
+	[jscocoa eval:str];
+	str = @"returnArray";
+	NSLog(@"call(%@)=%@", str, [jscocoa callFunction:str]);
+
+	str = @"function returnHash() { return { hello : 'world', array : [1, [2], {a:'b'}, 'z'], last : 'YES' } }";
+	[jscocoa eval:str];
+	str = @"returnHash";
+	NSLog(@"call(%@)=%@", str, [jscocoa callFunction:str]);
+*/	
+	return nil;
 }
 
 - (int)add1:(int)a
