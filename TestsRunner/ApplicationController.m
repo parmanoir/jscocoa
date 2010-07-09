@@ -245,6 +245,10 @@ int runCount = 0;
 	[JSCocoa logBoxedObjects];
 }
 
+- (void)log:(NSString*)message
+{
+	NSLog(@"%@", message);
+}
 
 
 - (IBAction)runSimpleTestFile:(id)sender
@@ -811,7 +815,7 @@ int dummyValue;
 {
 	if (!b)	return;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
-	
+
 	[jsc2 release];
 	for (id o in topObjects)
 		[o release];

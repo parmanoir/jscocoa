@@ -252,6 +252,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	useSplitCall	= NO;
 	ownsContext		= NO;
 
+	[JSCocoa updateCustomCallPaths];
+
 	return	self;
 }
 
@@ -645,7 +647,7 @@ static id JSCocoaSingleton = NULL;
 - (JSValueRef)callJSFunctionNamed:(NSString*)name withArgumentsArray:(NSArray*)arguments
 {
 	JSObjectRef jsFunction = [self JSFunctionNamed:name];
-	if (!jsFunction)	return	NULL;
+	if (!jsFunction)	return	NSLog(@"callJSFunctionNamed found no function %@", name), NULL;
 	return	[self callJSFunction:jsFunction withArguments:arguments];
 }
 
@@ -4029,7 +4031,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				JSValueRef res = [jsc JSCocoa:jsc callMethod:methodName ofObject:callee privateObject:thisPrivateObject argumentCount:argumentCount arguments:arguments inContext:ctx exception:exception];
 				if (res)	return	res;
 				
-				return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction : method %@ not found — remnant of a split call ?", methodName]), NULL;
+				return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction : method %@ of object %@ not found — remnant of a split call ?", methodName, [callee class]]), NULL;
 			}
 		}
 		
@@ -4679,3 +4681,4 @@ id	JSLocalizedString(id stringName, id firstArg, ...)
 }
 
 @end
+

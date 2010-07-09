@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "JSCocoa.h"
-#
+
 
 @interface ApplicationController : NSObject <NSApplicationDelegate> {
 
@@ -35,6 +35,7 @@
 - (IBAction)garbageCollect:(id)sender;
 - (IBAction)logInstanceStats:(id)sender;
 - (IBAction)logBoxedObjects:(id)sender;
+- (void)log:(NSString*)message;
 
 - (IBAction)runSimpleTestFile:(id)sender;
 - (IBAction)unlinkAllReferences:(id)sender;

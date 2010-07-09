@@ -1,0 +1,60 @@
+<html>
+	<style>
+		html
+		{
+			font-family: lucida grande;
+		}
+		#dump
+		{
+			white-space: pre;
+		}
+	</style>
+<body>
+
+
+	<h1>WebView's context used as JSCocoa source</h1>
+	
+	
+	<a href='http://yahoo.com'>Yahoo</a>
+	
+	<p>
+	<div id='dump'></div>
+	<script>
+	try
+	{
+		function	log(str)
+		{
+			str = str.replace(/</g, '&lt;')
+			str = str.replace(/>/g, '&gt;')
+			document.getElementById('dump').innerHTML += str + '\n'
+		}
+	
+	
+		if ('OSX' in this)	log('HAS OSX')
+		else				log('no JSCocoa :(')
+
+		var delegate = OSX.NSApplication.sharedApplication.delegate
+		
+
+		var point = new OSX.NSPoint(123, 456)
+		if (point.x != 123 || point.y != 456)						throw 'new NSPoint failed'
+		var rect = new OSX.NSRect(4, 7, 13, 26)
+		if (rect.origin.x != 4 || rect.origin.y != 7 
+			|| rect.size.width != 13 || rect.size.height != 26)		throw 'new NSRect failed'
+
+		log('app delegate=' + delegate)
+		log('NSDate(now)=' + OSX.NSDate.date)
+		log('NSDate=' + OSX.NSDate)
+		log('NSDate.valueOf()=' + OSX.NSDate.valueOf())
+		log('OSX=' + OSX)
+	}
+	catch(e)
+	{
+		document.body.style.backgroundColor = 'red'
+		document.body.innerHTML = '<pre>' + e + '</pre>'
+	}
+	</script>
+
+	
+</body>
+</html>

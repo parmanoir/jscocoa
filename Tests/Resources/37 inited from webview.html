@@ -68,9 +68,13 @@
 		log('app delegate=' + delegate)
 		log('test array=' +  array)
 		log('test hash=' + hash)
+		log('NSDate=' + OSX.NSDate)
+		log('NSDate(now)=' + OSX.NSDate.date)
+		log('NSDate=' + OSX.NSDate.valueOf())
+		log('OSX=' + OSX)
 		
 		delegate.finishTest37(true)
-		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'
+		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'		
 	}
 	catch(e)
 	{
