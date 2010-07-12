@@ -37,5 +37,7 @@
 - (NSString*)queryName:(NSString*)name;
 - (NSString*)queryName:(NSString*)name type:(NSString*)type;
 
+- (NSArray*)keys;
+
 
 @end

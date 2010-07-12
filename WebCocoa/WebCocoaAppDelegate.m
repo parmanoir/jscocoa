@@ -27,7 +27,7 @@
 #pragma mark WebFrameLoadDelegate Methods
 
 - (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject forFrame:(WebFrame *)frame {
-	NSLog(@"didClearWindowObject:");
+//	NSLog(@"didClearWindowObject:");
 
 }
 

@@ -70,6 +70,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 - (id)init;
 - (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
+
 + (id)sharedController;
 + (id)controllerFromContext:(JSContextRef)ctx;
 + (BOOL)hasSharedController;
@@ -77,6 +78,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (void)hazardReport;
 + (NSString*)runningArchitecture;
 + (void)updateCustomCallPaths;
+- (void)accomodateWebKitInspector;
 
 //
 // Evaluation

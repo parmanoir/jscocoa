@@ -35,7 +35,7 @@
 
 		var delegate = OSX.NSApplication.sharedApplication.delegate
 		
-
+/*
 		var point = new OSX.NSPoint(123, 456)
 		if (point.x != 123 || point.y != 456)						throw 'new NSPoint failed'
 		var rect = new OSX.NSRect(4, 7, 13, 26)
@@ -47,6 +47,27 @@
 		log('NSDate=' + OSX.NSDate)
 		log('NSDate.valueOf()=' + OSX.NSDate.valueOf())
 		log('OSX=' + OSX)
+		log('OSX instanceof Node=' + (OSX instanceof Node))
+		log('OSX.NSDate instanceof Node=' + ((OSX.NSDate) instanceof Node))
+		log('OSX.NSDate.prototype=' + OSX.NSDate.prototype)
+		log('OSX.NSDate.__proto__=' + OSX.NSDate.__proto__)
+*/
+		log('typeof OSX=' + (typeof OSX))
+		log('typeof OSX.NSDate=' + (typeof OSX.NSDate))
+
+/*
+		var _old_toString = Object.prototype.toString
+		Object.prototype.toString = function ()
+		{
+			var str = _old_toString.call(this)
+			if (!str.match(/JSCocoa/))
+				return str
+			return '[Object ' + (this.valueOf()) + ']'
+		}
+*/
+var obj = OSX.NSDate.date
+var a = Object.prototype.toString.call(obj)
+log('a=' + a + '**********')
 	}
 	catch(e)
 	{

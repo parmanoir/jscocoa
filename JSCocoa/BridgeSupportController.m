@@ -214,6 +214,15 @@
 	return variadicFunctions;
 }
 
+- (NSArray*)keys
+{
+	[hash removeObjectForKey:@"NSProxy"];
+	[hash removeObjectForKey:@"NSProtocolChecker"];
+	[hash removeObjectForKey:@"NSDistantObject"];
+	
+	return [hash allKeys];
+}
+
 
 - (NSString*)queryName:(NSString*)name
 {
@@ -238,10 +247,6 @@
 }
 
 @end
-
-
-
-
 
 
 
