@@ -319,3 +319,8 @@ JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 #   error "Unsupported MACOSX platform"
 #endif
 
+
+// Stored in boxedobjects to access a list of methods, properties, ...
+#define RuntimeInformationPropertyName		"info"
+
+
