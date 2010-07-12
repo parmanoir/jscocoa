@@ -10,9 +10,6 @@
 
 //log('point=' + point)
 	// Account for 32 and 64 bit types
-	log('point.x=' + point.x + ' y=' + point.y);
-	log('point=' + point + ' point.valueOf()=' + point.valueOf())
-	log('+++++++++++++++point.x=' + point.x + ' y=' + point.y);
 	if (point != '<NSPoint {x:12, y:27}>' && point != '<CGPoint {x:12, y:27}>')				throw 'struct description failed (1)'
 	
 	var rect = NSMakeRect(1, 5, 8, 59483)

@@ -29,6 +29,9 @@ static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, si
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
 static	bool		jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception);
 
+static	JSValueRef	jsCocoaInfo_getProperty(JSContextRef, JSObjectRef, JSStringRef, JSValueRef*);
+static	void		jsCocoaInfo_getPropertyNames(JSContextRef, JSObjectRef, JSPropertyNameAccumulatorRef);
+
 // Set on valueOf callback property of objects
 #define	JSCocoaInternalAttribute kJSPropertyAttributeDontEnum
 
@@ -36,6 +39,7 @@ static	bool		jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor
 static	JSClassRef			OSXObjectClass		= NULL;
 static	JSClassRef			jsCocoaObjectClass	= NULL;
 static	JSClassRef			jsCocoaFunctionClass= NULL;
+static	JSClassRef			jsCocoaInfoClass	= NULL;
 static	JSClassRef			hashObjectClass		= NULL;
 
 // Convenience method to throw a Javascript exception
@@ -174,13 +178,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	jsCocoaObjectDefinition.callAsConstructor	= jsCocoaObject_callAsConstructor;
 //	jsCocoaObjectDefinition.hasInstance			= jsCocoaObject_hasInstance;
 	jsCocoaObjectDefinition.convertToType		= jsCocoaObject_convertToType;
-/*	
-	JSStaticValue	jsCocoaObject_staticValues[]= {
-		{ "_info", jsCocoaObject_getProperty, NULL, kJSPropertyAttributeDontDelete | kJSPropertyAttributeReadOnly },
-		{ 0, 0, 0, 0 }
-	};
-	jsCocoaObjectDefinition.staticValues		= jsCocoaObject_staticValues;
-*/	
+
 	if (!jsCocoaObjectClass)
 		jsCocoaObjectClass = JSClassCreate(&jsCocoaObjectDefinition);
 
@@ -189,11 +187,24 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	//	Separated from the object because "typeof NSDate.date" gave "function" instead of object, preventing enumeration in WebKit inspector
 	//
 	JSClassDefinition jsCocoaFunctionDefinition	= kJSClassDefinitionEmpty;
+	jsCocoaFunctionDefinition.className			= "JSCocoa box";
 	jsCocoaFunctionDefinition.parentClass		= jsCocoaObjectClass;
 	jsCocoaFunctionDefinition.callAsFunction	= jsCocoaObject_callAsFunction;
 	
 	if (!jsCocoaFunctionClass)
 		jsCocoaFunctionClass = JSClassCreate(&jsCocoaFunctionDefinition);
+	
+	//
+	// Holds __info in objects
+	//
+	JSClassDefinition jsCocoaInfoDefinition		= kJSClassDefinitionEmpty;
+	jsCocoaInfoDefinition.className				= "Runtime info";
+//	jsCocoaInfoDefinition.parentClass			= jsCocoaObjectClass;
+	jsCocoaInfoDefinition.getProperty			= jsCocoaInfo_getProperty;
+	jsCocoaInfoDefinition.getPropertyNames		= jsCocoaInfo_getPropertyNames;
+	
+	if (!jsCocoaInfoClass)
+		jsCocoaInfoClass = JSClassCreate(&jsCocoaInfoDefinition);
 	
 	//
 	// Private Hash of derived classes, storing js values
@@ -319,6 +330,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		if (jsCocoaFunctionClass) {
             JSClassRelease(jsCocoaFunctionClass);
             jsCocoaFunctionClass = nil;
+		}
+		if (jsCocoaInfoClass) {
+            JSClassRelease(jsCocoaInfoClass);
+            jsCocoaInfoClass = nil;
 		}
         
 		if (hashObjectClass) {
@@ -472,7 +487,21 @@ static id JSCocoaSingleton = NULL;
 // Replace the toString function with our own
 - (void)accomodateWebKitInspector
 {
-	NSLog(@"TOWRITE");
+	// The inspector uses Object's toString to extract the class name and print it,
+	//	we replace that class name with valueOf when called for JSCocoa boxes
+	char* script = "\
+		var _old_toString = Object.prototype.toString		\n\
+		Object.prototype.toString = function ()				\n\
+		{													\n\
+			var str = _old_toString.call(this)				\n\
+			if (!str.match(/JSCocoa/))						\n\
+				return str									\n\
+			return '[Object ' + (this.valueOf()) + ']'		\n\
+		}													\n\
+															";
+	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)[NSString stringWithUTF8String:script]);
+	JSEvaluateScript(ctx, scriptJS, NULL, NULL, 1, NULL);
+	JSStringRelease(scriptJS);
 }
 
 
@@ -2917,7 +2946,19 @@ JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef va
 {
 	if (JSValueGetType(externalCtx, value) < kJSTypeObject)	return valueFromExternalContext(externalCtx, value, ctx);
 
-	JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	// If value is function ...
+	JSStringRef scriptJS= JSStringCreateWithUTF8CString("return (typeof arguments[0]) == 'function' ? true : null");
+	JSObjectRef fn		= JSObjectMakeFunction(externalCtx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+	JSValueRef result	= JSObjectCallAsFunction(externalCtx, fn, NULL, 1, (JSValueRef*)&value, NULL);
+	JSStringRelease(scriptJS);
+
+	// ... use the function boxer
+	JSObjectRef o; 
+	if (JSValueIsBoolean(externalCtx, result))
+		o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+	else
+		o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+		
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 	private.type = @"externalJSValueRef";
 	[private setExternalJSValueRef:value ctx:externalCtx];
@@ -3142,6 +3183,7 @@ call:
 
 		// Special case for NSMutableArray get and Javascript array methods
 //		if ([privateObject.object isKindOfClass:[NSArray class]])
+		// Use respondsToSelector for custom indexed access
 		if ([privateObject.object respondsToSelector:@selector(objectAtIndex:)])
 		{
 			id array	= privateObject.object;
@@ -3193,6 +3235,7 @@ call:
 		
 		// Special case for NSMutableDictionary get
 //		if ([privateObject.object isKindOfClass:[NSDictionary class]])
+		// Use respondsToSelector for custom indexed access
 		if ([privateObject.object respondsToSelector:@selector(objectForKey:)])
 		{
 			id dictionary	= privateObject.object;
@@ -3387,6 +3430,21 @@ call:
 				return	possibleReturnValue;
 			}
 		}
+		
+		// Info object for instances and classes
+		if ([propertyName isEqualToString:@"__info"])
+		{
+			JSObjectRef o = JSObjectMake(ctx, jsCocoaInfoClass, NULL);
+
+			JSStringRef	classNameProperty	= JSStringCreateWithUTF8CString("className");
+			JSStringRef	className			= JSStringCreateWithUTF8CString([[[[privateObject object] class] description] UTF8String]);
+			JSObjectSetProperty(ctx, o, classNameProperty, JSValueMakeString(ctx, className), 
+							kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontDelete, NULL);
+			JSStringRelease(classNameProperty);
+			JSStringRelease(className);
+			return	o;
+		}
+		
 
 		//
 		// Do some filtering here on property name : 
@@ -3472,7 +3530,7 @@ call:
 				}
 			}
 		}
-
+		
 		// Get ready for method call
 		JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
@@ -3837,20 +3895,25 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 //
 static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
-NSLog(@"property names");
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 
 	// If we have a dictionary, add keys from allKeys
-	if ([privateObject.type isEqualToString:@"@"] && [privateObject.object isKindOfClass:[NSDictionary class]])
+	if ([privateObject.type isEqualToString:@"@"])
 	{
-		id dictionary	= privateObject.object;
-		id keys			= [dictionary allKeys];
-		
-		for (id key in keys)
+		JSStringRef jsString = JSStringCreateWithUTF8CString("__info");
+		JSPropertyNameAccumulatorAddName(propertyNames, jsString);
+		JSStringRelease(jsString);			
+		if ([privateObject.object isKindOfClass:[NSDictionary class]])
 		{
-			JSStringRef jsString = JSStringCreateWithUTF8CString([key UTF8String]);
-			JSPropertyNameAccumulatorAddName(propertyNames, jsString);
-			JSStringRelease(jsString);			
+			id dictionary	= privateObject.object;
+			id keys			= [dictionary allKeys];
+			
+			for (id key in keys)
+			{
+				JSStringRef jsString = JSStringCreateWithUTF8CString([key UTF8String]);
+				JSPropertyNameAccumulatorAddName(propertyNames, jsString);
+				JSStringRelease(jsString);			
+			}
 		}
 	}
 }
@@ -4537,6 +4600,45 @@ static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef obje
 static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception)
 {
 	return NO;
+}
+
+//
+//
+#pragma mark JavascriptCore __info object (ObjCInstanceOrClass._info returns runtime info
+//
+//
+static JSValueRef jsCocoaInfo_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
+{
+	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
+	[NSMakeCollectable(propertyName) autorelease];
+	NSLog(@"GETPROP %@", propertyName);
+	
+/*
+			JSObjectRef o = JSObjectMake(ctx, jsCocoaInfoClass, NULL);
+
+			JSStringRef	classNameProperty	= JSStringCreateWithUTF8CString("className");
+			JSStringRef	className			= JSStringCreateWithUTF8CString([[[[privateObject object] class] description] UTF8String]);
+			JSObjectSetProperty(ctx, o, classNameProperty, JSValueMakeString(ctx, className), 
+							kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontDelete, NULL);
+			JSStringRelease(classNameProperty);
+			JSStringRelease(className);
+			return	o;
+
+*/	
+	return JSValueMakeUndefined(ctx);
+}
+
+static void jsCocoaInfo_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
+{
+	NSLog(@"GETNAMES");
+	
+	id names = [NSMutableArray arrayWithObjects:@"methods", @"ivars", @"properties", @"protocols", nil];
+	for (id name in names)
+	{
+		JSStringRef jsString = JSStringCreateWithUTF8CString([name UTF8String]);
+		JSPropertyNameAccumulatorAddName(propertyNames, jsString);
+		JSStringRelease(jsString);			
+	}
 }
 
 

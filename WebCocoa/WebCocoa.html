@@ -20,6 +20,7 @@
 	<p>
 	<div id='dump'></div>
 	<script>
+
 	try
 	{
 		function	log(str)
@@ -27,6 +28,13 @@
 			str = str.replace(/</g, '&lt;')
 			str = str.replace(/>/g, '&gt;')
 			document.getElementById('dump').innerHTML += str + '\n'
+		}
+
+		function	dumpHash(o)
+		{
+			var str = ''
+			for (var i in o) str += i + '=' + (o[i]) + '\n'
+			return str
 		}
 	
 	
@@ -54,7 +62,8 @@
 */
 		log('typeof OSX=' + (typeof OSX))
 		log('typeof OSX.NSDate=' + (typeof OSX.NSDate))
-
+		log('OSX.NSDate.__info=' + dumpHash(OSX.NSDate.__info))
+		log('OSX.NSDate.__info.__className=' + (OSX.NSDate.__info.__className))
 /*
 		var _old_toString = Object.prototype.toString
 		Object.prototype.toString = function ()

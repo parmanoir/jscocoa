@@ -576,6 +576,9 @@
 	//
 	// Describe struct
 	//	(Test 28)
+	//	point = new CGPoint(12, 27)
+	//	describeStruct(point)
+	//	-> <CGPoint {x:12, y:27}>
 	//
 	function	describeStruct(o, level)
 	{
