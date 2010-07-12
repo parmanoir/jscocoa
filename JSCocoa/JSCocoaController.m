@@ -2988,7 +2988,6 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		id self = [JSCocoaController controllerFromContext:ctx];
 		if ([self hasJSFunctionNamed:@"describeStruct"])
 		{
-			NSLog(@"describing ... %@", [NSThread callStackSymbols]);
 			JSStringRef scriptJS = JSStringCreateWithUTF8CString("return describeStruct(arguments[0])");
 			JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
 			JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&thisObject, NULL);

@@ -6,17 +6,8 @@
 		-> prints a readable description of the struct
 
 	*/
-log('START*****************')
-log('START*****************')
-log('START*****************')
-
-
-log('commented test 28')
-
 	var point = NSMakePoint(12, 27)
-log('point=' + point)
 
-/*
 //log('point=' + point)
 	// Account for 32 and 64 bit types
 	log('point.x=' + point.x + ' y=' + point.y);
@@ -34,7 +25,6 @@ log('point=' + point)
 
 	point = null
 	rect = null
-*/	
 /*	
 	log('====dump====')
 	for (var i in this)
@@ -46,8 +36,3 @@ log('point=' + point)
 	}
 	log('====dump====')
 */
-
-log('END===================')
-log('END===================')
-log('END===================')
-

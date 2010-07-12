@@ -584,16 +584,12 @@
 		if (level > 100)		return ''
 		
 		var str = ''
- 		log('(' + level + ') describeStruct typeof(o)=' + o + '=' + (typeof o))
 		if (typeof(o) == 'object' || typeof(o) == 'function')
 		{
 			str += '{'
 			var elements = []
 			for (var i in o)
-			{
-//				log('i=' + i)
 				elements.push(i + ':' + describeStruct(o[i], level+1))
-			}
 			str += elements.join(', ')
 			str += '}'
 		}
