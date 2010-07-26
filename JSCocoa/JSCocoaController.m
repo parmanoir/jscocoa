@@ -1624,7 +1624,6 @@ static id JSCocoaSingleton = NULL;
 + (BOOL)isMaybeSplitCall:(NSString*)_start forClass:(id)class
 {
 	int i;
-
 	id start = [_start lowercaseString];
 	// Search through every class level
 	while (class)
@@ -3568,7 +3567,9 @@ call:
 				if (callee == class)
 					class = objc_getMetaClass(object_getClassName(class));
 				// Try split start
-				BOOL isMaybeSplit = [JSCocoaController isMaybeSplitCall:methodName forClass:class];
+				BOOL isMaybeSplit = NO;
+				if ([jsc useSplitCall])
+					isMaybeSplit = [JSCocoaController isMaybeSplitCall:methodName forClass:class];
 				// If not split and not NSString, return (if NSString, try to convert to JS string in callAsFunction and use native JS methods)
 				if (!isMaybeSplit && ![callee isKindOfClass:[NSString class]])	
 				{
