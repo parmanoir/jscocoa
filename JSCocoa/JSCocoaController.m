@@ -518,6 +518,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Eval of strings, functions, files, returning JavascriptCore objects
 //
+#pragma mark Script evaluation returning JavascriptCore objects
 
 //
 // Evaluate a file
@@ -1445,7 +1446,7 @@ static id JSCocoaSingleton = NULL;
 	// If method is already swizzled, reswizzle it to reset the class. 
 	// addMethod: will overwrite our first swizzled method, which is what we want.
 	if ([class respondsToSelector:altSel_])	
-		method_setImplementation(class_getInstanceMethod(class, altSel_), class_getMethodImplementation(class, origSel_));
+		method_setImplementation(class_getClassMethod(class, altSel_), class_getMethodImplementation(class, origSel_));
 
 	BOOL b = [self addMethod:originalMethodName class:class jsFunction:valueAndContext encoding:(char*)method_getTypeEncoding(origMethod)];
 	if (!b)						return NO;
@@ -3038,6 +3039,13 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 		
 		toString = [NSString stringWithFormat:@"<%@ %@>", thisPrivateObject.structureName, structDescription];
 	}
+	
+	// Return a number is the whole string (no spaces, no others chars) is a number
+	NSScanner* scan = [NSScanner scannerWithString:toString];
+	double v = 0;
+	[scan scanDouble:&v];
+	if ([scan isAtEnd])
+		return JSValueMakeNumber(ctx, v);
 
 	// Convert to string and return
 	JSStringRef jsToString = JSStringCreateWithCFString((CFStringRef)toString);

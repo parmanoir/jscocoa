@@ -74,6 +74,15 @@
 			return '[Object ' + (this.valueOf()) + ']'
 		}
 */
+
+		with (OSX)
+		{
+			log('time=' + NSDate.date)
+			
+			var methods = NSDate.info.methods.map(function(i){return(i.name.valueOf());})
+			log('m=' + methods)
+		}
+
 var obj = OSX.NSDate.date
 var a = Object.prototype.toString.call(obj)
 log('a=' + a + '**********')
