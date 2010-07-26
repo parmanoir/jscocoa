@@ -769,7 +769,10 @@
 	var __jslint = __JSLINT()
 	var __lintTokens
 
-	function	expandJSMacros(script)
+	//
+	// Expand script, log errors into errorArray (or to console if there are none)
+	//
+	function	expandJSMacros(script, errorArray)
 	{
 		__lintTokens = []
 		var lines	= script.split('\n')
@@ -780,12 +783,24 @@
 		{
 			var e = __JSLINT.errors[i]
 			if (!e)	continue
-			log('JSLint error (' + e.line + ', ' + e.character + ')=' + e.reason)
-			log(lines[e.line])
+			var error				= 'JSLint error (' + e.line + ', ' + e.character + ')=' + e.reason
+			var errorLine			= lines[e.line]
 			var str = ''
 			for (var j=0; j<e.character-1; j++) str += ' '
 			str += '^'
-			log(str)
+			var errorPosition		= str
+			if (errorArray)
+			{
+				var o =  { error : error } 
+				if (errorLine)	o.line = errorLine, o.position = errorPosition
+				errorArray.addObject(o)
+			}
+			else
+			{
+				log(error)
+				log(errorLine)
+				log(errorPosition)
+			}
 		}
 		var useAutoCall = __jsc__.useAutoCall
 		if (typeof useAutoCall === 'function') useAutoCall = __jsc__.useAutoCall()

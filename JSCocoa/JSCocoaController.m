@@ -509,10 +509,12 @@ static id JSCocoaSingleton = NULL;
 //
 // Quick eval of strings and functions returning ObjC objects
 //
-- (id)eval:(NSString*)script		{	return [self toObject:[self evalJSString:script]];				}
-- (id)callFunction:(NSString*)name	{	return [self toObject:[self callJSFunctionNamed:name withArgumentsArray:nil]];	}
+- (id)eval:(NSString*)script			{	return [self toObject:[self evalJSString:script]];				}
+- (id)callFunction:(NSString*)name		{	return [self toObject:[self callJSFunctionNamed:name withArgumentsArray:nil]];	}
 - (id)callFunction:(NSString*)name withArguments:(NSArray*)arguments	{	return [self toObject:[self callJSFunctionNamed:name withArgumentsArray:arguments]];	}
-- (BOOL)hasFunction:(NSString*)name	{	return [self hasJSFunctionNamed:name];	}
+- (BOOL)hasFunction:(NSString*)name		{	return [self hasJSFunctionNamed:name];	}
+
+- (BOOL)isSyntaxValid:(NSString*)script	{	return [self isSyntaxValid:script error:nil];	}
 
 
 //
@@ -552,8 +554,8 @@ static id JSCocoaSingleton = NULL;
 	// Convert script and script URL to js strings
 //	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
 	// Using CreateWithUTF8 yields wrong results on PPC
-	JSStringRef scriptJS = JSStringCreateWithCFString((CFStringRef)script);
-	JSStringRef scriptURLJS		= JSStringCreateWithUTF8CString([path UTF8String]);
+	JSStringRef scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
+	JSStringRef scriptURLJS	= JSStringCreateWithUTF8CString([path UTF8String]);
 	// Eval !
 	JSValueRef	exception = NULL;
 	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
@@ -747,7 +749,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Expand macros
 //
-- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url
+- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url errors:(NSMutableArray*)array;
 {
 	// Normal path, with macro expansion for class definitions
 	// OR
@@ -757,7 +759,7 @@ static id JSCocoaSingleton = NULL;
 	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
 	if (hasFunction && useJSLint)
 	{
-		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, nil];
+		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, array, nil];
 		id expandedScript = [self unboxJSValueRef:v];
 		// Bail if expansion failed
 		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
@@ -767,6 +769,43 @@ static id JSCocoaSingleton = NULL;
 	}
 	return	script;
 }
+- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url
+{
+	return [self expandJSMacros:script url:url errors:nil];
+}
+
+//
+// Syntax validation
+//
+- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error
+{
+	id errors = [NSMutableArray array];
+	script = [self expandJSMacros:script url:nil errors:errors];
+
+	JSStringRef scriptJS	= JSStringCreateWithUTF8CString([script UTF8String]);
+	JSValueRef	exception	= NULL;
+	BOOL b = JSCheckScriptSyntax(ctx, scriptJS, scriptJS, 1, &exception);
+	JSStringRelease(scriptJS);
+	
+	if (exception)
+	{
+		NSMutableArray* errorList = [NSMutableArray array];
+		NSString* str = [self formatJSException:exception];
+		[errorList addObject:str];
+		for (id error in errors)
+		{
+			[errorList addObject:[error valueForKey:@"error"]];
+			if ([error valueForKey:@"line"])		[errorList addObject:[error valueForKey:@"line"]];
+			if ([error valueForKey:@"position"])	[errorList addObject:[error valueForKey:@"position"]];
+		}
+		if (error)
+			*error = [errorList componentsJoinedByString:@"\n"];
+	}
+	
+	return b;
+}
+
+
 
 //
 // Unbox a JSValueRef
@@ -1791,7 +1830,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Error reporting
 //
-- (void) callDelegateForException:(JSValueRef)exception {
+- (void)callDelegateForException:(JSValueRef)exception {
     if (!_delegate || ![_delegate respondsToSelector:@selector(JSCocoa:hadError:onLineNumber:atSourceURL:)]) {
 		NSLog(@"JSException: %@", [self formatJSException:exception]);
         return;

@@ -66,48 +66,14 @@
 			PBXWorkspaceStateSaveDate = 301830039;
 		};
 		perUserProjectItems = {
-			3D11CF6C11ECC40C004B8518 = 3D11CF6C11ECC40C004B8518 /* PBXTextBookmark */;
-			3D11CF6E11ECC40C004B8518 = 3D11CF6E11ECC40C004B8518 /* PBXTextBookmark */;
-			3D98A34311FC794C00111BFE = 3D98A34311FC794C00111BFE /* PBXTextBookmark */;
-			3D98A34511FC794C00111BFE = 3D98A34511FC794C00111BFE /* PBXTextBookmark */;
-			3D98A4C211FD8FA100111BFE /* PBXTextBookmark */ = 3D98A4C211FD8FA100111BFE /* PBXTextBookmark */;
-			3D98A4C311FD8FA100111BFE /* PBXTextBookmark */ = 3D98A4C311FD8FA100111BFE /* PBXTextBookmark */;
+			3D98A34311FC794C00111BFE /* PBXTextBookmark */ = 3D98A34311FC794C00111BFE /* PBXTextBookmark */;
+			3D98A34511FC794C00111BFE /* PBXTextBookmark */ = 3D98A34511FC794C00111BFE /* PBXTextBookmark */;
+			3D98A4DB11FD8FFC00111BFE /* PBXTextBookmark */ = 3D98A4DB11FD8FFC00111BFE /* PBXTextBookmark */;
+			3D98A4DD11FD8FFC00111BFE /* PBXTextBookmark */ = 3D98A4DD11FD8FFC00111BFE /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
 		};
-	};
-	3D11CF6C11ECC40C004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D11CF6D11ECC40C004B8518 /* 16 NSArray NSDictionary easy access.js */;
-		name = "16 NSArray NSDictionary easy access.js: 106";
-		rLen = 0;
-		rLoc = 2072;
-		rType = 0;
-		vrLen = 2089;
-		vrLoc = 835;
-	};
-	3D11CF6D11ECC40C004B8518 /* 16 NSArray NSDictionary easy access.js */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.javascript;
-		name = "16 NSArray NSDictionary easy access.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/16 NSArray NSDictionary easy access.js";
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 1474}}";
-			sepNavSelRange = "{2072, 0}";
-			sepNavVisRange = "{774, 2046}";
-		};
-	};
-	3D11CF6E11ECC40C004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
-		name = "ApplicationController.m: 150";
-		rLen = 0;
-		rLoc = 4224;
-		rType = 0;
-		vrLen = 2237;
-		vrLoc = 3004;
 	};
 	3D36E247105229B500132E23 /* TestsRunner */ = {
 		isa = PBXExecutable;
@@ -302,7 +268,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {909, 9955}}";
 			sepNavSelRange = "{4224, 0}";
-			sepNavVisRange = "{3004, 2230}";
+			sepNavVisRange = "{3004, 2237}";
 			sepNavWindowFrame = "{{152, 138}, {968, 1004}}";
 		};
 	};
@@ -354,24 +320,36 @@
 		vrLen = 2237;
 		vrLoc = 3004;
 	};
-	3D98A4C211FD8FA100111BFE /* PBXTextBookmark */ = {
+	3D98A4DB11FD8FFC00111BFE /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 3D11CF6D11ECC40C004B8518 /* 16 NSArray NSDictionary easy access.js */;
+		fRef = 3D98A4DC11FD8FFC00111BFE /* 16 NSArray NSDictionary easy access.js */;
 		name = "16 NSArray NSDictionary easy access.js: 106";
 		rLen = 0;
 		rLoc = 2072;
 		rType = 0;
-		vrLen = 2046;
+		vrLen = 2150;
 		vrLoc = 774;
 	};
-	3D98A4C311FD8FA100111BFE /* PBXTextBookmark */ = {
+	3D98A4DC11FD8FFC00111BFE /* 16 NSArray NSDictionary easy access.js */ = {
+		isa = PBXFileReference;
+		name = "16 NSArray NSDictionary easy access.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/16 NSArray NSDictionary easy access.js";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1038, 1474}}";
+			sepNavSelRange = "{2072, 0}";
+			sepNavVisRange = "{774, 2150}";
+			sepNavWindowFrame = "{{130, 27}, {1097, 1041}}";
+		};
+	};
+	3D98A4DD11FD8FFC00111BFE /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
 		name = "ApplicationController.m: 150";
 		rLen = 0;
 		rLoc = 4224;
 		rType = 0;
-		vrLen = 2230;
+		vrLen = 2237;
 		vrLoc = 3004;
 	};
 	8D1107260486CEB800E47090 /* TestsRunner */ = {
