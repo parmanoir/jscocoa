@@ -123,6 +123,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	// Hash used to quickly check for variadic methods, Original, Super, toString, valueOf ...
 	NSMutableDictionary*	customCallPaths;
 	BOOL					customCallPathsCacheIsClean;
+	
+	// Javascript functions defined for ObjC classes are stored in this hash
+	// __globalJSFunctionRepository__[className][propertyName]
 
 //
 // Init
@@ -3359,8 +3362,24 @@ call:
 				if (returnHashValue)	return	hashProperty;
 			}
 		}
-
-		
+/*
+		// ## Use javascript override functions, only bridge side. Discarded for now as it doesn't give a way to call the original method
+		// ## Plus : useful ? as it can be done by setting custom js functions on the boxed objects
+		// Check if this is a Javascript override
+		id script = [NSString stringWithFormat:@"__globalJSFunctionRepository__.%@.%@", [callee class], propertyName];
+		JSStringRef	jsScript = JSStringCreateWithUTF8CString([script UTF8String]);
+		JSValueRef result = JSEvaluateScript(ctx, jsScript, NULL, NULL, 1, NULL);
+		JSStringRelease(jsScript);
+		if (result && JSValueGetType(ctx, result) == kJSTypeObject)
+		{
+			NSLog(@"GOT IT %@", propertyName);
+			JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
+			private.type = @"jsFunction";
+			[private setJSValueRef:result ctx:ctx];
+			return	o;
+		}
+*/		
 		//
 		// Attempt Zero arg autocall
 		// Object.alloc().init() -> Object.alloc.init
