@@ -67,6 +67,10 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @property BOOL useSafeDealloc;
 @property BOOL useSplitCall;
 @property BOOL useJSLint;
+@property BOOL useAutoCall;
+@property BOOL callSelectorsMissingTrailingSemicolon;
+@property BOOL canSetOnBoxedObjects;
+
 
 - (id)init;
 - (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
@@ -186,8 +190,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;
 
-- (BOOL)useAutoCall;
-- (void)setUseAutoCall:(BOOL)b;
 
 - (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;
 + (const char*)typeEncodingOfMethod:(NSString*)methodName class:(NSString*)className;

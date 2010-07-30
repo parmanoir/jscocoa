@@ -326,7 +326,6 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	// Add ourselves in the JS context
 	[jsc evalJSString:@"var applicationController = NSApplication.sharedApplication.delegate"];
 	
-	
 	//
 	// Test disallowed getting
 	//
@@ -355,6 +354,9 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	o = [jsc unboxJSValueRef:ret];
 	if (o != [NSWorkspace sharedWorkspace])					return	@"delegate getProperty failed (3)";
 	
+	
+#define JSRESULTNUMBER JSValueToNumber([jsc ctx], ret?ret:JSValueMakeUndefined([jsc ctx]), NULL)
+	
 	//
 	// Test custom getting
 	//
@@ -362,7 +364,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	ret = [jsc evalJSString:@"NSWorkspace.sharedWorkspace"];
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (4)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (5)";
-	if (JSValueToNumber([jsc ctx], ret, NULL) != 123)		return	@"delegate getProperty failed (6)";
+	if (JSRESULTNUMBER != 123)		return	@"delegate getProperty failed (6)";
 	customValueGet = NULL;
 
 
@@ -389,7 +391,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	//
 	customValueSet = NULL;
 	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
-	int bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
+	int bezelStyle = JSRESULTNUMBER;
 	if (bezelStyle != 3)		return	@"delegate setProperty failed (1)";
 	
 
@@ -398,7 +400,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	//
 	didSet		= YES;
 	ret = [jsc evalJSString:@"var o = NSButtonCell.instance; o.bezelStyle = 0; o.bezelStyle = 3; var r = o.bezelStyle; o = null; r"];
-	bezelStyle = JSValueToNumber([jsc ctx], ret, NULL);
+	bezelStyle = JSRESULTNUMBER;
 //	NSLog(@"bezelStyle=%d", bezelStyle);
 	if (bezelStyle != 6)		return	@"delegate setProperty failed (2)";
 	
@@ -413,7 +415,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 
 	canCallC	= YES;
 	ret = [jsc evalJSString:@"var p = NSMakePoint(15, 100); p.x+p.y"];
-	int addResult = JSValueToNumber([jsc ctx], ret, NULL);
+	int addResult = JSRESULTNUMBER;
 	if (addResult != 115)		return	@"delegate canCallC failed (2)";
 	
 	
@@ -438,7 +440,6 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	ret = [jsc evalJSString:@"applicationController.dummyValue = 8"];
 	if (!hadError)				return	@"delegate canCallMethod failed (3)";
 
-
 	//
 	// Test allowed calling
 	//
@@ -446,13 +447,14 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	canCallObjC	= YES;
 	customValueCall	= NULL;
 	ret = [jsc evalJSString:@"applicationController.add1(5)"];
-	int add1Result1 = JSValueToNumber([jsc ctx], ret, NULL);
+	
+	int add1Result1 = JSRESULTNUMBER;
 	if (add1Result1 != 6)								return	@"delegate callMethod failed (1)";
 	if (object != self)									return	@"delegate callMethod failed (2)";
 	if (![methodName isEqualToString:@"add1:"])			return	@"delegate callMethod failed (3)";
 	
 	ret = [jsc evalJSString:@"applicationController.get5"];
-	int get5Result1 = JSValueToNumber([jsc ctx], ret, NULL);
+	int get5Result1 = JSRESULTNUMBER;
 	if (get5Result1 != 5)								return	@"delegate callMethod failed (4)";
 	if (object != self)									return	@"delegate callMethod failed (5)";
 	if (![methodName isEqualToString:@"get5"])			return	@"delegate callMethod failed (6)";
@@ -468,15 +470,14 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	hadError	= NO;
 	customValueCall	= JSValueMakeNumber([jsc ctx], 789);
 	ret = [jsc evalJSString:@"applicationController.add1(5)"];
-	int add1Result2 = JSValueToNumber([jsc ctx], ret, NULL);
+	int add1Result2 = JSRESULTNUMBER;
 	if (add1Result2 != 789)								return	@"delegate callMethod failed (10)";
 	
 	ret = [jsc evalJSString:@"applicationController.get5"];
-	int get5Result2 = JSValueToNumber([jsc ctx], ret, NULL);
+	int get5Result2 = JSRESULTNUMBER;
 	if (get5Result2 != 789)								return	@"delegate callMethod failed (11)";
 	customValueCall	= NULL;
 	
-
 
 	//
 	// Test disallowed global getting
@@ -514,11 +515,10 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	customValueGetGlobal = JSValueMakeNumber([jsc ctx], 7599);
 	ret = [jsc evalJSString:@"NSWorkspace"];
 	if (![propertyName isEqualToString:@"NSWorkspace"])		return	@"delegate getGlobalProperty failed (3)";
-	if (JSValueToNumber([jsc ctx], ret, NULL) != 7599)		return	@"delegate getGlobalProperty failed (4)";
+	if (JSRESULTNUMBER != 7599)		return	@"delegate getGlobalProperty failed (4)";
 	customValueGetGlobal = NULL;
 
 	canGetGlobal= YES;
-
 
 	//
 	// Test script loading
@@ -565,16 +565,15 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	customScript = @"100+12";
 	evaled = [jsc evalJSFile:path toJSValueRef:&ret];
 	if (!evaled)											return	@"delegate custom eval failed (1)";
-	if (JSValueToNumber([jsc ctx], ret, NULL) != 112)		return	@"delegate custom eval failed (2)";
+	if (JSRESULTNUMBER != 112)		return	@"delegate custom eval failed (2)";
 
 	ret = [jsc evalJSString:@"2+2"];
-	if (JSValueToNumber([jsc ctx], ret, NULL) != 112)		return	@"delegate custom eval failed (3)";
+	if (JSRESULTNUMBER != 112)		return	@"delegate custom eval failed (3)";
 	if (![scriptToEval isEqualToString:@"2+2"])				return	@"delegate custom eval failed (4)";
 	customScript = nil;
 	
 	jsc.useJSLint = useJSLint;
 	
-
 	return	nil;
 }
 
@@ -713,6 +712,7 @@ int dummyValue;
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"custom method call %@.%@", _object, _methodName);
+	
 	object		= _object;
 	methodName	= _methodName;
 	return	customValueCall;

@@ -107,6 +107,11 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
 	static	BOOL	useAutoCall;
+	// Allow calling obj.method(...) instead of obj.method_(...)
+	static	BOOL	callSelectorsMissingTrailingSemicolon;
+	// Allows setting javascript values on boxed objects (which are collected after nulling all references to them)
+	static	BOOL	canSetOnBoxedObjects;
+	
 	// If true, all exceptions will be sent to NSLog, event if they're caught later on by some Javascript core
 	static	BOOL	logAllExceptions;
 	// Is speaking when throwing exceptions
@@ -145,6 +150,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 			customCallPaths	= nil;			
 
 			useAutoCall			= YES;
+			callSelectorsMissingTrailingSemicolon	= YES;
+			canSetOnBoxedObjects= NO;
 			isSpeaking			= YES;
 			isSpeaking			= NO;
 			logAllExceptions	= NO;
@@ -1013,6 +1020,25 @@ static id JSCocoaSingleton = NULL;
 {
 	useAutoCall = b;
 }
+
+- (BOOL)callSelectorsMissingTrailingSemicolon
+{
+	return	callSelectorsMissingTrailingSemicolon;
+}
+- (void)setCallSelectorsMissingTrailingSemicolon:(BOOL)b
+{
+	callSelectorsMissingTrailingSemicolon = b;
+}
+
+- (BOOL)canSetOnBoxedObjects
+{
+	return	canSetOnBoxedObjects;
+}
+- (void)setCanSetOnBoxedObjects:(BOOL)b
+{
+	canSetOnBoxedObjects = b;
+}
+
 
 - (JSGlobalContextRef)ctx
 {
@@ -2093,7 +2119,7 @@ int	liveInstanceCount	= 0;
 //	-> 
 //	[object setWidth:100]
 //
-- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception;
+- (BOOL)JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception;
 {
     // FIXME: this doesn't actually work with objc properties, and we can't always rely that this method will exist either...
     // it should probably be moved up into the JSCocoa layer.
@@ -2112,7 +2138,7 @@ int	liveInstanceCount	= 0;
 //
 // NSDistantObject call using NSInvocation
 //
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
+- (JSValueRef)JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
 {
     SEL selector = NSSelectorFromString(methodName);
 	if (class_getInstanceMethod([callee class], selector) || class_getClassMethod([callee class], selector)) {
@@ -3515,7 +3541,7 @@ call:
 			if ([methodName rangeOfString:@"_"].location != NSNotFound)
 				[methodName replaceOccurrencesOfString:@"_" withString:@":" options:0 range:NSMakeRange(0, [methodName length])];
 
-			if (![methodName hasSuffix:@":"])	[methodName appendString:@":"];			
+			if (callSelectorsMissingTrailingSemicolon && ![methodName hasSuffix:@":"])	[methodName appendString:@":"];			
 
 			if (![callee respondsToSelector:NSSelectorFromString(methodName)])
 			{
@@ -3907,7 +3933,10 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 	// JSCocoa needs to set a custom javascript property to recognize out arguments.
 	if ([propertyName isEqualToString:@"isOutArgument"])	return	false;
 	// Allow general setting on structs
-	if ([privateObject.type isEqualToString:@"struct"])	return	false;
+	if ([privateObject.type isEqualToString:@"struct"])		return	false;
+	
+	// Don't throw an exception if setting is allowed
+	if (canSetOnBoxedObjects)								return	false;
 
 	// Setter fails AND WARNS if propertyName can't be set
 	// This happens of non-JSCocoa ObjC objects, eg NSWorkspace.sharedWorspace.someVariable = value
@@ -4027,7 +4056,6 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		callee		= [thisPrivateObject object];
 		methodName	= superSelector ? superSelector : [NSMutableString stringWithString:privateObject.methodName];
 //		NSLog(@"calling %@.%@", callee, methodName);
-//		NSLog(@"calling %@.%@", [callee class], methodName);
 
 		//
 		// Delegate canCallMethod, callMethod
@@ -4218,6 +4246,11 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 			sugarCheckVariadic = YES;
 			argumentCount++;
 		}
+	}
+	else
+	{
+		if (callAddressArgumentCount != argumentCount)
+			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
 	}
 
 	//

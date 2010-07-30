@@ -12,7 +12,7 @@
 	}
 
 	
-	function	log(str)	{	__jsc__.log('' + str)	}
+	function	log(str)	{	__jsc__.log_('' + str)	}
 	// This one is because I can't bring myself to not typing alert. 
 	function	alert(str)	{	log('********USE log(), not alert()*********'), log(str) }
 	
