@@ -3537,7 +3537,6 @@ call:
 		
 
 		//
-		// Do some filtering here on property name : 
 		//	We're asked a property name and at this point we've checked the class's jsarray, autocall. 
 		//	If the property we're asked does not start a split call we'll return NULL.
 		//
@@ -3545,7 +3544,7 @@ call:
 		//		If NO, replace underscores with colons
 		//				add a ':' suffix
 		//
-		//		If callee still fails to responds to that, check if propertyName maybe starts a split call.
+		//		If callee still fails to responds to that, check if propertyName starts a split call.
 		//		If NO, return null
 		//
 		id methodName = [NSMutableString stringWithString:propertyName];
@@ -3557,6 +3556,25 @@ call:
 			&& ![methodName isEqualToString:@"Original"]
 /*			&& ![methodName isEqualToString:@"instance"]*/)
 		{
+			// If setting on boxed objects is allowed, check existence of a property set on the js object - this is a reentrant call
+			if (canSetOnBoxedObjects)
+			{
+				// We need to bypass our get handler to get the js value
+				static int canSetCheck = 0;
+				// Return NULL so the get handler will retrieve the js property stored in the js object
+				if (canSetCheck > 0)
+					return NULL;
+
+				canSetCheck++;
+				// Call default handler
+				JSValueRef jsValueSetOnBoxedObject = JSObjectGetProperty(ctx, object, propertyNameJS, nil);
+				canSetCheck--;
+
+				// If we have something other than undefined, return it
+				if (JSValueGetType(ctx, jsValueSetOnBoxedObject) != kJSTypeUndefined)
+					return jsValueSetOnBoxedObject;
+			}
+
 			if ([methodName rangeOfString:@"_"].location != NSNotFound)
 				[methodName replaceOccurrencesOfString:@"_" withString:@":" options:0 range:NSMakeRange(0, [methodName length])];
 

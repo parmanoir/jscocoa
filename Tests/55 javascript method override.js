@@ -63,6 +63,24 @@
 
 	o = null
 	
+
+	//
+	// Test on a raw ObjC object, not a JSCocoa derived one
+	//
+	var wentThrough4 = false
+	
+	o = NSObject.instance
+	o.respondsToSelector = function (sel)
+	{
+		wentThrough4 = true
+		return this.respondsToSelector_(sel)
+	}
+
+	o.respondsToSelector('hello')
+	if (!wentThrough4)												throw 'Javascript method override failed (9)'
+	
+	o = null
 	
 	__jsc__.canSetOnBoxedObjects = canSet
+	
 	
