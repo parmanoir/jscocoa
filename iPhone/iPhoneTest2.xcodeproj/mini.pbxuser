@@ -9,7 +9,7 @@
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 3DB581D80EA17C1000EB80D9 /* iPhoneTest2 */;
-		activeSDKPreference = iphoneos3.1.3;
+		activeSDKPreference = iphonesimulator3.1.3;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* iPhoneTest2 */;
 		addToTargets = (
 			1D6058900D05DD3D006BFB54 /* iPhoneTest2 */,
@@ -90,16 +90,17 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 299192887;
-			PBXWorkspaceStateSaveDate = 299192887;
+			PBXPerProjectTemplateStateSaveDate = 302712291;
+			PBXWorkspaceStateSaveDate = 302712291;
 		};
 		perUserProjectItems = {
-			3DCB6EED11D5511400385AE2 /* PBXTextBookmark */ = 3DCB6EED11D5511400385AE2 /* PBXTextBookmark */;
-			3DCB6EEE11D5511400385AE2 /* PBXTextBookmark */ = 3DCB6EEE11D5511400385AE2 /* PBXTextBookmark */;
-			3DCB6EF011D5511400385AE2 /* PBXTextBookmark */ = 3DCB6EF011D5511400385AE2 /* PBXTextBookmark */;
-			3DCB6F6211D5524000385AE2 /* PBXTextBookmark */ = 3DCB6F6211D5524000385AE2 /* PBXTextBookmark */;
-			3DCB6F6311D5524000385AE2 /* PBXTextBookmark */ = 3DCB6F6311D5524000385AE2 /* PBXTextBookmark */;
-			3DCB6F6511D5524000385AE2 /* PBXTextBookmark */ = 3DCB6F6511D5524000385AE2 /* PBXTextBookmark */;
+			3D35B85D120B061500E260FB /* PBXTextBookmark */ = 3D35B85D120B061500E260FB /* PBXTextBookmark */;
+			3DCB6EED11D5511400385AE2 = 3DCB6EED11D5511400385AE2 /* PBXTextBookmark */;
+			3DCB6EEE11D5511400385AE2 = 3DCB6EEE11D5511400385AE2 /* PBXTextBookmark */;
+			3DCB6EF011D5511400385AE2 = 3DCB6EF011D5511400385AE2 /* PBXTextBookmark */;
+			3DCB6F6211D5524000385AE2 = 3DCB6F6211D5524000385AE2 /* PBXTextBookmark */;
+			3DCB6F6311D5524000385AE2 = 3DCB6F6311D5524000385AE2 /* PBXTextBookmark */;
+			3DCB6F6511D5524000385AE2 = 3DCB6F6511D5524000385AE2 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3DB581E90EA17C1600EB80D9 /* Source Control */;
 		userBuildSettings = {
@@ -120,6 +121,16 @@
 			sepNavVisRange = "{0, 219}";
 			sepNavWindowFrame = "{{101, 95}, {1322, 916}}";
 		};
+	};
+	3D35B85D120B061500E260FB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DCB6EEF11D5511400385AE2 /* code colorer.html */;
+		name = "code colorer.html: 2742";
+		rLen = 0;
+		rLoc = 87402;
+		rType = 0;
+		vrLen = 1603;
+		vrLoc = 0;
 	};
 	3D3B559A0F1D41F300D60188 /* GDataXMLNode.h */ = {
 		uiCtxt = {
@@ -613,7 +624,7 @@
 	3DB5820C0EA17CAC00EB80D9 /* JavascriptCore-dlsym.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1414, 5962}}";
-			sepNavSelRange = "{0, 19679}";
+			sepNavSelRange = "{206, 0}";
 			sepNavVisRange = "{0, 1783}";
 			sepNavWindowFrame = "{{351, 46}, {1473, 863}}";
 		};
@@ -683,6 +694,11 @@
 		name = "code colorer.html";
 		path = "/Users/mini/Sites/lintex/code colorer.html";
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {980, 30371}}";
+			sepNavSelRange = "{87402, 0}";
+			sepNavVisRange = "{0, 1603}";
+		};
 	};
 	3DCB6EF011D5511400385AE2 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -716,15 +732,10 @@
 	};
 	3DCB6F6411D5524000385AE2 /* code colorer.html */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = text.html;
 		name = "code colorer.html";
 		path = "/Users/mini/Sites/lintex/code colorer.html";
 		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {980, 30371}}";
-			sepNavSelRange = "{87402, 0}";
-			sepNavVisRange = "{0, 1603}";
-			sepNavWindowFrame = "{{726, 78}, {1039, 891}}";
-		};
 	};
 	3DCB6F6511D5524000385AE2 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

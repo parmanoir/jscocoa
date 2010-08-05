@@ -25,6 +25,12 @@ void JSGarbageCollect(JSContextRef ctx)
 	return	_JSGarbageCollect(ctx);
 }
 
+bool (*_JSCheckScriptSyntax)(JSContextRef ctx, JSStringRef script, JSStringRef sourceURL, int startingLineNumber, JSValueRef* exception);
+bool JSCheckScriptSyntax(JSContextRef ctx, JSStringRef script, JSStringRef sourceURL, int startingLineNumber, JSValueRef* exception)
+{
+	return _JSCheckScriptSyntax(ctx, script, sourceURL, startingLineNumber, exception);
+}
+
 
 //
 // JSContextRef
@@ -448,6 +454,7 @@ void JSValueUnprotect(JSContextRef ctx, JSValueRef value)
 + (void)populateJavascriptCoreSymbols
 {
 	_JSEvaluateScript = dlsym(RTLD_DEFAULT, "JSEvaluateScript");
+	_JSCheckScriptSyntax = dlsym(RTLD_DEFAULT, "JSCheckScriptSyntax");
 	_JSGarbageCollect = dlsym(RTLD_DEFAULT, "JSGarbageCollect");
 	_JSGlobalContextCreate = dlsym(RTLD_DEFAULT, "JSGlobalContextCreate");
 	_JSGlobalContextRetain = dlsym(RTLD_DEFAULT, "JSGlobalContextRetain");
