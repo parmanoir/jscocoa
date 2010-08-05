@@ -89,7 +89,7 @@
 		3DB582120EA17CAC00EB80D9 /* JSStringRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSStringRef.h; sourceTree = "<group>"; };
 		3DB582130EA17CAC00EB80D9 /* JSStringRefCF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSStringRefCF.h; sourceTree = "<group>"; };
 		3DB582140EA17CAC00EB80D9 /* JSValueRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSValueRef.h; sourceTree = "<group>"; };
-		3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = iPhoneMain.js; path = ../iPhoneMain.js; sourceTree = "<group>"; };
+		3DB582760EA1814000EB80D9 /* iPhoneMain.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = iPhoneMain.js; sourceTree = "<group>"; };
 		3DCB6EE111D5504F00385AE2 /* jslint-jscocoa.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "jslint-jscocoa.js"; path = "../JSCocoa/jslint-jscocoa.js"; sourceTree = SOURCE_ROOT; };
 		3DED293D103B970D0093C660 /* BurksPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BurksPool.h; path = ../JSCocoa/iPhone/BurksPool.h; sourceTree = SOURCE_ROOT; };
 		3DED293E103B970D0093C660 /* BurksPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BurksPool.m; path = ../JSCocoa/iPhone/BurksPool.m; sourceTree = SOURCE_ROOT; };
@@ -110,14 +110,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				3DB582760EA1814000EB80D9 /* iPhoneMain.js */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,7 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				3DB581EF0EA17C9000EB80D9 /* JSCocoa */,
-				080E96DDFE201D6D7F000001 /* Classes */,
+				3D35B89E120B08F000E260FB /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -168,6 +160,14 @@
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3D35B89E120B08F000E260FB /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				3DB582760EA1814000EB80D9 /* iPhoneMain.js */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 		3D97DA5710425AAA00E2E233 /* libffi */ = {
