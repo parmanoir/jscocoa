@@ -54,6 +54,43 @@
 //			if ([array[1] class])
 			return a+b
 		}
+		
+		- (IBAction)doThis:(id)sender
+		{
+			savedSender = sender
+		}
+		
+		// Test auto get/set
+		IBOutlet myOutlet
+		// Test custom get
+		IBOutlet myOutlet2
+		// Test custom set
+		IBOutlet myOutlet3
+		// Test custom get/set
+		IBOutlet myOutlet4
+
+		- (id)myOutlet2
+		{
+			wentThrough = true
+			return this._myOutlet2
+		}
+		
+		- (void)setMyOutlet3:(id)outlet
+		{
+			wentThrough = true
+			this._myOutlet3 = outlet
+		}
+		
+		- (void)setMyOutlet4:(id)outlet
+		{
+			wentThrough = true
+			this._myOutlet4 = outlet
+		}
+		- (id)myOutlet4
+		{
+			wentThrough = true
+			return this._myOutlet4
+		}
 	}
 	
 
@@ -75,6 +112,37 @@
 	
 	var r = [o wantInt:7 andNSArray:[[NSNumber numberWithDouble:1.23], [NSString stringWithString:'hello'], [NSArray arrayWithObjects:1, 2, 3], [4, 5, 6]] andFloat:8]
 	if (r != 7+8)														throw 'ObjJ syntax failed (8)'
+	
+	// Test IBAction
+	var savedSender = nil
+	[o doThis:'hello']
+	if (savedSender != 'hello')											throw 'ObjJ syntax failed (9)'
+	savedSender = nil
+	
+	// Test IBOutlet
+	var p = 'hello'
+	[o setMyOutlet:p]
+	if ([o myOutlet]!= p)												throw 'ObjJ syntax failed (11)'
+
+	var p = 'hello2'
+	var wentThrough = false
+	[o setMyOutlet2:p]
+	if ([o myOutlet2]!= p)												throw 'ObjJ syntax failed (12)'
+	if (!wentThrough)													throw 'ObjJ syntax failed (13)'
+
+	var p = 'hello3'
+	var wentThrough = false
+	[o setMyOutlet3:p]
+	if (!wentThrough)													throw 'ObjJ syntax failed (14)'
+	if ([o myOutlet3]!= p)												throw 'ObjJ syntax failed (15)'
+
+	var p = 'hello4'
+	var wentThrough = false
+	[o setMyOutlet4:p]
+	if (!wentThrough)													throw 'ObjJ syntax failed (16)'
+	var wentThrough = false
+	if ([o myOutlet4]!= p)												throw 'ObjJ syntax failed (17)'
+
 
 	o = null
 	

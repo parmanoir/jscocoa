@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	[[BridgeSupportController sharedController] loadBridgeSupport:[NSString stringWithFormat:@"%@/iPhone.bridgesupport", [[NSBundle mainBundle] bundlePath]]];
 	// Load js class kit
 	id c = [JSCocoaController sharedController];
-	[c evalJSFile:[NSString stringWithFormat:@"%@/class.js", [[NSBundle mainBundle] bundlePath]]];
+//	[c evalJSFile:[NSString stringWithFormat:@"%@/class.js", [[NSBundle mainBundle] bundlePath]]];
 	// Load js main
 	[c evalJSFile:[NSString stringWithFormat:@"%@/iPhoneMain.js", [[NSBundle mainBundle] bundlePath]]];
 	

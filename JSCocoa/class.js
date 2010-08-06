@@ -43,6 +43,7 @@
 		,'double'		: 'd'
 		,'bool'			: 'B'
 		,'void'			: 'v'
+		,'IBAction'		: 'v'
 		,'undef'		: '?'
 		,'pointer'		: '^'
 		,'charpointer'	: '*'
@@ -393,7 +394,26 @@
 //			var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
 			var newClass = JSCocoa.createClass_parentClass_(className, parentClassName)
 		}
+		
+		// Add outlets, actions and keys before methods as methods could override outlet setters and getters
 
+		//
+		// Outlets
+		//
+		for (var outlet in h.outlets)
+			class_add_outlet(newClass, outlet, h.outlets[outlet].setter)
+
+		//
+		// Actions
+		//
+		for (var action in h.actions)
+			class_add_action(newClass, action, h.actions[action])
+
+		//
+		// Keys
+		//
+		for (var key in h.keys)
+			class_add_key(newClass, key, h.keys[key].getter, h.keys[key].setter)
 
 		//
 		// Overloaded and new methods
@@ -435,25 +455,7 @@
 				else											class_add_instance_method(newClass, method, fn, encoding)
 			}
 		}
-		
-		//
-		// Outlets
-		//
-		for (var outlet in h.outlets)
-			class_add_outlet(newClass, outlet, h.outlets[outlet].setter)
 			
-		//
-		// Actions
-		//
-		for (var action in h.actions)
-			class_add_action(newClass, action, h.actions[action])
-
-		//
-		// Keys
-		//
-		for (var key in h.keys)
-			class_add_key(newClass, key, h.keys[key].getter, h.keys[key].setter)
-
 		//
 		// JS Functions
 		//

@@ -1,39 +1,74 @@
 
+
+
 	/*
 	
-		Drag the shape ...
-			* from inside its bounds to change its shape
-			* from outside its bounds to rotate it
+		This is the old style class syntax, using split calls (using this.perform({selector:'repaintPolygon:', withObject:null, afterDelay:0})
+																instead of [this performSelector:'repaintPolygon:' withObject:null afterDelay:0] )
 	
 	*/
 
 
 
+
+
+
+
+	// Call twice to check for a difference in return registers
+/*
+	log('***************About to call JSCocoaObjCMsgSend.addFloat_Float_')
+	log('JSCocoaObjCMsgSend.addFloat_Float_(7)=' + JSCocoaObjCMsgSend.addFloat_Float_(3, 4))
+	log('JSCocoaObjCMsgSend.addFloat_Float_(11)=' + JSCocoaObjCMsgSend.addFloat_Float_(5, 6))
+	log('***************Called JSCocoaObjCMsgSend.addFloatFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.addDouble_Double_')
+	log('JSCocoaObjCMsgSend.addDouble_Double_(7)=' + JSCocoaObjCMsgSend.addDouble_Double_(3, 4))
+	log('JSCocoaObjCMsgSend.addDouble_Double_(11)=' + JSCocoaObjCMsgSend.addDouble_Double_(5, 6))
+	log('***************Called JSCocoaObjCMsgSend.addFloatFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnFloat')
+	log('JSCocoaObjCMsgSend.returnFloat(1.2)=' + JSCocoaObjCMsgSend.returnFloat)
+	log('***************Called JSCocoaObjCMsgSend.returnFloat')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnDouble')
+	log('JSCocoaObjCMsgSend.returnDouble(3.4)=' + JSCocoaObjCMsgSend.returnDouble)
+	log('***************Called JSCocoaObjCMsgSend.returnDouble')
+
+	log('***************About to call JSCocoaObjCMsgSend.returnPoint')
+	var o = JSCocoaObjCMsgSend.returnPoint
+	log('JSCocoaObjCMsgSend.returnPoint(1, 2)=' + o.x + ', ' + o.y)
+	log('***************Called JSCocoaObjCMsgSend.returnPoint')
+	
+	log('***************About to call JSCocoaObjCMsgSend.returnRect')
+	var o = JSCocoaObjCMsgSend.returnRect
+	log('JSCocoaObjCMsgSend.returnRect(3, 4, 5, 6)=' + o.origin.x + ', ' + o.origin.y + ', ' + o.size.width + ', ' + o.size.height)
+	log('***************Called JSCocoaObjCMsgSend.returnRect')
+	CGRect
+	log('Also check return value of structs, eg View.frame, View.position')
+*/
+
 	//
 	// Application Delegate
 	//
-//	Class('iPhoneTest2AppDelegate < NSObject').definition = function ()
-	@implementation iPhoneTest2AppDelegate : NSObject
+	Class('iPhoneTest2AppDelegate < NSObject').definition = function ()
 	{
-//		Method('applicationDidFinishLaunching:').encoding('void id').fn = function (application)
-		- (void)applicationDidFinishLaunching:(UIApplication *)application;
+		Method('applicationDidFinishLaunching:').encoding('void id').fn = function (application)
 		{
 //			log('***(applicationDidFinishLaunching:)***finished launching, self=' + this + ' application=' + application)
 			// Table view background
 			this.viewController.view.backgroundColor = UIColor.groupTableView0BackgroundColor
 			this.window.addSubview(this.viewController.view)
 			this.window.makeKeyAndVisible
-			[this performSelector:'repaintPolygon' withObject:null afterDelay:0]
+			this.perform({selector:'repaintPolygon:', withObject:null, afterDelay:0})
 		}
 		// Shouldn't be needed !
-		- (void)repaintPolygon
+		IBAction('repaintPolygon').fn = function()
 		{
 			this.viewController.polygonView.setNeedsDisplay
 		}
 		IBOutlet('window')
 		IBOutlet('viewController')
 	}
-	@end
 
 
 	//
@@ -43,7 +78,7 @@
 	{
 		Method('loadView').fn = function ()
 		{
-			myTableView = [UITableView instanceWithFrame:UIScreen.mainScreen.applicationFrame style:0]
+			myTableView = UITableView.instance({withFrame:UIScreen.mainScreen.applicationFrame, style:0 })	
 			myTableView.delegate	= this
 			myTableView.dataSource	= this
 			myTableView.autoresizesSubviews = true
@@ -67,41 +102,41 @@
 		{
 			if (!this.cells)
 			{
-				var cell0 = [UITableViewCell instance]
-				var cell1 = [UITableViewCell instance]
+				var cell0 = UITableViewCell.instance()
+				var cell1 = UITableViewCell.instance()
 				
 				var bounds = this.view.bounds
 				var margin = 50
 
 				// Slider
-				var slider = [UISlider instanceWithFrame:new CGRect(margin, 12, bounds.size.width-margin*2, 10)]
+				var slider = UISlider.instance({withFrame: new CGRect(margin, 12, bounds.size.width-margin*2, 10)})
 				cell0.addSubview(slider)
 
 				// Image buttons
-				var imageButton = [UIButton instanceWithFrame: new CGRect(25, 19, 12, 10)]
+				var imageButton = UIButton.instance({withFrame: new CGRect(25, 19, 12, 10)})
 				var image = UIImage.imageNamed('lowPointCount.png')
-				[imageButton setImage:image forState:0]
+				imageButton.set({image:image, forState:0})
 				cell0.addSubview(imageButton)
 
-				var imageButton = [UIButton instanceWithFrame: new CGRect(bounds.size.width-38, 19, 12, 10)]
+				var imageButton = UIButton.instance({withFrame: new CGRect(bounds.size.width-38, 19, 12, 10)})
 				var image = UIImage.imageNamed('hiPointCount.png')
-				[imageButton setImage:image forState:0]
+				imageButton.set({image:image, forState:0})
 				cell0.addSubview(imageButton)
 
 				// Text label
-				var label = [UILabel instanceWithFrame: new CGRect(20, 8, 200, 30)]
+				var label = UILabel.instance({withFrame: new CGRect(20, 8, 200, 30)})
 				label.text = /*String(new Date)*/ 'Fill Polygon'
 				label.font = UIFont.boldSystemFontOfSize(18)
 				cell1.addSubview(label)
 
 				// Switch
-				var onoff = [UISwitch instanceWithFrame: new CGRect(200, 9, bounds.size.width-margin*2, 80)]
+				var onoff = UISwitch.instance({withFrame: new CGRect(200, 9, bounds.size.width-margin*2, 80)})
 				cell1.addSubview(onoff)
 
 				this.cells = [cell0, cell1]
 
-				[slider addTarget:this action:'pointCountChanged:' forControlEvents:0xffffffff]
-				[onoff addTarget:this action:'fillModeChanged:' forControlEvents:0xffffffff]
+				slider.add({target:this, action:'pointCountChanged:', forControlEvents:0xffffffff})
+				onoff.add({target:this, action:'fillModeChanged:', forControlEvents:0xffffffff})
 				
 				slider.value = 0
 				
@@ -121,7 +156,7 @@
 		}
 		IBAction('pointCountChanged').fn = function (sender)
 		{
-			log('sender=' + sender)
+//			log('sender=' + sender)
 //			log('sender.value=' + sender.value)
 //			log('typeof sender.value=' + (typeof sender.value))
 			var pointCount = Math.round(sender.value*10+5)
