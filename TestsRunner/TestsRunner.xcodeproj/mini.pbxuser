@@ -66,78 +66,52 @@
 			PBXWorkspaceStateSaveDate = 302797045;
 		};
 		perUserProjectItems = {
-			3D35BA52120C513F00E260FB /* PBXTextBookmark */ = 3D35BA52120C513F00E260FB /* PBXTextBookmark */;
-			3D35BA54120C513F00E260FB /* PBXTextBookmark */ = 3D35BA54120C513F00E260FB /* PBXTextBookmark */;
-			3D35BA56120C513F00E260FB /* PBXTextBookmark */ = 3D35BA56120C513F00E260FB /* PBXTextBookmark */;
-			3D35BA5C120C514A00E260FB /* PBXTextBookmark */ = 3D35BA5C120C514A00E260FB /* PBXTextBookmark */;
-			3D35BA5D120C514A00E260FB /* PBXTextBookmark */ = 3D35BA5D120C514A00E260FB /* PBXTextBookmark */;
-			3D35BA5E120C514A00E260FB /* PBXTextBookmark */ = 3D35BA5E120C514A00E260FB /* PBXTextBookmark */;
-			3D35BA5F120C514A00E260FB /* PBXTextBookmark */ = 3D35BA5F120C514A00E260FB /* PBXTextBookmark */;
-			3D9701AC12086B21004B5164 = 3D9701AC12086B21004B5164 /* PBXTextBookmark */;
-			3D9701AE12086B21004B5164 = 3D9701AE12086B21004B5164 /* PBXTextBookmark */;
-			3D9702D51208D1A4004B5164 = 3D9702D51208D1A4004B5164 /* PBXBookmark */;
-			3D9702E01208D1E4004B5164 = 3D9702E01208D1E4004B5164 /* PBXTextBookmark */;
-			3D9702E11208D1E4004B5164 = 3D9702E11208D1E4004B5164 /* PBXTextBookmark */;
-			3D9702E41208D1E4004B5164 = 3D9702E41208D1E4004B5164 /* PBXTextBookmark */;
-			3D9702E51208D1E4004B5164 = 3D9702E51208D1E4004B5164 /* PBXTextBookmark */;
-			3D9702E71208D1E4004B5164 = 3D9702E71208D1E4004B5164 /* PBXTextBookmark */;
+			3D35BA65120C526900E260FB /* PBXBookmark */ = 3D35BA65120C526900E260FB /* PBXBookmark */;
+			3D35BA99120C58A400E260FB /* PBXTextBookmark */ = 3D35BA99120C58A400E260FB /* PBXTextBookmark */;
+			3D35BA9B120C58A400E260FB /* PBXTextBookmark */ = 3D35BA9B120C58A400E260FB /* PBXTextBookmark */;
+			3D35BA9C120C58A400E260FB /* PBXTextBookmark */ = 3D35BA9C120C58A400E260FB /* PBXTextBookmark */;
+			3D35BA9D120C58A400E260FB /* PBXTextBookmark */ = 3D35BA9D120C58A400E260FB /* PBXTextBookmark */;
+			3D9702E11208D1E4004B5164 /* PBXTextBookmark */ = 3D9702E11208D1E4004B5164 /* PBXTextBookmark */;
+			3D9702E41208D1E4004B5164 /* PBXTextBookmark */ = 3D9702E41208D1E4004B5164 /* PBXTextBookmark */;
+			3D9702E71208D1E4004B5164 /* PBXTextBookmark */ = 3D9702E71208D1E4004B5164 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
 		};
 	};
-	3D35BA52120C513F00E260FB /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D35BA53120C513F00E260FB /* 15 IBOutlet IBAction.js */;
-		name = "15 IBOutlet IBAction.js: 39";
-		rLen = 8;
-		rLoc = 975;
-		rType = 0;
-		vrLen = 969;
-		vrLoc = 1045;
-	};
-	3D35BA53120C513F00E260FB /* 15 IBOutlet IBAction.js */ = {
-		isa = PBXFileReference;
-		name = "15 IBOutlet IBAction.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/15 IBOutlet IBAction.js";
-		sourceTree = "<absolute>";
-	};
-	3D35BA54120C513F00E260FB /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D35BA55120C513F00E260FB /* 21 new class definition.js */;
-		rLen = 8;
-		rLoc = 821;
-		rType = 0;
-	};
-	3D35BA55120C513F00E260FB /* 21 new class definition.js */ = {
+	3D35BA20120C50F500E260FB /* 40 ObjJ syntax.js */ = {
 		isa = PBXFileReference;
 		lastKnownFileType = sourcecode.javascript;
-		name = "21 new class definition.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/21 new class definition.js";
-		sourceTree = "<absolute>";
+		path = "40 ObjJ syntax.js";
+		sourceTree = "<group>";
 	};
-	3D35BA56120C513F00E260FB /* PBXTextBookmark */ = {
+	3D35BA65120C526900E260FB /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3D35BA20120C50F500E260FB /* 40 ObjJ syntax.js */;
+	};
+	3D35BA99120C58A400E260FB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
-		fRef = 3D35BA57120C513F00E260FB /* 21 new class definition.js */;
-		name = "21 new class definition.js: 39";
-		rLen = 8;
-		rLoc = 821;
+		fRef = 3D35BA9A120C58A400E260FB /* 40 ObjJ syntax.js */;
+		name = "40 ObjJ syntax.js: 92";
+		rLen = 0;
+		rLoc = 2233;
 		rType = 0;
-		vrLen = 575;
-		vrLoc = 424;
+		vrLen = 2425;
+		vrLoc = 1719;
 	};
-	3D35BA57120C513F00E260FB /* 21 new class definition.js */ = {
+	3D35BA9A120C58A400E260FB /* 40 ObjJ syntax.js */ = {
 		isa = PBXFileReference;
-		name = "21 new class definition.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/21 new class definition.js";
+		name = "40 ObjJ syntax.js";
+		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/40 ObjJ syntax.js";
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1074, 1892}}";
-			sepNavSelRange = "{821, 8}";
-			sepNavVisRange = "{424, 575}";
+			sepNavIntBoundsRect = "{{0, 0}, {1038, 1628}}";
+			sepNavSelRange = "{2233, 0}";
+			sepNavVisRange = "{1719, 2425}";
+			sepNavWindowFrame = "{{218, 82}, {1097, 1041}}";
 		};
 	};
-	3D35BA5C120C514A00E260FB /* PBXTextBookmark */ = {
+	3D35BA9B120C58A400E260FB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
 		name = "JSCocoaController.m: 4232";
@@ -147,7 +121,7 @@
 		vrLen = 3265;
 		vrLoc = 146591;
 	};
-	3D35BA5D120C514A00E260FB /* PBXTextBookmark */ = {
+	3D35BA9C120C58A400E260FB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D36E287105229E700132E23 /* JSCocoaController.h */;
 		name = "JSCocoaController.h: 72";
@@ -157,17 +131,7 @@
 		vrLen = 2631;
 		vrLoc = 8844;
 	};
-	3D35BA5E120C514A00E260FB /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9702E61208D1E4004B5164 /* 55 javascript method override.js */;
-		name = "55 javascript method override.js: 86";
-		rLen = 0;
-		rLoc = 2120;
-		rType = 0;
-		vrLen = 2119;
-		vrLoc = 0;
-	};
-	3D35BA5F120C514A00E260FB /* PBXTextBookmark */ = {
+	3D35BA9D120C58A400E260FB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
 		name = "ApplicationController.m: 367";
@@ -241,9 +205,9 @@
 	};
 	3D36E263105229E700132E23 /* class.js */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 12991}}";
-			sepNavSelRange = "{194, 0}";
-			sepNavVisRange = "{0, 1984}";
+			sepNavIntBoundsRect = "{{0, 0}, {1074, 12991}}";
+			sepNavSelRange = "{1012, 0}";
+			sepNavVisRange = "{1443, 758}";
 			sepNavWindowFrame = "{{456, 98}, {968, 1004}}";
 		};
 	};
@@ -268,7 +232,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {909, 54813}}";
 			sepNavSelRange = "{148313, 5}";
 			sepNavVisRange = "{146591, 3265}";
-			sepNavWindowFrame = "{{454, 74}, {968, 1004}}";
+			sepNavWindowFrame = "{{589, 84}, {968, 1004}}";
 		};
 	};
 	3D36E289105229E700132E23 /* JSCocoaFFIArgument.h */ = {
@@ -395,47 +359,6 @@
 			sepNavWindowFrame = "{{718, 4}, {1047, 1174}}";
 		};
 	};
-	3D9701AC12086B21004B5164 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9701AD12086B21004B5164 /* 55 javascript method override.js */;
-		name = "55 javascript method override.js: 86";
-		rLen = 0;
-		rLoc = 2120;
-		rType = 0;
-		vrLen = 2119;
-		vrLoc = 1;
-	};
-	3D9701AD12086B21004B5164 /* 55 javascript method override.js */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.javascript;
-		name = "55 javascript method override.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/55 javascript method override.js";
-		sourceTree = "<absolute>";
-	};
-	3D9701AE12086B21004B5164 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
-		name = "ApplicationController.m: 367";
-		rLen = 0;
-		rLoc = 9962;
-		rType = 0;
-		vrLen = 2763;
-		vrLoc = 11829;
-	};
-	3D9702D51208D1A4004B5164 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 3D36E287105229E700132E23 /* JSCocoaController.h */;
-	};
-	3D9702E01208D1E4004B5164 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 4232";
-		rLen = 5;
-		rLoc = 148313;
-		rType = 0;
-		vrLen = 3369;
-		vrLoc = 146591;
-	};
 	3D9702E11208D1E4004B5164 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
@@ -455,29 +378,6 @@
 		rType = 0;
 		vrLen = 2526;
 		vrLoc = 8949;
-	};
-	3D9702E51208D1E4004B5164 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9702E61208D1E4004B5164 /* 55 javascript method override.js */;
-		name = "55 javascript method override.js: 86";
-		rLen = 0;
-		rLoc = 2120;
-		rType = 0;
-		vrLen = 2120;
-		vrLoc = 0;
-	};
-	3D9702E61208D1E4004B5164 /* 55 javascript method override.js */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.javascript;
-		name = "55 javascript method override.js";
-		path = "/Users/mini/Software Inexdo/JSCocoa/Tests/55 javascript method override.js";
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 946}}";
-			sepNavSelRange = "{2120, 0}";
-			sepNavVisRange = "{0, 2119}";
-			sepNavWindowFrame = "{{486, 104}, {1097, 1041}}";
-		};
 	};
 	3D9702E71208D1E4004B5164 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

@@ -12,36 +12,34 @@
 	//
 	// Application Delegate
 	//
-//	Class('iPhoneTest2AppDelegate < NSObject').definition = function ()
 	@implementation iPhoneTest2AppDelegate : NSObject
-	{
-//		Method('applicationDidFinishLaunching:').encoding('void id').fn = function (application)
-		- (void)applicationDidFinishLaunching:(UIApplication *)application;
+
+		- (void)applicationDidFinishLaunching:(UIApplication *)application
 		{
-//			log('***(applicationDidFinishLaunching:)***finished launching, self=' + this + ' application=' + application)
 			// Table view background
-			this.viewController.view.backgroundColor = UIColor.groupTableView0BackgroundColor
+			this.viewController.view.backgroundColor = UIColor.groupTableViewBackgroundColor
 			this.window.addSubview(this.viewController.view)
 			this.window.makeKeyAndVisible
+
 			[this performSelector:'repaintPolygon' withObject:null afterDelay:0]
 		}
 		// Shouldn't be needed !
 		- (void)repaintPolygon
 		{
-			this.viewController.polygonView.setNeedsDisplay
+			[this.viewController.polygonView setNeedsDisplay]
 		}
-		IBOutlet('window')
-		IBOutlet('viewController')
-	}
+		IBOutlet window
+		IBOutlet viewController
+
 	@end
 
 
 	//
 	// View controller
 	//
-	Class('iPhoneTest2ViewController < UIViewController').definition = function()
-	{
-		Method('loadView').fn = function ()
+	@implementation iPhoneTest2ViewController : UIViewController
+
+		- (void)loadView
 		{
 			myTableView = [UITableView instanceWithFrame:UIScreen.mainScreen.applicationFrame style:0]
 			myTableView.delegate	= this
@@ -49,64 +47,67 @@
 			myTableView.autoresizesSubviews = true
 			this.view = myTableView
 //			this.polygonView.pointCount = 5
-			return	this.Super(arguments)
+			this.Super(arguments)
+			[this initCells]
+		}
+		- (void)initCells
+		{
+			var cell0 = [UITableViewCell instance]
+			var cell1 = [UITableViewCell instance]
+			
+			var bounds = this.view.bounds
+			var margin = 50
+
+			// Slider
+			var slider = [UISlider instanceWithFrame:new CGRect(margin, 12, bounds.size.width-margin*2, 10)]
+			[cell0 addSubview:slider]
+
+			// Image buttons
+			var imageButton = [UIButton instanceWithFrame: new CGRect(25, 19, 12, 10)]
+			var image = UIImage.imageNamed('lowPointCount.png')
+			[imageButton setImage:image forState:0]
+			[cell0 addSubview:imageButton]
+
+			var imageButton = [UIButton instanceWithFrame: new CGRect(bounds.size.width-38, 19, 12, 10)]
+			var image = UIImage.imageNamed('hiPointCount.png')
+			[imageButton setImage:image forState:0]
+			[cell0 addSubview:imageButton]
+
+			// Text label
+			var label = [UILabel instanceWithFrame: new CGRect(20, 8, 200, 30)]
+			label.text = /*String(new Date)*/ 'Fill Polygon'
+			label.font = UIFont.boldSystemFontOfSize(18)
+			[cell1 addSubview:label]
+
+			// Switch
+			var onoff = [UISwitch instanceWithFrame: new CGRect(200, 9, bounds.size.width-margin*2, 80)]
+			[cell1 addSubview:onoff]
+
+			this.cells = [cell0, cell1]
+
+			// UIControlEventAllEvents (0xFFFFFFFF) does not work anymore. ##checkwhy
+			[slider addTarget:this action:'pointCountChanged:' forControlEvents:1 << 12]
+			[onoff addTarget:this action:'fillModeChanged:' forControlEvents:1 << 12]
+			
+			slider.value = 0
 		}
 		
 		//
 		// Table view
 		//
-		Method('numberOfSectionsInTableView:').encoding('int id').fn = function (tableView)
+		- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 		{
 			return	1
 		}
-		Method('tableView:numberOfRowsInSection:').encoding('int id int').fn = function (tableView, section)
+		- (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 		{
 			return	2
 		}
-		Method('tableView:cellForRowAtIndexPath:').encoding('id id id').fn = function (tableView, indexPath)
+		- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 		{
 			if (!this.cells)
 			{
-				var cell0 = [UITableViewCell instance]
-				var cell1 = [UITableViewCell instance]
-				
-				var bounds = this.view.bounds
-				var margin = 50
-
-				// Slider
-				var slider = [UISlider instanceWithFrame:new CGRect(margin, 12, bounds.size.width-margin*2, 10)]
-				cell0.addSubview(slider)
-
-				// Image buttons
-				var imageButton = [UIButton instanceWithFrame: new CGRect(25, 19, 12, 10)]
-				var image = UIImage.imageNamed('lowPointCount.png')
-				[imageButton setImage:image forState:0]
-				cell0.addSubview(imageButton)
-
-				var imageButton = [UIButton instanceWithFrame: new CGRect(bounds.size.width-38, 19, 12, 10)]
-				var image = UIImage.imageNamed('hiPointCount.png')
-				[imageButton setImage:image forState:0]
-				cell0.addSubview(imageButton)
-
-				// Text label
-				var label = [UILabel instanceWithFrame: new CGRect(20, 8, 200, 30)]
-				label.text = /*String(new Date)*/ 'Fill Polygon'
-				label.font = UIFont.boldSystemFontOfSize(18)
-				cell1.addSubview(label)
-
-				// Switch
-				var onoff = [UISwitch instanceWithFrame: new CGRect(200, 9, bounds.size.width-margin*2, 80)]
-				cell1.addSubview(onoff)
-
-				this.cells = [cell0, cell1]
-
-				[slider addTarget:this action:'pointCountChanged:' forControlEvents:0xffffffff]
-				[onoff addTarget:this action:'fillModeChanged:' forControlEvents:0xffffffff]
-				
-				slider.value = 0
-				
-//				log('inited slider=' + slider)
-//				log('slider.value=' + slider.value)
+				[this initCells]
 			}
 			return	this.cells[indexPath.row]
 		}
@@ -114,16 +115,13 @@
 		//
 		// Actions
 		//
-		IBAction('fillModeChanged').fn = function (sender)
+		- (void)fillModeChanged:(id)sender
 		{
 			this.polygonView.isFilled = sender.isOn==1 ? true : false
-			this.polygonView.setNeedsDisplay
+			[this.polygonView setNeedsDisplay]
 		}
-		IBAction('pointCountChanged').fn = function (sender)
+		- (void)pointCountChanged:(id)sender
 		{
-			log('sender=' + sender)
-//			log('sender.value=' + sender.value)
-//			log('typeof sender.value=' + (typeof sender.value))
 			var pointCount = Math.round(sender.value*10+5)
 			if (pointCount < 5 || pointCount > 15)
 			{
@@ -132,28 +130,24 @@
 				if (pointCount > 15)	pointCount = 15
 			}
 			
-			
-//			log('pointCount=' + pointCount)
 			this.polygonView.pointCount = pointCount
-//			log('point count set')
-			this.polygonView.setNeedsDisplay
-//			log('display')
+			[this.polygonView setNeedsDisplay]
 		}
 		
 		//
 		// Outlets
 		//
-		IBOutlet('labelView')
-		IBOutlet('polygonView')
-	}
+		IBOutlet labelView
+		IBOutlet polygonView
+	@end
 	
 	
 	//
 	// Polygon view
 	//
-	Class('PolygonView < UIView').definition = function ()
-	{
-		Method('drawRect:').fn = function(rect)
+	@implementation PolygonView : UIView
+
+		- (void)drawRect:(CGRect)rect
 		{
 			var bounds = this.bounds
 			var w = this.bounds.size.width/2
@@ -190,7 +184,7 @@
 			else				CGContextStrokePath(ctx)
 		}
 		
-		Method('touchesBegan:withEvent:').fn = function (touches, event)
+		- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 		{
 			var touch = touches.anyObject
 			this.locationStart = touch.locationInView(this)
@@ -200,7 +194,7 @@
 			// Rotate when dragging from outside, Scale when dragging from inside
 			this.action = distanceFromCenter > 0.7 ? 'rotating' : 'scaling'
 		}
-		Method('touchesMoved:withEvent:').fn = function (touches, event)
+		- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 		{
 			var touch = touches.anyObject
 			var location = touch.locationInView(this)
@@ -227,12 +221,14 @@
 				this.currentAngleOffset = Math.acos(x0*x1 + y0*y1)
 				this.currentAngleOffset = Math.atan2(x1, y1) - Math.atan2(x0, y0)
 			}
-			this.setNeedsDisplay
+			[this setNeedsDisplay]
 		}
-		Method('touchesEnded:withEvent:').fn = function (touches, event)
+		- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 		{
 			this.angleOffset += this.currentAngleOffset
 			this.currentAngleOffset = 0
 		}
-	}
+	
+	@end
+	
 

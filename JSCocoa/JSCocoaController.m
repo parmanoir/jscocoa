@@ -1363,7 +1363,7 @@ static id JSCocoaSingleton = NULL;
 
 	SEL selector = NSSelectorFromString(methodName);
 	IMP fn = [BurksPool IMPforTypeEncodings:typeEncodings];
-	if (!fn)	return	NSLog(@"No encoding found when adding %@.%@(%s)", class, methodName, encoding), NO;
+	if (!fn)	return	NSLog(@"No BurksPool encoding found when adding %@.%@(%s)", class, methodName, encoding), NO;
 
 	// First addMethod : use class_addMethod to set closure
 	if (!class_addMethod(class, selector, fn, encoding))
