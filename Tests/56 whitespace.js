@@ -22,16 +22,3 @@
 	if (object.fetchTab != '	')			throw 'Whitespace failed (2)'
 	if (object.fetchSpaces != '    ')		throw 'Whitespace failed (3)'
 	
-	
-	log('a')
-	var o = NSString.stringWithString('hello')
-	log('b')
-	var p = NSString.stringWithString(o)
-	log('c')
-	var n = NSNumber.numberWithInt(123)
-	log('d')
-	NSApplication.sharedApplication.delegate.add1(n)
-	log('e')
-	log('r=' + r)
-	log(o + '*')
-	log(p + '*')	
