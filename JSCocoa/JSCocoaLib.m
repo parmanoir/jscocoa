@@ -138,7 +138,7 @@
 
 	// Compute buffer size
 	const char* types = [typeString UTF8String];
-	int l = [typeString length];
+	NSUInteger l = [typeString length];
 	bufferSize = 0;
 	for (int i=0; i<l; i++)
 	{
@@ -170,12 +170,12 @@
 //
 // Returns pointer for index without any padding
 //
-- (void*)pointerForIndex:(unsigned int)index
+- (void*)pointerForIndex:(NSUInteger)idx
 {
 	const char* types = [typeString UTF8String];
-	if (index >= [typeString length])	return NULL;
+	if (idx >= [typeString length])	return NULL;
 	void* pointedValue = buffer;
-	for (int i=0; i<index; i++)
+	for (int i=0; i<idx; i++)
 	{
 //		NSLog(@"advancing %c", types[i]);
 		[JSCocoaFFIArgument advancePtr:&pointedValue accordingToEncoding:types[i]];
@@ -183,31 +183,31 @@
 	return	pointedValue;
 }
 
-- (char)typeAtIndex:(unsigned int)index
+- (char)typeAtIndex:(NSUInteger)idx
 {
-	if (index >= [typeString length])	return '\0';
-	return	[typeString UTF8String][index];
+	if (idx >= [typeString length])	return '\0';
+	return	[typeString UTF8String][idx];
 }
 
-- (unsigned int)typeCount
+- (NSUInteger)typeCount
 {
 	return	[typeString length];
 }
 
--(BOOL)referenceObject:(id)o usingPointerAtIndex:(unsigned int)index
+-(BOOL)referenceObject:(id)o usingPointerAtIndex:(NSUInteger)idx
 {
-	if ([self typeAtIndex:index] != '^')	return NO;
+	if ([self typeAtIndex:idx] != '^')	return NO;
 	
-	void* v = *(void**)[self pointerForIndex:index];
+	void* v = *(void**)[self pointerForIndex:idx];
 	if (!v)	return NO;
 	*(id*)v = o;
 	return YES;
 }
 
-- (id)dereferenceObjectAtIndex:(unsigned int)index
+- (id)dereferenceObjectAtIndex:(NSUInteger)idx
 {
-	if ([self typeAtIndex:index] != '^')	return nil;
-	void* v = *(void**)[self pointerForIndex:index];
+	if ([self typeAtIndex:idx] != '^')	return nil;
+	void* v = *(void**)[self pointerForIndex:idx];
 	if (!v)	return NULL;
 
 	id o = *(id*)v;
@@ -218,20 +218,20 @@
 //
 // Using JSValueRefAndContextRef as input to get the current context in which to create the return value
 //
-- (JSValueRef)valueAtIndex:(unsigned int)index inContext:(JSContextRef)ctx
+- (JSValueRef)valueAtIndex:(NSUInteger)idx inContext:(JSContextRef)ctx
 {
-	char	typeEncoding = [self typeAtIndex:index];
-	void*	pointedValue = [self pointerForIndex:index];
+	char	typeEncoding = [self typeAtIndex:idx];
+	void*	pointedValue = [self pointerForIndex:idx];
 	if (!pointedValue)	return JSValueMakeUndefined(ctx);
 	JSValueRef returnValue;
 	[JSCocoaFFIArgument toJSValueRef:&returnValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	returnValue;
 }
 
-- (BOOL)setValue:(JSValueRef)jsValue atIndex:(unsigned int)index inContext:(JSContextRef)ctx;
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(NSUInteger)idx inContext:(JSContextRef)ctx;
 {
-	char	typeEncoding = [self typeAtIndex:index];
-	void*	pointedValue = [self pointerForIndex:index];
+	char	typeEncoding = [self typeAtIndex:idx];
+	void*	pointedValue = [self pointerForIndex:idx];
 	if (!pointedValue)	return NO;
 	[JSCocoaFFIArgument fromJSValueRef:jsValue inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:nil fromStorage:pointedValue];
 	return	YES;
@@ -540,11 +540,11 @@
 //
 // Derivation level
 //
-+ (int)__derivationLevel
++ (NSUInteger)__derivationLevel
 {
 	return [[self __derivationPath] count]-1;
 }
-- (int)__derivationLevel
+- (NSUInteger)__derivationLevel
 {
 	return [[self class] __derivationLevel];
 }
@@ -680,7 +680,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	id str = [NSMutableString string];
 	for (id subclass in subclasses)
 	{
-		int level = [subclass __derivationLevel];
+		NSUInteger level = [subclass __derivationLevel];
 		for (int i=0; i<level; i++)
 			[str appendString:@" "];
 		[str appendString:[NSString stringWithUTF8String:class_getName(subclass)]];

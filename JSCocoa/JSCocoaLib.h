@@ -45,11 +45,11 @@
 //- (id)initWithTypes:(id)types andValues:(id)values;
 //- (id)initWithMemoryBuffers:(id)buffers;
 
-- (void*)pointerForIndex:(unsigned int)index;
-- (char)typeAtIndex:(unsigned int)index;
-- (JSValueRef)valueAtIndex:(unsigned int)index inContext:(JSContextRef)ctx;
-- (BOOL)setValue:(JSValueRef)jsValue atIndex:(unsigned int)index inContext:(JSContextRef)ctx;
-- (unsigned int)typeCount;
+- (void*)pointerForIndex:(NSUInteger)index;
+- (char)typeAtIndex:(NSUInteger)index;
+- (JSValueRef)valueAtIndex:(NSUInteger)index inContext:(JSContextRef)ctx;
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(NSUInteger)index inContext:(JSContextRef)ctx;
+- (NSUInteger)typeCount;
 
 @end
 
@@ -72,8 +72,8 @@
 - (id)__classImage;
 + (id)__derivationPath;
 - (id)__derivationPath;
-+ (int)__derivationLevel;
-- (int)__derivationLevel;
++ (NSUInteger)__derivationLevel;
+- (NSUInteger)__derivationLevel;
 + (id)__ownMethods;
 - (id)__ownMethods;
 + (id)__methods;

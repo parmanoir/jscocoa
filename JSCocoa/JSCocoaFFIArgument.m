@@ -191,7 +191,7 @@
 	else	[self allocateStorage];
 
 	id types = [JSCocoaFFIArgument typeEncodingsFromStructureTypeEncoding:encoding];
-	int elementCount = [types count];
+	NSUInteger elementCount = [types count];
 
 	//
 	// Build FFI type
@@ -204,8 +204,8 @@
 	int i = 0;
 	for (id type in types)
 	{
-		char encoding = *(char*)[type UTF8String];
-		structureType.elements[i++] = [JSCocoaFFIArgument ffi_typeForTypeEncoding:encoding];
+		char charEncoding = *(char*)[type UTF8String];
+		structureType.elements[i++] = [JSCocoaFFIArgument ffi_typeForTypeEncoding:charEncoding];
 	}
 	structureType.elements[elementCount] = NULL;
 }
@@ -448,7 +448,7 @@
 			JSObjectRef object = JSValueToObject(ctx, value, NULL);
 			void* p = ptr;
 			id type = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
-			int numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:object inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[type UTF8String] fromStorage:&p];
+			NSInteger numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:object inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[type UTF8String] fromStorage:&p];
 			return	numParsed;
 		}
 		case	_C_SEL:
@@ -581,7 +581,7 @@
 			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 			private.type = @"struct";
-			int numParsed =	[JSCocoaFFIArgument structureToJSValueRef:value inContext:ctx fromCString:(char*)[type UTF8String] fromStorage:&p];
+			NSInteger numParsed =	[JSCocoaFFIArgument structureToJSValueRef:value inContext:ctx fromCString:(char*)[type UTF8String] fromStorage:&p];
 			return	numParsed;
 		}
 
@@ -640,12 +640,12 @@
 	Pass a writeable pointer whose original value you don't care about.
 	
 */
-+ (int)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr
++ (NSInteger)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr
 {
 	return	[self structureToJSValueRef:value inContext:ctx fromCString:c fromStorage:ptr initialValues:nil initialValueCount:0 convertedValueCount:nil];
 }
 
-+ (int)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr initialValues:(JSValueRef*)initialValues initialValueCount:(int)initialValueCount convertedValueCount:(int*)convertedValueCount
++ (NSInteger)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr initialValues:(JSValueRef*)initialValues initialValueCount:(NSInteger)initialValueCount convertedValueCount:(NSInteger*)convertedValueCount
 {
 	// Build new structure object
 	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
@@ -682,7 +682,7 @@
 			JSValueRef	valueJS = NULL;
 			if (encoding == '{')
 			{
-				int numParsed = [self structureToJSValueRef:&valueJS inContext:ctx fromCString:c fromStorage:ptr initialValues:initialValues initialValueCount:initialValueCount convertedValueCount:convertedValueCount];
+				NSInteger numParsed = [self structureToJSValueRef:&valueJS inContext:ctx fromCString:c fromStorage:ptr initialValues:initialValues initialValueCount:initialValueCount convertedValueCount:convertedValueCount];
 				c += numParsed;
 			}
 			else
@@ -714,7 +714,7 @@
 	return	c-c0-1;
 }
 
-+ (int)structureFromJSObjectRef:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue fromCString:(char*)c fromStorage:(void**)ptr
++ (NSInteger)structureFromJSObjectRef:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue fromCString:(char*)c fromStorage:(void**)ptr
 {
 	id structureName = [JSCocoaFFIArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
 	char* c0 = c;
@@ -755,7 +755,7 @@
 				if (JSValueIsObject(ctx, valueJS))
 				{
 					JSObjectRef objectProperty = JSValueToObject(ctx, valueJS, NULL);
-					int numParsed = [self structureFromJSObjectRef:objectProperty inContext:ctx inParentJSValueRef:NULL fromCString:c fromStorage:ptr];
+					NSInteger numParsed = [self structureFromJSObjectRef:objectProperty inContext:ctx inParentJSValueRef:NULL fromCString:c fromStorage:ptr];
 					c += numParsed;
 				}
 				else	return	0;
@@ -939,7 +939,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 }
 
 
-+ (NSArray*)typeEncodingsFromStructureTypeEncoding:(NSString*)structureTypeEncoding parsedCount:(int*)count
++ (NSArray*)typeEncodingsFromStructureTypeEncoding:(NSString*)structureTypeEncoding parsedCount:(NSInteger*)count
 {
 	id types = [[[NSMutableArray alloc] init] autorelease];
 	char* c = (char*)[structureTypeEncoding UTF8String];
@@ -1000,7 +1000,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 //
 // Given a structure encoding string, produce a human readable format
 //
-+ (int)structureTypeEncodingDescription:(NSString*)structureTypeEncoding inString:(NSMutableString**)str
++ (NSInteger)structureTypeEncodingDescription:(NSString*)structureTypeEncoding inString:(NSMutableString**)str
 {
 	char* c = (char*)[structureTypeEncoding UTF8String];
 	char* c0 = c;
@@ -1047,7 +1047,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 			if (encoding == '{')
 			{
 				[*str appendString:@"{"];
-				int parsed = [self structureTypeEncodingDescription:[NSString stringWithUTF8String:c] inString:str];
+				NSInteger parsed = [self structureTypeEncodingDescription:[NSString stringWithUTF8String:c] inString:str];
 				c += parsed;
 //				NSLog(@"parsed %@ (%d)", substr, [substr length]);
 			}
@@ -1080,11 +1080,11 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	void** ptr = (void**)&computedSize;
 	for (id type in types)
 	{
-		char encoding = *(char*)[type UTF8String];
+		char charEncoding = *(char*)[type UTF8String];
 		// Align 
-		[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:encoding];
+		[JSCocoaFFIArgument alignPtr:ptr accordingToEncoding:charEncoding];
 		// Advance ptr
-		[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:encoding];
+		[JSCocoaFFIArgument advancePtr:ptr accordingToEncoding:charEncoding];
 	}
 	return	computedSize;
 }
@@ -1235,7 +1235,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	// Get property count
 	JSValueRef	exception = NULL;
 	JSStringRef lengthJS = JSStringCreateWithUTF8CString("length");
-	int length = JSValueToNumber(ctx, JSObjectGetProperty(ctx, object, lengthJS, NULL), &exception);
+	NSUInteger length = JSValueToNumber(ctx, JSObjectGetProperty(ctx, object, lengthJS, NULL), &exception);
 	JSStringRelease(lengthJS);
 	if (exception)	return	NO;
 
@@ -1265,7 +1265,7 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 {
 	// Keys
 	JSPropertyNameArrayRef names = JSObjectCopyPropertyNames(ctx, object);
-	int length = JSPropertyNameArrayGetCount(names);
+	NSUInteger length = JSPropertyNameArrayGetCount(names);
 
 	// Converted hash
 	id hash = [NSMutableDictionary dictionary];

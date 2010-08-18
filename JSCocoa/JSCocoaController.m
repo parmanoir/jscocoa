@@ -285,7 +285,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
 		JSStringRelease(scriptJS);
 
-		JSStringRef jsName = JSStringCreateWithUTF8CString("allKeys");
+		jsName = JSStringCreateWithUTF8CString("allKeys");
 		JSObjectSetProperty(ctx, jsObject, jsName, fn, kJSPropertyAttributeDontEnum, NULL);
 		JSStringRelease(jsName);
 	}
@@ -374,7 +374,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		
 		
 		// Remove classes : go backwards to remove child classes first
-		int c = [jsClasses count]-1;
+		NSInteger c = [jsClasses count]-1;
 		while (c >= 0)
 		{
 			id class = [[jsClasses objectAtIndex:c] pointerValue];
@@ -652,7 +652,7 @@ static id JSCocoaSingleton = NULL;
 
 	// Convert arguments
 	JSValueRef* jsArguments = NULL;
-	int	argumentCount = [arguments count];
+	NSUInteger	argumentCount = [arguments count];
 	if (argumentCount)
 	{
 		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
@@ -787,7 +787,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Syntax validation
 //
-- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error
+- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)outError
 {
 	id errors = [NSMutableArray array];
 	script = [self expandJSMacros:script url:nil errors:errors];
@@ -808,8 +808,8 @@ static id JSCocoaSingleton = NULL;
 			if ([error valueForKey:@"line"])		[errorList addObject:[error valueForKey:@"line"]];
 			if ([error valueForKey:@"position"])	[errorList addObject:[error valueForKey:@"position"]];
 		}
-		if (error)
-			*error = [errorList componentsJoinedByString:@"\n"];
+		if (outError)
+			*outError = [errorList componentsJoinedByString:@"\n"];
 	}
 	
 	return b;
@@ -1111,7 +1111,7 @@ static id JSCocoaSingleton = NULL;
 		if (*argsParser == '{')
 		{
 			// Parse structure encoding
-			int count = 0;
+			NSInteger count = 0;
 			[JSCocoaFFIArgument typeEncodingsFromStructureTypeEncoding:[NSString stringWithUTF8String:argsParser] parsedCount:&count];
 
 			id encoding = [[NSString alloc] initWithBytes:argsParser length:count encoding:NSUTF8StringEncoding];
@@ -1175,7 +1175,7 @@ static id JSCocoaSingleton = NULL;
 	*functionNamePlaceHolder = [[rootElement attributeForName:@"name"] stringValue];
 	
 	// Parse children and return value
-	int i, numChildren	= [rootElement childCount];
+	NSUInteger i, numChildren	= [rootElement childCount];
 	id	returnValue		= NULL;
 	for (i=0; i<numChildren; i++)
 	{
@@ -1541,7 +1541,7 @@ static id JSCocoaSingleton = NULL;
 + (BOOL)trySplitCall:(id*)_methodName class:(Class)class argumentCount:(size_t*)_argumentCount arguments:(JSValueRef**)_arguments ctx:(JSContextRef)c
 {
 	id methodName			= *_methodName;
-	int argumentCount		= *_argumentCount;
+	size_t argumentCount	= *_argumentCount;
 	JSValueRef* arguments	= *_arguments;
 	if (argumentCount != 1)	return	NO;
 
@@ -1552,9 +1552,9 @@ static id JSCocoaSingleton = NULL;
 	
 	// Convert js names to NSString names : { jsName1 : value1, jsName2 : value 2 } -> NSArray[name1, name2]
 	id names = [NSMutableArray array];
-	int i, nameCount = JSPropertyNameArrayGetCount(jsNames);
+	size_t i, nameCount = JSPropertyNameArrayGetCount(jsNames);
 	// Length of target selector = length of method + length of each (argument + ':')
-	int targetSelectorLength = [methodName length];
+	NSUInteger targetSelectorLength = [methodName length];
 	// Actual arguments
 	JSValueRef*	actualArguments = malloc(sizeof(JSValueRef)*nameCount);
 	for (i=0; i<nameCount; i++)
@@ -1608,13 +1608,13 @@ static id JSCocoaSingleton = NULL;
 			{
 				char* s = (char*)[name UTF8String];
 				const char* t = [lowerCaseMethodName UTF8String];
-				int l = strlen(t);
+				size_t l = strlen(t);
 				// Does the selector start with the method name ?
 				if (strncmp(s, t, l) == 0)
 				{
 					s += l;
 					// Go through arguments and check if they're part of the string
-					int consumedLength = 0;
+					NSInteger consumedLength = 0;
 					for (id n in sortedNames)
 					{
 						if (strstr(s, [n UTF8String]))	consumedLength += [n length];
@@ -1827,7 +1827,7 @@ static id JSCocoaSingleton = NULL;
 	// Iterate over all properties of the exception
 	JSObjectRef jsObject = JSValueToObject(context, exception, NULL);
 	JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(context, jsObject);
-	int i, nameCount = JSPropertyNameArrayGetCount(jsNames);
+	size_t i, nameCount = JSPropertyNameArrayGetCount(jsNames);
 	id line = nil, sourceURL = nil;
 	for (i=0; i<nameCount; i++)
 	{
@@ -1876,7 +1876,7 @@ static id JSCocoaSingleton = NULL;
 	// Iterate over all properties of the exception
 	JSObjectRef jsObject = JSValueToObject(ctx, exception, NULL);
 	JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(ctx, jsObject);
-	int i, nameCount = JSPropertyNameArrayGetCount(jsNames);
+	size_t i, nameCount = JSPropertyNameArrayGetCount(jsNames);
 	id line = nil, sourceURL = nil;
 	for (i=0; i<nameCount; i++)
 	{
@@ -2141,7 +2141,7 @@ int	liveInstanceCount	= 0;
 //
 // NSDistantObject call using NSInvocation
 //
-- (JSValueRef)JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
+- (JSValueRef)JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
 {
     SEL selector = NSSelectorFromString(methodName);
 	if (class_getInstanceMethod([callee class], selector) || class_getClassMethod([callee class], selector)) {
@@ -2182,7 +2182,7 @@ int	liveInstanceCount	= 0;
 				[NSData dataWithBytesNoCopy:source length:size freeWhenDone:YES];
 				
 				void* p = source;
-				int numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:jsObject inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[fullStructureType UTF8String] fromStorage:&p];
+				NSInteger numParsed =	[JSCocoaFFIArgument structureFromJSObjectRef:jsObject inContext:ctx inParentJSValueRef:NULL fromCString:(char*)[fullStructureType UTF8String] fromStorage:&p];
 				if (numParsed)	[invocation setArgument:source atIndex:argIndex+2];
 			}
 		}
@@ -2346,7 +2346,7 @@ int	liveInstanceCount	= 0;
 
 			// structureToJSValueRef will advance the pointer in place, overwriting its original value
 			void* ptr = result;
-			int numParsed =	[JSCocoaFFIArgument structureToJSValueRef:&jsReturnValue inContext:localCtx fromCString:(char*)[fullStructureType UTF8String] fromStorage:&ptr];
+			NSInteger numParsed =	[JSCocoaFFIArgument structureToJSValueRef:&jsReturnValue inContext:localCtx fromCString:(char*)[fullStructureType UTF8String] fromStorage:&ptr];
 			if (!numParsed) jsReturnValue = NULL;
 			free(result);
 		}
@@ -2988,17 +2988,17 @@ JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextR
 			JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(o);
 			if (![privateObject.type isEqualToString:@"externalJSValueRef"])	
 			{
-				id o = [privateObject object];
-				if ([o isKindOfClass:[NSString class]])
+				id object = [privateObject object];
+				if ([object isKindOfClass:[NSString class]])
 				{
-					JSStringRef jsName	= JSStringCreateWithUTF8CString([o UTF8String]);
+					JSStringRef jsName	= JSStringCreateWithUTF8CString([object UTF8String]);
 					JSValueRef jsString	= JSValueMakeString(externalCtx, jsName);
 					JSStringRelease(jsName);
 					return		jsString;
 				}
-				if ([o isKindOfClass:[NSNumber class]])
+				if ([object isKindOfClass:[NSNumber class]])
 				{
-					return		JSValueMakeNumber(externalCtx, [o doubleValue]);
+					return		JSValueMakeNumber(externalCtx, [object doubleValue]);
 				}
 //				NSLog(@"Object (%@) converted to undefined", o );
 				return	JSValueMakeUndefined(externalCtx);
@@ -3386,7 +3386,7 @@ call:
 		//
 		if (useAutoCall)
 		{
-			id callee	= [privateObject object];
+			callee	= [privateObject object];
 			SEL sel		= NSSelectorFromString(propertyName);
 			
 			BOOL isInstanceCall = [propertyName isEqualToString:@"instance"];
@@ -4063,7 +4063,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	void* callAddress = NULL;
 
 	// Number of arguments of called method or function
-	int callAddressArgumentCount = 0;
+	NSUInteger callAddressArgumentCount = 0;
 
 	// Arguments encoding
 	// Holds return value encoding as first element
@@ -4302,7 +4302,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	void*		superPointer;
 	
 	// Total number of arguments to ffi_call
-	int	effectiveArgumentCount = argumentCount + (callingObjC ? 2 : 0);
+	NSUInteger	effectiveArgumentCount = argumentCount + (callingObjC ? 2 : 0);
 	if (effectiveArgumentCount > 0)
 	{
 		args = malloc(sizeof(ffi_type*)*effectiveArgumentCount);
@@ -4412,7 +4412,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		[returnValue allocateStorage];
 
 	// Setup ffi
-	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, effectiveArgumentCount, [returnValue ffi_type], args);
+	ffi_status prep_status	= ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffi_type], args);
 
 	//
 	// Call !
@@ -4567,10 +4567,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 		//
 		if ([methodName isEqualToString:@"Super"] || [methodName isEqualToString:@"Original"])
 		{
-			id methodName = privateObject.methodName;
+			methodName = privateObject.methodName;
 			BOOL callingSwizzled = [methodName isEqualToString:@"Original"];
 			if (argumentCount != 1 && argumentCount != 3)	return	throwException(ctx, exception, [NSString stringWithFormat:@"%@ wants (arguments) or (arguments, selector, argarray)", methodName]), NULL;
-			int originalArgumentCount = argumentCount;
+			size_t originalArgumentCount = argumentCount;
 
 			// Get argument object
 			JSObjectRef argumentObject = JSValueToObject(ctx, arguments[argumentCount == 3 ? 2 : 0], NULL);
@@ -4686,7 +4686,7 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 
 	// Create Javascript object out of structure type
 	JSValueRef	convertedStruct = NULL;
-	int			convertedValueCount = 0;
+	NSInteger	convertedValueCount = 0;
 	[JSCocoaFFIArgument structureToJSValueRef:&convertedStruct inContext:ctx fromCString:(char*)[fullStructureType UTF8String] fromStorage:nil initialValues:(JSValueRef*)arguments initialValueCount:argumentCount convertedValueCount:&convertedValueCount];
 
 	// If constructor is called with arguments, make sure they are the correct amount to fill all structure slots

@@ -295,7 +295,8 @@ BOOL	canCallC, canCallObjC;
 id		pathtoJSFile;
 id		customScript;
 id		scriptToEval;
-id		o;
+//id		o;
+id		unboxedValueTest;
 
 
 JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willReturn, customValueReturn, customValueGetGlobal;
@@ -351,11 +352,11 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	if (object != [NSWorkspace class])						return	@"delegate getProperty failed (1)";
 	if (![propertyName isEqualToString:@"sharedWorkspace"])	return	@"delegate getProperty failed (2)";
 	
-	o = [jsc unboxJSValueRef:ret];
-	if (o != [NSWorkspace sharedWorkspace])					return	@"delegate getProperty failed (3)";
+	unboxedValueTest = [jsc unboxJSValueRef:ret];
+	if (unboxedValueTest != [NSWorkspace sharedWorkspace])	return	@"delegate getProperty failed (3)";
 	
 	
-#define JSRESULTNUMBER JSValueToNumber([jsc ctx], ret?ret:JSValueMakeUndefined([jsc ctx]), NULL)
+#define JSRESULTNUMBER (int)JSValueToNumber([jsc ctx], ret?ret:JSValueMakeUndefined([jsc ctx]), NULL)
 	
 	//
 	// Test custom getting
@@ -506,8 +507,8 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	ret = [jsc evalJSString:@"NSWorkspace"];
 	if (![propertyName isEqualToString:@"NSWorkspace"])		return	@"delegate getGlobalProperty failed (1)";
 
-	o = [jsc unboxJSValueRef:ret];
-	if (o != [NSWorkspace class])							return	@"delegate getGlobalProperty failed (2)";
+	unboxedValueTest = [jsc unboxJSValueRef:ret];
+	if (unboxedValueTest != [NSWorkspace class])			return	@"delegate getGlobalProperty failed (2)";
 	
 	//
 	// Test custom global getting
@@ -696,20 +697,20 @@ int dummyValue;
 }
 
 
-- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)_functionName argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallFunction:(NSString*)_functionName argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"can call function %@", _functionName);
 	functionName = _functionName;
 	return	canCallC;
 }
-- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)_methodName ofObject:(id)_object argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+- (BOOL) JSCocoa:(JSCocoaController*)controller canCallMethod:(NSString*)_methodName ofObject:(id)_object argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"can call method %@.%@", _object, _methodName);
 	object		= _object;
 	methodName	= _methodName;
 	return	canCallObjC;
 }
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(int)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)_methodName ofObject:(id)_object privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"custom method call %@.%@", _object, _methodName);
 	

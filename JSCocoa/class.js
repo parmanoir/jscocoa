@@ -50,6 +50,13 @@
 		
 		,'BOOL'			: 'c'
 		,'NSInteger'	: 'i'
+		
+		,'unsigned char'	: 'C'
+		,'unsigned short'	: 'S'
+		,'unsigned int'		: 'I'
+		,'unsigned long'	: 'L'
+		,'unsigned longlong': 'Q'
+		
 	}
 	var reverseEncodings = {}
 	for (var e in encodings) reverseEncodings[encodings[e]] = e
@@ -57,7 +64,10 @@
 
 	function	objc_unary_encoding(encoding)
 	{
-		encoding = encoding.replace(/<\w+>/, '').toString()
+		// Remove protocol information 
+		//		id<NSValidatedUserInterfaceItem> item
+		//	->	id item
+		encoding = encoding.replace(/\s*<\s*\w+\s*>\s*/, '').toString()
 
 
 		// Structure arg
@@ -361,17 +371,6 @@
 	{
 		var inherit = h.className
 		var s = inherit.split('<')
-/*
-		if (s.length != 2)	throw 'New class must specify parent class name'
-		var className = s[0].replace(/ /gi, '')
-		var parentClassName = s[1].replace(/ /gi, '')
-		if (className.length == 0 || parentClassName.length == 0)	throw 'Invalid class definition : ' + inherit
-
-		// Get parent class
-		var parentClass = this[parentClassName]
-		if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
-		var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
-*/
 
 		// Adding methods to an existing class
 		if (s.length == 1)
@@ -391,7 +390,6 @@
 			// Get parent class
 			var parentClass = this[parentClassName]
 			if (!parentClass)											throw 'Parent class ' + parentClassName + ' not found'
-//			var newClass = JSCocoa.create({ 'class' : className, parentClass : parentClassName})
 			var newClass = JSCocoa.createClass_parentClass_(className, parentClassName)
 		}
 		
@@ -675,91 +673,6 @@
 		return str
 	}
 	
-/*	
-	//
-	// expandJSMacros
-	//	convert ObjC-like class syntax to Javascript
-	//
-	function	expandJSMacros(script)
-	{
-		if (script.match(/^\s*class\s+\w+\s+<\s+\w+\s*$/m))
-		{
-			// Replace classes (m modifier to treat as multiple lines)
-			script = script.replace(/^\s*(class)\s+(\w+)\s+(<)\s+(\w+)\s*$/gm, 'Class(\'$2 < $4\').definition = function ()')
-			// Replace class method (re)definition
-			script = script.replace(/^\s*(class)\s+(\w+)\s*$/gm, 'Class(\'$2\').definition = function ()')
-			// Replace methods
-			script = script.replace(/^\s*(Swizzle)?\s*(\-|\+)\s\(.*$/gm, expandJSMacros_ReplaceMethods)
-			
-			// Replace outlets
-			script = script.replace(/^\s*IBOutlet\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceOutlets)
-
-			// Replace keys
-			script = script.replace(/^\s*Key\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceKeys)
-			
-			// Replace actions
-			script = script.replace(/^\s*IBAction\s+(\w+)($|\s*)\(?(\w+)?\)?/gm, expandJSMacros_ReplaceActions)
-
-			// Replace js functions
-			script = script.replace(/^\s*js\s+function\s+(\w+)(.*)$/gm, expandJSMacros_ReplaceJSFunctions)
-		}
-		return	script
-	}
-	function	expandJSMacros_ReplaceMethods(r)
-	{
-		var name
-		var type
-		var args = []
-		var names = []
-
-		// Parse method
-		var s = String(r)
-		var isSwizzle = s.match(/^\s*Swizzle/)
-		if (isSwizzle) s = s.replace(/^\s*Swizzle/, '')
-		// extract class or instance method marker
-		s = s.replace(/(\+|\-)/, function (r) { type = r == '-' ? 'Method' : 'ClassMethod'; return '' } )
-		// extract arguments
-		s = s.replace(/\([^)]+\)/g, function (r) { r = String(r); r= r.substr(1, r.length-2); args.push(r); return '' } )
-		// extract argument names
-		s = s.replace(/\w+(\s|$)/gm, function (r) { names.push(r.replace(/\s/g, '')); return '' } )
-		// extract method name
-		var name = s.replace(/\s/g, '')
-		
-		// fixup : if no name and one argument, we have a zero arg method
-		if (args.length == 1 && names.length == 1) name = names[0], names = []
-		
-		// Bail if no return value
-		if (args.length < 1)	throw 'Need at least one return value in ' + r
-
-		var encoding = args.map(function (r) { return "'" + r + "'" })
-		var str = (isSwizzle ? 'Swizzle' : '') + type + "('" + name + "').encodingArray([" + encoding + "]).fn = function (" + names.join(', ') + ")"
-		return str
-	}
-	function	expandJSMacros_ReplaceOutlets(r, outletName, skippedParen, paramName)
-	{
-		var r = 'IBOutlet(\'' + outletName + '\')'
-		if (paramName) r += '.setter = function (' + paramName + ')'
-		return	r
-	}
-
-	function	expandJSMacros_ReplaceKeys(r, keyName, skippedParen, paramName)
-	{
-		var r = 'Key(\'' + keyName + '\')'
-		return	r
-	}
-
-	function	expandJSMacros_ReplaceActions(r, actionName, skippedParen, paramName)
-	{
-		paramName = paramName || 'sender'
-		return	'IBAction(\'' + actionName + '\').fn = function (' + paramName + ')'
-	}
-
-	function	expandJSMacros_ReplaceJSFunctions(r, functionName, arguments)
-	{
-		return	'JSFunction(\'' + functionName + '\').fn = function ' + arguments
-	}
-*/	
-
 
 	// JSLint
 	function	__logToken(token)

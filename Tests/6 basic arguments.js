@@ -4,6 +4,14 @@
 	/*
 
 		Test int, float, bool, strings
+		
+		  http://stackoverflow.com/questions/1908492/unsigned-integer-in-javascript
+		  Javascript ints are signed, therefore
+			1 << 31			returns a negative number
+			(1 << 31) >>> 0	coerces to a positive number
+
+		  To get 1 << 32
+			(1 << 30)*4
 
 	*/
 

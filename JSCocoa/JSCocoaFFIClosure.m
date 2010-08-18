@@ -87,7 +87,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	[encodings retain];
 	isObjC		= objC;
 	
-	int i, argumentCount = [argumentEncodings count]-1;
+	unsigned int i, argumentCount = (unsigned int)([argumentEncodings count]-1);
 	argTypes = malloc(sizeof(ffi_type*)*argumentCount);
 	for (i=0; i<argumentCount; i++)
 	{
@@ -146,7 +146,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	// ## Only objC for now. Need to test C function pointers.
 	
 	// Argument count is encodings count minus return value
-	int	i, idx = 0, effectiveArgumentCount = [encodings count]-1;
+	NSUInteger	i, idx = 0, effectiveArgumentCount = [encodings count]-1;
 	// Skip self and selector
 	if (isObjC)
 	{

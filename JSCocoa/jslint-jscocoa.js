@@ -5117,13 +5117,17 @@ members)?
 				advance('(')
 				var type = ''
 				var typeTokenCount = 0
+				var startToken = nexttoken
 				while (nexttoken && nexttoken.value != ')' && nexttoken.line == line)
 				{
 					advance()
 					type += token.value
 					typeTokenCount++
 				}
-				if (!typeTokenCount)	warningAt('Missing parameter type', token.line, token.from)
+				if (!typeTokenCount)				warningAt('Missing parameter type', token.line, token.from)
+				var endToken = token
+				if (endToken.line != token.line)	warningAt('Parameter must be defined on one line', token.line, token.from)
+				type = lines[startToken.line].substr(startToken.from, endToken.character-startToken.from)
 				encodings.push("'" + type + "'")
 				advance(')')
 			}

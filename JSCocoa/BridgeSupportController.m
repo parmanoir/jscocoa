@@ -126,15 +126,16 @@
 					{
 						if (strncmp(c, "variadic", 8) == 0)
 						{
-							// Skip to tag start
-							char* c0 = c;
+							// Skip back to tag start
+							c0 = c;
 							for (; *c0 != '<'; c0--);
 
-							// Variadic method
+							// Tag name starts with 'm' : variadic method
+							// <method variadic='true' selector='alertWithMessageText:defaultButton:alternateButton:otherButton:informativeTextWithFormat:' class_method='true'>
 							if (c0[1] == 'm')
 							{
 								c = c0;
-								id name = nil;
+								id variadicMethodName = nil;
 								// Extract selector name
 								for (; *c != '>'; c++)
 								{
@@ -144,14 +145,15 @@
 										c++;
 										c0 = c;
 										for (; *c && *c != '\''; c++);
-										name = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
+										variadicMethodName = [[[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding] autorelease];
 									}
 								}
-								[variadicSelectors setValue:@"true" forKey:name];
+								[variadicSelectors setValue:@"true" forKey:variadicMethodName];
 //								NSLog(@"SELECTOR %@", name);
 							}
 							else
 							// Variadic function
+							// <function name='NSBeginAlertSheet' variadic='true'>
 							{
 								[variadicFunctions setValue:@"true" forKey:name];
 //								NSLog(@"function %@", name);
@@ -193,7 +195,7 @@
 //
 - (NSUInteger)bridgeSupportIndexForString:(NSString*)string
 {
-	int i, l = [paths count];
+	NSUInteger i, l = [paths count];
 	for (i=0; i<l; i++)
 	{
 		NSString* path = [paths objectAtIndex:i];

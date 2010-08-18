@@ -13,7 +13,6 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2899E5220DE3E06400AC0155 /* iPhoneTest2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* iPhoneTest2ViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
-		3D35B9D2120C4EDF00E260FB /* iPhoneMain.oldStyle.js in Sources */ = {isa = PBXBuildFile; fileRef = 3D35B9D1120C4EDF00E260FB /* iPhoneMain.oldStyle.js */; };
 		3D3B559C0F1D41F300D60188 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D3B559B0F1D41F300D60188 /* GDataXMLNode.m */; };
 		3D64C8870F3F1A45004D610C /* JSCocoaLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D64C8850F3F1A45004D610C /* JSCocoaLib.m */; };
 		3D7A7E270EA2216D009DE07C /* iPhone.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = 3D7A7E260EA2216D009DE07C /* iPhone.bridgesupport */; };
@@ -326,7 +325,6 @@
 				3D97DA7110425AAA00E2E233 /* prep_cif.c in Sources */,
 				3D97DA7210425AAA00E2E233 /* raw_api.c in Sources */,
 				3D97DA7310425AAA00E2E233 /* types.c in Sources */,
-				3D35B9D2120C4EDF00E260FB /* iPhoneMain.oldStyle.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
