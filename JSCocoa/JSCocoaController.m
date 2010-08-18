@@ -3034,7 +3034,10 @@ JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef va
 
 
 //
-// Autocall : return value
+// valueOf : from a boxed ObjC object, returns a primitive javascript value (number or string) 
+//  that JavascriptCore can use in expressions (eg boxedObject + 'this', boxedObject < 4)
+//
+//  The converted object is temporary and does not affect the boxed object
 //
 JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception)
 {
