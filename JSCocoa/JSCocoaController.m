@@ -3108,7 +3108,9 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 	}
 	
 	// Return a number is the whole string (no spaces, no others chars) is a number
+	// This emulates the javascript behaviour '4'*2 -> 8 when '4' is a string or an NSString
 	NSScanner* scan = [NSScanner scannerWithString:toString];
+	[scan setCharactersToBeSkipped:nil];
 	double v = 0;
 	[scan scanDouble:&v];
 	if ([scan isAtEnd])

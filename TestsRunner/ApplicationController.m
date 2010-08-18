@@ -641,7 +641,11 @@ int dummyValue;
 	return	5;
 }
 
-
+//
+//
+#pragma mark Delegate test
+//
+//
 - (void) JSCocoa:(JSCocoaController*)controller hadError:(NSString*)error onLineNumber:(NSInteger)lineNumber atSourceURL:(id)url
 {
 //	NSLog(@"delegate exception handler : %@", error);
@@ -768,6 +772,13 @@ int dummyValue;
 
 
 
+
+//
+//
+#pragma mark -
+//
+//
+
 //
 // JSCocoa inited from a WebView tests
 //
@@ -893,5 +904,29 @@ BOOL	bindingsAlreadyTested2 = NO;
 	[self disposeClass:@"NSKVONotifying_NibTestOwner"];
 }
 
+
+@end
+
+
+
+//
+//	From Ian Beck
+#pragma mark Test 56, Whitespace
+//
+//
+@interface MRTestWhitespace : NSObject
+@end
+
+@implementation MRTestWhitespace
+
+- (NSString *)fetchLinebreak {
+	return @"\n";
+}
+- (NSString *)fetchTab {
+	return @"	";
+}
+- (NSString *)fetchSpaces {
+	return @"    ";
+}
 
 @end
