@@ -298,7 +298,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 //void* malloc_autorelease(size_t size);
 
-id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATION;
+// Convert values between contexts (eg user context and webkit page context)
 JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx);
 
 // valueOf() is called by Javascript on objects, eg someObject + ' someString'

@@ -164,7 +164,7 @@
 				
 				c0 = tagStart;
 				id value = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
-				
+	
 				[hash setValue:value forKey:name];
 				[value release];
 				[name release];

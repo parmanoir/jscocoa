@@ -228,7 +228,7 @@
 	return	returnValue;
 }
 
-- (BOOL)setValue:(JSValueRef)jsValue atIndex:(NSUInteger)idx inContext:(JSContextRef)ctx;
+- (BOOL)setValue:(JSValueRef)jsValue atIndex:(NSUInteger)idx inContext:(JSContextRef)ctx
 {
 	char	typeEncoding = [self typeAtIndex:idx];
 	void*	pointedValue = [self pointerForIndex:idx];

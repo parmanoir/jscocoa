@@ -120,7 +120,7 @@
 	return method;
 }
 
-- (void)setJSValueRef:(JSValueRef)v ctx:(JSContextRef)c;
+- (void)setJSValueRef:(JSValueRef)v ctx:(JSContextRef)c
 {
 	// While autocalling we'll get a NULL value when boxing a void return type - just skip JSValueProtect
 	if (!v)	

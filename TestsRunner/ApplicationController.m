@@ -653,14 +653,14 @@ int dummyValue;
 }
 
 
-- (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller canGetProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"delegate canGet %@(%@).%@ canGet=%d", _object, [_object class], _propertyName, canGet);
 	object			= _object;
 	propertyName	= _propertyName;
 	return	canGet;
 }
-- (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"delegate get %@(%@).%@ customValueGet=%x", _object, [_object class], _propertyName, customValueGet);
 	object			= _object;
@@ -668,7 +668,7 @@ int dummyValue;
 	return	customValueGet;
 }
 
-- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller canSetProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"delegate canSet %@(%@).%@", _object, [_object class], _propertyName);
 	object			= _object;
@@ -680,7 +680,7 @@ int dummyValue;
 	equalsBezelStyle	= [_propertyName isEqualToString:@"bezelStyle"];
 	return	canSet;
 }
-- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception;
+- (BOOL) JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)_propertyName ofObject:(id)_object toValue:(JSValueRef)_jsValue inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
 //	NSLog(@"delegate set");
 	object			= _object;

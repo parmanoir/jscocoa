@@ -245,9 +245,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		[self accomodateWebKitInspector];
 	}
 
-	// Create a reference to ourselves, and make it read only, don't enum, don't delete
-	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
-
 #if !TARGET_IPHONE_SIMULATOR && !TARGET_OS_IPHONE
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
@@ -258,6 +255,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	[BurksPool setJSFunctionHash:jsFunctionHash];
 #endif
+
+	// Create a reference to ourselves, and make it read only, don't enum, don't delete
+	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
+
 
 	// Load class kit
 	if (!_ctx)
@@ -694,7 +695,8 @@ static id JSCocoaSingleton = NULL;
 	{
 		va_list	args;
 		va_start(args, firstArg);
-		while (arg = va_arg(args, id))	[arguments addObject:arg];
+		while ((arg = va_arg(args, id)))	
+			[arguments addObject:arg];
 		va_end(args);
 	}
 
@@ -759,7 +761,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Expand macros
 //
-- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url errors:(NSMutableArray*)array;
+- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url errors:(NSMutableArray*)array
 {
 	// Normal path, with macro expansion for class definitions
 	// OR
@@ -1061,7 +1063,7 @@ static id JSCocoaSingleton = NULL;
 //	* in property get (NSString.instance.count, getting 'count')
 //	* in valueOf (handled automatically as JavascriptCore will request 'valueOf' through property get)
 //
-+ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx;
++ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)jsValue inContext:(JSContextRef)ctx
 {
 	NSLog(@"***For zero arg instance, use obj.instance() instead of obj.instance***");
 }
@@ -2122,7 +2124,7 @@ int	liveInstanceCount	= 0;
 //	-> 
 //	[object setWidth:100]
 //
-- (BOOL)JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception;
+- (BOOL)JSCocoa:(JSCocoaController*)controller setProperty:(NSString*)propertyName ofObject:(id)object toValue:(JSValueRef)value inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
 {
     // FIXME: this doesn't actually work with objc properties, and we can't always rely that this method will exist either...
     // it should probably be moved up into the JSCocoa layer.
@@ -4729,6 +4731,13 @@ static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 	return NO;
 }
 
+
+
+
+
+
+
+
 //
 //
 #pragma mark JavascriptCore __info object (ObjCInstanceOrClass._info returns runtime info
@@ -4883,47 +4892,6 @@ void* malloc_autorelease(size_t size)
 	return	p;
 }
 */
-
-//
-// JSLocalizedString
-//
-id	JSLocalizedString(id stringName, id firstArg, ...)
-{
-	// Convert args to array
-	id arg, arguments = [NSMutableArray array];
-	[arguments addObject:stringName];
-	if (firstArg)	[arguments addObject:firstArg];
-
-	if (firstArg)
-	{
-		va_list	args;
-		va_start(args, firstArg);
-		while (arg = va_arg(args, id))	[arguments addObject:arg];
-		va_end(args);
-	}
-	
-	// Get global object
-	id				jsc			= [JSCocoaController sharedController];
-	JSContextRef	ctx			= [jsc ctx];
-	JSObjectRef		globalObject= JSContextGetGlobalObject(ctx);
-	JSValueRef		exception	= NULL;
-	
-	// Get function as property of global object
-	JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([@"localizedString" UTF8String]);
-	JSValueRef jsFunctionValue = JSObjectGetProperty(ctx, globalObject, jsFunctionName, &exception);
-	JSStringRelease(jsFunctionName);
-	if (exception)				return	NSLog(@"localizedString failed"), NULL;
-	
-	JSObjectRef	jsFunction = JSValueToObject(ctx, jsFunctionValue, NULL);
-	// Return if function is not of function type
-	if (!jsFunction)			return	NSLog(@"localizedString is not a function"), NULL;
-
-	// Call !
-	JSValueRef jsRes = [jsc callJSFunction:jsFunction withArguments:arguments];
-	id res = [jsc unboxJSValueRef:jsRes];
-
-	return	res;
-}
 
 
 

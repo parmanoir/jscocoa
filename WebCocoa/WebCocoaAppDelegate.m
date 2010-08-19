@@ -23,6 +23,8 @@
 	JSGlobalContextRef ctx = [[webview mainFrame] globalContext];
 	jscocoa = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	[jscocoa setObject:self withName:@"myself"];
+	
+	NSLog(@"the page should list all classes and corresponding methods, derivation tree, etc. Also, searchable.")
 }
 #pragma mark WebFrameLoadDelegate Methods
 
