@@ -876,6 +876,46 @@ typedef	struct { char a; BOOL b;		} struct_C_BOOL;
 	return	NULL;
 }
 
+//
+// Type encodings
+//	http://developer.apple.com/mac/library/documentation/cocoa/conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
+//
+//	Will change a bit between 32 and 64 bits (NSUInteger I->Q, CGFloat f->d)
+//
+static NSMutableDictionary* typeEncodings = nil;
++ (NSString*)typeEncodingForType:(NSString*)encoding
+{
+	if (!typeEncodings)
+	{
+		typeEncodings = [NSMutableDictionary new];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(char)]					forKey:@"char"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(int)]					forKey:@"int"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(short)]					forKey:@"short"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(long)]					forKey:@"long"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(long long)]				forKey:@"long long"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(unsigned char)]			forKey:@"unsigned char"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(unsigned int)]			forKey:@"unsigned int"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(unsigned short)]			forKey:@"unsigned short"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(unsigned long)]			forKey:@"unsigned long"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(unsigned long long)]		forKey:@"unsigned long long"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(float)]					forKey:@"float"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(double)]					forKey:@"double"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(bool)]					forKey:@"bool"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(void)]					forKey:@"void"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(char*)]					forKey:@"char*"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(id)]						forKey:@"id"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(Class)]					forKey:@"Class"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(SEL)]					forKey:@"selector"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(BOOL)]					forKey:@"BOOL"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(void*)]					forKey:@"void*"];
+
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(NSInteger)]				forKey:@"NSInteger"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(NSUInteger)]				forKey:@"NSUInteger"];
+		[typeEncodings setValue:[NSString stringWithUTF8String:@encode(CGFloat)]				forKey:@"CGFloat"];
+	}
+	return [typeEncodings valueForKey:encoding];
+}
+
 
 #pragma mark Structure encoding, size
 

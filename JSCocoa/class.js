@@ -19,45 +19,25 @@
 	function	dumpHash(o)	{	var str = ''; for (var i in o) str += i + '=' + o[i] + '\n'; return str }
 	
 	//	
-	//	Pretty print of ObjC type encodings
-	//	http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_13_section_9.html#//apple_ref/doc/uid/TP30001163-CH9-113054
+	//	ObjC type encodings
+	//	http://developer.apple.com/mac/library/documentation/cocoa/conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
 	//	
+	//	  Used to write ObjC methods in Javascript
 	//
-
-
-	var encodings = { 	
-		 'id'			: '@'
-		,'class'		: '#'
-		,'selector'		: ':'
-		,'char'			: 'c'
-		,'uchar'		: 'C'
-		,'short'		: 's'
-		,'ushort'		: 'S'
-		,'int'			: 'i'
-		,'uint'			: 'I'
-		,'long'			: 'l'
-		,'ulong'		: 'L'
-		,'longlong'		: 'q'
-		,'ulonglong'	: 'Q'
-		,'float'		: 'f'
-		,'double'		: 'd'
-		,'bool'			: 'B'
-		,'void'			: 'v'
-		,'IBAction'		: 'v'
-		,'undef'		: '?'
-		,'pointer'		: '^'
-		,'charpointer'	: '*'
-		
-		,'BOOL'			: 'c'
-		,'NSInteger'	: 'i'
-		
-		,'unsigned char'	: 'C'
-		,'unsigned short'	: 'S'
-		,'unsigned int'		: 'I'
-		,'unsigned long'	: 'L'
-		,'unsigned longlong': 'Q'
-		
+	var types = ['char', 'int', 'short', 'long', 'long long', 'unsigned char', 'unsigned int', 'unsigned short', 'unsigned long',
+				'unsigned long long', 'float', 'double', 'bool', 'void', 'char*', 'id', 'Class', 'selector', 'BOOL', 'void*',
+				'NSInteger', 'NSUInteger', 'CGFloat'];
+	var encodings = {}
+	var l = types.length
+	// Encodings are architecture dependent and were encoded at compile time, retrieve them now
+	for (var i=0; i<l; i++)
+	{
+		var t = types[i]
+		encodings[t] = JSCocoaFFIArgument.typeEncodingForType_(t)
 	}
+	encodings['charpointer'] = encodings['char*']
+	encodings['IBAction'] = encodings['void']
+	
 	var reverseEncodings = {}
 	for (var e in encodings) reverseEncodings[encodings[e]] = e
 	

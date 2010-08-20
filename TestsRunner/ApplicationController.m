@@ -40,6 +40,7 @@ JSCocoaController* jsc = nil;
 	BOOL b = [@"hello" writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:&error];
 	NSLog(@"++++++++ %d %@", b, error);
 */
+//	[self dumpEncodings];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -48,6 +49,7 @@ JSCocoaController* jsc = nil;
 
 	[self disposeShadowBindingsClasses];
 
+	// Retain count is 2 because a variable named __jsc__ holds the ObjC object in the Javascript context
 	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
 
@@ -770,8 +772,36 @@ int dummyValue;
 	return	script;
 }
 
-
-
+//
+//
+#pragma Encodings
+//
+//
+- (void)dumpEncodings
+{
+	NSLog(@"id=%s", @encode(id));
+	NSLog(@"class=%s", @encode(Class));
+	NSLog(@"selector=%s", @encode(SEL));
+	NSLog(@"char=%s", @encode(char));
+	NSLog(@"unsigned char=%s", @encode(unsigned char));
+	NSLog(@"short=%s", @encode(short));
+	NSLog(@"unsigned short=%s", @encode(unsigned short));
+	NSLog(@"int=%s", @encode(int));
+	NSLog(@"unsigned int=%s", @encode(unsigned int));
+	NSLog(@"long=%s", @encode(long));
+	NSLog(@"unsigned long=%s", @encode(unsigned long));
+	NSLog(@"long long=%s", @encode(long long));
+	NSLog(@"unsigned long long=%s", @encode(unsigned long long));
+	NSLog(@"float=%s", @encode(float));
+	NSLog(@"double=%s", @encode(double));
+	NSLog(@"bool=%s", @encode(bool));
+	NSLog(@"void=%s", @encode(void));
+	NSLog(@"pointer=%s", @encode(void*));
+	NSLog(@"charpointer=%s", @encode(char*));
+	NSLog(@"BOOL=%s", @encode(BOOL));
+	NSLog(@"NSInteger=%s", @encode(NSInteger));
+	NSLog(@"NSUInteger=%s", @encode(NSUInteger));
+}
 
 //
 //

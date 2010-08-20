@@ -49,6 +49,8 @@
 - (void)disposeClass:(NSString*)className;
 - (void)disposeShadowBindingsClasses;
 
+- (void)dumpEncodings;
+
 @end
 
 @interface NSErrorTest : NSObject
