@@ -549,7 +549,7 @@ static id JSCocoaSingleton = NULL;
 	if (_delegate && [_delegate respondsToSelector:@selector(JSCocoa:canLoadJSFile:)] && ![_delegate JSCocoa:self canLoadJSFile:path])	return	NO;
 
 	// Expand macros
-	script = [self expandJSMacros:script url:path];
+	script = [self expandJSMacros:script path:path];
 
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -563,16 +563,17 @@ static id JSCocoaSingleton = NULL;
 	if (!customCallPathsCacheIsClean)	[JSCocoa updateCustomCallPaths];
 	
 	// Convert script and script URL to js strings
-//	JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
+	// JSStringRef scriptJS		= JSStringCreateWithUTF8CString([script UTF8String]);
 	// Using CreateWithUTF8 yields wrong results on PPC
 	JSStringRef scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
-	JSStringRef scriptURLJS	= JSStringCreateWithUTF8CString([path UTF8String]);
+	JSStringRef scriptPath	= JSStringCreateWithUTF8CString([path UTF8String]);
+    
 	// Eval !
 	JSValueRef	exception = NULL;
-	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
+	JSValueRef result = JSEvaluateScript(ctx, scriptJS, NULL, scriptPath, 1, &exception);
 	if (returnValue)	*returnValue = result;
 	// Release
-	JSStringRelease(scriptURLJS);
+	JSStringRelease(scriptPath);
 	JSStringRelease(scriptJS);
 	if (exception) 
 	{
@@ -595,12 +596,12 @@ static id JSCocoaSingleton = NULL;
 //
 // Evaluate a string
 // 
-- (JSValueRef)evalJSString:(NSString*)script withScriptURL:(NSString*)url
+- (JSValueRef)evalJSString:(NSString*)script withScriptPath:(NSString*)path
 {
 	if (!script)	return	NULL;
 
 	// Expand macros
-	id expandedScript = [self expandJSMacros:script url:url];
+	id expandedScript = [self expandJSMacros:script path:path];
 	if (expandedScript)
 		script = expandedScript;
 	
@@ -620,10 +621,10 @@ static id JSCocoaSingleton = NULL;
 	
 	JSStringRef		scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef		exception	= NULL;
-	JSStringRef		scriptURLJS = url ? JSStringCreateWithUTF8CString([url UTF8String]) : NULL;
-	JSValueRef		result = JSEvaluateScript(ctx, scriptJS, NULL, scriptURLJS, 1, &exception);
+	JSStringRef		scriptPath = path ? JSStringCreateWithUTF8CString([path UTF8String]) : NULL;
+	JSValueRef		result = JSEvaluateScript(ctx, scriptJS, NULL, scriptPath, 1, &exception);
 	JSStringRelease(scriptJS);
-	if (url)		JSStringRelease(scriptURLJS);
+	if (path)		JSStringRelease(scriptPath);
 
 	if (exception) 
 	{
@@ -634,10 +635,10 @@ static id JSCocoaSingleton = NULL;
 	return	result;
 }
 
-// Evaluate a string, no script URL
+// Evaluate a string, no script path
 - (JSValueRef)evalJSString:(NSString*)script
 {
-	return [self evalJSString:script withScriptURL:nil];
+	return [self evalJSString:script withScriptPath:nil];
 }
 
 
@@ -761,7 +762,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Expand macros
 //
-- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url errors:(NSMutableArray*)array
+- (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path errors:(NSMutableArray*)array
 {
 	// Normal path, with macro expansion for class definitions
 	// OR
@@ -775,15 +776,15 @@ static id JSCocoaSingleton = NULL;
 		id expandedScript = [self unboxJSValueRef:v];
 		// Bail if expansion failed
 		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
-			return NSLog(@"%@ expansion failed on script %@ (%@) ", functionName, script, url), NULL;
+			return NSLog(@"%@ expansion failed on script %@ (%@) ", functionName, script, path), NULL;
 
 		script = expandedScript;
 	}
 	return	script;
 }
-- (NSString*)expandJSMacros:(NSString*)script url:(NSString*)url
+- (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path
 {
-	return [self expandJSMacros:script url:url errors:nil];
+	return [self expandJSMacros:script path:path errors:nil];
 }
 
 //
@@ -792,7 +793,7 @@ static id JSCocoaSingleton = NULL;
 - (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)outError
 {
 	id errors = [NSMutableArray array];
-	script = [self expandJSMacros:script url:nil errors:errors];
+	script = [self expandJSMacros:script path:nil errors:errors];
 
 	JSStringRef scriptJS	= JSStringCreateWithUTF8CString([script UTF8String]);
 	JSValueRef	exception	= NULL;
@@ -1812,7 +1813,7 @@ static id JSCocoaSingleton = NULL;
 }
 
 //
-// Given an exception, get its line number, source URL, error message and return them in a NSString
+//	Given an exception, get its line number, source URL, error message and return them in a NSString
 //	When throwing an exception from Javascript, throw an object instead of a string. 
 //	This way, JavascriptCore will add line and sourceURL.
 //	(throw new String('error') instead of throw 'error')
