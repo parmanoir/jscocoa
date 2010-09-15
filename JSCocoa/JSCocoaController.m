@@ -2070,14 +2070,15 @@ int	liveInstanceCount	= 0;
 + (void)logInstanceStats
 {
 	id allKeys = [sharedInstanceStats allKeys];
-	NSLog(@"====instanceStats : %d classes spawned %d instances since launch, %d dead, %d alive====", [allKeys count], fullInstanceCount, fullInstanceCount-liveInstanceCount, liveInstanceCount);
+	NSLog(@"====instanceStats : %ld classes spawned %d instances since launch, %d dead, %d alive====", (long)[allKeys count], fullInstanceCount, fullInstanceCount-liveInstanceCount, liveInstanceCount);
 	for (id key in allKeys)		
 		NSLog(@"%@=%d", key, [[sharedInstanceStats objectForKey:key] intValue]);
 	if ([allKeys count])	NSLog(@"====");
 }
+
 + (void)logBoxedObjects
 {
-	NSLog(@"====%d boxedObjects====", [[boxedObjects allKeys] count]);
+	NSLog(@"====%ld boxedObjects====", (long)[[boxedObjects allKeys] count]);
 	NSLog(@"%@", boxedObjects);
 }
 
@@ -3173,7 +3174,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 						if ([jsc useSafeDealloc])
 							[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
 					}
-					else	NSLog(@"safeDealloc could not find the context attached to %@.%x - allocate this object with instance, or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
+					else	NSLog(@"safeDealloc could not find the context attached to %@.%p - allocate this object with instance, or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
 				}
 				
 			}
