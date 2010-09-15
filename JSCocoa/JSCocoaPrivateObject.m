@@ -57,7 +57,7 @@
 //			JSGlobalContextRelease((JSGlobalContextRef)ctx);
 			
 			if (exception)
-				NSLog(@"Got an exception while trying to release externalJSValueRef %x of context %x", jsValue, ctx);
+				NSLog(@"Got an exception while trying to release externalJSValueRef %p of context %p", jsValue, ctx);
 		}
 	}
 /*
