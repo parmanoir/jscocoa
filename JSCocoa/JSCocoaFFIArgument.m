@@ -149,7 +149,10 @@
 
 - (BOOL)setTypeEncoding:(char)encoding
 {
-	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{ NSLog(@"Bad type encoding %c", encoding); return NO; };
+	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1) { 
+		NSLog(@"Bad type encoding %c", encoding); 
+		return NO;
+	};
 
 	typeEncoding = encoding;
 	[self allocateStorage];
@@ -159,7 +162,10 @@
 
 - (BOOL)setTypeEncoding:(char)encoding withCustomStorage:(void*)storagePtr
 {
-	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{ NSLog(@"Bad type encoding %c", encoding); return NO; };
+	if ([JSCocoaFFIArgument sizeOfTypeEncoding:encoding] == -1)	{
+		NSLog(@"Bad type encoding %c", encoding); 
+		return NO;
+	};
 
 	typeEncoding	= encoding;
 	ownsStorage		= NO;

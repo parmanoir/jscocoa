@@ -4220,6 +4220,9 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		const char* typeEncoding = method_getTypeEncoding(method);
 //		NSLog(@"method %@ encoding=%s", methodName, typeEncoding);
 		argumentEncodings = [JSCocoaController parseObjCMethodEncoding:typeEncoding];
+		if (!argumentEncodings) {
+			return	throwException(ctx, exception, [NSString stringWithFormat:@"jsCocoaObject_callAsFunction could not parse type encodings %s of [%@ %@]", [JSCocoa typeEncodingOfMethod:methodName class:[[callee class] description]], methodName, [callee class]]), NULL;
+		}
 		// Function arguments is all arguments minus return value and [instance, selector] params to objc_send
 		callAddressArgumentCount = [argumentEncodings count]-3;
 
@@ -4740,7 +4743,7 @@ static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 
 //
 //
-#pragma mark JavascriptCore __info object (ObjCInstanceOrClass._info returns runtime info
+#pragma mark JavascriptCore __info object (ObjCInstanceOrClass._info returns runtime info)
 //
 //
 static JSValueRef jsCocoaInfo_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)

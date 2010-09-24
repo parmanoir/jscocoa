@@ -960,3 +960,27 @@ BOOL	bindingsAlreadyTested2 = NO;
 }
 
 @end
+
+//
+// From Gus Mueller
+#pragma mark Blocks test
+//
+//
+@interface JSTestBlocks : NSObject { } @end 
+
+@implementation JSTestBlocks
+
++ (id)newErrorBlockForJSFunction:(JSValueRefAndContextRef)callbackFunction {
+   void (^theBlock)(NSError *) = ^(NSError *err) {
+       id _jsc = [JSCocoa controllerFromContext:callbackFunction.ctx];
+       [_jsc callJSFunction:callbackFunction.value withArguments:[NSArray arrayWithObjects:err, nil]];
+   };
+
+   return [theBlock copy];
+}
+
++ (void)testFunction:(void (^)(NSError *))theBlock {
+   theBlock(nil);
+}
+
+@end

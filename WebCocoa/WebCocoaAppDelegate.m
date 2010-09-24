@@ -24,7 +24,8 @@
 	jscocoa = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	[jscocoa setObject:self withName:@"myself"];
 	
-	NSLog(@"the page should list all classes and corresponding methods, derivation tree, etc. Also, searchable.")
+	NSLog(@"the page should list all classes and corresponding methods, derivation tree, etc. Also, searchable.");
+	Ideally, integrate the editor into WebCocoa, and launch the debugger from there.
 }
 #pragma mark WebFrameLoadDelegate Methods
 
