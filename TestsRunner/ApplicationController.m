@@ -964,7 +964,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 //
 // From Gus Mueller
 #pragma mark Blocks test
-//
+// This fails because JSCocoa does not parse the '?' encoding used by blocks and function pointers
 //
 @interface JSTestBlocks : NSObject { } @end 
 
@@ -984,3 +984,16 @@ BOOL	bindingsAlreadyTested2 = NO;
 }
 
 @end
+
+/*
+var f = function(err) {
+   log("Hello from a jsfunction");
+};
+
+var objcBlock = JSTestBlocks.newErrorBlockForJSFunction_(f);
+
+log('block=' + objcBlock);
+
+JSTestBlocks.testFunction_(objcBlock);
+
+*/
