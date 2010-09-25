@@ -290,6 +290,18 @@
 			3DC79FDE124DE05A00E0B47D /* PBXTextBookmark */ = 3DC79FDE124DE05A00E0B47D /* PBXTextBookmark */;
 			3DC79FDF124DE05A00E0B47D /* PBXTextBookmark */ = 3DC79FDF124DE05A00E0B47D /* PBXTextBookmark */;
 			3DC79FE0124DE05A00E0B47D /* PBXTextBookmark */ = 3DC79FE0124DE05A00E0B47D /* PBXTextBookmark */;
+			3DC79FE2124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE2124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FE3124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE3124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FE4124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE4124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FE5124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE5124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FE6124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE6124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FE7124DE09500E0B47D /* PBXTextBookmark */ = 3DC79FE7124DE09500E0B47D /* PBXTextBookmark */;
+			3DC79FEC124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FEC124DE0B000E0B47D /* PBXTextBookmark */;
+			3DC79FED124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FED124DE0B000E0B47D /* PBXTextBookmark */;
+			3DC79FEE124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FEE124DE0B000E0B47D /* PBXTextBookmark */;
+			3DC79FEF124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FEF124DE0B000E0B47D /* PBXTextBookmark */;
+			3DC79FF0124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FF0124DE0B000E0B47D /* PBXTextBookmark */;
+			3DC79FF1124DE0B000E0B47D /* PBXTextBookmark */ = 3DC79FF1124DE0B000E0B47D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 3D36E256105229C200132E23 /* Source Control */;
 		userBuildSettings = {
@@ -383,9 +395,9 @@
 	};
 	3D36E288105229E700132E23 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {909, 55264}}";
+			sepNavIntBoundsRect = "{{0, 0}, {909, 55275}}";
 			sepNavSelRange = "{36307, 0}";
-			sepNavVisRange = "{155331, 2385}";
+			sepNavVisRange = "{155416, 2360}";
 			sepNavWindowFrame = "{{534, 158}, {968, 1004}}";
 		};
 	};
@@ -400,7 +412,7 @@
 	3D36E28A105229E700132E23 /* JSCocoaFFIArgument.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {909, 14927}}";
-			sepNavSelRange = "{22193, 5}";
+			sepNavSelRange = "{9144, 5}";
 			sepNavVisRange = "{7525, 2228}";
 			sepNavWindowFrame = "{{463, 135}, {968, 1004}}";
 		};
@@ -488,8 +500,8 @@
 	3D36E2B910522A2600132E23 /* ApplicationController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {909, 11385}}";
-			sepNavSelRange = "{28719, 0}";
-			sepNavVisRange = "{27601, 1686}";
+			sepNavSelRange = "{28308, 698}";
+			sepNavVisRange = "{27628, 1659}";
 			sepNavWindowFrame = "{{152, 141}, {968, 1004}}";
 		};
 	};
@@ -547,7 +559,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -560,8 +572,8 @@
 		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1036, 935}}";
-			sepNavSelRange = "{204, 0}";
-			sepNavVisRange = "{0, 244}";
+			sepNavSelRange = "{72, 0}";
+			sepNavVisRange = "{0, 72}";
 			sepNavWindowFrame = "{{15, 125}, {1095, 1048}}";
 		};
 	};
@@ -590,7 +602,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -656,7 +668,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -686,7 +698,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -716,7 +728,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -746,7 +758,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -776,7 +788,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -816,7 +828,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -826,7 +838,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 10";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 73;
 		vrLoc = 0;
@@ -890,7 +902,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -946,9 +958,9 @@
 		path = /Developer/SDKs/MacOSX10.6.sdk/usr/include/objc/runtime.h;
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1036, 5555}}";
-			sepNavSelRange = "{12786, 8}";
-			sepNavVisRange = "{10781, 2587}";
+			sepNavIntBoundsRect = "{{0, 0}, {1036, 5533}}";
+			sepNavSelRange = "{12346, 24}";
+			sepNavVisRange = "{10781, 2667}";
 			sepNavWindowFrame = "{{61, 83}, {1095, 1048}}";
 		};
 	};
@@ -957,7 +969,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -987,7 +999,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1073,7 +1085,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1103,7 +1115,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1133,7 +1145,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1183,7 +1195,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1213,7 +1225,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1243,7 +1255,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 0;
@@ -1253,7 +1265,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 328;
 		vrLoc = 0;
@@ -1293,7 +1305,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 328;
 		vrLoc = 0;
@@ -1323,7 +1335,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 328;
 		vrLoc = 0;
@@ -1353,7 +1365,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 13";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 328;
 		vrLoc = 0;
@@ -1373,7 +1385,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1427,7 +1439,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1467,7 +1479,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1507,7 +1519,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1547,7 +1559,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1587,7 +1599,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1637,7 +1649,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1685,7 +1697,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1735,7 +1747,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 12";
 		rLen = 0;
-		rLoc = 205;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 326;
 		vrLoc = 0;
@@ -1765,7 +1777,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 5";
 		rLen = 0;
-		rLoc = 136;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 333;
 		vrLoc = 0;
@@ -1805,7 +1817,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -1865,7 +1877,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -1905,7 +1917,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -1945,7 +1957,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2012,7 +2024,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2062,7 +2074,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2102,7 +2114,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2142,7 +2154,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2182,7 +2194,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2239,7 +2251,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2289,7 +2301,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2339,7 +2351,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2389,7 +2401,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2439,7 +2451,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2489,7 +2501,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 18";
 		rLen = 0;
-		rLoc = 244;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 0;
@@ -2519,7 +2531,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 9";
 		rLen = 0;
-		rLoc = 204;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 244;
 		vrLoc = 0;
@@ -2579,7 +2591,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 9";
 		rLen = 0;
-		rLoc = 204;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 244;
 		vrLoc = 0;
@@ -2629,7 +2641,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 9";
 		rLen = 0;
-		rLoc = 204;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 244;
 		vrLoc = 0;
@@ -2679,7 +2691,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 9";
 		rLen = 0;
-		rLoc = 204;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 244;
 		vrLoc = 0;
@@ -2729,7 +2741,7 @@
 		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
 		name = "0 blank.js: 9";
 		rLen = 0;
-		rLoc = 204;
+		rLoc = 72;
 		rType = 0;
 		vrLen = 244;
 		vrLoc = 0;
@@ -2763,6 +2775,126 @@
 		rType = 0;
 		vrLen = 2228;
 		vrLoc = 7525;
+	};
+	3DC79FE2124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28A105229E700132E23 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 792";
+		rLen = 5;
+		rLoc = 22193;
+		rType = 0;
+		vrLen = 2228;
+		vrLoc = 7525;
+	};
+	3DC79FE3124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28A105229E700132E23 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 373";
+		rLen = 5;
+		rLoc = 9144;
+		rType = 0;
+		vrLen = 2228;
+		vrLoc = 7525;
+	};
+	3DC79FE4124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
+		name = "ApplicationController.m: 973";
+		rLen = 698;
+		rLoc = 28308;
+		rType = 0;
+		vrLen = 1686;
+		vrLoc = 27601;
+	};
+	3DC79FE5124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
+		name = "0 blank.js: 9";
+		rLen = 0;
+		rLoc = 72;
+		rType = 0;
+		vrLen = 244;
+		vrLoc = 0;
+	};
+	3DC79FE6124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E287105229E700132E23 /* JSCocoaController.h */;
+		name = "JSCocoaController.h: 24";
+		rLen = 12;
+		rLoc = 584;
+		rType = 0;
+		vrLen = 2022;
+		vrLoc = 0;
+	};
+	3DC79FE7124DE09500E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1159";
+		rLen = 0;
+		rLoc = 36307;
+		rType = 0;
+		vrLen = 2385;
+		vrLoc = 155331;
+	};
+	3DC79FEC124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
+		name = "0 blank.js: 9";
+		rLen = 0;
+		rLoc = 72;
+		rType = 0;
+		vrLen = 244;
+		vrLoc = 0;
+	};
+	3DC79FED124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DC79DDF124D379600E0B47D /* 0 blank.js */;
+		name = "0 blank.js: 3";
+		rLen = 0;
+		rLoc = 72;
+		rType = 0;
+		vrLen = 72;
+		vrLoc = 0;
+	};
+	3DC79FEE124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E28A105229E700132E23 /* JSCocoaFFIArgument.m */;
+		name = "JSCocoaFFIArgument.m: 373";
+		rLen = 5;
+		rLoc = 9144;
+		rType = 0;
+		vrLen = 2228;
+		vrLoc = 7525;
+	};
+	3DC79FEF124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E2B910522A2600132E23 /* ApplicationController.m */;
+		name = "ApplicationController.m: 973";
+		rLen = 698;
+		rLoc = 28308;
+		rType = 0;
+		vrLen = 1659;
+		vrLoc = 27628;
+	};
+	3DC79FF0124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E287105229E700132E23 /* JSCocoaController.h */;
+		name = "JSCocoaController.h: 24";
+		rLen = 12;
+		rLoc = 584;
+		rType = 0;
+		vrLen = 2022;
+		vrLoc = 0;
+	};
+	3DC79FF1124DE0B000E0B47D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D36E288105229E700132E23 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 1159";
+		rLen = 0;
+		rLoc = 36307;
+		rType = 0;
+		vrLen = 2360;
+		vrLoc = 155416;
 	};
 	3DE54F1E121DEC060022BA9E /* JSCocoaController.m:2656 */ = {
 		isa = PBXFileBreakpoint;
