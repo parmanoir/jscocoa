@@ -971,13 +971,20 @@ BOOL	bindingsAlreadyTested2 = NO;
 @implementation JSTestBlocks
 
 + (id)newErrorBlockForJSFunction:(JSValueRefAndContextRef)callbackFunction {
+
+	JSContextRef mainContext = [[JSCocoa controllerFromContext:callbackFunction.ctx] ctx];
+
+	// Protect function using the main context (JavascriptCore creates a new context every time it enters a function)
+	// (This is not needed if the function has a name in the main scope or is stored in an object or array stored in the main scope) 
+	JSValueProtect(mainContext, callbackFunction.value);
+	
    void (^theBlock)(NSError *) = ^(NSError *err) {
-       id _jsc = [JSCocoa controllerFromContext:callbackFunction.ctx];
-       [_jsc callJSFunction:callbackFunction.value withArguments:[NSArray arrayWithObjects:err, nil]];
+       [[JSCocoa controllerFromContext:mainContext] callJSFunction:callbackFunction.value withArguments:[NSArray arrayWithObjects:err, nil]];
    };
 
    return [theBlock copy];
 }
+
 
 + (void)testFunction:(void (^)(NSError *))theBlock {
    theBlock(nil);

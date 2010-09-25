@@ -808,6 +808,9 @@
 		case	_C_VOID:	return	sizeof(void);
 		case	_C_PTR:		return	sizeof(void*);
 		case	_C_CHARPTR:	return	sizeof(char*);
+		// Function pointers
+//		case	_C_UNDEF:	return	sizeof(void*);
+		// Blocks are encoded with @?
 	}
 	return	-1;
 }

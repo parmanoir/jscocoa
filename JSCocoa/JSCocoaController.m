@@ -1154,6 +1154,9 @@ static id JSCocoaSingleton = NULL;
 					[argumentEncoding release];
 					return	nil;
 				}
+				// Blocks are '@?', skip '?'
+				if (typeStart[0] == _C_ID && typeStart[1] == _C_UNDEF)
+					argsParser++;
 			}
 			
 			[argumentEncodings addObject:argumentEncoding];
@@ -4297,7 +4300,9 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	else
 	{
 		if (callAddressArgumentCount != argumentCount)
+		{
 			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
+		}
 	}
 
 	//
