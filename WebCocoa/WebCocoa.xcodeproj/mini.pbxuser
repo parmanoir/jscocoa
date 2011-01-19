@@ -2,7 +2,7 @@
 {
 	256AC3D80F4B6AC300CF3369 /* WebCocoaAppDelegate.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 928}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1038, 905}}";
 			sepNavSelRange = "{391, 46}";
 			sepNavVisRange = "{0, 482}";
 			sepNavWindowFrame = "{{294, 113}, {1097, 1041}}";
@@ -12,7 +12,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1038, 928}}";
 			sepNavSelRange = "{687, 0}";
-			sepNavVisRange = "{0, 1105}";
+			sepNavVisRange = "{0, 1116}";
 			sepNavWindowFrame = "{{563, 50}, {1097, 1041}}";
 		};
 	};
@@ -77,14 +77,16 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 304983270;
-			PBXWorkspaceStateSaveDate = 304983270;
+			PBXPerProjectTemplateStateSaveDate = 309647513;
+			PBXWorkspaceStateSaveDate = 309647513;
 		};
 		perUserProjectItems = {
-			3D11CF3311EC8A5B004B8518 /* PBXTextBookmark */ = 3D11CF3311EC8A5B004B8518 /* PBXTextBookmark */;
-			3D11CF3411EC8A5B004B8518 /* PBXTextBookmark */ = 3D11CF3411EC8A5B004B8518 /* PBXTextBookmark */;
-			3D11CF3511EC8A5B004B8518 /* PBXTextBookmark */ = 3D11CF3511EC8A5B004B8518 /* PBXTextBookmark */;
-			3D11CF3611EC8A5B004B8518 /* PBXTextBookmark */ = 3D11CF3611EC8A5B004B8518 /* PBXTextBookmark */;
+			3DB206A01274D93000A14D51 /* PBXBookmark */ = 3DB206A01274D93000A14D51 /* PBXBookmark */;
+			3DB2074212787AE000A14D51 /* PBXTextBookmark */ = 3DB2074212787AE000A14D51 /* PBXTextBookmark */;
+			3DB2074412787AE000A14D51 /* PBXTextBookmark */ = 3DB2074412787AE000A14D51 /* PBXTextBookmark */;
+			3DB2074512787AE000A14D51 /* PBXTextBookmark */ = 3DB2074512787AE000A14D51 /* PBXTextBookmark */;
+			3DB2074612787AE000A14D51 /* PBXTextBookmark */ = 3DB2074612787AE000A14D51 /* PBXTextBookmark */;
+			3DB2074712787AE000A14D51 /* PBXTextBookmark */ = 3DB2074712787AE000A14D51 /* PBXTextBookmark */;
 			3DDF88E5122DAD5900A97171 /* PBXTextBookmark */ = 3DDF88E5122DAD5900A97171 /* PBXTextBookmark */;
 			3DDF88E6122DAD5900A97171 /* PBXTextBookmark */ = 3DDF88E6122DAD5900A97171 /* PBXTextBookmark */;
 			3DDF88E7122DAD5900A97171 /* PBXTextBookmark */ = 3DDF88E7122DAD5900A97171 /* PBXTextBookmark */;
@@ -101,46 +103,6 @@
 			sepNavVisRange = "{0, 386}";
 			sepNavWindowFrame = "{{308, 50}, {1097, 1041}}";
 		};
-	};
-	3D11CF3311EC8A5B004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D98562D11E7C0A600732434 /* WebCocoa.html */;
-		name = "WebCocoa.html: 66";
-		rLen = 0;
-		rLoc = 1527;
-		rType = 0;
-		vrLen = 1974;
-		vrLoc = 74;
-	};
-	3D11CF3411EC8A5B004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9855C311E7BF3A00732434 /* JSCocoaController.m */;
-		name = "JSCocoaController.m: 4650";
-		rLen = 0;
-		rLoc = 164672;
-		rType = 0;
-		vrLen = 3109;
-		vrLoc = 164370;
-	};
-	3D11CF3511EC8A5B004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3D9855C911E7BF3A00732434 /* JSCocoaLib.m */;
-		name = "JSCocoaLib.m: 543";
-		rLen = 24;
-		rLoc = 12992;
-		rType = 0;
-		vrLen = 1728;
-		vrLoc = 12312;
-	};
-	3D11CF3611EC8A5B004B8518 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 256AC3D90F4B6AC300CF3369 /* WebCocoaAppDelegate.m */;
-		name = "WebCocoaAppDelegate.m: 26";
-		rLen = 0;
-		rLoc = 687;
-		rType = 0;
-		vrLen = 909;
-		vrLoc = 0;
 	};
 	3D98558511E7BEEB00732434 /* WebCocoa */ = {
 		isa = PBXExecutable;
@@ -214,9 +176,9 @@
 	};
 	3D9855C311E7BF3A00732434 /* JSCocoaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 54274}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1038, 54384}}";
 			sepNavSelRange = "{164672, 0}";
-			sepNavVisRange = "{163947, 3890}";
+			sepNavVisRange = "{163915, 3778}";
 			sepNavWindowFrame = "{{454, 98}, {1097, 1041}}";
 		};
 	};
@@ -238,11 +200,83 @@
 	};
 	3D98562D11E7C0A600732434 /* WebCocoa.html */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1038, 1056}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1038, 1067}}";
 			sepNavSelRange = "{1527, 0}";
 			sepNavVisRange = "{62, 2017}";
 			sepNavWindowFrame = "{{162, 102}, {1097, 1041}}";
 		};
+	};
+	3DB2068B1274D92B00A14D51 /* WebFrame.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		path = WebFrame.h;
+		sourceTree = "<group>";
+	};
+	3DB206A01274D93000A14D51 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 3DB2068B1274D92B00A14D51 /* WebFrame.h */;
+	};
+	3DB2074212787AE000A14D51 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3DB2074312787AE000A14D51 /* WebFrame.h */;
+		name = "WebFrame.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2727;
+		vrLoc = 149;
+	};
+	3DB2074312787AE000A14D51 /* WebFrame.h */ = {
+		isa = PBXFileReference;
+		name = WebFrame.h;
+		path = /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/WebKit.framework/Headers/WebFrame.h;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {978, 2398}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{149, 2727}";
+			sepNavWindowFrame = "{{153, 80}, {1037, 967}}";
+		};
+	};
+	3DB2074412787AE000A14D51 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D98562D11E7C0A600732434 /* WebCocoa.html */;
+		name = "WebCocoa.html: 66";
+		rLen = 0;
+		rLoc = 1527;
+		rType = 0;
+		vrLen = 2017;
+		vrLoc = 62;
+	};
+	3DB2074512787AE000A14D51 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9855C311E7BF3A00732434 /* JSCocoaController.m */;
+		name = "JSCocoaController.m: 4664";
+		rLen = 0;
+		rLoc = 164672;
+		rType = 0;
+		vrLen = 3778;
+		vrLoc = 163915;
+	};
+	3DB2074612787AE000A14D51 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3D9855C911E7BF3A00732434 /* JSCocoaLib.m */;
+		name = "JSCocoaLib.m: 545";
+		rLen = 24;
+		rLoc = 12992;
+		rType = 0;
+		vrLen = 1760;
+		vrLoc = 12273;
+	};
+	3DB2074712787AE000A14D51 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* WebCocoaAppDelegate.m */;
+		name = "WebCocoaAppDelegate.m: 26";
+		rLen = 0;
+		rLoc = 687;
+		rType = 0;
+		vrLen = 1116;
+		vrLoc = 0;
 	};
 	3DDF88E5122DAD5900A97171 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

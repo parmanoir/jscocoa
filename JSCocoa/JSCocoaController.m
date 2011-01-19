@@ -4766,7 +4766,7 @@ static JSValueRef jsCocoaInfo_getProperty(JSContextRef ctx, JSObjectRef object, 
 	JSValueRef classNameJS = JSObjectGetProperty(ctx, object, classNameProperty, NULL);
 	JSStringRelease(classNameProperty);
 	
-	id className = NSStringFromJSValue(classNameJS, ctx);
+	id className = NSStringFromJSValue(ctx, classNameJS);
 //	NSLog(@"className=%@", className);
 	
 	id class = objc_getClass([className UTF8String]);
@@ -4848,7 +4848,7 @@ static void jsCocoaInfo_getPropertyNames(JSContextRef ctx, JSObjectRef object, J
 
 #pragma mark Helpers
 
-id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx)
+id	NSStringFromJSValue(JSContextRef ctx, JSValueRef value)
 {
 	if (JSValueIsNull(ctx, value))	return	nil;
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);

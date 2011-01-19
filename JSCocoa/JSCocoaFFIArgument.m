@@ -459,13 +459,13 @@
 		}
 		case	_C_SEL:
 		{
-			id str = NSStringFromJSValue(value, ctx);
+			id str = NSStringFromJSValue(ctx, value);
 			*(SEL*)ptr = NSSelectorFromString(str);
 			return	YES;
 		}
 		case	_C_CHARPTR:
 		{
-			id str = NSStringFromJSValue(value, ctx);
+			id str = NSStringFromJSValue(ctx, value);
 			*(char**)ptr = (char*)[str UTF8String];
 			return	YES;
 		}

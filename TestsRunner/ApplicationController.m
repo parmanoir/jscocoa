@@ -14,33 +14,18 @@
 
 JSCocoaController* jsc = nil;
 
-//- (void)awakeFromNib
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+	jsc				= nil;
+	testNSError		= nil;
+	cyclingContext	= NO;
+
 	[JSCocoaController hazardReport];
-
-	jsc = nil;
-//	jsc = [JSCocoa new];
-//	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
-
 	[[NSApplication sharedApplication] setDelegate:self];
-	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
-
-	testNSError = nil;
-	
-//	NSLog(@"sizeof(int)=%d", sizeof(int));
-//	NSLog(@"sizeof(long)=%d", sizeof(long));
-//	NSLog(@"sizeof(CGFloat)=%d", sizeof(CGFloat));
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 
-	cyclingContext = NO;
-/*	
-	id error = nil;
-	id url = [NSURL fileURLWithPath:@"/non/existent"];
-	BOOL b = [@"hello" writeToURL:url atomically:NO encoding:NSUTF8StringEncoding error:&error];
-	NSLog(@"++++++++ %d %@", b, error);
-*/
-//	[self dumpEncodings];
+	// Run tests
+//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -645,6 +630,36 @@ int dummyValue;
 
 //
 //
+#pragma mark Eval
+//
+//
+- (IBAction)eval:(id)sender
+{
+	id script = [evalText stringValue];
+
+	if (!jsc)
+		[self cycleContext];
+
+	JSStringRef		scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
+	JSValueRef		exception	= NULL;
+	JSValueRef		result		= JSEvaluateScript([jsc ctx], scriptJS, NULL, NULL, 1, &exception);
+	JSStringRelease(scriptJS);
+
+	id resultString = nil;
+	if (exception)
+	{
+		resultString = [NSString stringWithFormat:@"*** Exception ***\n%@", NSStringFromJSValue([jsc ctx], exception)];
+	}
+	else
+		resultString = NSStringFromJSValue([jsc ctx], result);
+
+	[evalResult setStringValue:resultString];
+}
+
+
+
+//
+//
 #pragma mark Delegate test
 //
 //
@@ -1004,3 +1019,7 @@ log('block=' + objcBlock);
 JSTestBlocks.testFunction_(objcBlock);
 
 */
+
+
+
+

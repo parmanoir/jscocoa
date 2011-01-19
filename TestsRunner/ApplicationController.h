@@ -16,6 +16,9 @@
 	IBOutlet	id window;
 	IBOutlet	id textField;
 	
+	IBOutlet	NSTextField* evalText;
+	IBOutlet	NSTextField* evalResult;
+	
 	JSCocoa* jsc2;
 	id topObjects;
 	
@@ -39,6 +42,8 @@
 
 - (IBAction)runSimpleTestFile:(id)sender;
 - (IBAction)unlinkAllReferences:(id)sender;
+
+- (IBAction)eval:(id)sender;
 
 - (id)testDelegate;
 - (int)dummyValue;
