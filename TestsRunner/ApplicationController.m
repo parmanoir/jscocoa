@@ -54,6 +54,13 @@ JSCocoaController* jsc = nil;
 #endif	
 }
 
+
+//
+//
+#pragma mark Running tests
+//
+//
+
 - (void)cycleContext
 {
 	cyclingContext = YES;
@@ -214,6 +221,14 @@ int runCount = 0;
 }
 
 
+
+//
+//
+#pragma mark GC, log
+//
+//
+
+
 //
 // GC
 //
@@ -237,24 +252,6 @@ int runCount = 0;
 	NSLog(@"%@", message);
 }
 
-
-- (IBAction)runSimpleTestFile:(id)sender
-{
-	id js = @"2+2";
-	js = @"NSWorkspace.sharedWorkspace.activeApplication";
-
-	js = @"var a = NSMakePoint(2, 3)";
-	[JSCocoaController garbageCollect];
-	JSValueRef ret = [jsc evalJSString:js];
-	[JSCocoaController garbageCollect];
-	
-	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret, NULL);
-	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
-	JSStringRelease(resultStringJS);
-	
-	NSLog(@"res=%@", r);
-	[r release];
-}
 
 - (IBAction)unlinkAllReferences:(id)sender
 {
@@ -342,8 +339,6 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	unboxedValueTest = [jsc unboxJSValueRef:ret];
 	if (unboxedValueTest != [NSWorkspace sharedWorkspace])	return	@"delegate getProperty failed (3)";
 	
-	
-#define JSRESULTNUMBER (int)JSValueToNumber([jsc ctx], ret?ret:JSValueMakeUndefined([jsc ctx]), NULL)
 	
 	//
 	// Test custom getting
@@ -609,24 +604,6 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	return nil;
 }
 
-- (int)add1:(int)a
-{
-	return	a+1;
-}
-
-int dummyValue;
-- (void)setDummyValue:(int)value
-{
-	dummyValue = value;
-}
-- (int)dummyValue
-{
-	return	dummyValue;
-}
-- (int)get5
-{
-	return	5;
-}
 
 //
 //
@@ -639,7 +616,9 @@ int dummyValue;
 
 	if (!jsc)
 		[self cycleContext];
-
+//	NSLog(@"eval : expand macros");
+	script = [jsc expandJSMacros:script path:nil];
+//	NSLog(@"eval : run");
 	JSStringRef		scriptJS	= JSStringCreateWithCFString((CFStringRef)script);
 	JSValueRef		exception	= NULL;
 	JSValueRef		result		= JSEvaluateScript([jsc ctx], scriptJS, NULL, NULL, 1, &exception);
@@ -647,16 +626,15 @@ int dummyValue;
 
 	id resultString = nil;
 	if (exception)
-	{
 		resultString = [NSString stringWithFormat:@"*** Exception ***\n%@", NSStringFromJSValue([jsc ctx], exception)];
-	}
 	else
 		resultString = NSStringFromJSValue([jsc ctx], result);
-
+		
+	if (!resultString)
+		resultString = @"(null)";
+		
 	[evalResult setStringValue:resultString];
 }
-
-
 
 //
 //
@@ -820,9 +798,57 @@ int dummyValue;
 
 //
 //
-#pragma mark -
+#pragma mark Called by delegate test, checking disallowed calling
 //
 //
+- (int)add1:(int)a
+{
+	return	a+1;
+}
+
+int dummyValue;
+- (void)setDummyValue:(int)value
+{
+	dummyValue = value;
+}
+- (int)dummyValue
+{
+	return	dummyValue;
+}
+- (int)get5
+{
+	return	5;
+}
+
+
+//
+//
+#pragma mark Various tests
+//
+//
+
+
+
+
+
+- (IBAction)runSimpleTestFile:(id)sender
+{
+	id js = @"2+2";
+	js = @"NSWorkspace.sharedWorkspace.activeApplication";
+
+	js = @"var a = NSMakePoint(2, 3)";
+	[JSCocoaController garbageCollect];
+	JSValueRef ret = [jsc evalJSString:js];
+	[JSCocoaController garbageCollect];
+	
+	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret, NULL);
+	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+	JSStringRelease(resultStringJS);
+	
+	NSLog(@"res=%@", r);
+	[r release];
+}
+
 
 //
 // JSCocoa inited from a WebView tests
@@ -947,6 +973,15 @@ BOOL	bindingsAlreadyTested2 = NO;
 {
 	[self disposeClass:@"NSKVONotifying_BindingsSafeDeallocSource"];
 	[self disposeClass:@"NSKVONotifying_NibTestOwner"];
+}
+
+
+
+// Disallow JSValueRef as argument, as a JSValueRef needs a JSContextRef
+//	Use JSValueRefAndContextRef 
+- (void)incorrectlySetJSValue:(JSValueRef)value
+{
+	NSLog(@"[%@ %s] got %x", [self class], _cmd, value);
 }
 
 

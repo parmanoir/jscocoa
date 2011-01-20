@@ -10,6 +10,9 @@
 #import "JSCocoa.h"
 
 
+#define JSRESULTNUMBER (int)JSValueToNumber([jsc ctx], ret?ret:JSValueMakeUndefined([jsc ctx]), NULL)
+	
+
 @interface ApplicationController : NSObject <NSApplicationDelegate> {
 
 	IBOutlet	id webViewUsedAsContextSource;
@@ -48,6 +51,7 @@
 - (id)testDelegate;
 - (int)dummyValue;
 - (id)testCallAPI;
+- (void)incorrectlySetJSValue:(JSValueRef)jsvalue;
 
 - (NSError*)testNSError;
 
