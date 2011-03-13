@@ -52,6 +52,8 @@
 - (int)dummyValue;
 - (id)testCallAPI;
 - (void)incorrectlySetJSValue:(JSValueRef)jsvalue;
+- (void)setJSValue:(JSValueRefAndContextRef)vc;
+- (JSValueRefAndContextRef)jsValue;
 
 - (NSError*)testNSError;
 

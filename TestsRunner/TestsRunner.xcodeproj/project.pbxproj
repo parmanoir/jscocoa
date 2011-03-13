@@ -20,8 +20,8 @@
 		3D36E2BC10522A4100132E23 /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2BB10522A4100132E23 /* Tests */; };
 		3D36E2C310522A5900132E23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2BF10522A5900132E23 /* InfoPlist.strings */; };
 		3D36E2C410522A5900132E23 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2C110522A5900132E23 /* MainMenu.xib */; };
-		3D36E2C710522A6F00132E23 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D36E2C610522A6F00132E23 /* JavaScriptCore.framework */; };
 		3D44EA621072FC7300F20BAD /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */; };
+		3DBE5C4112F0B6D000579DC8 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D36E2C610522A6F00132E23 /* JavaScriptCore.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,8 +64,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DBE5C4112F0B6D000579DC8 /* JavaScriptCore.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				3D36E2C710522A6F00132E23 /* JavaScriptCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +203,14 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TestsRunner" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* TestsRunner */;
 			projectDirPath = "";
 			projectRoot = "";

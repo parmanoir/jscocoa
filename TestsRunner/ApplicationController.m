@@ -23,7 +23,16 @@ JSCocoaController* jsc = nil;
 	[JSCocoaController hazardReport];
 	[[NSApplication sharedApplication] setDelegate:self];
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
-
+	
+/*	
+	[self cycleContext];
+	NSLog(@"%d", [jsc retainCount]);
+//	[jsc retain];
+//	[jsc eval:@"'hello'"];
+	[jsc unlinkAllReferences];
+	NSLog(@"%d", [jsc retainCount]);
+	[jsc garbageCollect];
+*/
 	// Run tests
 //	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
@@ -234,6 +243,7 @@ int runCount = 0;
 //
 - (IBAction)garbageCollect:(id)sender
 {
+	NSLog(@"Collecting ...");
 	[jsc garbageCollect];
 }
 
@@ -838,10 +848,10 @@ int dummyValue;
 
 	js = @"var a = NSMakePoint(2, 3)";
 	[JSCocoaController garbageCollect];
-	JSValueRef ret = [jsc evalJSString:js];
+	JSValueRef ret2 = [jsc evalJSString:js];
 	[JSCocoaController garbageCollect];
 	
-	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret, NULL);
+	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret2, NULL);
 	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
 	JSStringRelease(resultStringJS);
 	
@@ -984,6 +994,28 @@ BOOL	bindingsAlreadyTested2 = NO;
 	NSLog(@"[%@ %s] got %x", [self class], _cmd, value);
 }
 
+// Correctly set, testing holding on to it
+JSValueRef savedValue = nil;
+- (void)setJSValue:(JSValueRefAndContextRef)vc
+{
+	savedValue = vc.value;
+	JSValueProtect([jsc ctx], savedValue);
+/*
+	// Crash ! Call setJSValue with
+	//	function a(p1) { NSApp.delegate.setJSValue('hello from save' + p1 + Math.random()) }; a('HOP');
+	// then unlink all references, then garbage collect
+	JSValueProtect(vc.ctx, savedValue);
+	JSContextGroupRetain(JSContextGetGroup(vc.ctx));
+	JSGlobalContextRetain([jsc ctx]);
+*/
+	NSLog(@"ctx=%x value=%x globalctx=%x", vc.ctx, vc.value, [jsc ctx]);
+}
+- (JSValueRefAndContextRef)jsValue
+{
+	JSValueRefAndContextRef vc = { NULL, NULL };
+	vc.value = savedValue;
+	return vc;
+}
 
 @end
 
