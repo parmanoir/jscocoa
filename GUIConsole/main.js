@@ -42,7 +42,7 @@
 
 			var webView = NSLogConsole.sharedConsole.webView
 			webView.startCommand(script)
-			result = eval(String([__jsc__ expandJSMacros:script url:null]))
+			result = eval(String([__jsc__ expandJSMacros:script path:null]))
 //			result = __jsc__.evalJSString(String(script))
 			log(String(result))
 			webView.endCommand

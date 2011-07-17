@@ -4345,8 +4345,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				_super.receiver = callee;
 #if __LP64__
 				_super.super_class	= superSelectorClass;
-#elif TARGET_IPHONE_SIMULATOR || !TARGET_OS_IPHONE
-				_super.class	= superSelectorClass;
+//#elif TARGET_IPHONE_SIMULATOR || !TARGET_OS_IPHONE
+//				_super.class	= superSelectorClass;
 #else			
 				_super.super_class	= superSelectorClass;
 #endif			
