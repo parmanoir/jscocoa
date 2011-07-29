@@ -177,7 +177,8 @@ SOFTWARE.
 // global variable. The function will be invoked, its return value is the JSLINT
 // application itself.
 
-"use strict";
+// disable strict for Lion compatibility
+// "use strict";
 
 function JSLintWithLogs(logs)
 {
