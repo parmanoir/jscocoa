@@ -1000,8 +1000,34 @@ static id JSCocoaSingleton = NULL;
 	if (isSpeaking)	system([[NSString stringWithFormat:@"say %@ &", string] UTF8String]);
 }
 */
+- (JSObjectRef)newPrivateObject {
+	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
+	[private setCtx:ctx];
+#ifdef __OBJC_GC__
+	// Mark internal object as non collectable
+	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
+#endif
+	JSObjectRef o = JSObjectMake(ctx, jsCocoaObjectClass, private);
+	// Object is retained by jsCocoaObject_initialize, release it to make 'private' sole owner
+	[private release];
+	return	o;
+}
+- (JSObjectRef)newPrivateFunction {
+	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
+	[private setCtx:ctx];
+#ifdef __OBJC_GC__
+	// Mark internal object as non collectable
+	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
+#endif
+	JSObjectRef o = JSObjectMake(ctx, jsCocoaFunctionClass, private);
+	// Object is retained by jsCocoaObject_initialize, release it to make 'private' sole owner
+	[private release];
+	return	o;
+}
+/*
 + (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx {
 	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
+	[private setCtx:
 #ifdef __OBJC_GC__
 	// Mark internal object as non collectable
 	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
@@ -1021,7 +1047,7 @@ static id JSCocoaSingleton = NULL;
 	[private release];
 	return	o;
 }
-
+*/
 /*
 - (BOOL)useAutoCall
 {
@@ -1769,10 +1795,12 @@ static id JSCocoaSingleton = NULL;
 		return	[value jsObject];
 	}
 
+	// o --> (JS)JSObjectRef(o) --> (ObjC)BoxedJSObject(JSObjectRef(o)), 
+	//								^stored in the boxedObjects hash to always return the same box for the same object
+
 	//
 	// Create a new ObjC box around the JSValueRef boxing the JSObject
-	// , so we need to box
-	// Here's the why of the boxing :
+	//
 	// We are returning an ObjC object to Javascript.
 	// That ObjC object is boxed in a Javascript object.
 	// For all boxing requests of the same ObjC object, that Javascript object needs to be unique for object comparisons to work :
@@ -1781,8 +1809,10 @@ static id JSCocoaSingleton = NULL;
 	// To guarantee unicity, we keep a cache of boxed objects. 
 	// As boxed objects are JSObjectRef not derived from NSObject, we box them in an ObjC object.
 	//
+
 	// Box the ObjC object in a JSObjectRef
-	JSObjectRef jsObject = [JSCocoa jsCocoaPrivateObjectInContext:ctx];
+//	JSObjectRef jsObject = [JSCocoa jsCocoaPrivateObjectInContext:ctx];
+	JSObjectRef jsObject = [self newPrivateObject];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"@";
 	[private setObject:o];
@@ -1930,43 +1960,43 @@ static id JSCocoaSingleton = NULL;
 }
 
 
+//
+//
 #pragma mark Tests
-- (int)runTests:(NSString*)path withSelector:(SEL)sel
-{
+//
+// Tests stay here so that any app might run them, not just TestsRunner
+//
+- (int)runTests:(NSString*)path withSelector:(SEL)sel {
 	int count = 0;
 #if TARGET_OS_IPHONE
 #elif TARGET_IPHONE_SIMULATOR
 #else
-	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-	id predicate = [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
-	files = [files filteredArrayUsingPredicate:predicate]; 
+	id files	= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+	id predicate= [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
+	files		= [files filteredArrayUsingPredicate:predicate]; 
 	
 	// Execute in test order, not finder order
-	files = [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
+	files		= [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 //	NSLog(@"files=%@", files);
 
-	if ([files count] == 0)	return	[JSCocoaController log:@"no test files found"], 0;
+	if ([files count] == 0)
+		return	[JSCocoaController log:@"no test files found"], 0;
 	
-	for (id file in files)
-	{
-		id filePath = [NSString stringWithFormat:@"%@/%@", path, file];
+	for (id file in files) {
+		id filePath	= [NSString stringWithFormat:@"%@/%@", path, file];
 //		NSLog(@">>>evaling %@", filePath);
 //		BOOL evaled = [self evalJSFile:filePath];
 		
-		id evaled = nil;
-		@try 
-		{
-			evaled = [self performSelector:sel withObject:filePath];
+		id evaled	= nil;
+		@try {
+			evaled	= [self performSelector:sel withObject:filePath];
 //			NSLog(@">>>EVALED %d, %@", evaled, filePath);
-		}
-		@catch (id e) 
-		{
+		} @catch (id e) {
 			NSLog(@"(Test exception from %@) %@", file, e);
-			evaled = nil;
+			evaled	= nil;
 		}
-		if (!evaled)	
-		{
-			id error = [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
+		if (!evaled) {
+			id error	= [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
 			[JSCocoaController log:error];
 			return NO;
 		}
@@ -1976,20 +2006,17 @@ static id JSCocoaSingleton = NULL;
 #endif	
 	return	count;
 }
-- (int)runTests:(NSString*)path
-{
+- (int)runTests:(NSString*)path {
 	return [self runTests:path withSelector:@selector(evalJSFile:)];
 }
 
 #pragma mark Autorelease pool
 static id autoreleasePool;
-+ (void)allocAutoreleasePool
-{
++ (void)allocAutoreleasePool {
 	autoreleasePool = [[NSAutoreleasePool alloc] init];
 }
 
-+ (void)deallocAutoreleasePool
-{
++ (void)deallocAutoreleasePool {
 	[autoreleasePool release];
 }
 
@@ -1998,8 +2025,12 @@ static id autoreleasePool;
 //
 // Collect on top of the run loop, not in some JS function
 //
-+ (void)garbageCollect	{	NSLog(@"*** Deprecated — call garbageCollect on an instance ***"); /*JSGarbageCollect(NULL);*/ }
-- (void)garbageCollect	{	JSGarbageCollect(ctx); }
++ (void)garbageCollect	{	
+	NSLog(@"*** Deprecated — call garbageCollect on an instance ***"); /*JSGarbageCollect(NULL);*/ 
+}
+- (void)garbageCollect	{	
+	JSGarbageCollect(ctx); 
+}
 
 //
 // Make all root Javascript variables point to null
@@ -2623,7 +2654,9 @@ static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 	id newInstance = [self alloc];
 	
 	// Set it as new object
-	JSObjectRef thisObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//	JSObjectRef thisObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	id jsc = [JSCocoa controllerFromContext:ctx];
+	JSObjectRef thisObject = [jsc newPrivateObject];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(thisObject);
 	private.type = @"@";
 	[private setObjectNoRetain:newInstance];
@@ -2632,7 +2665,8 @@ static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 //	JSObjectRef thisObject = [JSCocoaController boxedJSObject:newInstance inContext:ctx];
 	
 	// Create function object boxing our init method
-	JSObjectRef function = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//	JSObjectRef function = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+	JSObjectRef function = [jsc newPrivateFunction];
 	private = JSObjectGetPrivate(function);
 	private.type = @"method";
 	private.methodName = methodName;
@@ -2655,7 +2689,7 @@ static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 	// Register our context in there so that safeDealloc finds it.
 	if ([boxedObject respondsToSelector:@selector(safeDealloc)])
 	{
-		id jsc = [JSCocoaController controllerFromContext:ctx];
+//		id jsc = [JSCocoaController controllerFromContext:ctx];
 		object_setInstanceVariable(boxedObject, "__jsCocoaController", (void*)jsc);
 	}
 	return	returnValue;
@@ -2742,7 +2776,8 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 		//
 		if ([type isEqualToString:@"function"])
 		{
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//			JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+			JSObjectRef o = [jsc newPrivateFunction];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"function";
 			private.xml = xml;
@@ -2755,7 +2790,8 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 		else
 		if ([type isEqualToString:@"struct"])
 		{
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef o = [jsc newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"struct";
 			private.xml = xml;
@@ -3055,9 +3091,11 @@ JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef va
 	// ... use the function boxer
 	JSObjectRef o; 
 	if (JSValueIsBoolean(externalCtx, result))
-		o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//		o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+		o = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 	else
-		o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//		o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+		o = [[JSCocoa controllerFromContext:ctx] newPrivateFunction];
 		
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 	private.type = @"externalJSValueRef";
@@ -3182,7 +3220,16 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// Clean up the object now as WebKit calls us twice while cleaning __jsc__ (20110730)
 	JSObjectSetPrivate(object, NULL);
 
-	id jsc = [private ctx];
+	id jsc = nil;
+	JSContextRef ctx = [private ctx];
+	if (!ctx) {
+		NSLog(@"+++++++NO CONTEXT, NO DELETE");
+	} else {
+		jsc = [JSCocoa controllerFromContext:ctx];
+	}
+	if (!jsc) {
+		NSLog(@"*******NO CONTEXT+++++++++++");
+	}
 	//
 	// If a boxed object is being destroyed, remove it from the cache
 	//
@@ -3346,7 +3393,8 @@ call:
 				if (isJavascriptArrayMethod)
 				{
 //					NSLog(@"*** array method : %@", propertyName);
-					JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//					JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+					JSObjectRef o = [jsc newPrivateObject];
 					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 					private.type = @"jsFunction";
 					[private setJSValueRef:result ctx:ctx];
@@ -3487,7 +3535,8 @@ call:
 				if ([propertyName isEqualToString:@"alloc"])
 				{
 					id allocatedObject = [callee alloc];
-					JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//					JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+					JSObjectRef jsObject = [jsc newPrivateObject];
 					JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 					private.type = @"@";
 					[private setObjectNoRetain:allocatedObject];
@@ -3638,7 +3687,8 @@ call:
 					id initMethodName = [NSString stringWithFormat:@"init%@", [methodName substringFromIndex:8]];
 					if ([callee instancesRespondToSelector:NSSelectorFromString(initMethodName)])
 					{
-						JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//						JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+						JSObjectRef o = [jsc newPrivateFunction];
 						JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 						private.type = @"method";
 						private.methodName = methodName;
@@ -3666,7 +3716,8 @@ call:
 				// This is a pure JS function call — box it
 				if (result && JSValueGetType(ctx, result) == kJSTypeObject)
 				{
-					JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//					JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+					JSObjectRef o = [jsc newPrivateFunction];
 					JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 					private.type = @"jsFunction";
 					[private setJSValueRef:result ctx:ctx];
@@ -3692,7 +3743,8 @@ call:
 		}
 		
 		// Get ready for method call
-		JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//		JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+		JSObjectRef o = [jsc newPrivateFunction];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"method";
 		private.methodName = methodName;
@@ -3703,7 +3755,8 @@ call:
 	// Struct + rawPointer valueOf
 	if (/*[privateObject.type isEqualToString:@"struct"] &&*/ ([propertyName isEqualToString:@"valueOf"] || [propertyName isEqualToString:@"toString"]))
 	{
-		JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//		JSObjectRef o = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+		JSObjectRef o = [jsc newPrivateFunction];
 		JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 		private.type = @"method";
 		private.methodName = propertyName;
@@ -4171,7 +4224,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		if (![jsc useAutoCall] && argumentCount == 0 && [methodName isEqualToString:@"alloc"])
 		{
 			id allocatedObject = [callee alloc];
-			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef jsObject = [jsc newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 			private.type = @"@";
 			[private setObjectNoRetain:allocatedObject];
@@ -4680,7 +4734,8 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 					if (superArguments)		free(superArguments);
 					return	throwException(ctx, exception, [NSString stringWithFormat:@"Original called on a non swizzled method (%@)", superSelector]), NULL;
 				}
-				function = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+//				function = [JSCocoaController jsCocoaPrivateFunctionInContext:ctx];
+				function = [[JSCocoa controllerFromContext:ctx] newPrivateFunction];
 				JSCocoaPrivateObject* private = JSObjectGetPrivate(function);
 				private.type		= @"method";
 				private.methodName	= superSelector;

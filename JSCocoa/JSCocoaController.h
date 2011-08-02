@@ -194,7 +194,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Various internals
 //
-+ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx;
+//+ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx;
+- (JSObjectRef)newPrivateObject;
+- (JSObjectRef)newPrivateFunction;
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding;
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder;
 

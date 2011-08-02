@@ -590,7 +590,8 @@
 			// Bail if structure not found
 			if (!type)	return	0;
 
-			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef jsObject = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 			private.type = @"struct";
 			NSInteger numParsed =	[JSCocoaFFIArgument structureToJSValueRef:value inContext:ctx fromCString:(char*)[type UTF8String] fromStorage:&p];
@@ -632,7 +633,8 @@
 		
 		case	_C_PTR:
 		{
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef o = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"rawPointer";
 			[private setRawPointer:*(void**)ptr encoding:fullTypeEncoding];
@@ -660,7 +662,8 @@
 + (NSInteger)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr initialValues:(JSValueRef*)initialValues initialValueCount:(NSInteger)initialValueCount convertedValueCount:(NSInteger*)convertedValueCount
 {
 	// Build new structure object
-	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSObjectRef jsObject = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"struct";
 	private.structureName = [JSCocoaFFIArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
