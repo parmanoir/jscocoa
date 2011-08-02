@@ -12,9 +12,19 @@
 
 @implementation ApplicationController
 
-@synthesize test_unit;
+@synthesize test_unit, test_delegate, test_webview, test_autocall;
 
 JSCocoaController* jsc = nil;
+
+- (id)init {
+	self = [super init];
+	if (!self)
+		return nil;
+		
+	test_unit = test_delegate = test_webview = test_autocall = YES;
+
+	return self;
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
@@ -36,7 +46,7 @@ JSCocoaController* jsc = nil;
 	[jsc garbageCollect];
 */
 	// Run tests
-	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -46,8 +56,8 @@ JSCocoaController* jsc = nil;
 	[self disposeShadowBindingsClasses];
 
 	// Retain count is 2 because a variable named __jsc__ holds the ObjC object in the Javascript context
-	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%d (OK)", jsc, [jsc retainCount]);
-	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%d", jsc, [jsc retainCount]);
+	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%lu (OK)", jsc, [jsc retainCount]);
+	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%lu", jsc, [jsc retainCount]);
 
 	// Check if JSCocoa can be released (retainCount got down to 1)
 	// Won't work under ObjC GC
@@ -104,7 +114,9 @@ int runCount = 0;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-	int testCount = [jsc runTests:path];
+	int testCount = 0;
+	if (test_unit)
+		testCount = [jsc runTests:path];
 	BOOL b = !!testCount;
 	[self garbageCollect:nil];
 
@@ -113,7 +125,8 @@ int runCount = 0;
 	//
 	id error = nil;
 //	NSLog(@"testing delegate ...");
-	error = [self testDelegate];
+	if (test_delegate)
+		error = [self testDelegate];
 //	NSLog(@"delegate tests done");
 
 	if (error)
@@ -134,7 +147,7 @@ int runCount = 0;
 		[jsc loadFrameworkWithName:@"WebKit"];
 		webViewClass = objc_getClass("WebView");
 	}
-	if (webViewClass)
+	if (webViewClass && test_webview)
 	{
 //		NSLog(@"Testing initing from a WebView");
 		// Load nib
@@ -205,14 +218,15 @@ int runCount = 0;
 	//
 	// Test autocall-less ObjJ
 	//
-	b = [jsc useAutoCall];
-	[jsc setUseAutoCall:NO];
+	if (test_autocall) {
+		b = [jsc useAutoCall];
+		[jsc setUseAutoCall:NO];
 
-	id str = [jsc toString:[jsc evalJSString:@"[JSCocoa runningArchitecture]"]];
-	[jsc setUseAutoCall:b];
-	[jsc setUseJSLint:YES];
-	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
-
+		id str = [jsc toString:[jsc evalJSString:@"[JSCocoa runningArchitecture]"]];
+		[jsc setUseAutoCall:b];
+		[jsc setUseJSLint:YES];
+		if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
+	}
 /*	
 	id class = objc_getClass([@"ファイナンス" UTF8String]);
 	id o = [class new];
@@ -934,11 +948,11 @@ int dummyValue;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 
 	NSLog(@"COMMENTED test 37 !");
-	NSLog(@"jsc2 rc=%d (%llx)", [jsc2 retainCount], self);
+	NSLog(@"jsc2 rc=%lu (%llx)", [jsc2 retainCount], self);
 	NSLog(@"get1 %@", [jsc2 eval:@"__jsc__"]);
 //	b = [jsc2 removeObjectWithName:@"__jsc__"];
 	[jsc2 garbageCollect];
-	NSLog(@"jsc2 rc=%d (POST REMOVE %d)", [jsc2 retainCount], b);
+	NSLog(@"jsc2 rc=%lu (POST REMOVE %d)", [jsc2 retainCount], b);
 	NSLog(@"get2 %@", [jsc2 eval:@"__jsc__"]);
 	[jsc2 release];
 
@@ -1030,7 +1044,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 //	Use JSValueRefAndContextRef 
 - (void)incorrectlySetJSValue:(JSValueRef)value
 {
-	NSLog(@"[%@ %s] got %llx", [self class], _cmd, value);
+	NSLog(@"[%@ %@] got %llx", [self class], NSStringFromSelector(_cmd), value);
 }
 
 // Correctly set, testing holding on to it

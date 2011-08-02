@@ -2299,6 +2299,54 @@
 					</object>
 					<int key="connectionID">681</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: test_delegate</string>
+						<reference key="source" ref="778899845"/>
+						<reference key="destination" ref="451068665"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="778899845"/>
+							<reference key="NSDestination" ref="451068665"/>
+							<string key="NSLabel">value: test_delegate</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">test_delegate</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">684</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: test_webview</string>
+						<reference key="source" ref="481926543"/>
+						<reference key="destination" ref="451068665"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="481926543"/>
+							<reference key="NSDestination" ref="451068665"/>
+							<string key="NSLabel">value: test_webview</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">test_webview</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">685</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: test_autocall</string>
+						<reference key="source" ref="835348829"/>
+						<reference key="destination" ref="451068665"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="835348829"/>
+							<reference key="NSDestination" ref="451068665"/>
+							<string key="NSLabel">value: test_autocall</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">test_autocall</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">686</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3837,7 +3885,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">681</int>
+			<int key="maxID">686</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -22,7 +22,7 @@
 	IBOutlet	NSTextField* evalText;
 	IBOutlet	NSTextField* evalResult;
 
-	BOOL		test_unit;
+	BOOL		test_unit, test_delegate, test_webview, test_autocall;
 	
 	JSCocoa* jsc2;
 	id topObjects;
@@ -35,7 +35,7 @@
 
 }
 
-@property BOOL test_unit;
+@property BOOL test_unit, test_delegate, test_webview, test_autocall;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
 - (void)applicationWillTerminate:(NSNotification *)notification;

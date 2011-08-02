@@ -61,15 +61,19 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 	// JSLint : used for ObjJ syntax, class syntax, return if
 	BOOL				useJSLint;
 	
+	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
+	BOOL				useAutoCall;
+	// Allows setting javascript values on boxed objects (which are collected after nulling all references to them)
+	BOOL				canSetOnBoxedObjects;
+	// Allow calling obj.method(...) instead of obj.method_(...)
+	BOOL				callSelectorsMissingTrailingSemicolon;
+	
+	BOOL				logAllExceptions;
+	
 }
 
 @property (assign) id delegate;
-@property BOOL useSafeDealloc;
-@property BOOL useSplitCall;
-@property BOOL useJSLint;
-@property BOOL useAutoCall;
-@property BOOL callSelectorsMissingTrailingSemicolon;
-@property BOOL canSetOnBoxedObjects;
+@property BOOL useSafeDealloc, useSplitCall, useJSLint, useAutoCall, callSelectorsMissingTrailingSemicolon, canSetOnBoxedObjects, logAllExceptions;
 
 
 - (id)init;
@@ -175,8 +179,8 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 //
 // Global boxer : only one JSValueRef for multiple box requests of one pointer
 //
-+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
-+ (void)downBoxedJSObjectCount:(id)o;
+//+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
+//+ (void)downBoxedJSObjectCount:(id)o;
 
 
 //
@@ -186,7 +190,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding;
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder;
 
-+ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
+//+ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;
 
