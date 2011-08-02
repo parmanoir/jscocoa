@@ -67,7 +67,7 @@
 /*
 	if (retainContext)
 	{
-		NSLog(@"releasing %x", ctx);
+		NSLog(@"releasing %llx", ctx);
 		JSContextGroupRelease(contextGroup);
 //		JSGlobalContextRelease((JSGlobalContextRef)ctx);
 	}
@@ -200,8 +200,8 @@
 - (id)description
 {
 	id extra = @"";
-	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%x) %@", rawPointer, declaredType];
-	return	[NSString stringWithFormat:@"<%@: %x holding %@%@>",
+	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%llx) %@", rawPointer, declaredType];
+	return	[NSString stringWithFormat:@"<%@: %llx holding %@%@>",
 				[self class], 
 				self, 
 				type,

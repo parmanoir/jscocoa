@@ -54,7 +54,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 }
 - (void)dealloc
 {
-//	NSLog(@"deallocing closure %x IMP=%x", self, closure);
+//	NSLog(@"deallocing closure %llx IMP=%llx", self, closure);
 	[self cleanUp];
 	[super dealloc];
 }

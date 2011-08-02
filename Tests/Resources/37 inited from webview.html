@@ -28,23 +28,40 @@
 			str = str.replace(/>/g, '&gt;')
 			document.getElementById('dump').innerHTML += str + '\n'
 		}
-	
-	
-		if ('OSX' in this)	log('HAS OSX')
-		else				log('no JSCocoa :(')
-		
+
+		if ('OSX' in this)	log('JSCocoa is running')
+		else				log('FAILED : JSCocoa is not running')
+
 		log('jsc=' + ('__jsc__' in this) + ' (' + __jsc__ + ')')
+
 		var objCDate = OSX.NSDate.alloc.init
 		log('NSDate=' + objCDate)
+
 		objCDate.release
 		objCDate = null
 
-		var delegate = OSX.NSApplication.sharedApplication.delegate
-		
-		if (delegate.get5 != 5)										throw	'get5 failed'
-		if (delegate.add1(5) !=6)									throw	'add1 failed'
-		delegate.dummyValue = 13
-		if (delegate.dummyValue != 13)								throw 'dummyValue failed'
+//		var delegate = OSX.NSApplication.sharedApplication.delegate
+//log('delegate=' + delegate)
+log('NSDate.date=' + OSX.NSDate)
+log('NSDate.date=' + OSX.NSDate.date)
+log('NSDate.date=' + OSX.NSDate.date.timeIntervalSinceNow)
+log('delegate2=' + OSX)
+log('delegate3=' + OSX.NSApplication)
+log('delegate4=' + OSX.NSApplication.sharedApplication)
+
+var a = OSX.NSApplication.sharedApplication
+var str = a.length
+str += '\n' + (typeof a) + '\nproto=' + a.__proto__ + '\ncons=' + a.constructor
+for (var i in a)
+	str += '<br>' + i + '$'
+log('length=' + str)
+
+//log('delegate5=' + OSX.NSApplication.sharedApplication.delegate)
+//		if (delegate.get5 != 5)										throw	'get5 failed'
+//		if (delegate.add1(5) !=6)									throw	'add1 failed'
+//		delegate.dummyValue = 13
+//		if (delegate.dummyValue != 13)								throw 'dummyValue failed'
+/*
 		
 		var point = new OSX.NSPoint(123, 456)
 		if (point.x != 123 || point.y != 456)						throw 'new NSPoint failed'
@@ -60,11 +77,10 @@
 		var array = delegate.testArray( ['hello', 'world', [4, 5, 6], 'end' ] )
 		if (!array)													throw 'array test failed (1)'
 		if (array[0] != 'Hello' || array[1] != 'world')				throw 'array test failed (2)'
-		
+
 		var hash = delegate.testHash( { hello : 'world', subHash : { part1 : 'bonjour', part2 : 'monde' }, end : 'fin', subArray : [11, 12, 13] } ) 
 		if (!hash)													throw 'hash test failed (1)'
 		if (hash['Hello'] != 'world')								throw 'hash test failed (2)'
-		
 		log('app delegate=' + delegate)
 		log('test array=' +  array)
 		log('test hash=' + hash)
@@ -72,8 +88,8 @@
 		log('NSDate(now)=' + OSX.NSDate.date)
 		log('NSDate=' + OSX.NSDate.valueOf())
 		log('OSX=' + OSX)
-		
 		delegate.finishTest37(true)
+*/
 		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'		
 	}
 	catch(e)

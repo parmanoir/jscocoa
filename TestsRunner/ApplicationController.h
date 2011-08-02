@@ -21,6 +21,8 @@
 	
 	IBOutlet	NSTextField* evalText;
 	IBOutlet	NSTextField* evalResult;
+
+	BOOL		test_unit;
 	
 	JSCocoa* jsc2;
 	id topObjects;
@@ -32,6 +34,9 @@
 	BOOL		cyclingContext;
 
 }
+
+@property BOOL test_unit;
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
@@ -47,6 +52,8 @@
 - (IBAction)unlinkAllReferences:(id)sender;
 
 - (IBAction)eval:(id)sender;
+
+- (IBAction)displayTestsWindow:(id)sender;
 
 - (id)testDelegate;
 - (int)dummyValue;

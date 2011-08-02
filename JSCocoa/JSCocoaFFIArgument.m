@@ -64,7 +64,7 @@
 
 - (NSString*)description
 {
-	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %x typeEncoding=%c %@ isReturnValue=%d storage=%x", self, 
+	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %llx typeEncoding=%c %@ isReturnValue=%d storage=%llx", self, 
 			typeEncoding, 
 			(structureTypeEncoding ? structureTypeEncoding : @""),
 			isReturnValue, ptr];
@@ -276,7 +276,7 @@
 		if (isReturnValue && size < minimalReturnSize)	size = minimalReturnSize;
 		ptr = malloc(size);
 	}
-//	NSLog(@"Allocated size=%d (%x) for object %@", size, ptr, self);
+//	NSLog(@"Allocated size=%d (%llx) for object %@", size, ptr, self);
 	
 	return	ptr;
 }
@@ -366,7 +366,7 @@
 	if (!typeEncoding)	return	NO;
 
 //	JSType type = JSValueGetType(ctx, value);
-//	NSLog(@"JSType=%d encoding=%c self=%x", type, typeEncoding, self);
+//	NSLog(@"JSType=%d encoding=%c self=%llx", type, typeEncoding, self);
 
 	switch  (typeEncoding)
 	{
@@ -526,7 +526,7 @@
 {
 	if (!typeEncoding)	return	NO;
 	
-//	NSLog(@"toJSValueRef: %c ptr=%x", typeEncoding, ptr);
+//	NSLog(@"toJSValueRef: %c ptr=%llx", typeEncoding, ptr);
 	switch  (typeEncoding)
 	{
 		case	_C_ID:	
@@ -761,7 +761,7 @@
 			JSStringRelease(propertyNameJS);
 //			JSObjectRef objectProperty2 = JSValueToObject(ctx, valueJS, NULL);
 
-//			NSLog(@"%c %@ %x %x", encoding, propertyName, valueJS, objectProperty2);
+//			NSLog(@"%c %@ %llx %llx", encoding, propertyName, valueJS, objectProperty2);
 			if (encoding == '{')
 			{
 				if (JSValueIsObject(ctx, valueJS))
@@ -983,6 +983,9 @@ static NSMutableDictionary* typeEncodings = nil;
 #else
 	id type = [[rootElement attributeForName:@"type"] stringValue];
 #endif
+	// Retain the string as releasing xmlDocument deallocs it
+	[[type retain] autorelease];
+
 	[xmlDocument release];
 	return	type;
 }

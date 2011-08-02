@@ -177,7 +177,8 @@ SOFTWARE.
 // global variable. The function will be invoked, its return value is the JSLINT
 // application itself.
 
-"use strict";
+// http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
+//"use strict";
 
 function JSLintWithLogs(logs)
 {
@@ -5105,12 +5106,9 @@ members)?
 		if (style != '@implementation')	advance('{')
 		
 		var validTokens = { '-' : true, '+' : true, 'IBOutlet' : true, 'IBAction' : true, 'swizzle' : true, 'Swizzle' : true, 'Key' : true, 'function' : true, 'ƒ' : true }
-
 		var parsingClassDefinition = true
-		while (validTokens[nexttoken.value] && parsingClassDefinition)
-		{
-			nexttoken.isObjCClassItemStart = true
-			var dataHolder = nexttoken
+		
+		
 			function	type()
 			{
 				var line = nexttoken.line
@@ -5131,6 +5129,11 @@ members)?
 				encodings.push("'" + type + "'")
 				advance(')')
 			}
+		
+		while (validTokens[nexttoken.value] && parsingClassDefinition)
+		{
+			nexttoken.isObjCClassItemStart = true
+			var dataHolder = nexttoken
 
 			// Advance type
 			advance()

@@ -133,6 +133,7 @@
 //	log('shouldCloseWithWindow=' + view.shouldCloseWithWindow)
 	
 	var path = NSBundle.mainBundle.resourcePath + '/Tests/Resources/35 webView page.html'
+	path = NSURL.fileURLWithPath(path).absoluteString
 //	path = 'http://yahoo.com'
 	view.mainFrameURL = path
 

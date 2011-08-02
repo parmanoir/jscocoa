@@ -12,6 +12,8 @@
 
 @implementation ApplicationController
 
+@synthesize test_unit;
+
 JSCocoaController* jsc = nil;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
@@ -34,7 +36,7 @@ JSCocoaController* jsc = nil;
 	[jsc garbageCollect];
 */
 	// Run tests
-//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -51,7 +53,7 @@ JSCocoaController* jsc = nil;
 	// Won't work under ObjC GC
 #ifndef __OBJC_GC__
 	// Must be 2 with new release method
-	if ([jsc retainCount] != 2)									NSLog(@"***Invalid JSCocoa retainCount***");
+	if ([jsc retainCount] && [jsc retainCount] != 2)									NSLog(@"***Invalid JSCocoa retainCount***");
 #endif
 	[jsc release];
 	
@@ -110,18 +112,16 @@ int runCount = 0;
 	// Test delegate
 	//
 	id error = nil;
+//	NSLog(@"testing delegate ...");
 	error = [self testDelegate];
+//	NSLog(@"delegate tests done");
+
 	if (error)
 	{
 		b = NO;
 		path = error;
 	}
 	jsc.delegate = nil;
-	
-	//
-	// Test api
-	//
-	[self testCallAPI];
 
 
 	//
@@ -134,7 +134,7 @@ int runCount = 0;
 		[jsc loadFrameworkWithName:@"WebKit"];
 		webViewClass = objc_getClass("WebView");
 	}
-	if (webViewClass && 1)
+	if (webViewClass)
 	{
 //		NSLog(@"Testing initing from a WebView");
 		// Load nib
@@ -143,18 +143,32 @@ int runCount = 0;
 		id webViewNib = [[NSNib alloc] initWithContentsOfURL:nibURL];
 
 		// Instantiate nib with ourselves as owner
+		// http://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/LoadingResources/LoadingResources.pdf
 		topObjects = nil;
+		
 		[webViewNib instantiateNibWithOwner:self topLevelObjects:&topObjects];
+		// Release the raw nib data
 		[webViewNib release];
+
+		// Release the top-level objects so that they are just owned by the array
+		[topObjects makeObjectsPerformSelector:@selector(release)];
+		// Retain the array
 		[topObjects retain];
+
+		// Load webpage in the window's WebView
+		//	webViewUsedAsContextSource is set when loading the NIB
 		[webViewUsedAsContextSource setFrameLoadDelegate:self];
 
-		id pageURL	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
-		[webViewUsedAsContextSource setMainFrameURL:pageURL];
+		id pagePath	= [NSString stringWithFormat:@"%@%@", [[NSBundle mainBundle] resourcePath], @"/Tests/Resources/37 inited from webview.html"];
+		id pageURL	= [NSURL fileURLWithPath:pagePath];
+//		NSLog(@"url=%@", [pageURL absoluteURL]);
+		
+		[webViewUsedAsContextSource setMainFrameURL:[pageURL absoluteString]];
 
 		// Init JSCocoa from WebView's globalContext
 		JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
-//		NSLog(@"WebView contextGroup=%x context=%x", JSContextGetGroup(ctx), ctx);
+//		NSLog(@"WebView contextGroup=%llx context=%llx", JSContextGetGroup(ctx), ctx);
+		
 		jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	}
 	else
@@ -198,7 +212,7 @@ int runCount = 0;
 	[jsc setUseAutoCall:b];
 	[jsc setUseJSLint:YES];
 	if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
-	
+
 /*	
 	id class = objc_getClass([@"ファイナンス" UTF8String]);
 	id o = [class new];
@@ -229,6 +243,13 @@ int runCount = 0;
 	runningContinuously = NO;
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem *) menuItem {
+	NSLog(@"%@", menuItem);
+	SEL itemAction = [menuItem action];
+	if (itemAction == @selector(displayTestsWindow:))
+		return YES;
+	return NO;
+}
 
 
 //
@@ -243,8 +264,9 @@ int runCount = 0;
 //
 - (IBAction)garbageCollect:(id)sender
 {
-	NSLog(@"Collecting ...");
+//	NSLog(@"Collecting ...");
 	[jsc garbageCollect];
+//	NSLog(@"Collected");
 }
 
 - (IBAction)logInstanceStats:(id)sender
@@ -481,7 +503,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	canSet		= YES;
 	canGetGlobal= NO;
 	ret = [jsc evalJSString:@"NSWorkspace"];
-//	NSLog(@"ret=%x %x", ret, JSValueIsNull([jsc ctx], ret));
+//	NSLog(@"ret=%llx %llx", ret, JSValueIsNull([jsc ctx], ret));
 	if (ret)												return	@"delegate canGetGlobalProperty failed (1)";
 	
 	//
@@ -667,7 +689,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 }
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
-//	NSLog(@"delegate get %@(%@).%@ customValueGet=%x", _object, [_object class], _propertyName, customValueGet);
+//	NSLog(@"delegate get %@(%@).%@ customValueGet=%llx", _object, [_object class], _propertyName, customValueGet);
 	object			= _object;
 	propertyName	= _propertyName;
 	return	customValueGet;
@@ -745,7 +767,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 }
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getGlobalProperty:(NSString*)_propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
-//	NSLog(@"getGlobalProperty %@ %x", _propertyName, customValueGetGlobal);
+//	NSLog(@"getGlobalProperty %@ %llx", _propertyName, customValueGetGlobal);
 	propertyName	= _propertyName;
 	return	customValueGetGlobal;
 }
@@ -843,13 +865,15 @@ int dummyValue;
 
 - (IBAction)runSimpleTestFile:(id)sender
 {
+	if (!jsc)
+		return;
 	id js = @"2+2";
 	js = @"NSWorkspace.sharedWorkspace.activeApplication";
 
 	js = @"var a = NSMakePoint(2, 3)";
-	[JSCocoaController garbageCollect];
+	[jsc garbageCollect];
 	JSValueRef ret2 = [jsc evalJSString:js];
-	[JSCocoaController garbageCollect];
+	[jsc garbageCollect];
 	
 	JSStringRef resultStringJS = JSValueToStringCopy([jsc ctx], ret2, NULL);
 	NSString* r = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
@@ -909,12 +933,22 @@ int dummyValue;
 	if (!b)	return;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 
+	NSLog(@"COMMENTED test 37 !");
+	NSLog(@"jsc2 rc=%d (%llx)", [jsc2 retainCount], self);
+	NSLog(@"get1 %@", [jsc2 eval:@"__jsc__"]);
+//	b = [jsc2 removeObjectWithName:@"__jsc__"];
+	[jsc2 garbageCollect];
+	NSLog(@"jsc2 rc=%d (POST REMOVE %d)", [jsc2 retainCount], b);
+	NSLog(@"get2 %@", [jsc2 eval:@"__jsc__"]);
 	[jsc2 release];
-	for (id o in topObjects)
-		[o release];
+
 	[topObjects release];
 	topObjects	= nil;
 	jsc2		= nil;
+
+	NSLog(@"***COMMENTED test 37 !");
+	
+	NSLog(@"AND, commented test37 html");
 /*	
 	NSLog(@"****************");
 	[JSCocoa logInstanceStats];
@@ -937,6 +971,11 @@ BOOL	bindingsAlreadyTested2 = NO;
 	[textField setStringValue:@"All tests ran OK"];
 }
 
+- (IBAction)displayTestsWindow:(id)sender {
+	[window makeKeyAndOrderFront:nil];
+}
+
+
 - (NSError*)testNSError
 {
 	return	testNSError;
@@ -950,7 +989,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 		testNSError = nil;
 	}
 	NSError* error = nil;
-//	NSLog(@"calling with pointer %x", &error);
+//	NSLog(@"calling with pointer %llx", &error);
 	BOOL r = [o someMethodReturningAnError:&error];
 
 	if (error)
@@ -991,7 +1030,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 //	Use JSValueRefAndContextRef 
 - (void)incorrectlySetJSValue:(JSValueRef)value
 {
-	NSLog(@"[%@ %s] got %x", [self class], _cmd, value);
+	NSLog(@"[%@ %s] got %llx", [self class], _cmd, value);
 }
 
 // Correctly set, testing holding on to it
@@ -1008,7 +1047,7 @@ JSValueRef savedValue = nil;
 	JSContextGroupRetain(JSContextGetGroup(vc.ctx));
 	JSGlobalContextRetain([jsc ctx]);
 */
-	NSLog(@"ctx=%x value=%x globalctx=%x", vc.ctx, vc.value, [jsc ctx]);
+	NSLog(@"ctx=%llx value=%llx globalctx=%llx", vc.ctx, vc.value, [jsc ctx]);
 }
 - (JSValueRefAndContextRef)jsValue
 {

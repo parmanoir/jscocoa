@@ -132,7 +132,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
 {
-//	NSLog(@"JSCocoa : %x spawning with context %x", self, _ctx);
+	NSLog(@"JSCocoa : %llx spawning with context %llx", self, _ctx);
 	self	= [super init];
 	controllerCount++;
 
@@ -255,7 +255,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 	[BurksPool setJSFunctionHash:jsFunctionHash];
 #endif
-
 	// Create a reference to ourselves, and make it read only, don't enum, don't delete
 	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
 
@@ -265,7 +264,11 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	{
 		useJSLint		= NO;
 		id lintPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"jslint-jscocoa" ofType:@"js"];
-		if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	[self evalJSFile:lintPath];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:lintPath])	{
+			BOOL b = [self evalJSFile:lintPath];
+			if (!b)
+				NSLog(@"[JSCocoa initWithGlobalContext:] JSLint not loaded");
+		}
 		id classKitPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"class" ofType:@"js"];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
 	}
@@ -303,7 +306,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	ownsContext		= NO;
 
 	[JSCocoa updateCustomCallPaths];
-
+	NSLog(@"JSCocoa spawned with context %llx", ctx);
 	return	self;
 }
 
@@ -320,7 +323,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (void)cleanUp
 {
-//	NSLog(@"JSCocoa : %x dying", self);
+	NSLog(@"JSCocoa : %llx dying", self);
 	[self setUseSafeDealloc:NO];
 	[self unlinkAllReferences];
 	JSGarbageCollect(ctx);
@@ -393,15 +396,21 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 
 - (oneway void)release
 {
+	NSLog(@"jsc %llx OUT\n***\n%@\n***\n", self, [NSThread callStackSymbols]);
+//NSLog(@"RET!"); return;
 	// Each controller adds itself to its Javascript context, therefore retain count will be two when user last calls release.
 	// We check for this and clean up references then call GC, which will lower retain count to 1.
 	// Use 'useSafeDealloc' to make sure we're not reentering this one-time code block when GC calls release.
 	if ([self retainCount] == 2 && useSafeDealloc)
 	{
 		[self setUseSafeDealloc:NO];
-		[self unlinkAllReferences];
+
 		// This will take retain count from 2 to 1, readying this instance for deallocation
-		[self garbageCollect];
+		//	Only collect if we own the context, has a WebView might be deallocating us while it's collecting its garbage
+		if (ownsContext) {
+			[self unlinkAllReferences];
+			[self garbageCollect];
+		}
 	}
 	[super release];
 }
@@ -436,7 +445,7 @@ static id JSCocoaSingleton = NULL;
 			//	Why ? if init is calling sharedController, the pointer won't have been set and it will call itself over and over again.
 			//
 			JSCocoaSingleton = [self alloc];
-//			NSLog(@"JSCocoa : allocating shared instance %x", JSCocoaSingleton);
+//			NSLog(@"JSCocoa : allocating shared instance %llx", JSCocoaSingleton);
 			[JSCocoaSingleton init];
 		}
 	}
@@ -456,7 +465,7 @@ static id JSCocoaSingleton = NULL;
 	id jsc = nil;
 	[JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&jsc inContext:ctx];
 	// Commented as it falsely reports failure when controller is cleaning up while being deallocated
-//	if (!jsc)	NSLog(@"controllerFromContext couldn't find found the JSCocoaController in ctx %x", ctx);
+//	if (!jsc)	NSLog(@"controllerFromContext couldn't find found the JSCocoaController in ctx %llx", ctx);
 	return	jsc;
 }
 
@@ -550,6 +559,10 @@ static id JSCocoaSingleton = NULL;
 
 	// Expand macros
 	script = [self expandJSMacros:script path:path];
+	if (!script) {
+		NSLog(@"evalJSFile:toJSValueRef: expandJSMacros returned null on %@", path);
+		return NO;
+	}
 
 	//
 	// Delegate canEvaluateScript, willEvaluateScript
@@ -772,7 +785,7 @@ static id JSCocoaSingleton = NULL;
 	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
 	if (hasFunction && useJSLint)
 	{
-		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, array, nil];
+		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, path?path:@"null", array, nil];
 		id expandedScript = [self unboxJSValueRef:v];
 		// Bail if expansion failed
 		if (!expandedScript || ![expandedScript isKindOfClass:[NSString class]])	
@@ -794,6 +807,10 @@ static id JSCocoaSingleton = NULL;
 {
 	id errors = [NSMutableArray array];
 	script = [self expandJSMacros:script path:nil errors:errors];
+	if (!script) {
+		NSLog(@"isSyntaxValid: expandJSMacros returned null on %@", script);
+		return NO;
+	}
 
 	JSStringRef scriptJS	= JSStringCreateWithUTF8CString([script UTF8String]);
 	JSValueRef	exception	= NULL;
@@ -1384,7 +1401,7 @@ static id JSCocoaSingleton = NULL;
 	id jsc = [JSCocoaController controllerFromContext:valueAndContext.ctx];
 
 	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", class, methodName];
-	id keyForFunction		= [NSString stringWithFormat:@"%x", valueAndContext.value];
+	id keyForFunction		= [NSString stringWithFormat:@"%llx", valueAndContext.value];
 
 	id privateObject = [[JSCocoaPrivateObject alloc] init];
 	[privateObject setJSValueRef:valueAndContext.value ctx:[jsc ctx]];
@@ -1403,7 +1420,7 @@ static id JSCocoaSingleton = NULL;
 	SEL selector = NSSelectorFromString(methodName);
 
 	id keyForClassAndMethod	= [NSString stringWithFormat:@"%@ %@", class, methodName];
-	id keyForFunction		= [NSString stringWithFormat:@"%x", valueAndContext.value];
+	id keyForFunction		= [NSString stringWithFormat:@"%llx", valueAndContext.value];
 
 	id existingMethodForJSFunction = [closureHash valueForKey:keyForFunction];
 	if (existingMethodForJSFunction)
@@ -1412,7 +1429,7 @@ static id JSCocoaSingleton = NULL;
 		return	NO;
 	}
 
-//	NSLog(@"keyForFunction=%x for %@.%@", keyForFunction, class, methodName);
+//	NSLog(@"keyForFunction=%llx for %@.%@", keyForFunction, class, methodName);
 	
 	id jsc = [JSCocoaController controllerFromContext:valueAndContext.ctx];
 	JSContextRef ctx = [jsc ctx];
@@ -1425,7 +1442,7 @@ static id JSCocoaSingleton = NULL;
 	// Closure cleanup - dangerous as instances might still be around AND IF dealloc/release is overloaded
 	if (existingPrivateObject)
 	{
-		id keyForExistingFunction = [NSString stringWithFormat:@"%x", [existingPrivateObject jsValueRef]];
+		id keyForExistingFunction = [NSString stringWithFormat:@"%llx", [existingPrivateObject jsValueRef]];
 
 		[closureHash			removeObjectForKey:keyForExistingFunction];
 		[jsFunctionSelectors	removeObjectForKey:keyForExistingFunction];
@@ -1746,11 +1763,16 @@ static id JSCocoaSingleton = NULL;
 
 + (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
 {
-	id key = [NSString stringWithFormat:@"%x", o];
+	NSLog(@"QUICK FIX : key is ctx+llx, AND ctx is always the global context");
+
+	id key = [NSString stringWithFormat:@"%llx", o];
 	id value = [boxedObjects valueForKey:key];
+	
+	NSLog(@"boxing (in ctx %llx) %@ (key %@)", ctx, o, key);
 	// If object is boxed, up its usage count and return it
 	if (value)
 	{
+		NSLog(@"CACHE HIT %@", key);
 //		NSLog(@"upusage %@ (rc=%d) %d", o, [o retainCount], [value usageCount]);
 		return	[value jsObject];
 	}
@@ -1767,7 +1789,6 @@ static id JSCocoaSingleton = NULL;
 	// To guarantee unicity, we keep a cache of boxed objects. 
 	// As boxed objects are JSObjectRef not derived from NSObject, we box them in an ObjC object.
 	//
-	
 	// Box the ObjC object in a JSObjectRef
 	JSObjectRef jsObject = [self jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
@@ -1788,7 +1809,7 @@ static id JSCocoaSingleton = NULL;
 
 + (void)downBoxedJSObjectCount:(id)o
 {
-	id key = [NSString stringWithFormat:@"%x", o];
+	id key = [NSString stringWithFormat:@"%llx", o];
 	id value = [boxedObjects valueForKey:key];
 	if (!value)
 		return;
@@ -1804,12 +1825,12 @@ static id JSCocoaSingleton = NULL;
 #pragma mark Helpers
 - (id)selectorForJSFunction:(JSObjectRef)function
 {
-	return [jsFunctionSelectors valueForKey:[NSString stringWithFormat:@"%x", function]];
+	return [jsFunctionSelectors valueForKey:[NSString stringWithFormat:@"%llx", function]];
 }
 
 - (id)classForJSFunction:(JSObjectRef)function
 {
-	return [jsFunctionClasses valueForKey:[NSString stringWithFormat:@"%x", function]];
+	return [jsFunctionClasses valueForKey:[NSString stringWithFormat:@"%llx", function]];
 }
 
 //
@@ -1981,6 +2002,7 @@ static id autoreleasePool;
 //
 - (void)unlinkAllReferences
 {
+	NSLog(@"WARNING ! Must build an array of first (Object.keys(this)), THEN an exception for each while we try to delete them");
 	// Null and delete every reference to every live object
 //	[self evalJSString:@"for (var i in this) { log('DELETE ' + i); this[i] = null; delete this[i]; }"];
 	[self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
@@ -1995,7 +2017,7 @@ static id autoreleasePool;
 	// This code might re-box the instance ...
 	[sender safeDealloc];
 	// So, clean it up
-	[boxedObjects removeObjectForKey:[NSString stringWithFormat:@"%x", sender]];
+	[boxedObjects removeObjectForKey:[NSString stringWithFormat:@"%llx", sender]];
 	// sender is retained by performSelector, object will be destroyed upon function exit
 }
 
@@ -3152,6 +3174,9 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// if dealloc is overloaded, releasing now will trigger JS code and fail
 	// As we're being called by GC, KJS might assert() in operationInProgress == NoOperation
 	id private = JSObjectGetPrivate(object);
+	
+	// Clean up the object now as WebKit calls us twice while cleaning __jsc__ (20110730)
+	JSObjectSetPrivate(object, NULL);
 
 	//
 	// If a boxed object is being destroyed, remove it from the cache
@@ -3159,7 +3184,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	id boxedObject = [private object]; 
 	if (boxedObject)
 	{
-		id key = [NSString stringWithFormat:@"%x", boxedObject];
+		id key = [NSString stringWithFormat:@"%llx", boxedObject];
 		// Object may have been already deallocated
 		id existingBoxedObject = [boxedObjects objectForKey:key];
 		if (existingBoxedObject)
@@ -3181,7 +3206,6 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 				}
 				
 			}
-
 			[boxedObjects removeObjectForKey:key];
 		}
 		else
@@ -3193,6 +3217,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 
 	// Immediate release if dealloc is not overloaded
 	[private release];
+	
 #ifdef __OBJC_GC__
 	// Mark internal object as collectable
 	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:private];
@@ -3235,8 +3260,12 @@ static JSValueRef jsCocoaObject_getProperty(JSContextRef ctx, JSObjectRef object
 	[NSMakeCollectable(propertyName) autorelease];
 	
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
-//	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
+	NSLog(@"Asking for property %@ %@(%@)", propertyName, privateObject, privateObject.type);
 
+	if ([propertyName hasPrefix:@"sharedA"]) {
+		NSLog(@"there");
+	}
+	
 	// Get delegate
 	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
 	id delegate = jsc.delegate;
@@ -3369,7 +3398,7 @@ call:
 					JSStringRelease(scriptJS);
 					BOOL isNativeCode =  result ? JSValueToBoolean(ctx, result) : NO;
 					returnHashValue = !isNativeCode;
-//					NSLog(@"isNative(%@)=%d rawJSResult=%x hashProperty=%x returnHashValue=%d", propertyName, isNativeCode, result, hashProperty, returnHashValue);
+//					NSLog(@"isNative(%@)=%d rawJSResult=%llx hashProperty=%llx returnHashValue=%d", propertyName, isNativeCode, result, hashProperty, returnHashValue);
 				}
 				if (returnHashValue)	return	hashProperty;
 			}
@@ -3399,6 +3428,7 @@ call:
 		if (useAutoCall)
 		{
 			callee	= [privateObject object];
+			NSLog(@"%@.%@", [callee class], propertyName);
 			SEL sel		= NSSelectorFromString(propertyName);
 			
 			BOOL isInstanceCall = [propertyName isEqualToString:@"instance"];
@@ -3738,7 +3768,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
-//	NSLog(@"****SET %@ in ctx %x on object %x (type=%@) method=%@", propertyName, ctx, object, privateObject.type, privateObject.methodName);
+//	NSLog(@"****SET %@ in ctx %llx on object %llx (type=%@) method=%@", propertyName, ctx, object, privateObject.type, privateObject.methodName);
 
 	// Get delegate
 	JSCocoaController* jsc = [JSCocoaController controllerFromContext:ctx];
@@ -4352,7 +4382,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 #endif			
 				superPointer	= &_super;
 				values[0]		= &superPointer;
-//				NSLog(@"superClass=%@ (old=%@) (%@) function=%x", superSelectorClass, [callee superclass], [callee class], function);
+//				NSLog(@"superClass=%@ (old=%@) (%@) function=%llx", superSelectorClass, [callee superclass], [callee class], function);
 			}
 		}
 
@@ -4695,6 +4725,9 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 #else
 	id structureType = [[rootElement attributeForName:@"type"] stringValue];
 #endif			
+	// Retain the string as releasing xmlDocument deallocs it
+	[[structureType retain] autorelease];
+
 	[xmlDocument release];
 	id fullStructureType = [JSCocoaFFIArgument structureFullTypeEncodingFromStructureTypeEncoding:structureType];
 	if (!fullStructureType)	return throwException(ctx, exception, @"Calling constructor on a non struct"), NULL;
@@ -4933,7 +4966,7 @@ void* malloc_autorelease(size_t size)
 #if !TARGET_OS_IPHONE
 	retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
 #endif
-	return [NSString stringWithFormat:@"<%@: %x holding %@ %@: %x (retainCount=%@)>",
+	return [NSString stringWithFormat:@"<%@: %llx holding %@ %@: %llx (retainCount=%@)>",
 				[self class], 
 				self, 
 				((id)self == (id)[self class]) ? @"Class" : @"",
