@@ -40,8 +40,8 @@
 		objCDate.release
 		objCDate = null
 
-//		var delegate = OSX.NSApplication.sharedApplication.delegate
-//log('delegate=' + delegate)
+		var delegate = OSX.NSApplication.sharedApplication.delegate
+log('delegate=' + delegate)
 log('NSDate.date=' + OSX.NSDate)
 log('NSDate.date=' + OSX.NSDate.date)
 log('NSDate.date=' + OSX.NSDate.date.timeIntervalSinceNow)
@@ -61,7 +61,6 @@ log('length=' + str)
 //		if (delegate.add1(5) !=6)									throw	'add1 failed'
 //		delegate.dummyValue = 13
 //		if (delegate.dummyValue != 13)								throw 'dummyValue failed'
-/*
 		
 		var point = new OSX.NSPoint(123, 456)
 		if (point.x != 123 || point.y != 456)						throw 'new NSPoint failed'
@@ -89,7 +88,7 @@ log('length=' + str)
 		log('NSDate=' + OSX.NSDate.valueOf())
 		log('OSX=' + OSX)
 		delegate.finishTest37(true)
-*/
+
 		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'		
 	}
 	catch(e)

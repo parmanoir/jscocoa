@@ -49,8 +49,7 @@
 	JSContextRef	ctx;
 	unsigned int	externalJSValueIndex;
 	// (test) when storing JSValues from a WebView, used to retain the WebView's context.
-	// Disabled for now. Just make sure the WebView has a longer life than the vars
-	// it's using.
+	// Disabled for now. Just make sure the WebView has a longer life than the vars it uses.
 	//
 	// Disabled because retaining the context crashes in 32 bits, but works in 64 bit.
 	// May be reenabled someday.
@@ -82,6 +81,7 @@
 
 - (void)setJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 - (JSValueRef)jsValueRef;
+- (void)setCtx:(JSContextRef)ctx;
 - (JSContextRef)ctx;
 - (void)setExternalJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 

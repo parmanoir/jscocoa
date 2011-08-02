@@ -41,14 +41,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
     id					_delegate;
 
 	//
-	// Safe dealloc
-	//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
-	//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
-	//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
-	//
-	BOOL				useSafeDealloc;
-
-	//
 	// Split call
 	//	Allows calling multi param ObjC messages with a jQuery-like syntax.
 	//
@@ -63,12 +55,25 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 	
 	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
 	BOOL				useAutoCall;
-	// Allows setting javascript values on boxed objects (which are collected after nulling all references to them)
+	// Allow setting javascript values on boxed objects (which are collected after nulling all references to them)
 	BOOL				canSetOnBoxedObjects;
 	// Allow calling obj.method(...) instead of obj.method_(...)
 	BOOL				callSelectorsMissingTrailingSemicolon;
-	
+
+	// Log all exceptions to NSLog, even if they're caught later by downstream Javascript (in f(g()), log even if f catches after g threw)
 	BOOL				logAllExceptions;
+	
+	//
+	// Safe dealloc (For ObjC classes written in Javascript)
+	//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
+	//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
+	//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
+	//
+	BOOL				useSafeDealloc;
+
+	
+	NSMutableDictionary*	boxedObjects;
+	
 	
 }
 
@@ -144,7 +149,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 + (void)logInstanceStats;
 - (id)instanceStats;
-+ (void)logBoxedObjects;
+- (void)logBoxedObjects;
 
 //
 // Class inspection (shortcuts to JSCocoaLib)
@@ -177,9 +182,12 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (void)deallocAutoreleasePool;
 
 //
-// Global boxer : only one JSValueRef for multiple box requests of one pointer
+// Boxing : each object gets only one box, stored in boxedObjects
 //
 //+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
+- (JSObjectRef)boxObject:(id)o;
+- (BOOL)isObjectBoxed:(id)o;
+- (void)deleteBoxOfObject:(id)o;
 //+ (void)downBoxedJSObjectCount:(id)o;
 
 
@@ -331,5 +339,17 @@ JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 
 // Stored in boxedobjects to access a list of methods, properties, ...
 #define RuntimeInformationPropertyName		"info"
+
+
+
+/*
+Some more doc
+
+	__jsHash
+	__jsCocoaController
+		Instance variables set on ObjC classes written in Javascript.
+		These variables enable classes to store Javascript values in them.
+	
+*/
 
 

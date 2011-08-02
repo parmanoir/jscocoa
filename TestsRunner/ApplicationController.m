@@ -290,7 +290,7 @@ int runCount = 0;
 
 - (IBAction)logBoxedObjects:(id)sender
 {
-	[JSCocoa logBoxedObjects];
+	[jsc logBoxedObjects];
 }
 
 - (void)log:(NSString*)message
@@ -948,6 +948,7 @@ int dummyValue;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 
 	NSLog(@"COMMENTED test 37 !");
+	return;
 	NSLog(@"jsc2 rc=%lu (%llx)", [jsc2 retainCount], self);
 	NSLog(@"get1 %@", [jsc2 eval:@"__jsc__"]);
 //	b = [jsc2 removeObjectWithName:@"__jsc__"];

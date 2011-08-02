@@ -179,7 +179,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	
 	// Create 'this'
 	if (isObjC)
-		jsThis = [JSCocoaController boxedJSObject:*(void**)closureArgs[0] inContext:ctx];
+		jsThis = [[JSCocoa controllerFromContext:ctx] boxObject:*(void**)closureArgs[0]];
 
 	// Call !
 	JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);

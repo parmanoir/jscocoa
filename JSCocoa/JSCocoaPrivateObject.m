@@ -21,7 +21,7 @@
 	object		= nil;
 	isAutoCall	= NO;
 	jsValue		= NULL;
-	retainObject	= YES;
+	retainObject= YES;
 	rawPointer	= NULL;
 	ctx			= NULL;
 //	retainContext = NO;
@@ -37,7 +37,8 @@
 	[JSCocoaController downJSCocoaPrivateObjectCount];
 	if (object && retainObject)
 	{
-		[JSCocoaController downBoxedJSObjectCount:object];
+		NSLog(@"commented downBoxedJSObjectCount");
+//		[JSCocoaController downBoxedJSObjectCount:object];
 //		NSLog(@"releasing %@(%d)", [object class], [object retainCount]);
 //		if ([object isKindOfClass:[JSCocoaController class]])
 //			[object autorelease];
@@ -145,6 +146,9 @@
 	return	jsValue;
 }
 
+- (void)setCtx:(JSContextRef)_ctx {
+	ctx = _ctx;
+}
 - (JSContextRef)ctx
 {
 	return	ctx;

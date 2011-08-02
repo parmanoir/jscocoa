@@ -143,6 +143,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	callSelectorsMissingTrailingSemicolon	= YES;
 	canSetOnBoxedObjects= NO;
 	logAllExceptions	= NO;
+	boxedObjects		= [NSMutableDictionary new];
 
 	@synchronized(self)
 	{
@@ -155,7 +156,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 			jsFunctionHash		= [NSMutableDictionary new];
 			splitCallCache		= [NSMutableDictionary new];
 			jsClassParents		= [NSMutableDictionary new];
-			boxedObjects		= [NSMutableDictionary new];
+//			boxedObjects		= [NSMutableDictionary new];
 			jsClasses			= [NSMutableArray new];
 			customCallPathsCacheIsClean = NO;
 			customCallPaths	= nil;			
@@ -325,6 +326,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 - (void)cleanUp
 {
 	NSLog(@"JSCocoa : %llx dying", self);
+	[boxedObjects release];
 	[self setUseSafeDealloc:NO];
 	[self unlinkAllReferences];
 	JSGarbageCollect(ctx);
@@ -333,27 +335,17 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	if (controllerCount == 0)
 	{
 		if (OSXObjectClass) {
-            JSClassRelease(OSXObjectClass);
-            OSXObjectClass = nil;
-        }
-        
-		if (jsCocoaObjectClass) {
-            JSClassRelease(jsCocoaObjectClass);
-            jsCocoaObjectClass = nil;
-        }
-		if (jsCocoaFunctionClass) {
-            JSClassRelease(jsCocoaFunctionClass);
-            jsCocoaFunctionClass = nil;
+			JSClassRelease(OSXObjectClass);
+			JSClassRelease(jsCocoaObjectClass);
+			JSClassRelease(jsCocoaFunctionClass);
+			JSClassRelease(jsCocoaInfoClass);
+			JSClassRelease(hashObjectClass);
+			OSXObjectClass = nil;
+			jsCocoaObjectClass = nil;
+			jsCocoaFunctionClass = nil;
+			jsCocoaInfoClass = nil;
+			hashObjectClass = nil;
 		}
-		if (jsCocoaInfoClass) {
-            JSClassRelease(jsCocoaInfoClass);
-            jsCocoaInfoClass = nil;
-		}
-        
-		if (hashObjectClass) {
-            JSClassRelease(hashObjectClass);
-            hashObjectClass = nil;
-        }
         
         // We need to nil these all out, since they are static
         // and if we make another JSCocoaController after this- they will
@@ -372,8 +364,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
         splitCallCache = nil;
 		[jsClassParents release];
         jsClassParents = nil;
-		[boxedObjects release];
-        boxedObjects = nil;
+//		[boxedObjects release];
+//        boxedObjects = nil;
 		[customCallPaths release];
 		customCallPaths = nil;
 		
@@ -392,7 +384,8 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	}
 	
 
-	if (ownsContext)	JSGlobalContextRelease(ctx);
+	if (ownsContext)
+		JSGlobalContextRelease(ctx);
 }
 
 - (oneway void)release
@@ -891,7 +884,7 @@ static id JSCocoaSingleton = NULL;
 //
 - (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes
 {
-	JSObjectRef o = [JSCocoaController boxedJSObject:object inContext:ctx];
+	JSObjectRef o = [self boxObject:object];
 
 	// Set
 	JSValueRef	exception = NULL;
@@ -1007,25 +1000,24 @@ static id JSCocoaSingleton = NULL;
 	if (isSpeaking)	system([[NSString stringWithFormat:@"say %@ &", string] UTF8String]);
 }
 */
-+ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx
-{
++ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx {
 	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
 #ifdef __OBJC_GC__
-// Mark internal object as non collectable
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
+	// Mark internal object as non collectable
+	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
 #endif
 	JSObjectRef o = JSObjectMake(ctx, jsCocoaObjectClass, private);
 	[private release];
 	return	o;
 }
-+ (JSObjectRef)jsCocoaPrivateFunctionInContext:(JSContextRef)ctx
-{
++ (JSObjectRef)jsCocoaPrivateFunctionInContext:(JSContextRef)ctx {
 	JSCocoaPrivateObject* private = [[JSCocoaPrivateObject alloc] init];
 #ifdef __OBJC_GC__
-// Mark internal object as non collectable
-[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
+	// Mark internal object as non collectable
+	[[NSGarbageCollector defaultCollector] disableCollectorForPointer:private];
 #endif
 	JSObjectRef o = JSObjectMake(ctx, jsCocoaFunctionClass, private);
+	// Object is retained by jsCocoaObject_initialize, release it to make 'private' sole owner
 	[private release];
 	return	o;
 }
@@ -1760,12 +1752,13 @@ static id JSCocoaSingleton = NULL;
 
 #pragma mark Boxed object hash
 
-+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
+//+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
+- (JSObjectRef)boxObject:(id)o
 {
 	NSLog(@"QUICK FIX : key is ctx+llx, AND ctx is always the global context");
 
-	id key = [NSString stringWithFormat:@"%llx", o];
-	id value = [boxedObjects valueForKey:key];
+	id key	= [NSString stringWithFormat:@"%llx", o];
+	id value= [boxedObjects valueForKey:key];
 	
 	NSLog(@"boxing (in ctx %llx) %@ (key %@)", ctx, o, key);
 	// If object is boxed, up its usage count and return it
@@ -1789,7 +1782,7 @@ static id JSCocoaSingleton = NULL;
 	// As boxed objects are JSObjectRef not derived from NSObject, we box them in an ObjC object.
 	//
 	// Box the ObjC object in a JSObjectRef
-	JSObjectRef jsObject = [self jsCocoaPrivateObjectInContext:ctx];
+	JSObjectRef jsObject = [JSCocoa jsCocoaPrivateObjectInContext:ctx];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"@";
 	[private setObject:o];
@@ -1802,10 +1795,22 @@ static id JSCocoaSingleton = NULL;
 	[boxedObjects setValue:value forKey:key];
 	[value release];
 	return	jsObject;
-
 }
 
+- (BOOL)isObjectBoxed:(id)o {
+	id key	= [NSString stringWithFormat:@"%llx", o];
+	return !![boxedObjects valueForKey:key];
+}
 
+- (void)deleteBoxOfObject:(id)o {
+	id key	= [NSString stringWithFormat:@"%llx", o];
+	id value= [boxedObjects valueForKey:key];
+	if (!value)
+		return;
+	[boxedObjects removeObjectForKey:key];
+}
+
+/*
 + (void)downBoxedJSObjectCount:(id)o
 {
 	id key = [NSString stringWithFormat:@"%llx", o];
@@ -1820,7 +1825,7 @@ static id JSCocoaSingleton = NULL;
 {
 	return boxedObjects;
 }
-
+*/
 #pragma mark Helpers
 - (id)selectorForJSFunction:(JSObjectRef)function
 {
@@ -1940,7 +1945,7 @@ static id JSCocoaSingleton = NULL;
 	files = [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 //	NSLog(@"files=%@", files);
 
-	if ([files count] == 0)	return	[JSCocoaController logAndSay:@"no test files found"], 0;
+	if ([files count] == 0)	return	[JSCocoaController log:@"no test files found"], 0;
 	
 	for (id file in files)
 	{
@@ -1962,7 +1967,7 @@ static id JSCocoaSingleton = NULL;
 		if (!evaled)	
 		{
 			id error = [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
-			[JSCocoaController logAndSay:error];
+			[JSCocoaController log:error];
 			return NO;
 		}
 		count ++;
@@ -2100,7 +2105,7 @@ int	liveInstanceCount	= 0;
 	if ([allKeys count])	NSLog(@"====");
 }
 
-+ (void)logBoxedObjects
+- (void)logBoxedObjects
 {
 	NSLog(@"====%ld boxedObjects====", (long)[[boxedObjects allKeys] count]);
 	NSLog(@"%@", boxedObjects);
@@ -2392,10 +2397,10 @@ int	liveInstanceCount	= 0;
 
 
 #pragma mark Javascript setter functions
-// Hold these methods in a derived NSObject class : only derived classes created with a __jsHash (capable of hosting js objects) will get them
+// Give ObjC classes written in Javascript extra abilities like storing extra javascript variables in an internal __jsHash.
+//	The following methods handle that. JSCocoaMethodHolder is a dummy class to hold them.
 @interface	JSCocoaMethodHolder : NSObject
 @end
-// Stored there for convenience. They won't be used by JSCocoaPrivateObject but will be patched in for any derived class
 @implementation JSCocoaMethodHolder
 - (BOOL)setJSValue:(JSValueRefAndContextRef)valueAndContext forJSName:(JSValueRefAndContextRef)nameAndContext
 {
@@ -2713,7 +2718,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 	Class objCClass = NSClassFromString(propertyName);
 	if (objCClass && ![propertyName isEqualToString:@"Object"])
 	{
-		JSValueRef ret = [JSCocoaController boxedJSObject:objCClass inContext:ctx];
+		JSValueRef ret = [jsc boxObject:objCClass];
 		return	ret;
 	}
 
@@ -2781,7 +2786,7 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 			if ([[declared_type stringValue] isEqualToString:@"@"])
 			{
 				id o = *(id*)symbol;
-				return [JSCocoaController boxedJSObject:o inContext:ctx];
+				return [jsc boxObject:o];
 			}
 
 			// Return symbol as a Javascript string
@@ -3172,28 +3177,31 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 {
 	// if dealloc is overloaded, releasing now will trigger JS code and fail
 	// As we're being called by GC, KJS might assert() in operationInProgress == NoOperation
-	id private = JSObjectGetPrivate(object);
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(object);
 	
 	// Clean up the object now as WebKit calls us twice while cleaning __jsc__ (20110730)
 	JSObjectSetPrivate(object, NULL);
 
+	id jsc = [private ctx];
 	//
 	// If a boxed object is being destroyed, remove it from the cache
 	//
 	id boxedObject = [private object]; 
 	if (boxedObject)
 	{
-		id key = [NSString stringWithFormat:@"%llx", boxedObject];
+//		id key = [NSString stringWithFormat:@"%llx", boxedObject];
 		// Object may have been already deallocated
-		id existingBoxedObject = [boxedObjects objectForKey:key];
-		if (existingBoxedObject)
+//		id existingBoxedObject = [boxedObjects objectForKey:key];
+//		id existingBoxedObject = [jsc boxedObject];
+//		if (existingBoxedObject)
+		if ([jsc isObjectBoxed:boxedObject])
 		{
 			// Safe dealloc ?
 			if ([boxedObject retainCount] == 1)
 			{
 				if ([boxedObject respondsToSelector:@selector(safeDealloc)])
 				{
-					id jsc = NULL;
+					jsc = NULL;
 					object_getInstanceVariable(boxedObject, "__jsCocoaController", (void**)&jsc);
 					// Call safeDealloc if enabled (will be disabled upon last JSCocoaController release, to make sure the )
 					if (jsc)	
@@ -3205,7 +3213,8 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 				}
 				
 			}
-			[boxedObjects removeObjectForKey:key];
+//			[boxedObjects removeObjectForKey:key];
+			[jsc deleteBoxOfObject:boxedObject];
 		}
 		else
 		{
@@ -4842,7 +4851,7 @@ static JSValueRef jsCocoaInfo_getProperty(JSContextRef ctx, JSObjectRef object, 
 	if ([propertyName isEqualToString:@"protocols"])		r = [class __protocols];
 
 	if (r)
-		return [JSCocoa boxedJSObject:r inContext:ctx];
+		return [[JSCocoa controllerFromContext:ctx] boxObject:r];
 	return JSValueMakeUndefined(ctx);
 }
 

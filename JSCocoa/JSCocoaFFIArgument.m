@@ -1153,17 +1153,15 @@ static NSMutableDictionary* typeEncodings = nil;
 //
 // Box
 //
-+ (BOOL)boxObject:(id)objcObject toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx
-{
++ (BOOL)boxObject:(id)objcObject toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx {
 	// Return null if our pointer is null
-	if (!objcObject)
-	{
+	if (!objcObject) {
 		*value = JSValueMakeNull(ctx);
 		return	YES;
 	}
 	// Use a global boxing function to always return the same Javascript object 
 	//	when requesting multiple boxings of the same ObjC object
-	*value = [JSCocoaController boxedJSObject:objcObject inContext:ctx];
+	*value = [[JSCocoa controllerFromContext:ctx] boxObject:objcObject];
 	return	YES;
 }
 
