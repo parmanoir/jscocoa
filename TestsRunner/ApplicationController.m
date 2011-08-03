@@ -22,7 +22,7 @@ JSCocoaController* jsc = nil;
 		return nil;
 		
 	test_unit = test_delegate = test_webview = test_autocall = YES;
-
+	areTestsRunning	= NO;
 	return self;
 }
 
@@ -98,8 +98,7 @@ JSCocoaController* jsc = nil;
 //
 int runCount = 0;
 
-- (IBAction)runJSTests:(id)sender
-{
+- (IBAction)_runJSTests:(id)sender {
 	[self cycleContext];
 
 	[textField setStringValue:@"Running Tests ..."];
@@ -241,7 +240,14 @@ int runCount = 0;
 	NSLog(@"r=%@", r);
 */
 }
-
+- (IBAction)runJSTests:(id)sender
+{
+	if (areTestsRunning)
+		return;
+	areTestsRunning = YES;
+	[self _runJSTests:sender];
+	areTestsRunning = NO;
+}
 
 - (IBAction)_runJSTestsContinuously:(id)sender
 {
@@ -267,6 +273,15 @@ int runCount = 0;
 	return NO;
 }
 
+- (void)dumpObjectAtAddress:(NSUInteger)address {
+	void* p = (void*)address;
+	NSLog(@"object at %p=", p);
+	@try {
+		NSLog(@"%@", *(id*)p);
+	} @catch (NSException* e) {
+		NSLog(@"Bad address");
+	}
+}
 
 //
 //
@@ -1162,7 +1177,6 @@ log('block=' + objcBlock);
 JSTestBlocks.testFunction_(objcBlock);
 
 */
-
 
 
 

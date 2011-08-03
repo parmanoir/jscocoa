@@ -29,6 +29,7 @@
 	
 	NSError*	testNSError;
 	
+	BOOL		areTestsRunning;
 	BOOL		runningContinuously;
 	// If we cycle context each time, we can test bindings each time.
 	BOOL		cyclingContext;

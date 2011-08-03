@@ -1360,7 +1360,7 @@
 						<object class="NSTextField" id="835093140">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">290</int>
-							<string key="NSFrame">{{17, 20}, {386, 11}}</string>
+							<string key="NSFrame">{{17, 19}, {386, 12}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
@@ -1368,12 +1368,13 @@
 							<object class="NSTextFieldCell" key="NSCell" id="291550997">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">272892928</int>
-								<string key="NSContents">Text field</string>
+								<string key="NSContents"/>
 								<object class="NSFont" key="NSSupport">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">9</double>
 									<int key="NSfFlags">3614</int>
 								</object>
+								<string key="NSPlaceholderString">…</string>
 								<reference key="NSControlView" ref="835093140"/>
 								<object class="NSColor" key="NSBackgroundColor" id="895343154">
 									<int key="NSColorSpace">6</int>
