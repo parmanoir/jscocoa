@@ -22,7 +22,6 @@ JSCocoaController* jsc = nil;
 		return nil;
 		
 	test_unit = test_delegate = test_webview = test_autocall = YES;
-	test_webview = NO;
 
 	return self;
 }
@@ -149,7 +148,7 @@ int runCount = 0;
 		[jsc loadFrameworkWithName:@"WebKit"];
 		webViewClass = objc_getClass("WebView");
 	}
-	if (webViewClass && test_webview)
+	if (webViewClass)
 	{
 //		NSLog(@"Testing initing from a WebView");
 		// Load nib
@@ -188,7 +187,8 @@ int runCount = 0;
 	}
 	else
 	{
-		NSLog(@"WebKit not loaded - cannot test JSCocoa inited from a WebView");
+		if (test_webview)
+			NSLog(@"WebKit not loaded - cannot test JSCocoa inited from a WebView");
 	}
 
 
@@ -240,8 +240,6 @@ int runCount = 0;
 	id r = [o performSelector:[@"だけを追加する:" UTF8String] withObject:[NSNumber numberWithInt:7]];
 	NSLog(@"r=%@", r);
 */
-	NSLog(@"DOUBLE CYCLE");
-//	[self cycleContext];
 }
 
 
@@ -956,9 +954,11 @@ int dummyValue;
 
 
 	NSLog(@"JSC2 not deallocated");
-	
+	NSLog(@"unlinking...");
 	[jsc2 unlinkAllReferences];
+	NSLog(@"collecting...");
 	[jsc2 garbageCollect];
+	NSLog(@"releasing...");
 	[jsc2 release];
 	jsc2 = nil;
 	

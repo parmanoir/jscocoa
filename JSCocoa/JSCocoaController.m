@@ -345,12 +345,10 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		[self unlinkAllReferences];
 		JSGarbageCollect(ctx);
 	}
-	[self logBoxedObjects];
     
 	controllerCount--;
 	if (controllerCount == 0)
 	{
-		NSLog(@"OUT");
 		if (OSXObjectClass) {
 			JSClassRelease(OSXObjectClass);
 			JSClassRelease(jsCocoaObjectClass);
@@ -390,25 +388,14 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		// Remove classes : go backwards to remove child classes first
 		for (id class in [jsClasses reverseObjectEnumerator])
 			objc_disposeClassPair([class pointerValue]);
-/*
-		NSInteger c = [jsClasses count]-1;
-		NSLog(@"CLASSCOUNT %d", c);
-		while (c >= 0)
-		{
-			id class = [[jsClasses objectAtIndex:c] pointerValue];
-			NSLog(@"DEALLOC CLASS %@", class);
-			objc_disposeClassPair(class);
-			c--;
-		}
-*/
+
 		[jsClasses release];
 		jsClasses = nil;
 	}
-NSLog(@"DESTROY context");	
+
 	if (ownsContext)
 		JSGlobalContextRelease(ctx);	
 
-NSLog(@"DESTROY boxedObjects");	
 	[boxedObjects release];
 }
 
@@ -951,7 +938,11 @@ static id JSCocoaSingleton = NULL;
 	return	YES;
 }
 
+//
+//
 #pragma mark Loading Frameworks
+//
+//
 - (BOOL)loadFrameworkWithName:(NSString*)name
 {
 	// Only check /System/Library/Frameworks for now
@@ -1156,10 +1147,12 @@ static id JSCocoaSingleton = NULL;
 	return	[jsClassParents objectForKey:className];
 }
 
+//
+//
 #pragma mark Common encoding parsing
 //
-// This is parsed from method_getTypeEncoding
 //
+// This is parsed from method_getTypeEncoding
 //	Later : Use method_copyArgumentType ?
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding
 {
@@ -1315,9 +1308,11 @@ static id JSCocoaSingleton = NULL;
 
 
 
-
+//
+//
 #pragma mark Class Creation
-
+//
+//
 + (Class)createClass:(char*)className parentClass:(char*)parentClass
 {
 	Class class = objc_getClass(className);
@@ -1804,6 +1799,8 @@ static id JSCocoaSingleton = NULL;
 	return	isVariadic;
 }
 
+
+
 #pragma mark Boxed object hash
 
 //+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx
@@ -2002,18 +1999,14 @@ static id JSCocoaSingleton = NULL;
 	id files	= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	id predicate= [NSPredicate predicateWithFormat:@"SELF ENDSWITH[c] '.js'"];
 	files		= [files filteredArrayUsingPredicate:predicate]; 
-	
-	// Execute in test order, not finder order
-	files		= [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
-//	NSLog(@"files=%@", files);
-
 	if ([files count] == 0)
 		return	[JSCocoaController log:@"no test files found"], 0;
 	
+	// Execute in test order, not finder order
+	files		= [files sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 	for (id file in files) {
 		id filePath	= [NSString stringWithFormat:@"%@/%@", path, file];
-		NSLog(@">>>evaling %@", filePath);
-//		BOOL evaled = [self evalJSFile:filePath];
+//		NSLog(@">>>evaling %@", filePath);
 		
 		id evaled	= nil;
 		@try {
@@ -3281,14 +3274,12 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	id jsc = nil;
 	JSContextRef ctx = [private ctx];
 
-	if (!ctx) {
-		NSLog(@"+++++++NO CONTEXT, NO DELETE");
-	} else {
+	if (ctx)
 		jsc = [JSCocoa controllerFromContext:ctx];
-	}
-	if (!jsc) {
-		NSLog(@"*******NO CONTEXT+++++++++++");
-	}
+	// We will be called during garbage collection before dealloc occurs. 
+	// The __jsc__ variable will be gone, therefore controllerFromContext will yield 0.
+	// Not a problem since it's only used to remove the object from the boxedObjects hash,
+	// and dealloc will occur soon after.
 
 	//
 	// If a boxed object is being destroyed, remove it from the cache
@@ -4996,8 +4987,11 @@ static void jsCocoaInfo_getPropertyNames(JSContextRef ctx, JSObjectRef object, J
 }
 
 
-
-#pragma mark Helpers
+//
+//
+#pragma mark Global helpers
+//
+//
 
 id	NSStringFromJSValue(JSContextRef ctx, JSValueRef value)
 {
