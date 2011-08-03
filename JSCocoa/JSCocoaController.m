@@ -4768,12 +4768,10 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			{
 				JSStringRef resultStringJS = JSValueToStringCopy(ctx, arguments[1], NULL);
 				superSelector = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);
+				[superSelector autorelease];
 				JSStringRelease(resultStringJS);
-				if (callingSwizzled)	{
-					NSString* previousSelector = superSelector;
+				if (callingSwizzled)
 					superSelector = [NSString stringWithFormat:@"%@%@", OriginalMethodPrefix, superSelector];
-					[previousSelector release];
-				}
 			}			
 			
 			// Swizzled handling : we're just changing the selector
