@@ -22,6 +22,7 @@ JSCocoaController* jsc = nil;
 		return nil;
 		
 	test_unit = test_delegate = test_webview = test_autocall = YES;
+	test_webview = NO;
 
 	return self;
 }
@@ -239,6 +240,8 @@ int runCount = 0;
 	id r = [o performSelector:[@"だけを追加する:" UTF8String] withObject:[NSNumber numberWithInt:7]];
 	NSLog(@"r=%@", r);
 */
+	NSLog(@"DOUBLE CYCLE");
+//	[self cycleContext];
 }
 
 

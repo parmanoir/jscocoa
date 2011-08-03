@@ -259,6 +259,13 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 #endif
 	// Create a reference to ourselves, and make it read only, don't enum, don't delete
 	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
+	// Get reference back and set it to no retain
+	JSValueRef jsSelf = [self evalJSString:@"__jsc__"];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsSelf, NULL));
+	// Overwrite settings
+	[private setObjectNoRetain:self];
+	// And discard private's retain
+	[self release];
 
 
 	// Load class kit
@@ -325,23 +332,25 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (void)cleanUp
 {
-	NSLog(@"JSCocoa : %p dying", self);
-	[boxedObjects release];
+	NSLog(@"JSCocoa : %p dying (ownsContext=%d)", self, ownsContext);
 	[self setUseSafeDealloc:NO];
 
 	// Cleanup if we created the JavascriptCore context.
 	// If not, let user do it. In a WebView, this method will be called during JS GC,
 	// and trying to execute more JS code will fail.
 	// User must clean up manually by calling unlinkAllReferences then destroying the webView
+	
+	
 	if (ownsContext) {
 		[self unlinkAllReferences];
 		JSGarbageCollect(ctx);
-		JSGlobalContextRelease(ctx);
 	}
+	[self logBoxedObjects];
     
 	controllerCount--;
 	if (controllerCount == 0)
 	{
+		NSLog(@"OUT");
 		if (OSXObjectClass) {
 			JSClassRelease(OSXObjectClass);
 			JSClassRelease(jsCocoaObjectClass);
@@ -379,19 +388,28 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		
 		
 		// Remove classes : go backwards to remove child classes first
+		for (id class in [jsClasses reverseObjectEnumerator])
+			objc_disposeClassPair([class pointerValue]);
+/*
 		NSInteger c = [jsClasses count]-1;
+		NSLog(@"CLASSCOUNT %d", c);
 		while (c >= 0)
 		{
 			id class = [[jsClasses objectAtIndex:c] pointerValue];
+			NSLog(@"DEALLOC CLASS %@", class);
 			objc_disposeClassPair(class);
 			c--;
 		}
-
+*/
 		[jsClasses release];
 		jsClasses = nil;
 	}
-	
+NSLog(@"DESTROY context");	
+	if (ownsContext)
+		JSGlobalContextRelease(ctx);	
 
+NSLog(@"DESTROY boxedObjects");	
+	[boxedObjects release];
 }
 
 - (oneway void)release
@@ -1994,7 +2012,7 @@ static id JSCocoaSingleton = NULL;
 	
 	for (id file in files) {
 		id filePath	= [NSString stringWithFormat:@"%@/%@", path, file];
-//		NSLog(@">>>evaling %@", filePath);
+		NSLog(@">>>evaling %@", filePath);
 //		BOOL evaled = [self evalJSFile:filePath];
 		
 		id evaled	= nil;
@@ -2051,7 +2069,8 @@ static id autoreleasePool;
 //	[self evalJSString:@"for (var i in this) { log('DELETE ' + i); this[i] = null; delete this[i]; }"];
 //	[self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
 
-	id del = @"var keys = Object.keys(this); var c = keys.length; for (var i=0; i<c; i++) { try { this[keys[i]] = null } catch(e) {} }";
+//	id del = @"var keys = Object.keys(this); var c = keys.length; for (var i=0; i<c; i++) { try { this[keys[i]] = null } catch(e) {} }";
+	id del = @"for (var i in this) { this[i] = null; delete this[i]; }";
 	[self evalJSString:del];
 	// Everything is now collectable !
 }
@@ -3259,9 +3278,9 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	
 	// Clean up the object now as WebKit calls us twice while cleaning __jsc__ (20110730)
 	JSObjectSetPrivate(object, NULL);
-
 	id jsc = nil;
 	JSContextRef ctx = [private ctx];
+
 	if (!ctx) {
 		NSLog(@"+++++++NO CONTEXT, NO DELETE");
 	} else {
@@ -3270,6 +3289,7 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	if (!jsc) {
 		NSLog(@"*******NO CONTEXT+++++++++++");
 	}
+
 	//
 	// If a boxed object is being destroyed, remove it from the cache
 	//
