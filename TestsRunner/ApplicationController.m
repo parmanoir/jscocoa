@@ -36,6 +36,7 @@ JSCocoaController* jsc = nil;
 	[[NSApplication sharedApplication] setDelegate:self];
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 	
+	
 /*	
 	[self cycleContext];
 	NSLog(@"%d", [jsc retainCount]);
@@ -46,7 +47,7 @@ JSCocoaController* jsc = nil;
 	[jsc garbageCollect];
 */
 	// Run tests
-//	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
+	[self performSelector:@selector(runJSTests:) withObject:nil afterDelay:0];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
@@ -180,7 +181,7 @@ int runCount = 0;
 
 		// Init JSCocoa from WebView's globalContext
 		JSGlobalContextRef ctx = [[webViewUsedAsContextSource mainFrame] globalContext];
-//		NSLog(@"WebView contextGroup=%llx context=%llx", JSContextGetGroup(ctx), ctx);
+//		NSLog(@"WebView contextGroup=%p context=%p", JSContextGetGroup(ctx), ctx);
 		
 		jsc2 = [[JSCocoa alloc] initWithGlobalContext:ctx];
 	}
@@ -290,7 +291,10 @@ int runCount = 0;
 
 - (IBAction)logBoxedObjects:(id)sender
 {
+	NSLog(@"(jsc)");
 	[jsc logBoxedObjects];
+	NSLog(@"(jsc2, webView)");
+	[jsc2 logBoxedObjects];
 }
 
 - (void)log:(NSString*)message
@@ -517,7 +521,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 	canSet		= YES;
 	canGetGlobal= NO;
 	ret = [jsc evalJSString:@"NSWorkspace"];
-//	NSLog(@"ret=%llx %llx", ret, JSValueIsNull([jsc ctx], ret));
+//	NSLog(@"ret=%p %p", ret, JSValueIsNull([jsc ctx], ret));
 	if (ret)												return	@"delegate canGetGlobalProperty failed (1)";
 	
 	//
@@ -703,7 +707,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 }
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getProperty:(NSString*)_propertyName ofObject:(id)_object inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
-//	NSLog(@"delegate get %@(%@).%@ customValueGet=%llx", _object, [_object class], _propertyName, customValueGet);
+//	NSLog(@"delegate get %@(%@).%@ customValueGet=%p", _object, [_object class], _propertyName, customValueGet);
 	object			= _object;
 	propertyName	= _propertyName;
 	return	customValueGet;
@@ -781,7 +785,7 @@ JSValueRef	customValueGet, customValueSet, customValueCall, jsValue, ret, willRe
 }
 - (JSValueRef) JSCocoa:(JSCocoaController*)controller getGlobalProperty:(NSString*)_propertyName inContext:(JSContextRef)ctx exception:(JSValueRef*)exception
 {
-//	NSLog(@"getGlobalProperty %@ %llx", _propertyName, customValueGetGlobal);
+//	NSLog(@"getGlobalProperty %@ %p", _propertyName, customValueGetGlobal);
 	propertyName	= _propertyName;
 	return	customValueGetGlobal;
 }
@@ -881,9 +885,9 @@ int dummyValue;
 {
 	if (!jsc)
 		return;
-	id js = @"2+2";
-	js = @"NSWorkspace.sharedWorkspace.activeApplication";
-
+	id js;
+//	js = @"2+2";
+//	js = @"NSWorkspace.sharedWorkspace.activeApplication";
 	js = @"var a = NSMakePoint(2, 3)";
 	[jsc garbageCollect];
 	JSValueRef ret2 = [jsc evalJSString:js];
@@ -947,17 +951,32 @@ int dummyValue;
 	if (!b)	return;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 
+
+	NSLog(@"JSC2 not deallocated");
+	
+	[jsc2 unlinkAllReferences];
+	[jsc2 garbageCollect];
+	[jsc2 release];
+	jsc2 = nil;
+	
+	NSLog(@"JSC2 DEALLOCATED");
+	
+/*
 	NSLog(@"COMMENTED test 37 !");
-	return;
-	NSLog(@"jsc2 rc=%lu (%llx)", [jsc2 retainCount], self);
+//	return;
+	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
 	NSLog(@"get1 %@", [jsc2 eval:@"__jsc__"]);
 //	b = [jsc2 removeObjectWithName:@"__jsc__"];
 	[jsc2 garbageCollect];
 	NSLog(@"jsc2 rc=%lu (POST REMOVE %d)", [jsc2 retainCount], b);
 	NSLog(@"get2 %@", [jsc2 eval:@"__jsc__"]);
 	[jsc2 release];
+*/
 
+	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
 	[topObjects release];
+	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
+
 	topObjects	= nil;
 	jsc2		= nil;
 
@@ -1004,7 +1023,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 		testNSError = nil;
 	}
 	NSError* error = nil;
-//	NSLog(@"calling with pointer %llx", &error);
+//	NSLog(@"calling with pointer %p", &error);
 	BOOL r = [o someMethodReturningAnError:&error];
 
 	if (error)
@@ -1045,7 +1064,7 @@ BOOL	bindingsAlreadyTested2 = NO;
 //	Use JSValueRefAndContextRef 
 - (void)incorrectlySetJSValue:(JSValueRef)value
 {
-	NSLog(@"[%@ %@] got %llx", [self class], NSStringFromSelector(_cmd), value);
+	NSLog(@"[%@ %@] got %p", [self class], NSStringFromSelector(_cmd), value);
 }
 
 // Correctly set, testing holding on to it
@@ -1062,7 +1081,7 @@ JSValueRef savedValue = nil;
 	JSContextGroupRetain(JSContextGetGroup(vc.ctx));
 	JSGlobalContextRetain([jsc ctx]);
 */
-	NSLog(@"ctx=%llx value=%llx globalctx=%llx", vc.ctx, vc.value, [jsc ctx]);
+	NSLog(@"ctx=%p value=%p globalctx=%p", vc.ctx, vc.value, [jsc ctx]);
 }
 - (JSValueRefAndContextRef)jsValue
 {

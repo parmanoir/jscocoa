@@ -31,7 +31,6 @@
 
 		if ('OSX' in this)	log('JSCocoa is running')
 		else				log('FAILED : JSCocoa is not running')
-
 		log('jsc=' + ('__jsc__' in this) + ' (' + __jsc__ + ')')
 
 		var objCDate = OSX.NSDate.alloc.init
@@ -41,6 +40,8 @@
 		objCDate = null
 
 		var delegate = OSX.NSApplication.sharedApplication.delegate
+		
+
 log('delegate=' + delegate)
 log('NSDate.date=' + OSX.NSDate)
 log('NSDate.date=' + OSX.NSDate.date)
@@ -87,8 +88,8 @@ log('length=' + str)
 		log('NSDate(now)=' + OSX.NSDate.date)
 		log('NSDate=' + OSX.NSDate.valueOf())
 		log('OSX=' + OSX)
-		delegate.finishTest37(true)
 
+		delegate.finishTest37(true)
 		document.getElementById('dump').innerHTML += '<br><h2 style="color: lime">OK</h2>'		
 	}
 	catch(e)

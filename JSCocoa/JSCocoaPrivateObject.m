@@ -37,7 +37,7 @@
 	[JSCocoaController downJSCocoaPrivateObjectCount];
 	if (object && retainObject)
 	{
-		NSLog(@"commented downBoxedJSObjectCount");
+//		NSLog(@"commented downBoxedJSObjectCount");
 //		[JSCocoaController downBoxedJSObjectCount:object];
 //		NSLog(@"releasing %@(%d)", [object class], [object retainCount]);
 //		if ([object isKindOfClass:[JSCocoaController class]])
@@ -68,7 +68,7 @@
 /*
 	if (retainContext)
 	{
-		NSLog(@"releasing %llx", ctx);
+		NSLog(@"releasing %p", ctx);
 		JSContextGroupRelease(contextGroup);
 //		JSGlobalContextRelease((JSGlobalContextRef)ctx);
 	}
@@ -204,8 +204,8 @@
 - (id)description
 {
 	id extra = @"";
-	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%llx) %@", rawPointer, declaredType];
-	return	[NSString stringWithFormat:@"<%@: %llx holding %@%@>",
+	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%p) %@", rawPointer, declaredType];
+	return	[NSString stringWithFormat:@"<%@: %p holding %@%@>",
 				[self class], 
 				self, 
 				type,

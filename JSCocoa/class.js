@@ -33,7 +33,8 @@
 	for (var i=0; i<l; i++)
 	{
 		var t = types[i]
-		encodings[t] = JSCocoaFFIArgument.typeEncodingForType_(t)
+		// use new String to convert from a boxed NSString to a Javascript string
+		encodings[t] = new String(JSCocoaFFIArgument.typeEncodingForType_(t))
 	}
 	encodings['charpointer'] = encodings['char*']
 	encodings['IBAction'] = encodings['void']

@@ -1360,7 +1360,7 @@
 						<object class="NSTextField" id="835093140">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">290</int>
-							<string key="NSFrame">{{31, 19}, {372, 12}}</string>
+							<string key="NSFrame">{{17, 20}, {386, 11}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
@@ -1368,7 +1368,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="291550997">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">272892928</int>
-								<string key="NSContents"/>
+								<string key="NSContents">Text field</string>
 								<object class="NSFont" key="NSSupport">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">9</double>
@@ -1408,6 +1408,7 @@
 								<int key="NSCellFlags2">272630784</int>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="943665204"/>
+								<string key="NSPlaceholderString">Type to eval, eg NSDate.date</string>
 								<reference key="NSControlView" ref="49564704"/>
 								<bool key="NSDrawsBackground">YES</bool>
 								<object class="NSColor" key="NSBackgroundColor" id="336928000">
@@ -1430,7 +1431,7 @@
 						<object class="NSTextField" id="118854190">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrame">{{20, 20}, {380, 95}}</string>
+							<string key="NSFrame">{{20, 39}, {380, 76}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="835093140"/>
@@ -1440,6 +1441,7 @@
 								<int key="NSCellFlags2">272629760</int>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="943665204"/>
+								<string key="NSPlaceholderString">Eval results</string>
 								<reference key="NSControlView" ref="118854190"/>
 								<bool key="NSDrawsBackground">YES</bool>
 								<reference key="NSBackgroundColor" ref="336928000"/>
@@ -2943,13 +2945,13 @@
 							<reference ref="1051573598"/>
 							<reference ref="872062680"/>
 							<reference ref="49564704"/>
-							<reference ref="835093140"/>
 							<reference ref="118854190"/>
 							<reference ref="934852353"/>
 							<reference ref="362537091"/>
 							<reference ref="778899845"/>
 							<reference ref="481926543"/>
 							<reference ref="835348829"/>
+							<reference ref="835093140"/>
 						</object>
 						<reference key="parent" ref="972006081"/>
 					</object>

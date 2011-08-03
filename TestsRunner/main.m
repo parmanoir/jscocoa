@@ -11,9 +11,5 @@
 
 int main(int argc, char *argv[])
 {
-//	[[NSAutoreleasePool alloc] init];
-//	[JSCocoaController allocAutoreleasePool];
-//	[JSCocoaController sharedController];
-
     return NSApplicationMain(argc,  (const char **) argv);
 }
