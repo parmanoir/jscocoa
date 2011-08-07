@@ -19,6 +19,7 @@
 
 @implementation JSCocoaFFIArgument
 
+
 - (id)init
 {
 	self	= [super init];

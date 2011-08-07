@@ -40,7 +40,7 @@
 		if (delayedTestPendingCount() == 0)	
 		{
 			log('All pending tests ran, ' + delayedTestSuccessCount() + '/' + delayedTestCount() + ' successful')
-			NSApplication.sharedApplication.delegate.allTestsRanOK
+			NSApplication.sharedApplication.delegate.delayedTestsRan_outof_(delayedTestSuccessCount(), delayedTestCount())
 		}
 	}
 	

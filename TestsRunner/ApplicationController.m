@@ -56,21 +56,23 @@ JSCocoaController* jsc = nil;
 
 	[self disposeShadowBindingsClasses];
 
-	// Retain count is 2 because a variable named __jsc__ holds the ObjC object in the Javascript context
-	if ([jsc retainCount] == 2)	NSLog(@"willTerminate %@ JSCocoa retainCount=%lu (OK)", jsc, [jsc retainCount]);
+	// Retain count should be 1, the variable named __jsc__ holding the JSCocoa object does not retain it
+	if ([jsc retainCount] == 1)	NSLog(@"willTerminate %@ JSCocoa retainCount=%lu (OK)", jsc, [jsc retainCount]);
 	else						NSLog(@"willTerminate %@ JSCocoa retainCount=%lu", jsc, [jsc retainCount]);
 
 	// Check if JSCocoa can be released (retainCount got down to 1)
 	// Won't work under ObjC GC
 #ifndef __OBJC_GC__
 	// Must be 2 with new release method
-	if ([jsc retainCount] && [jsc retainCount] != 2)									NSLog(@"***Invalid JSCocoa retainCount***");
+	// ^fixed, the instance set in the js context is not released.
+//	if ([jsc retainCount] && [jsc retainCount] != 2)									
+//		NSLog(@"***Invalid JSCocoa retainCount***");
 #endif
 	[jsc release];
 	
 	id path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/! stock", [[NSBundle mainBundle] bundlePath]];
 	id files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-	if ([files count])											NSLog(@"***warning, skipping tests in ./!stock***"), NSLog(@"%@", files);
+	if ([files count])											NSLog(@"***Skipping tests in ./!stock***"), NSLog(@"%@", files);
 #ifdef __OBJC_GC__
 	if (![[NSGarbageCollector defaultCollector] isEnabled])		NSLog(@"***GC running but disabled***");
 #endif	
@@ -114,7 +116,7 @@ int runCount = 0;
 	id path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
 //	NSLog(@"Run %d from %@", runCount, path);
-	int testCount = 0;
+	testCount = 0;
 	if (test_unit)
 		testCount = [jsc runTests:path];
 	BOOL b = !!testCount;
@@ -968,45 +970,16 @@ int dummyValue;
 	[jsc callJSFunctionNamed:@"completeDelayedTest" withArguments:@"37 init from webview", [NSNumber numberWithInt:1], nil];
 
 
-	NSLog(@"JSC2 not deallocated");
-	NSLog(@"unlinking...");
+	// WebView context cleanup
 	[jsc2 unlinkAllReferences];
-	NSLog(@"collecting...");
 	[jsc2 garbageCollect];
-	NSLog(@"releasing...");
 	[jsc2 release];
 	jsc2 = nil;
-	
-	NSLog(@"JSC2 DEALLOCATED");
-	
-/*
-	NSLog(@"COMMENTED test 37 !");
-//	return;
-	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
-	NSLog(@"get1 %@", [jsc2 eval:@"__jsc__"]);
-//	b = [jsc2 removeObjectWithName:@"__jsc__"];
-	[jsc2 garbageCollect];
-	NSLog(@"jsc2 rc=%lu (POST REMOVE %d)", [jsc2 retainCount], b);
-	NSLog(@"get2 %@", [jsc2 eval:@"__jsc__"]);
-	[jsc2 release];
-*/
 
-	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
+
+	// WebView nib cleanup
 	[topObjects release];
-	NSLog(@"jsc2 rc=%lu (%p)", [jsc2 retainCount], self);
-
 	topObjects	= nil;
-	jsc2		= nil;
-
-	NSLog(@"***COMMENTED test 37 !");
-	
-	NSLog(@"AND, commented test37 html");
-/*	
-	NSLog(@"****************");
-	[JSCocoa logInstanceStats];
-	[JSCocoa logBoxedObjects];
-	NSLog(@"****************");
-*/	
 }
 
 BOOL	bindingsAlreadyTested = NO;
@@ -1017,10 +990,14 @@ BOOL	bindingsAlreadyTested2 = NO;
 - (void)setBindingsAlreadyTested:(BOOL)b	{	bindingsAlreadyTested	= b;	}
 - (void)setBindingsAlreadyTested2:(BOOL)b	{	bindingsAlreadyTested2	= b;	}
 
-- (void)allTestsRanOK
+//- (void)allTestsRanOK
+- (void)delayedTestsRan:(NSInteger)successful outof:(NSInteger)total
 {
 	[window makeKeyAndOrderFront:nil];
-	[textField setStringValue:@"All tests ran OK"];
+	if (successful == total && testCount)
+		[textField setStringValue:[NSString stringWithFormat:@"All tests ran OK (%d tests, %d delayed)", testCount, total]];
+	else
+		[textField setStringValue:[NSString stringWithFormat:@"Tests failed (%d tests, %d delayed)", testCount, total]];
 }
 
 - (IBAction)displayTestsWindow:(id)sender {

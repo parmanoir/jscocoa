@@ -135,7 +135,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (id)initWithGlobalContext:(JSGlobalContextRef)_ctx
 {
-	NSLog(@"JSCocoa : %p spawning with context %p", self, _ctx);
+//	NSLog(@"JSCocoa : %p spawning with context %p", self, _ctx);
 	self	= [super init];
 	controllerCount++;
 
@@ -258,15 +258,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	[BurksPool setJSFunctionHash:jsFunctionHash];
 #endif
 	// Create a reference to ourselves, and make it read only, don't enum, don't delete
-	[self setObject:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
-	// Get reference back and set it to no retain
-	JSValueRef jsSelf = [self evalJSString:@"__jsc__"];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsSelf, NULL));
-	// Overwrite settings
-	[private setObjectNoRetain:self];
-	// And discard private's retain
-	[self release];
-
+	[self setObjectNoRetain:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
 
 	// Load class kit
 	if (!_ctx)
@@ -315,7 +307,6 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	ownsContext		= NO;
 
 	[JSCocoa updateCustomCallPaths];
-	NSLog(@"JSCocoa spawned with context %p", ctx);
 	return	self;
 }
 
@@ -332,7 +323,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 //
 - (void)cleanUp
 {
-	NSLog(@"JSCocoa : %p dying (ownsContext=%d)", self, ownsContext);
+//	NSLog(@"JSCocoa : %p dying (ownsContext=%d)", self, ownsContext);
 	[self setUseSafeDealloc:NO];
 
 	// Cleanup if we created the JavascriptCore context.
@@ -344,6 +335,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	if (ownsContext) {
 		[self unlinkAllReferences];
 		JSGarbageCollect(ctx);
+		[self setObjectNoRetain:self withName:@"__jsc__" attributes:kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete];
 	}
     
 	controllerCount--;
@@ -393,35 +385,11 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		jsClasses = nil;
 	}
 
+	[self removeObjectWithName:@"__jsc__"];
 	if (ownsContext)
 		JSGlobalContextRelease(ctx);	
 
 	[boxedObjects release];
-}
-
-- (oneway void)release
-{
-	NSLog(@"jsc %p OUT\n***\n%@\n***\n", self, [NSThread callStackSymbols]);
-//NSLog(@"RET!"); return;
-	// Each controller adds itself to its Javascript context, therefore retain count will be two when user last calls release.
-	// We check for this and clean up references then call GC, which will lower retain count to 1.
-	// Use 'useSafeDealloc' to make sure we're not reentering this one-time code block when GC calls release.
-	if ([self retainCount] == 2 && useSafeDealloc)
-	{
-		[self setUseSafeDealloc:NO];
-
-		// This will take retain count from 2 to 1, readying this instance for deallocation
-		//	Only collect if we own the context, has a WebView might be deallocating us while it's collecting its garbage
-		
-		NSLog(@"COMMENTED RELEASE : need to remove our variable");
-/*
-		if (ownsContext) {
-			[self unlinkAllReferences];
-			[self garbageCollect];
-		}
-*/
-	}
-	[super release];
 }
 
 - (void)dealloc
@@ -897,31 +865,46 @@ static id JSCocoaSingleton = NULL;
 //
 // Add/Remove an ObjC object variable to the global context
 //
-- (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes
-{
-	JSObjectRef o = [self boxObject:object];
-
+- (BOOL)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
+	JSObjectRef o			= [self boxObject:object];
 	// Set
-	JSValueRef	exception = NULL;
-	JSStringRef	jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+	JSValueRef exception	= NULL;
+	JSStringRef	jsName		= JSStringCreateWithUTF8CString([name UTF8String]);
 	JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, attributes, &exception);
 	JSStringRelease(jsName);
 
-	if (exception)	
-	{
+	if (exception) {
         [self callDelegateForException:exception];
 		return	NO;
 	}
-
 	return	YES;
 }
 
-- (BOOL)setObject:(id)object withName:(id)name
-{
+- (BOOL)setObject:(id)object withName:(NSString*)name {
 	return [self setObject:object withName:name attributes:kJSPropertyAttributeNone];
 }
 
-- (BOOL)removeObjectWithName:(id)name
+- (BOOL)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
+	if (![self setObject:self withName:name attributes:attributes])
+		return NO;
+	// Get reference back and set it to no retain
+	JSValueRef jsSelf = [self evalJSString:name];
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsSelf, NULL));
+	// Overwrite settings
+	[private setObjectNoRetain:self];
+	// And discard private's retain
+	[self release];
+	
+	return YES;
+}
+
+- (id)objectWithName:(NSString*)name {
+	JSValueRef jsSelf = [self evalJSString:name];
+	return [self toObject:jsSelf];
+}
+
+
+- (BOOL)removeObjectWithName:(NSString*)name
 {
 	JSValueRef	exception = NULL;
 	// Delete
@@ -3265,7 +3248,9 @@ static void jsCocoaObject_initialize(JSContextRef ctx, JSObjectRef object)
 //
 static void jsCocoaObject_finalize(JSObjectRef object)
 {
-	// if dealloc is overloaded, releasing now will trigger JS code and fail
+//	NSLog(@"finalizing %p", object);
+
+	// If dealloc is overloaded, releasing now will trigger JS code and fail
 	// As we're being called by GC, KJS might assert() in operationInProgress == NoOperation
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(object);
 	
@@ -3285,42 +3270,25 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// If a boxed object is being destroyed, remove it from the cache
 	//
 	id boxedObject = [private object]; 
-	if (boxedObject)
-	{
-//		id key = [NSString stringWithFormat:@"%p", boxedObject];
-		// Object may have been already deallocated
-//		id existingBoxedObject = [boxedObjects objectForKey:key];
-//		id existingBoxedObject = [jsc boxedObject];
-//		if (existingBoxedObject)
-		if ([jsc isObjectBoxed:boxedObject])
-		{
+	if (boxedObject) {
+		if ([jsc isObjectBoxed:boxedObject]) {
 			// Safe dealloc ?
-			if ([boxedObject retainCount] == 1)
-			{
-				if ([boxedObject respondsToSelector:@selector(safeDealloc)])
-				{
+			if ([boxedObject retainCount] == 1) {
+				if ([boxedObject respondsToSelector:@selector(safeDealloc)]) {
 					jsc = NULL;
 					object_getInstanceVariable(boxedObject, "__jsCocoaController", (void**)&jsc);
 					// Call safeDealloc if enabled (will be disabled upon last JSCocoaController release, to make sure the )
-					if (jsc)	
-					{
+					if (jsc) {
 						if ([jsc useSafeDealloc])
 							[jsc performSelector:@selector(safeDeallocInstance:) withObject:boxedObject afterDelay:0];
-					}
-					else	NSLog(@"safeDealloc could not find the context attached to %@.%p - allocate this object with instance, or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
+					} else
+						NSLog(@"safeDealloc could not find the context attached to %@.%p - allocate this object with instance, or add a Javascript variable to it (obj.hello = 'world')", [boxedObject class], boxedObject);
 				}
-				
 			}
-//			[boxedObjects removeObjectForKey:key];
 			[jsc deleteBoxOfObject:boxedObject];
 		}
-		else
-		{
-//			BOOL retainObject = [private retainObject];
-//			NSLog(@"finalizing an UNBOXED object (retain=%d)", retainObject);
-		}
 	}
-
+	
 	// Immediate release if dealloc is not overloaded
 	[private release];
 	
@@ -3328,7 +3296,6 @@ static void jsCocoaObject_finalize(JSObjectRef object)
 	// Mark internal object as collectable
 	[[NSGarbageCollector defaultCollector] enableCollectorForPointer:private];
 #endif
-
 }
 
 /*
@@ -3818,21 +3785,20 @@ call:
 		BOOL responds = NO;
 		id methodName = propertyName;
 		responds = [privateObject respondsToSelector:NSSelectorFromString(propertyName)];
-		if (!responds)
-		{
+		if (!responds) {
 			methodName = [NSString stringWithFormat:@"%@:", methodName];
 			responds = [privateObject respondsToSelector:NSSelectorFromString(methodName)];
 		}
-		if ([privateObject.type isEqualToString:@"rawPointer"] && responds)
+		if (responds)
 		{
 			// When calling a method with arguments, this will be used to get the instance on which to call
 			id callee = privateObject;
-			privateObject.object = callee;
-			// Box the private object
+			// Retaining the object leaks
+			[privateObject setObjectNoRetain:privateObject];
+
 			privateObject = [[JSCocoaPrivateObject new] autorelease];
 			privateObject.object = callee;
 			privateObject.type = @"@";
-			propertyName = methodName;
 			goto call;
 		}
 	}
@@ -4206,7 +4172,8 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 
 	// Return an exception if calling on NULL
-	if ([thisPrivateObject object] == NULL && !privateObject.xml)	return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : call with null object"), NULL;
+	if (thisPrivateObject.object == NULL && !privateObject.xml)
+		return	throwException(ctx, exception, @"jsCocoaObject_callAsFunction : call with null object"), NULL;
 
 	// Function address
 	void* callAddress = NULL;

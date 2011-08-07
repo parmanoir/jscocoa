@@ -94,6 +94,8 @@
 
 - (void)setObject:(id)o
 {
+//	if (object && retainObject)
+//		[object release];
 	object = o;
 	if (object && [object retainCount] == -1)	return;
 	[object retain];
@@ -109,7 +111,6 @@
 {
 	return	retainObject;
 }
-
 
 - (id)object
 {
@@ -201,10 +202,10 @@
 }
 
 
-- (id)description
-{
+- (id)description {
 	id extra = @"";
-	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%p) %@", rawPointer, declaredType];
+	if ([type isEqualToString:@"rawPointer"]) 
+		extra = [NSString stringWithFormat:@" rawPointer=%p declaredType=%@", rawPointer, declaredType];
 	return	[NSString stringWithFormat:@"<%@: %p holding %@%@>",
 				[self class], 
 				self, 
@@ -213,21 +214,19 @@
 				];
 }
 
-+ (id)description
-{
++ (id)description {
 	return @"<JSCocoaPrivateObject class>";
 }
 
-- (id)dereferencedObject
-{
-	if (![type isEqualToString:@"rawPointer"] || !rawPointer)	return nil;
+- (id)dereferencedObject {
+	if (![type isEqualToString:@"rawPointer"] || !rawPointer)	
+		return nil;
 	return *(void**)rawPointer;
 }
 
-- (BOOL)referenceObject:(id)o
-{
-	if (![type isEqualToString:@"rawPointer"])	return NO;
-//	void* v = *(void**)rawPointer;
+- (BOOL)referenceObject:(id)o {
+	if (![type isEqualToString:@"rawPointer"])	
+		return NO;
 	*(id*)rawPointer = o;
 	return	YES;
 }

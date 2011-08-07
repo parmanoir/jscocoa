@@ -21,13 +21,14 @@
 // Boxing object
 //
 //	type
-//	@			ObjC object
-//	struct		C struct
-//	method		ObjC method name
-//	rawPointer	raw C pointer (_C_PTR)
-//	jsFunction	Javascript function
-//	jsValueRef	raw jsvalue
-//	externalJSValueRef	EXPERIMENTAL from webView
+//	@					ObjC object
+//	struct				C struct
+//	method				ObjC method name
+//	function			C function
+//	rawPointer			raw C pointer (_C_PTR)
+//	jsFunction			Javascript function
+//	jsValueRef			raw jsvalue
+//	externalJSValueRef	jsvalue coming from an external context (eg, a WebView)
 //
 
 @interface JSCocoaPrivateObject : NSObject {
@@ -38,7 +39,6 @@
 	NSString*	structureName;
 	
 	NSString*	declaredType;
-//	void*		ptr;
 	void*		rawPointer;
 
 	id			object;

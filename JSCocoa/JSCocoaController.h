@@ -114,9 +114,11 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path;
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path errors:(NSMutableArray*)array;
 - (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error;
-- (BOOL)setObject:(id)object withName:(id)name;
-- (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
-- (BOOL)removeObjectWithName:(id)name;
+- (BOOL)setObject:(id)object withName:(NSString*)name;
+- (BOOL)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
+- (BOOL)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
+- (id)objectWithName:(NSString*)name;
+- (BOOL)removeObjectWithName:(NSString*)name;
 // Get ObjC and raw values from Javascript
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (BOOL)toBool:(JSValueRef)value;

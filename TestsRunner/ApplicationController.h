@@ -33,6 +33,8 @@
 	BOOL		runningContinuously;
 	// If we cycle context each time, we can test bindings each time.
 	BOOL		cyclingContext;
+	
+	NSInteger	testCount;	// successful test count
 
 }
 
