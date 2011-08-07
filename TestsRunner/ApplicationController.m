@@ -268,13 +268,13 @@ int runCount = 0;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *) menuItem {
-	NSLog(@"%@", menuItem);
 	SEL itemAction = [menuItem action];
 	if (itemAction == @selector(displayTestsWindow:))
 		return YES;
 	return NO;
 }
 
+// ## debug, to dump an object from an address (Sometimes debugging does not work when breaking in code called from JavascriptCore)
 - (void)dumpObjectAtAddress:(NSUInteger)address {
 	void* p = (void*)address;
 	NSLog(@"object at %p=", p);

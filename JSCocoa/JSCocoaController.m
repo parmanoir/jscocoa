@@ -274,30 +274,9 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 		if ([[NSFileManager defaultManager] fileExistsAtPath:classKitPath])	[self evalJSFile:classKitPath];
 	}
 
-	// Add allKeys method to Javascript hash : { a : 1, b : 2, c : 3 }.allKeys() = ['a', 'b', 'c']
-
-	// Retrieve Javascript function from class.js
-	JSStringRef jsName = JSStringCreateWithUTF8CString("allKeysInHash");
-	JSValueRef fn = JSObjectGetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, NULL);
-	JSStringRelease(jsName);
-	
-	if (fn)
-	{
-		// Add it to Object.prototype with dont enum property
-		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return Object.prototype");
-		JSObjectRef fn2 = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
-		JSValueRef jsValue = JSObjectCallAsFunction(ctx, fn2, NULL, 0, NULL, NULL);
-		JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
-		JSStringRelease(scriptJS);
-
-		jsName = JSStringCreateWithUTF8CString("allKeys");
-		JSObjectSetProperty(ctx, jsObject, jsName, fn, kJSPropertyAttributeDontEnum, NULL);
-		JSStringRelease(jsName);
-	}
-	
 	// Objects can use their own dealloc, normally used up by JSCocoa
 	// JSCocoa registers 'safeDealloc' in place of 'dealloc' and calls it in the next run loop cycle. 
-	// (If called during dealloc, this would mean executing JS code during JS GC, which is not possible)
+	// (Dealloc might be called by JS GC, and running JS fails at this time)
 	// useSafeDealloc will be turned to NO upon JSCocoaController dealloc
 	useSafeDealloc	= YES;
 	// Yep !

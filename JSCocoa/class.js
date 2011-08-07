@@ -1053,10 +1053,3 @@
 //		log('Transformed' + script + '->' + transformed)
 		return	transformed
 	}
-
-	function	allKeysInHash(o)
-	{
-		var r = []
-		for (var i in this) r.push(i)
-		return r
-	}
