@@ -2704,7 +2704,7 @@ static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 	if ([boxedObject respondsToSelector:@selector(safeDealloc)])
 	{
 //		id jsc = [JSCocoaController controllerFromContext:ctx];
-		object_setInstanceVariable(boxedObject, "__jsCocoaController", (void*)jsc);
+//		object_setInstanceVariable(boxedObject, "__jsCocoaController", (void*)jsc);
 	}
 	return	returnValue;
 }
