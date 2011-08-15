@@ -19,31 +19,8 @@ Basically, JSCocoa works like these bridges :
 * [Cappuccino](http://cappuccino.org/) an open source framework that makes it easy to build desktop-caliber applications that run in a web browser
 * [SproutCore](http://www.sproutcore.com/) makes building javascript applications fun and easy
 
-Contribute and discuss
---
 
-* [Discussion group](http://groups.google.com/group/jscocoa) Questions ? Join the Google group and ask away !
-* [Twitter](http://twitter.com/parmanoir) Tweet me questions and comments
-* [Github](http://github.com/parmanoir/jscocoa/tree/master) fork JSCocoa from Github, add changes, and notify me with a pull request
-* [Documentation](http://code.google.com/p/jscocoa/w/list) on Google Code
-
-Who uses it ?
---
-
-* [Spice-sugar](http://github.com/onecrayon/Spice-sugar) Spice.sugar allows the [Espresso text editor](http://macrabbit.com/espresso/) to be extended using JSCocoa
-* [Narwhal-jsc](http://github.com/tlrobinson/narwhal-jsc/) A JavascriptCore + optional JSCocoa module for [Narwhal](http://github.com/tlrobinson/narwhal/tree) (Server-side Javascript)
-* [JSTalk](http://github.com/ccgus/jstalk/) Gus Mueller, to let Cocoa applications be scripted in Javascript
-* [PluginManager](http://github.com/Grayson/pluginmanager/) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
-* [Elysium](http://lucidmac.com/products/elysium/) Matt Mower, to script Elysium, a MIDI sequencer
-* [Acorn Plugins](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) Gus Mueller, to let Acorn users write [Acorn](http://flyingmeat.com/acorn/) plugins in Javascript
-* [Interactive console for iPhone](http://ido.nu/kuma/2008/11/22/jscocoa-interactive-console-for-iphone/) Kumagai Kentaro wrote a console to interact with the iPhone simulator from a web page !
-* [JSCocoaCodaLoader](http://gusmueller.com/blog/archives/2008/11/jscocoacodaloader.html) write Javascript plugins that work in [Coda](http://www.panic.com/coda/)
-* [REPL console](http://tlrobinson.net/blog/2008/10/10/command-line-interpreter-and-repl-for-jscocoa/) Tom Robinson's command line interface
-
-Are you missing on that list ? [Send me a mail !](mailto:parmanoir@gmail.com)
-
-
-What does it look like ?
+Syntax
 --
 
 	// Get current application name : dot syntax
@@ -155,6 +132,30 @@ Integrate its files directly into your project :
 * Add the JavascriptCore framework
 * In 'Build' project settings, add -lffi to 'Other linker flags'
 * import "JSCocoa.h"
+
+Contribute and discuss
+--
+
+* [Discussion group](http://groups.google.com/group/jscocoa) Questions ? Join the Google group and ask away !
+* [Twitter](http://twitter.com/parmanoir) Tweet me questions and comments
+* [Github](http://github.com/parmanoir/jscocoa/tree/master) fork JSCocoa from Github, add changes, and notify me with a pull request
+* [Documentation](http://code.google.com/p/jscocoa/w/list) on Google Code
+
+Who uses it ?
+--
+
+* [KosmicTask](http://www.mugginsoft.com/kosmictask/) Integrated Scripting Environment for OS X to run, create and share tasks
+* [Spice-sugar](http://github.com/onecrayon/Spice-sugar) Spice.sugar allows the [Espresso text editor](http://macrabbit.com/espresso/) to be extended using JSCocoa
+* [Narwhal-jsc](http://github.com/tlrobinson/narwhal-jsc/) A JavascriptCore + optional JSCocoa module for [Narwhal](http://github.com/tlrobinson/narwhal/tree) (Server-side Javascript)
+* [JSTalk](http://github.com/ccgus/jstalk/) Gus Mueller, to let Cocoa applications be scripted in Javascript
+* [PluginManager](http://github.com/Grayson/pluginmanager/) Grayson Hansard wrote a manager that enables you to write Cocoa plugins in AppleScript, F-Script, Javascript, Lua, Nu, Python and Ruby.
+* [Elysium](http://lucidmac.com/products/elysium/) Matt Mower, to script Elysium, a MIDI sequencer
+* [Acorn Plugins](http://gusmueller.com/blog/archives/2009/01/jscocoa_and_acorn_plugins_in_javascript.html) Gus Mueller, to let Acorn users write [Acorn](http://flyingmeat.com/acorn/) plugins in Javascript
+* [Interactive console for iPhone](http://ido.nu/kuma/2008/11/22/jscocoa-interactive-console-for-iphone/) Kumagai Kentaro wrote a console to interact with the iPhone simulator from a web page !
+* [JSCocoaCodaLoader](http://gusmueller.com/blog/archives/2008/11/jscocoacodaloader.html) write Javascript plugins that work in [Coda](http://www.panic.com/coda/)
+* [REPL console](http://tlrobinson.net/blog/2008/10/10/command-line-interpreter-and-repl-for-jscocoa/) Tom Robinson's command line interface
+
+Are you missing on that list ? [Send me a mail !](mailto:parmanoir@gmail.com)
 
 
 Thanks !
