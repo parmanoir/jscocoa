@@ -1862,7 +1862,8 @@ static id JSCocoaSingleton = NULL;
 //
 + (NSString*)formatJSException:(JSValueRef)exception inContext:(JSContextRef)context
 {
-	if (!exception)	return @"formatJSException:(null)";
+	if (!exception)
+		return @"formatJSException:(null)";
 	// Convert exception to string
 	JSStringRef resultStringJS = JSValueToStringCopy(context, exception, NULL);
 	NSString* b = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS);

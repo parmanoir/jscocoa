@@ -178,7 +178,7 @@ SOFTWARE.
 // application itself.
 
 // http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
-//"use strict";
+"use strict";
 
 function JSLintWithLogs(logs)
 {
@@ -5672,7 +5672,13 @@ members)?
     };
 
     itself.edition = '2009-05-06';
-
+/*
+	var JSLINTGLOBALS = {}
+	var _varstatement = varstatement
+	varstatement = function () {
+		return _varstatement.apply(JSLINTGLOBALS, arguments)
+	}
+*/
     return itself;
 
 });
