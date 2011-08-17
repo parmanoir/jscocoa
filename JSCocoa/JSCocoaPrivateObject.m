@@ -43,9 +43,7 @@
 //		if ([object isKindOfClass:[JSCocoaController class]])
 //			[object autorelease];
 //		else
-NSLog(@"about to cleanup %p", object);
 			[object release];
-NSLog(@"cleaned %p", object);
 	}
 	if (jsValue)		
 	{
@@ -98,7 +96,6 @@ NSLog(@"cleaned %p", object);
 {
 //	if (object && retainObject)
 //		[object release];
-NSLog(@"about to set %p (class=%@, object=%@)", o, [o class], o);
 	object = o;
 	if (object && [object retainCount] == -1)	return;
 	[object retain];
