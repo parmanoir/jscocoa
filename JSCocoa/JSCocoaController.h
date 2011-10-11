@@ -101,24 +101,32 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (id)callFunction:(NSString*)name withArguments:(NSArray*)arguments;
 - (BOOL)hasFunction:(NSString*)name;
 - (BOOL)isSyntaxValid:(NSString*)script;
+- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error;
 
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
 - (JSValueRef)evalJSString:(NSString*)script;
 - (JSValueRef)evalJSString:(NSString*)script withScriptPath:(NSString*)path;
-- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
+- (JSValueRef)callJSFunction:(JSObjectRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArgumentsArray:(NSArray*)arguments;
 - (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
+
+- (JSValueRef)anonEval:(NSString*)script withThis:(JSValueRef)jsThis;
+// Arguments are JSValueRefs wrapped in BoxedJSValue
+- (JSValueRef)callJSFunction:(JSObjectRef)function withJSValueArray:(NSArray*)args;
+
+
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path;
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path errors:(NSMutableArray*)array;
-- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error;
+
 - (BOOL)setObject:(id)object withName:(NSString*)name;
 - (BOOL)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
 - (BOOL)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
 - (id)objectWithName:(NSString*)name;
 - (BOOL)removeObjectWithName:(NSString*)name;
+
 // Get ObjC and raw values from Javascript
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (BOOL)toBool:(JSValueRef)value;
@@ -307,6 +315,20 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSObjectRef)jsObject;
 
 @end
+
+//
+// Boxed value, used for arguments in callJSFunction:withJSValueRefArray:
+//
+@interface BoxedJSValue : NSObject {
+	JSValueRef	jsValue;
+}
++ (id)with:(JSValueRef)v;
+- (void)setJSValue:(JSValueRef)v;
+- (JSValueRef)jsValue;
+
+@end
+
+
 
 //
 // Helpers

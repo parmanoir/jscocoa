@@ -103,6 +103,8 @@ int runCount = 0;
 - (IBAction)_runJSTests:(id)sender {
 	[self cycleContext];
 
+
+
 	[textField setStringValue:@"Running Tests ..."];
 
 	// Clean up notifications registered by previously run tests
@@ -230,6 +232,9 @@ int runCount = 0;
 		[jsc setUseJSLint:YES];
 		if (![str isEqualToString:[JSCocoa runningArchitecture]])	NSLog(@"!!!!!!!!!!ObjJ syntax with autocall disabled failed");
 	}
+	
+	
+	
 /*	
 	id class = objc_getClass([@"ファイナンス" UTF8String]);
 	id o = [class new];
@@ -1129,7 +1134,7 @@ JSValueRef savedValue = nil;
 	JSValueProtect(mainContext, callbackFunction.value);
 	
    void (^theBlock)(NSError *) = ^(NSError *err) {
-       [[JSCocoa controllerFromContext:mainContext] callJSFunction:callbackFunction.value withArguments:[NSArray arrayWithObjects:err, nil]];
+       [[JSCocoa controllerFromContext:mainContext] callJSFunction:JSValueToObject(mainContext, callbackFunction.value, NULL) withArguments:[NSArray arrayWithObjects:err, nil]];
    };
 
    return [theBlock copy];

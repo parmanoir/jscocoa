@@ -615,12 +615,13 @@ static id JSCocoaSingleton = NULL;
 //
 // Call a Javascript function by function reference (JSValueRef)
 // 
-- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments
+- (JSValueRef)callJSFunction:(JSObjectRef)jsFunction withArguments:(NSArray*)arguments
 {
+/*
 	JSObjectRef	jsFunction = JSValueToObject(ctx, function, NULL);
 	// Return if function is not of function type
 	if (!jsFunction)			return	NSLog(@"callJSFunction : value is not a function"), NULL;
-
+*/
 	// Convert arguments
 	JSValueRef* jsArguments = NULL;
 	NSUInteger	argumentCount = [arguments count];
@@ -728,6 +729,54 @@ static id JSCocoaSingleton = NULL;
 	return	!![self JSFunctionNamed:name];
 }
 
+
+//
+// Eval an anonymous function with a custom 'this'.
+//	Used to easily inspect and manipulate a JSValue
+//		Given a javascript date :
+//			[jsc anonEval:@"return this.getMilliseconds()" withThis:myObject]
+//		Getting an object's keys :
+//			[jsc anonEval:@"return Object.keys(this)" withThis:myObject]
+//		Getting the length of an array :
+//			[jsc anonEval:@"return this.length" withThis:myObject]
+//
+- (JSValueRef)anonEval:(NSString*)script withThis:(JSValueRef)jsThis {
+	JSStringRef scriptJS= JSStringCreateWithUTF8CString([script UTF8String]);
+	JSObjectRef fn		= JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
+	JSValueRef result	= JSObjectCallAsFunction(ctx, fn, jsThis ? JSValueToObject(ctx, jsThis, NULL) : NULL, 0, NULL, NULL);
+	JSStringRelease(scriptJS);
+	return result;
+}
+
+//
+// Call a Javascript function with raw, non-JSCocoa-boxed JSValueRefs.
+//	The JSValueRefs themselves do need to be boxed with 'BoxedJSValue' to be stored in an NSArray
+//
+- (JSValueRef)callJSFunction:(JSObjectRef)function withJSValueArray:(NSArray*)args {
+
+	JSValueRef* jsArguments	= nil;
+	NSUInteger argumentCount= [args count];
+	if (argumentCount) {
+		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
+		for (NSUInteger i=0; i<argumentCount; i++)
+			jsArguments[i] = [[args objectAtIndex:i] jsValue];
+	}
+
+	JSValueRef exception	= NULL;
+	JSValueRef returnValue	= JSObjectCallAsFunction(ctx, function, NULL, argumentCount, jsArguments, &exception);
+	
+	if (jsArguments)
+		free(jsArguments);
+
+	if (exception) {
+        [self callDelegateForException:exception];
+		return	NULL;
+	}
+
+	return	returnValue;
+}
+
+
 //
 // Expand macros
 //
@@ -798,6 +847,8 @@ static id JSCocoaSingleton = NULL;
 //
 - (id)unboxJSValueRef:(JSValueRef)value
 {
+	if (!value)
+		return nil;
 	id object = nil;
 	[JSCocoaFFIArgument unboxJSValueRef:value toObject:&object inContext:ctx];
 	return object;
@@ -5033,3 +5084,22 @@ void* malloc_autorelease(size_t size)
 
 @end
 
+
+//
+// Boxed JSValue
+//
+@implementation BoxedJSValue
+
++ (id)with:(JSValueRef)v {
+	id o = [[BoxedJSValue new] autorelease];
+	[o setJSValue:v];
+	return o;
+}
+- (void)setJSValue:(JSValueRef)v {
+	jsValue = v;
+}
+- (JSValueRef)jsValue {
+	return jsValue;
+}
+
+@end
