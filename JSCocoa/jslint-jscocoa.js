@@ -1083,7 +1083,7 @@ members)?
             t.line = line;
             t.character = character;
             t.from = from;
-//alert('NEWTOKEN\ntype=' + type + '\nvalue=' + value + '\nfrom=' + t.from + '\ncharacter=' + t.character)
+
             i = t.id;
             if (i !== '(endline)') {
                 prereg = i &&
@@ -1374,14 +1374,15 @@ members)?
 							var c = lines[line].length-1
 							if (!s.match(/\n/))
 								c++
-							if (!logTokenLock) 
-							{
+							if (!logTokenLock) {
 								var t = { type : '(comment)', line : line, from : from, value : v, character : c }
 								t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
-								logToken(t)
+                            	s = '';
+								return t
+//								logToken(t)
 							}
-                            s = '';
-                            token.comment = true;
+//                            s = '';
+//                            token.comment = true;
                             break;
 
     //      /* comment
@@ -1396,6 +1397,7 @@ members)?
 							var commentLineIndex = 0
 							var firstCommentPrefix = '/*'
 							// First line misses '*' in '/*'
+							var commentTokens = []
                             for (;;) {
                                 i = s.search(lx);
                                 if (i >= 0) {
@@ -1407,7 +1409,8 @@ members)?
 									{
 										var t = { type : '(comment)', line : line, from : from, value : v, character: from+v.length }
 										t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
-										logToken(t)
+//										logToken(t)
+										commentTokens.push(t)
 									}
                                     break;
                                 }
@@ -1421,8 +1424,10 @@ members)?
 									{
 										var t = { type : '(comment)', line : line, from : from, value : firstCommentPrefix + s, character : c+from }
 										t.rawValue = lines[t.line] ? lines[t.line].substr(t.from, t.character-t.from) : ''
-										logToken(t)
-										logToken( { id : '(endline)' } )
+//										logToken(t)
+//										logToken( { id : '(endline)' } )
+										commentTokens.push(t)
+										commentTokens.push({ id : '(endline)', line : line })
 									}
 									from = 0
 								}
@@ -1442,6 +1447,10 @@ members)?
                             }
                             s = s.substr(i + 2);
                             token.comment = true;
+
+							var t = { type : '(comment)', tokenArray : commentTokens }
+							return t
+
                             break;
 
     //      /*global /*extern /*members /*jslint */
@@ -1771,6 +1780,7 @@ members)?
 
 
     function doOption() {
+		
         var b, obj, filter, o = nexttoken.value, t, v;
         switch (o) {
         case '*/':
@@ -1917,14 +1927,23 @@ members)?
 			if (!logTokenLock)	
 			{
 				nexttoken.rawValue = lines[nexttoken.line] ? lines[nexttoken.line].substr(nexttoken.from, nexttoken.character-nexttoken.from) : ''
-				logToken(nexttoken)
+				if (!nexttoken.tokenArray)
+					logToken(nexttoken)
+				else {
+					// Multiline tokens, like /*...*/ tokens
+					for (var i=0; i<nexttoken.tokenArray.length; i++)
+						logToken(nexttoken.tokenArray[i])
+				}
 			}
             if (nexttoken.id === '(end)' || nexttoken.id === '(error)') {
                 return;
             }
-            if (nexttoken.type === 'special') {
+            if (nexttoken.type === '(comment)') {
+	
+			} else {
+/*            if (nexttoken.type === 'special') {
                 doOption();
-            } else {
+            } else {*/
                 if (nexttoken.id !== '(endline)') {
                     break;
                 }
@@ -2397,7 +2416,7 @@ members)?
             if (t.reach) {
                 return;
             }
-            if (t.id !== '(endline)') {
+            if (t.id !== '(endline)' && t.type != '(comment)') {
                 if (t.id === 'function') {
                     warning(
 "Inner functions should be listed at the top of the outer function.", t);

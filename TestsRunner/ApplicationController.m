@@ -102,9 +102,7 @@ int runCount = 0;
 
 - (IBAction)_runJSTests:(id)sender {
 	[self cycleContext];
-
-
-
+	
 	[textField setStringValue:@"Running Tests ..."];
 
 	// Clean up notifications registered by previously run tests

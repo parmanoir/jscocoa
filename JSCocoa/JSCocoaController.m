@@ -304,6 +304,7 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 {
 //	NSLog(@"JSCocoa : %p dying (ownsContext=%d)", self, ownsContext);
 	[self setUseSafeDealloc:NO];
+	[self setUseJSLint:NO];
 
 	// Cleanup if we created the JavascriptCore context.
 	// If not, let user do it. In a WebView, this method will be called during JS GC,
@@ -787,7 +788,7 @@ static id JSCocoaSingleton = NULL;
 	// Lintex path
 	id functionName = @"expandJSMacros";
 	// Expand macros
-	BOOL hasFunction = [self hasJSFunctionNamed:functionName];
+	BOOL hasFunction = useJSLint ? [self hasJSFunctionNamed:functionName] : NO;
 	if (hasFunction && useJSLint)
 	{
 		JSValueRef v = [self callJSFunctionNamed:functionName withArguments:script, path?path:@"null", array, nil];
@@ -895,7 +896,7 @@ static id JSCocoaSingleton = NULL;
 //
 // Add/Remove an ObjC object variable to the global context
 //
-- (BOOL)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
+- (JSObjectRef)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
 	JSObjectRef o			= [self boxObject:object];
 	// Set
 	JSValueRef exception	= NULL;
@@ -905,27 +906,29 @@ static id JSCocoaSingleton = NULL;
 
 	if (exception) {
         [self callDelegateForException:exception];
-		return	NO;
+		return	NULL;
 	}
-	return	YES;
+	return	o;
 }
 
-- (BOOL)setObject:(id)object withName:(NSString*)name {
+- (JSObjectRef)setObject:(id)object withName:(NSString*)name {
 	return [self setObject:object withName:name attributes:kJSPropertyAttributeNone];
 }
 
-- (BOOL)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
-	if (![self setObject:self withName:name attributes:attributes])
-		return NO;
+- (JSObjectRef)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
+	JSObjectRef o = [self setObject:self withName:name attributes:attributes];
+	if (!o)
+		return NULL;
 	// Get reference back and set it to no retain
-	JSValueRef jsSelf = [self evalJSString:name];
-	JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsSelf, NULL));
+//	JSValueRef jsSelf = [self evalJSString:name];
+//	JSCocoaPrivateObject* private = JSObjectGetPrivate(JSValueToObject(ctx, jsSelf, NULL));
+	JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 	// Overwrite settings
 	[private setObjectNoRetain:self];
 	// And discard private's retain
 	[self release];
 	
-	return YES;
+	return o;
 }
 
 - (id)objectWithName:(NSString*)name {
