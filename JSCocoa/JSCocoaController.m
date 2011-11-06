@@ -855,6 +855,8 @@ static id JSCocoaSingleton = NULL;
 	return object;
 }
 
+#pragma mark Data conversion Javascript -> C and ObjC values
+
 //
 // Conversion boolean / number / string
 //
@@ -891,7 +893,68 @@ static id JSCocoaSingleton = NULL;
 	return [self unboxJSValueRef:value];
 }
 
+#pragma mark Data conversion ObjC -> Javascript
 
+
+
+//
+// Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
+//
+- (JSValueRef)_toJS:(id)object {
+	if ([object isKindOfClass:[NSString class]]) {
+		NSString* string	= (NSString*)object;
+		JSStringRef jsName	= JSStringCreateWithUTF8CString([string UTF8String]);
+		JSValueRef jsString	= JSValueMakeString(ctx, jsName);
+		JSStringRelease(jsName);
+		return jsString;
+	}
+	else if ([object isKindOfClass:[NSNumber class]]) {
+		NSNumber* number	= (NSNumber*)object;
+		return JSValueMakeNumber(ctx, [number doubleValue]);
+	}
+	else if ([object isKindOfClass:[NSDate class]]) {
+		NSDate* date		= (NSDate*)object;
+		JSObjectRef jsDate	= JSValueToObject(ctx, [self evalJSString:@"new Date"], NULL);
+		NSString* str		= [NSString stringWithFormat:@"this.setTime(%f*1000)", [date timeIntervalSince1970]];
+		[self anonEval:str withThis:jsDate];
+		return jsDate;
+	}
+	else if ([object isKindOfClass:[NSArray class]]) {
+		NSArray* array		= (NSArray*)object;
+		JSObjectRef jsArray = JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
+		unsigned i = 0;
+		for (id o in array) {
+			JSValueRef convertedValue = [self _toJS:o];
+			JSObjectSetPropertyAtIndex(ctx, jsArray, i, convertedValue, NULL);
+			i++;
+		}
+		return jsArray;
+	}
+	else if ([object isKindOfClass:[NSDictionary class]]) {
+		NSDictionary* dict	= (NSDictionary*)object;
+		JSObjectRef jsDict	= JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
+		for (NSString* key in dict) {
+			id value = [dict valueForKey:key];
+			JSValueRef convertedValue = [self _toJS:value];
+			JSStringRef	jsName		= JSStringCreateWithUTF8CString([key UTF8String]);
+			JSObjectSetProperty(ctx, jsDict, jsName, convertedValue, kJSPropertyAttributeNone, NULL);
+			JSStringRelease(jsName);
+		}
+		return jsDict;
+	}
+	NSLog(@"Don't know how to convert %@, boxing it", object);
+	return [self boxObject:object];
+}
+
+- (JSValueRefAndContextRef)toJS:(id)object {
+	JSValueRefAndContextRef valueAndContext = { JSValueMakeNull(ctx), NULL };
+	valueAndContext.value = [self _toJS:object];
+	
+	return valueAndContext;
+}
+
+
+#pragma mark Setting named objects in context (ctx.name = value)
 
 //
 // Add/Remove an ObjC object variable to the global context

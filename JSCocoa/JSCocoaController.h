@@ -17,7 +17,8 @@
 #import "JSCocoaFFIClosure.h"
 
 
-// JS value container, used by methods wanting a straight JSValue and not a converted JS->ObjC value.
+// JS context and value container, used by methods to get and return raw Javascript values
+//	(No conversion happens)
 struct	JSValueRefAndContextRef
 {
 	JSValueRef		value;
@@ -135,6 +136,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (NSString*)toString:(JSValueRef)value;
 // Wrapper for unboxJSValueRef
 - (id)toObject:(JSValueRef)value;
+
+// Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
+- (JSValueRefAndContextRef)toJS:(id)object;
 
 
 //

@@ -2471,8 +2471,11 @@ members)?
         if (!t.block) {
 			// ## Only warn about missing semicolons when next token is on same line and not a closing brace (like in one line closures)
             if (nexttoken.id !== ';') {
+/*	
 				if (token.line == nexttoken.line && nexttoken.id != '}')
-                	warningAt("Missing semicolon.", token.line, token.from + token.value.length);
+//				alert('THERE')
+                	warningAt("@@@Missing semicolon.", token.line, token.from + token.value.length);
+*/
 //##	
 //                warningAt("Missing semicolon.", token.line,
 //                        token.from + token.value.length);
@@ -4590,7 +4593,8 @@ members)?
     stmt('var', varstatement);
 
     stmt('new', function () {
-        warning("'new' should not be used as a statement.");
+		// JSCocoa can eval stuff like 'new Date' to get a date.
+//        warning("'new' should not be used as a statement.");
     });
 
 
