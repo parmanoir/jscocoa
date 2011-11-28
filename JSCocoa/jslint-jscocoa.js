@@ -2471,11 +2471,13 @@ members)?
         if (!t.block) {
 			// ## Only warn about missing semicolons when next token is on same line and not a closing brace (like in one line closures)
             if (nexttoken.id !== ';') {
-/*	
-				if (token.line == nexttoken.line && nexttoken.id != '}')
-//				alert('THERE')
-                	warningAt("@@@Missing semicolon.", token.line, token.from + token.value.length);
-*/
+				if (token.line == nexttoken.line && nexttoken.id != '}') {
+					// Allow 'new Date' as a valid expression
+					var isNewExpression = token.value == 'new' && token.line != prevtoken.line
+					if (!isNewExpression)
+                		warningAt("@@@Missing semicolon.", token.line, token.from + token.value.length);
+				}
+
 //##	
 //                warningAt("Missing semicolon.", token.line,
 //                        token.from + token.value.length);
