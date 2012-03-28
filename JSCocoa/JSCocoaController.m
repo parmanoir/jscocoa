@@ -251,7 +251,14 @@ const JSClassDefinition kJSClassDefinitionEmpty = { 0, 0,
 	[self loadFrameworkWithName:@"AppKit"];
 	[self loadFrameworkWithName:@"CoreFoundation"];
 	[self loadFrameworkWithName:@"Foundation"];
-	[self loadFrameworkWithName:@"CoreGraphics" inPath:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
+
+	// CoreGraphics.framework moved in 10.8
+	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/System/Library/Frameworks/CoreGraphics.framework"]) {
+		[self loadFrameworkWithName:@"CoreGraphics"];
+	}
+	else {
+		[self loadFrameworkWithName:@"CoreGraphics" inPath:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
+	}
 #endif	
 
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
