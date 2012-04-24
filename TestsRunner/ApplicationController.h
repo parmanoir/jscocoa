@@ -21,17 +21,25 @@
 	
 	IBOutlet	NSTextField* evalText;
 	IBOutlet	NSTextField* evalResult;
+
+	BOOL		test_unit, test_delegate, test_webview, test_autocall;
 	
 	JSCocoa* jsc2;
 	id topObjects;
 	
 	NSError*	testNSError;
 	
+	BOOL		areTestsRunning;
 	BOOL		runningContinuously;
 	// If we cycle context each time, we can test bindings each time.
 	BOOL		cyclingContext;
+	
+	NSInteger	testCount;	// successful test count
 
 }
+
+@property BOOL test_unit, test_delegate, test_webview, test_autocall;
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification;
 - (void)applicationWillTerminate:(NSNotification *)notification;
 
@@ -47,6 +55,8 @@
 - (IBAction)unlinkAllReferences:(id)sender;
 
 - (IBAction)eval:(id)sender;
+
+- (IBAction)displayTestsWindow:(id)sender;
 
 - (id)testDelegate;
 - (int)dummyValue;

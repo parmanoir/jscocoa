@@ -9,7 +9,6 @@
 		- (BOOL)someMethodReturningAnError:(NSError**)outError
 		{
 //			log('outError=' + outError)
-		
 			// Init a memory buffer from pointer
 			var b = new memoryBuffer('^')
 			b[0] = outError
@@ -34,7 +33,7 @@
 			outError.referenceObject(error)
 			var readBackError4 = outError.dereferencedObject
 			if (readBackError4 != error)					throw 'NSError** read/write failed (4)'
-			
+
 			return	res
 		}
 	
@@ -44,14 +43,13 @@
 			var o = outError.dereferencedObject
 			if (o != null)									throw 'NSError** read/write failed (5)'
 
-
 			// Init a memory buffer from pointer
 			var b = new memoryBuffer('^')
 			b[0] = outError
 
 			var readBackError = [b dereferenceObjectAtIndex:0]
 			if (readBackError != null)						throw 'NSError** read/write failed (6)'
-			
+
 			return	true
 		}
 
@@ -139,7 +137,7 @@
 	if (actualSig != expectedSig)					throw 'NSError** signature failed — expected ' + expectedSig + ', got ' + actualSig
 	
 
-	
+	oa = null
 	o = null
 	
 	

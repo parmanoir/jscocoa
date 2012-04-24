@@ -74,3 +74,6 @@
 
 	o = null
 	o2 = null
+	newClass = null
+
+

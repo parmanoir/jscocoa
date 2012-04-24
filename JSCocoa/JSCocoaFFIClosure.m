@@ -45,16 +45,13 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 		JSValueUnprotect(ctx, jsFunction);
 		[JSCocoaController downJSValueProtectCount];
 	}
-	//
-	// A strange crash reporting ??? as the source address is a deleted closure being called (happens with the bindings mechanism)
-	//
 #if !TARGET_OS_IPHONE
 	if (munmap(closure, sizeof(closure)) == -1)	NSLog(@"ffi closure munmap failed");
 #endif
 }
 - (void)dealloc
 {
-//	NSLog(@"deallocing closure %x IMP=%x", self, closure);
+//	NSLog(@"deallocing closure %p IMP=%p", self, closure);
 	[self cleanUp];
 	[super dealloc];
 }
@@ -170,7 +167,6 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 			
 			args[i] = NULL;
 			[arg toJSValueRef:&args[i] inContext:ctx];
-			
 			[arg release];
 		}
 	}
@@ -179,7 +175,7 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	
 	// Create 'this'
 	if (isObjC)
-		jsThis = [JSCocoaController boxedJSObject:*(void**)closureArgs[0] inContext:ctx];
+		jsThis = [[JSCocoa controllerFromContext:ctx] boxObject:*(void**)closureArgs[0]];
 
 	// Call !
 	JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunctionObject, jsThis, effectiveArgumentCount, args, &exception);
@@ -204,10 +200,8 @@ void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 	}
 
 	if (effectiveArgumentCount)	free(args);
-//	if (exception)	NSLog(@"%@", [[JSCocoaController controllerFromContext:ctx] formatJSException:exception]);
 	if (exception)
 	{
-		NSLog(@"throwing");
 		@throw	[NSException exceptionWithName:@"JSCocoa exception"
 			reason:[[JSCocoaController controllerFromContext:ctx] formatJSException:exception]
 			userInfo:nil];

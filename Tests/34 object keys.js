@@ -12,7 +12,7 @@
 	var hasName			= false
 	var hasSurname		= false
 	var hasSomeVariable	= false
-	var allKeys = o.allKeys()
+	var allKeys = Object.keys(o)
 	for (var i=0; i<allKeys.length; i++)
 	{
 		var key = allKeys[i]

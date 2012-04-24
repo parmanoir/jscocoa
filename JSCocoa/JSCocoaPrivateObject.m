@@ -21,7 +21,7 @@
 	object		= nil;
 	isAutoCall	= NO;
 	jsValue		= NULL;
-	retainObject	= YES;
+	retainObject= YES;
 	rawPointer	= NULL;
 	ctx			= NULL;
 //	retainContext = NO;
@@ -37,7 +37,8 @@
 	[JSCocoaController downJSCocoaPrivateObjectCount];
 	if (object && retainObject)
 	{
-		[JSCocoaController downBoxedJSObjectCount:object];
+//		NSLog(@"commented downBoxedJSObjectCount");
+//		[JSCocoaController downBoxedJSObjectCount:object];
 //		NSLog(@"releasing %@(%d)", [object class], [object retainCount]);
 //		if ([object isKindOfClass:[JSCocoaController class]])
 //			[object autorelease];
@@ -67,7 +68,7 @@
 /*
 	if (retainContext)
 	{
-		NSLog(@"releasing %x", ctx);
+		NSLog(@"releasing %p", ctx);
 		JSContextGroupRelease(contextGroup);
 //		JSGlobalContextRelease((JSGlobalContextRef)ctx);
 	}
@@ -93,6 +94,8 @@
 
 - (void)setObject:(id)o
 {
+//	if (object && retainObject)
+//		[object release];
 	object = o;
 	if (object && [object retainCount] == -1)	return;
 	[object retain];
@@ -108,7 +111,6 @@
 {
 	return	retainObject;
 }
-
 
 - (id)object
 {
@@ -145,6 +147,9 @@
 	return	jsValue;
 }
 
+- (void)setCtx:(JSContextRef)_ctx {
+	ctx = _ctx;
+}
 - (JSContextRef)ctx
 {
 	return	ctx;
@@ -197,11 +202,11 @@
 }
 
 
-- (id)description
-{
+- (id)description {
 	id extra = @"";
-	if ([type isEqualToString:@"rawPointer"]) extra = [NSString stringWithFormat:@" (%x) %@", rawPointer, declaredType];
-	return	[NSString stringWithFormat:@"<%@: %x holding %@%@>",
+	if ([type isEqualToString:@"rawPointer"]) 
+		extra = [NSString stringWithFormat:@" rawPointer=%p declaredType=%@", rawPointer, declaredType];
+	return	[NSString stringWithFormat:@"<%@: %p holding %@%@>",
 				[self class], 
 				self, 
 				type,
@@ -209,21 +214,19 @@
 				];
 }
 
-+ (id)description
-{
++ (id)description {
 	return @"<JSCocoaPrivateObject class>";
 }
 
-- (id)dereferencedObject
-{
-	if (![type isEqualToString:@"rawPointer"] || !rawPointer)	return nil;
+- (id)dereferencedObject {
+	if (![type isEqualToString:@"rawPointer"] || !rawPointer)	
+		return nil;
 	return *(void**)rawPointer;
 }
 
-- (BOOL)referenceObject:(id)o
-{
-	if (![type isEqualToString:@"rawPointer"])	return NO;
-//	void* v = *(void**)rawPointer;
+- (BOOL)referenceObject:(id)o {
+	if (![type isEqualToString:@"rawPointer"])	
+		return NO;
 	*(id*)rawPointer = o;
 	return	YES;
 }

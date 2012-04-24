@@ -21,13 +21,14 @@
 // Boxing object
 //
 //	type
-//	@			ObjC object
-//	struct		C struct
-//	method		ObjC method name
-//	rawPointer	raw C pointer (_C_PTR)
-//	jsFunction	Javascript function
-//	jsValueRef	raw jsvalue
-//	externalJSValueRef	EXPERIMENTAL from webView
+//	@					ObjC object
+//	struct				C struct
+//	method				ObjC method name
+//	function			C function
+//	rawPointer			raw C pointer (_C_PTR)
+//	jsFunction			Javascript function
+//	jsValueRef			raw jsvalue
+//	externalJSValueRef	jsvalue coming from an external context (eg, a WebView)
 //
 
 @interface JSCocoaPrivateObject : NSObject {
@@ -38,7 +39,6 @@
 	NSString*	structureName;
 	
 	NSString*	declaredType;
-//	void*		ptr;
 	void*		rawPointer;
 
 	id			object;
@@ -49,8 +49,7 @@
 	JSContextRef	ctx;
 	unsigned int	externalJSValueIndex;
 	// (test) when storing JSValues from a WebView, used to retain the WebView's context.
-	// Disabled for now. Just make sure the WebView has a longer life than the vars
-	// it's using.
+	// Disabled for now. Just make sure the WebView has a longer life than the vars it uses.
 	//
 	// Disabled because retaining the context crashes in 32 bits, but works in 64 bit.
 	// May be reenabled someday.
@@ -82,6 +81,7 @@
 
 - (void)setJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 - (JSValueRef)jsValueRef;
+- (void)setCtx:(JSContextRef)ctx;
 - (JSContextRef)ctx;
 - (void)setExternalJSValueRef:(JSValueRef)v ctx:(JSContextRef)ctx;
 

@@ -19,6 +19,7 @@
 
 @implementation JSCocoaFFIArgument
 
+
 - (id)init
 {
 	self	= [super init];
@@ -64,7 +65,7 @@
 
 - (NSString*)description
 {
-	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %x typeEncoding=%c %@ isReturnValue=%d storage=%x", self, 
+	return	[NSString stringWithFormat:@"JSCocoaFFIArgument %p typeEncoding=%c %@ isReturnValue=%d storage=%p", self, 
 			typeEncoding, 
 			(structureTypeEncoding ? structureTypeEncoding : @""),
 			isReturnValue, ptr];
@@ -276,7 +277,7 @@
 		if (isReturnValue && size < minimalReturnSize)	size = minimalReturnSize;
 		ptr = malloc(size);
 	}
-//	NSLog(@"Allocated size=%d (%x) for object %@", size, ptr, self);
+//	NSLog(@"Allocated size=%d (%p) for object %@", size, ptr, self);
 	
 	return	ptr;
 }
@@ -366,7 +367,7 @@
 	if (!typeEncoding)	return	NO;
 
 //	JSType type = JSValueGetType(ctx, value);
-//	NSLog(@"JSType=%d encoding=%c self=%x", type, typeEncoding, self);
+//	NSLog(@"JSType=%d encoding=%c self=%p", type, typeEncoding, self);
 
 	switch  (typeEncoding)
 	{
@@ -526,7 +527,7 @@
 {
 	if (!typeEncoding)	return	NO;
 	
-//	NSLog(@"toJSValueRef: %c ptr=%x", typeEncoding, ptr);
+//	NSLog(@"toJSValueRef: %c ptr=%p", typeEncoding, ptr);
 	switch  (typeEncoding)
 	{
 		case	_C_ID:	
@@ -590,7 +591,8 @@
 			// Bail if structure not found
 			if (!type)	return	0;
 
-			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef jsObject = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 			private.type = @"struct";
 			NSInteger numParsed =	[JSCocoaFFIArgument structureToJSValueRef:value inContext:ctx fromCString:(char*)[type UTF8String] fromStorage:&p];
@@ -632,7 +634,8 @@
 		
 		case	_C_PTR:
 		{
-			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//			JSObjectRef o = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+			JSObjectRef o = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
 			private.type = @"rawPointer";
 			[private setRawPointer:*(void**)ptr encoding:fullTypeEncoding];
@@ -660,7 +663,8 @@
 + (NSInteger)structureToJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx fromCString:(char*)c fromStorage:(void**)ptr initialValues:(JSValueRef*)initialValues initialValueCount:(NSInteger)initialValueCount convertedValueCount:(NSInteger*)convertedValueCount
 {
 	// Build new structure object
-	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+//	JSObjectRef jsObject = [JSCocoaController jsCocoaPrivateObjectInContext:ctx];
+	JSObjectRef jsObject = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
 	JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
 	private.type = @"struct";
 	private.structureName = [JSCocoaFFIArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
@@ -761,7 +765,7 @@
 			JSStringRelease(propertyNameJS);
 //			JSObjectRef objectProperty2 = JSValueToObject(ctx, valueJS, NULL);
 
-//			NSLog(@"%c %@ %x %x", encoding, propertyName, valueJS, objectProperty2);
+//			NSLog(@"%c %@ %p %p", encoding, propertyName, valueJS, objectProperty2);
 			if (encoding == '{')
 			{
 				if (JSValueIsObject(ctx, valueJS))
@@ -983,6 +987,9 @@ static NSMutableDictionary* typeEncodings = nil;
 #else
 	id type = [[rootElement attributeForName:@"type"] stringValue];
 #endif
+	// Retain the string as releasing xmlDocument deallocs it
+	[[type retain] autorelease];
+
 	[xmlDocument release];
 	return	type;
 }
@@ -1150,17 +1157,15 @@ static NSMutableDictionary* typeEncodings = nil;
 //
 // Box
 //
-+ (BOOL)boxObject:(id)objcObject toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx
-{
++ (BOOL)boxObject:(id)objcObject toJSValueRef:(JSValueRef*)value inContext:(JSContextRef)ctx {
 	// Return null if our pointer is null
-	if (!objcObject)
-	{
+	if (!objcObject) {
 		*value = JSValueMakeNull(ctx);
 		return	YES;
 	}
 	// Use a global boxing function to always return the same Javascript object 
 	//	when requesting multiple boxings of the same ObjC object
-	*value = [JSCocoaController boxedJSObject:objcObject inContext:ctx];
+	*value = [[JSCocoa controllerFromContext:ctx] boxObject:objcObject];
 	return	YES;
 }
 
@@ -1346,6 +1351,7 @@ static NSMutableDictionary* typeEncodings = nil;
 	*o = hash;
 	return	YES;
 }
+
 
 
 

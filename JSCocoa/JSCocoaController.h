@@ -17,7 +17,8 @@
 #import "JSCocoaFFIClosure.h"
 
 
-// JS value container, used by methods wanting a straight JSValue and not a converted JS->ObjC value.
+// JS context and value container, used by methods to get and return raw Javascript values
+//	(No conversion happens)
 struct	JSValueRefAndContextRef
 {
 	JSValueRef		value;
@@ -41,14 +42,6 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
     id					_delegate;
 
 	//
-	// Safe dealloc
-	//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
-	//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
-	//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
-	//
-	BOOL				useSafeDealloc;
-
-	//
 	// Split call
 	//	Allows calling multi param ObjC messages with a jQuery-like syntax.
 	//
@@ -61,15 +54,32 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 	// JSLint : used for ObjJ syntax, class syntax, return if
 	BOOL				useJSLint;
 	
+	// Auto call zero arg methods : allow NSWorkspace.sharedWorkspace instead of NSWorkspace.sharedWorkspace()
+	BOOL				useAutoCall;
+	// Allow setting javascript values on boxed objects (which are collected after nulling all references to them)
+	BOOL				canSetOnBoxedObjects;
+	// Allow calling obj.method(...) instead of obj.method_(...)
+	BOOL				callSelectorsMissingTrailingSemicolon;
+
+	// Log all exceptions to NSLog, even if they're caught later by downstream Javascript (in f(g()), log even if f catches after g threw)
+	BOOL				logAllExceptions;
+	
+	//
+	// Safe dealloc (For ObjC classes written in Javascript)
+	//	- (void)dealloc cannot be overloaded as it is called during JS GC, which forbids new JS code execution.
+	//	As the js dealloc method cannot be called, safe dealloc allows it to be executed during the next run loop cycle
+	//	NOTE : upon destroying a JSCocoaController, safe dealloc is disabled
+	//
+	BOOL				useSafeDealloc;
+
+	
+	NSMutableDictionary*	boxedObjects;
+	
+	
 }
 
 @property (assign) id delegate;
-@property BOOL useSafeDealloc;
-@property BOOL useSplitCall;
-@property BOOL useJSLint;
-@property BOOL useAutoCall;
-@property BOOL callSelectorsMissingTrailingSemicolon;
-@property BOOL canSetOnBoxedObjects;
+@property BOOL useSafeDealloc, useSplitCall, useJSLint, useAutoCall, callSelectorsMissingTrailingSemicolon, canSetOnBoxedObjects, logAllExceptions;
 
 
 - (id)init;
@@ -92,22 +102,32 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (id)callFunction:(NSString*)name withArguments:(NSArray*)arguments;
 - (BOOL)hasFunction:(NSString*)name;
 - (BOOL)isSyntaxValid:(NSString*)script;
+- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error;
 
 - (BOOL)evalJSFile:(NSString*)path;
 - (BOOL)evalJSFile:(NSString*)path toJSValueRef:(JSValueRef*)returnValue;
 - (JSValueRef)evalJSString:(NSString*)script;
 - (JSValueRef)evalJSString:(NSString*)script withScriptPath:(NSString*)path;
-- (JSValueRef)callJSFunction:(JSValueRef)function withArguments:(NSArray*)arguments;
+- (JSValueRef)callJSFunction:(JSObjectRef)function withArguments:(NSArray*)arguments;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArguments:arguments, ... NS_REQUIRES_NIL_TERMINATION;
 - (JSValueRef)callJSFunctionNamed:(NSString*)functionName withArgumentsArray:(NSArray*)arguments;
 - (JSObjectRef)JSFunctionNamed:(NSString*)functionName;
 - (BOOL)hasJSFunctionNamed:(NSString*)functionName;
+
+- (JSValueRef)anonEval:(NSString*)script withThis:(JSValueRef)jsThis;
+// Arguments are JSValueRefs wrapped in BoxedJSValue
+- (JSValueRef)callJSFunction:(JSObjectRef)function withJSValueArray:(NSArray*)args;
+
+
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path;
 - (NSString*)expandJSMacros:(NSString*)script path:(NSString*)path errors:(NSMutableArray*)array;
-- (BOOL)isSyntaxValid:(NSString*)script error:(NSString**)error;
-- (BOOL)setObject:(id)object withName:(id)name;
-- (BOOL)setObject:(id)object withName:(id)name attributes:(JSPropertyAttributes)attributes;
-- (BOOL)removeObjectWithName:(id)name;
+
+- (JSObjectRef)setObject:(id)object withName:(NSString*)name;
+- (JSObjectRef)setObject:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
+- (JSObjectRef)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes;
+- (id)objectWithName:(NSString*)name;
+- (BOOL)removeObjectWithName:(NSString*)name;
+
 // Get ObjC and raw values from Javascript
 - (id)unboxJSValueRef:(JSValueRef)jsValue;
 - (BOOL)toBool:(JSValueRef)value;
@@ -116,6 +136,9 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (NSString*)toString:(JSValueRef)value;
 // Wrapper for unboxJSValueRef
 - (id)toObject:(JSValueRef)value;
+
+// Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
+- (JSValueRefAndContextRef)toJS:(id)object;
 
 
 //
@@ -140,7 +163,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 + (void)logInstanceStats;
 - (id)instanceStats;
-+ (void)logBoxedObjects;
+- (void)logBoxedObjects;
 
 //
 // Class inspection (shortcuts to JSCocoaLib)
@@ -173,20 +196,25 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 + (void)deallocAutoreleasePool;
 
 //
-// Global boxer : only one JSValueRef for multiple box requests of one pointer
+// Boxing : each object gets only one box, stored in boxedObjects
 //
-+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
-+ (void)downBoxedJSObjectCount:(id)o;
+//+ (JSObjectRef)boxedJSObject:(id)o inContext:(JSContextRef)ctx;
+- (JSObjectRef)boxObject:(id)o;
+- (BOOL)isObjectBoxed:(id)o;
+- (void)deleteBoxOfObject:(id)o;
+//+ (void)downBoxedJSObjectCount:(id)o;
 
 
 //
 // Various internals
 //
-+ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx;
+//+ (JSObjectRef)jsCocoaPrivateObjectInContext:(JSContextRef)ctx;
+- (JSObjectRef)newPrivateObject;
+- (JSObjectRef)newPrivateFunction;
 + (NSMutableArray*)parseObjCMethodEncoding:(const char*)typeEncoding;
 + (NSMutableArray*)parseCFunctionEncoding:(NSString*)xml functionName:(NSString**)functionNamePlaceHolder;
 
-+ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
+//+ (void)ensureJSValueIsObjectAfterInstanceAutocall:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (NSString*)formatJSException:(JSValueRef)exception;
 - (id)selectorForJSFunction:(JSObjectRef)function;
 
@@ -293,6 +321,20 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @end
 
 //
+// Boxed value, used for arguments in callJSFunction:withJSValueRefArray:
+//
+@interface BoxedJSValue : NSObject {
+	JSValueRef	jsValue;
+}
++ (id)with:(JSValueRef)v;
+- (void)setJSValue:(JSValueRef)v;
+- (JSValueRef)jsValue;
+
+@end
+
+
+
+//
 // Helpers
 //
 id	NSStringFromJSValue(JSContextRef ctx, JSValueRef value);
@@ -327,5 +369,17 @@ JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 
 // Stored in boxedobjects to access a list of methods, properties, ...
 #define RuntimeInformationPropertyName		"info"
+
+
+
+/*
+Some more doc
+
+	__jsHash
+	__jsCocoaController
+		Instance variables set on ObjC classes written in Javascript.
+		These variables enable classes to store Javascript values in them.
+	
+*/
 
 

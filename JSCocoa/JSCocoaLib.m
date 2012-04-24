@@ -146,6 +146,11 @@
 		if (size == -1)	return	NSLog(@"JSCocoaMemoryBuffer initWithTypes : unknown type %c", types[i]), self;
 		bufferSize += size;
 	}
+	
+	if (bufferSize == 0) {
+		NSLog(@"initWithTypes has no types");
+		return NULL;
+	}
 
 	// Malloc
 //	NSLog(@"mallocing %d bytes for %@", bufferSize, typeString);

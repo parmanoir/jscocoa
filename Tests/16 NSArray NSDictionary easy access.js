@@ -126,6 +126,7 @@
 
 	// Change that as we could be inactive - check that identifier has two dots
 //	if (app.NSApplicationBundleIdentifier != 'com.inexdo.JSCocoa')	throw 'dictionary get failed (3)'
+//	log('ID=' + app.NSApplicationBundleIdentifier)
 	if (app.NSApplicationBundleIdentifier.match(/\./g).length != 2)	throw 'dictionary get failed (3)'
 
 //	JSCocoaController.log('app=' + app['class'])

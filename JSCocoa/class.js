@@ -33,7 +33,8 @@
 	for (var i=0; i<l; i++)
 	{
 		var t = types[i]
-		encodings[t] = JSCocoaFFIArgument.typeEncodingForType_(t)
+		// use new String to convert from a boxed NSString to a Javascript string
+		encodings[t] = new String(JSCocoaFFIArgument.typeEncodingForType_(t))
 	}
 	encodings['charpointer'] = encodings['char*']
 	encodings['IBAction'] = encodings['void']
@@ -667,8 +668,10 @@
 	//
 	// Expand script, log errors into errorArray (or to console if there are none)
 	//
-	function	expandJSMacros(script, errorArray)
+	function	expandJSMacros(script, scriptURL, errorArray)
 	{
+		if (!__jslint)
+			return null
 		__lintTokens = []
 		var lines	= script.split('\n')
 		var options	= { forin : true, laxbreak : true, indent : true, evil : true }
@@ -678,7 +681,11 @@
 		{
 			var e = __JSLINT.errors[i]
 			if (!e)	continue
-			var error				= 'JSLint error (' + e.line + ', ' + e.character + ')=' + e.reason
+			var error				= 'JSLint error'
+			if (scriptURL)
+				error += ' in ' + scriptURL + ' '
+																								
+			error += '(' + e.line + ', ' + e.character + ')=' + e.reason
 			var errorLine			= lines[e.line]
 			var str = ''
 			for (var j=0; j<e.character-1; j++) str += ' '
@@ -1045,11 +1052,4 @@
 		var transformed = tokenStream.join('')
 //		log('Transformed' + script + '->' + transformed)
 		return	transformed
-	}
-
-	function	allKeysInHash(o)
-	{
-		var r = []
-		for (var i in this) r.push(i)
-		return r
 	}

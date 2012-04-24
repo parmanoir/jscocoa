@@ -143,7 +143,9 @@ static	id jsFunctionHash = nil;
 	
 	
 	// Create 'this'
-	JSObjectRef jsThis = [JSCocoaController boxedJSObject:o inContext:ctx];
+//	JSObjectRef jsThis = [JSCocoaController boxedJSObject:o inContext:ctx];
+	id jsc = [JSCocoaController controllerFromContext:ctx];
+	JSObjectRef jsThis = [jsc boxObject:o];
 
 	// Call !
 	JSValueRef	exception			= NULL;
