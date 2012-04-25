@@ -964,25 +964,7 @@ static id JSCocoaSingleton = NULL;
 // Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
 //
 - (JSValueRef)_toJSObject:(id)object {
-	if ([object isKindOfClass:[NSString class]]) {
-		NSString* string	= (NSString*)object;
-		JSStringRef jsName	= JSStringCreateWithUTF8CString([string UTF8String]);
-		JSValueRef jsString	= JSValueMakeString(ctx, jsName);
-		JSStringRelease(jsName);
-		return jsString;
-	}
-	else if ([object isKindOfClass:[NSNumber class]]) {
-		NSNumber* number	= (NSNumber*)object;
-		return JSValueMakeNumber(ctx, [number doubleValue]);
-	}
-	else if ([object isKindOfClass:[NSDate class]]) {
-		NSDate* date		= (NSDate*)object;
-		JSObjectRef jsDate	= JSValueToObject(ctx, [self evalJSString:@"new Date"], NULL);
-		NSString* str		= [NSString stringWithFormat:@"this.setTime(%f*1000)", [date timeIntervalSince1970]];
-		[self anonEval:str withThis:jsDate];
-		return jsDate;
-	}
-	else if ([object isKindOfClass:[NSArray class]]) {
+	if ([object isKindOfClass:[NSArray class]]) {
 		NSArray* array		= (NSArray*)object;
 		JSObjectRef jsArray = JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
 		unsigned i = 0;
@@ -1005,8 +987,7 @@ static id JSCocoaSingleton = NULL;
 		}
 		return jsDict;
 	}
-	NSLog(@"Don't know how to convert %@, boxing it", object);
-	return [self boxObject:object];
+	return [self _toJS:object];
 }
 
 - (JSValueRefAndContextRef)toJSObject:(id)object {
