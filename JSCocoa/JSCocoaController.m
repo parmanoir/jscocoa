@@ -960,6 +960,61 @@ static id JSCocoaSingleton = NULL;
 	return valueAndContext;
 }
 
+//
+// Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
+//
+- (JSValueRef)_toJSObject:(id)object {
+	if ([object isKindOfClass:[NSString class]]) {
+		NSString* string	= (NSString*)object;
+		JSStringRef jsName	= JSStringCreateWithUTF8CString([string UTF8String]);
+		JSValueRef jsString	= JSValueMakeString(ctx, jsName);
+		JSStringRelease(jsName);
+		return jsString;
+	}
+	else if ([object isKindOfClass:[NSNumber class]]) {
+		NSNumber* number	= (NSNumber*)object;
+		return JSValueMakeNumber(ctx, [number doubleValue]);
+	}
+	else if ([object isKindOfClass:[NSDate class]]) {
+		NSDate* date		= (NSDate*)object;
+		JSObjectRef jsDate	= JSValueToObject(ctx, [self evalJSString:@"new Date"], NULL);
+		NSString* str		= [NSString stringWithFormat:@"this.setTime(%f*1000)", [date timeIntervalSince1970]];
+		[self anonEval:str withThis:jsDate];
+		return jsDate;
+	}
+	else if ([object isKindOfClass:[NSArray class]]) {
+		NSArray* array		= (NSArray*)object;
+		JSObjectRef jsArray = JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
+		unsigned i = 0;
+		for (id o in array) {
+			JSValueRef convertedValue = [self _toJSObject:o];
+			JSObjectSetPropertyAtIndex(ctx, jsArray, i, convertedValue, NULL);
+			i++;
+		}
+		return jsArray;
+	}
+	else if ([object isKindOfClass:[NSDictionary class]]) {
+		NSDictionary* dict	= (NSDictionary*)object;
+        JSObjectRef jsDict	= JSObjectMake(ctx, NULL, NULL);
+		for (NSString* key in dict) {
+			id value = [dict valueForKey:key];
+			JSValueRef convertedValue = [self _toJSObject:value];
+			JSStringRef	jsName		= JSStringCreateWithUTF8CString([key UTF8String]);
+			JSObjectSetProperty(ctx, jsDict, jsName, convertedValue, kJSPropertyAttributeNone, NULL);
+			JSStringRelease(jsName);
+		}
+		return jsDict;
+	}
+	NSLog(@"Don't know how to convert %@, boxing it", object);
+	return [self boxObject:object];
+}
+
+- (JSValueRefAndContextRef)toJSObject:(id)object {
+	JSValueRefAndContextRef valueAndContext = { JSValueMakeNull(ctx), NULL };
+	valueAndContext.value = [self _toJSObject:object];
+	
+	return valueAndContext;
+}
 
 #pragma mark Setting named objects in context (ctx.name = value)
 
