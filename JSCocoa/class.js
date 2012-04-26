@@ -1,4 +1,13 @@
 
+
+	//
+	// class.js
+	//	Handles derivation, ObjJ syntax
+	//	
+	//	__globalJSFunctionRepository__ is a global hash that handles js functions defined on ObjC classes
+	//
+
+
 	// ObjC
 	var nil = null
 	var	YES	= true
@@ -585,7 +594,7 @@
 	
 
 	//
-	// type o
+	// type o (Handling methods that take pointers as arguments)
 	//
 	function	outArgument()
 	{
@@ -654,6 +663,11 @@
 		return str
 	}
 	
+
+
+	//
+	// ObjJ syntax
+	//
 
 	// JSLint
 	function	__logToken(token)
