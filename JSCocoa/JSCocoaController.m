@@ -960,6 +960,42 @@ static id JSCocoaSingleton = NULL;
 	return valueAndContext;
 }
 
+//
+// Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
+//
+- (JSValueRef)_toJSObject:(id)object {
+	if ([object isKindOfClass:[NSArray class]]) {
+		NSArray* array		= (NSArray*)object;
+		JSObjectRef jsArray = JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
+		unsigned i = 0;
+		for (id o in array) {
+			JSValueRef convertedValue = [self _toJSObject:o];
+			JSObjectSetPropertyAtIndex(ctx, jsArray, i, convertedValue, NULL);
+			i++;
+		}
+		return jsArray;
+	}
+	else if ([object isKindOfClass:[NSDictionary class]]) {
+		NSDictionary* dict	= (NSDictionary*)object;
+        JSObjectRef jsDict	= JSObjectMake(ctx, NULL, NULL);
+		for (NSString* key in dict) {
+			id value = [dict valueForKey:key];
+			JSValueRef convertedValue = [self _toJSObject:value];
+			JSStringRef	jsName		= JSStringCreateWithUTF8CString([key UTF8String]);
+			JSObjectSetProperty(ctx, jsDict, jsName, convertedValue, kJSPropertyAttributeNone, NULL);
+			JSStringRelease(jsName);
+		}
+		return jsDict;
+	}
+	return [self _toJS:object];
+}
+
+- (JSValueRefAndContextRef)toJSObject:(id)object {
+	JSValueRefAndContextRef valueAndContext = { JSValueMakeNull(ctx), NULL };
+	valueAndContext.value = [self _toJSObject:object];
+	
+	return valueAndContext;
+}
 
 #pragma mark Setting named objects in context (ctx.name = value)
 
@@ -4552,12 +4588,14 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 				callAddress = objc_msgSendSuper;
 				if (usingStret)	callAddress = objc_msgSendSuper_stret;
 				_super.receiver = callee;
+                
+// __OBJC2__ might be a better choice
 #if __LP64__
 				_super.super_class	= superSelectorClass;
 //#elif TARGET_IPHONE_SIMULATOR || !TARGET_OS_IPHONE
 //				_super.class	= superSelectorClass;
 #else			
-				_super.super_class	= superSelectorClass;
+				_super.class	= superSelectorClass;
 #endif			
 				superPointer	= &_super;
 				values[0]		= &superPointer;
