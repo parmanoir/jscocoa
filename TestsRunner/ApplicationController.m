@@ -92,6 +92,8 @@ JSCocoaController* jsc = nil;
 	[jsc release];
 	jsc = [JSCocoa new];
 	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"]];
+	// Load JSON lib
+	[jsc evalJSFile:[[NSBundle mainBundle] pathForResource:@"json" ofType:@"js"]];
 }
 
 

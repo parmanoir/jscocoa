@@ -939,7 +939,7 @@ static id JSCocoaSingleton = NULL;
 	}
 	else if ([object isKindOfClass:[NSDictionary class]]) {
 		NSDictionary* dict	= (NSDictionary*)object;
-		JSObjectRef jsDict	= JSValueToObject(ctx, [self evalJSString:@"[]"], NULL);
+		JSObjectRef jsDict  = JSObjectMake(ctx, NULL, NULL);
 		for (NSString* key in dict) {
 			id value = [dict valueForKey:key];
 			JSValueRef convertedValue = [self _toJS:value];
