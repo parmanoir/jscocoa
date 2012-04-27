@@ -139,7 +139,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 // Convert a native ObjC object (NSNumber, NSString, NSArray, NSDictionary, NSDate) to its JS counterpart
 - (JSValueRefAndContextRef)toJS:(id)object;
-
+- (JSValueRefAndContextRef)toJSObject:(id)object;
 
 //
 // Framework
