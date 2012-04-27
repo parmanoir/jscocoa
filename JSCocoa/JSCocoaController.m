@@ -1249,8 +1249,16 @@ static id JSCocoaSingleton = NULL;
 		// Skip ObjC argument order
 		if (*argsParser >= '0' && *argsParser <= '9')	continue;
 		else
-		// Skip ObjC 'const', 'oneway' markers
-		if (*argsParser == 'r' || *argsParser == 'V')	continue;
+//		// Skip ObjC 'const', 'oneway' markers
+//		if (*argsParser == 'r' || *argsParser == 'V')	continue;
+		// Skip ObjC type qualifiers - except for _C_CONST these are not defined in runtime.h
+		if (*argsParser == _C_CONST ||
+			*argsParser == 'n' ||
+			*argsParser == 'N' || 
+			*argsParser == 'o' ||
+			*argsParser == 'O' ||
+			*argsParser == 'R' ||
+			*argsParser == 'V')	continue;		
 		else
 		if (*argsParser == '{')
 		{

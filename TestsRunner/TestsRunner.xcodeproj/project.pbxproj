@@ -21,7 +21,6 @@
 		3D36E2C310522A5900132E23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2BF10522A5900132E23 /* InfoPlist.strings */; };
 		3D36E2C410522A5900132E23 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D36E2C110522A5900132E23 /* MainMenu.xib */; };
 		3D44EA621072FC7300F20BAD /* jslint-jscocoa.js in Resources */ = {isa = PBXBuildFile; fileRef = 3D44EA611072FC7300F20BAD /* jslint-jscocoa.js */; };
-		3DB9C7151549F39500A590B3 /* json.js in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9C7141549F39500A590B3 /* json.js */; };
 		3DB9C7161549F3CD00A590B3 /* json.js in Resources */ = {isa = PBXBuildFile; fileRef = 3DB9C7141549F39500A590B3 /* json.js */; };
 		3DBE5C4112F0B6D000579DC8 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D36E2C610522A6F00132E23 /* JavaScriptCore.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -257,7 +256,6 @@
 				3D36E2A4105229E700132E23 /* JSCocoaPrivateObject.m in Sources */,
 				3D36E2B510522A1200132E23 /* main.m in Sources */,
 				3D36E2BA10522A2600132E23 /* ApplicationController.m in Sources */,
-				3DB9C7151549F39500A590B3 /* json.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
