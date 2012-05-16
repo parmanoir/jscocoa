@@ -77,3 +77,19 @@
 @interface NSErrorTest : NSObject
 - (BOOL)someMethodReturningAnError:(NSError**)error;
 @end
+
+
+
+
+
+
+// Test 58
+struct ccColor4F {
+	GLfloat r;
+	GLfloat g;
+	GLfloat b;
+	GLfloat a;
+};
+typedef struct ccColor4F ccColor4F;
+
+__declspec(export) extern ccColor4F ccc4f(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);

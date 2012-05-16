@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='1.0'>
+<function name='ccc4f'>
+<arg type='f'/>
+<arg type='f'/>
+<arg type='f'/>
+<arg type='f'/>
+<retval type='{ccColor4F=ffff}'/>
+</function>
+<struct name='ccColor4F' type='{ccColor4F=&quot;r&quot;f&quot;g&quot;f&quot;b&quot;f&quot;a&quot;f}'>
+<field name='r' declared_type='GLfloat' type='f'/>
+<field name='g' declared_type='GLfloat' type='f'/>
+<field name='b' declared_type='GLfloat' type='f'/>
+<field name='a' declared_type='GLfloat' type='f'/>
+</struct>
+</signatures>
