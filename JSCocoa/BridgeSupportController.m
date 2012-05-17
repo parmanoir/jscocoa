@@ -87,12 +87,25 @@
 			// 'st'	struct
 			if ((c[1] == 'c' && (c[2] == 'o' || c[2] == 'l')) || c[1] == 'e' || (c[1] == 'f' && c[2] == 'u') || (c[1] == 's' && c[2] == 't'))
 			{
+				char*	tagStart;
+				char*	c0;
+
+				tagStart = c;
+parsename:
 				// Extract name
-				char* tagStart = c;
 				for (; *c && *c != '\''; c++);
 				c++;
-				char* c0 = c;
+				c0 = c;
 				for (; *c && *c != '\''; c++);
+				
+				// 10.8 : 'name' might not be the first attribute in structures. Go back up to find it.
+				if (*c0 == '{') {
+					// Skip '
+					c++;
+					if (!*c)
+						return	NSLog(@"No name in bridgesupport"), NO;
+					goto parsename;
+				}
 				
 				id name = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
 				

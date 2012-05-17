@@ -8,7 +8,7 @@
 <arg type='f'/>
 <retval type='{ccColor4F=ffff}'/>
 </function>
-<struct name='ccColor4F' type='{ccColor4F=&quot;r&quot;f&quot;g&quot;f&quot;b&quot;f&quot;a&quot;f}'>
+<struct type='{ccColor4F=&quot;r&quot;f&quot;g&quot;f&quot;b&quot;f&quot;a&quot;f}' name='ccColor4F'>
 <field name='r' declared_type='GLfloat' type='f'/>
 <field name='g' declared_type='GLfloat' type='f'/>
 <field name='b' declared_type='GLfloat' type='f'/>
