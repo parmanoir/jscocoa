@@ -39,6 +39,11 @@ JSCocoaController* jsc = nil;
 	NSLog(@"*** Running %@ ***", [JSCocoa runningArchitecture]);
 	
 	
+	// Test 58
+	//	Test custom symbols, immediate NSStrings exported via BridgeSupport
+	NSToolbarPrintItemIdentifier1 = @"printItemIdentifier1";
+	NSToolbarPrintItemIdentifier2 = @"printItemIdentifier2";
+	
 /*	
 	[self cycleContext];
 	NSLog(@"%d", [jsc retainCount]);
@@ -1179,12 +1184,13 @@ JSTestBlocks.testFunction_(objcBlock);
 //
 //
 
-#define EXPORT __attribute__((visibility("default")))
 
 EXPORT ccColor4F ccc4f(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a)
 {
 	ccColor4F c = {r, g, b, a};
 	return (ccColor4F)c;
 }
+
+
 
 

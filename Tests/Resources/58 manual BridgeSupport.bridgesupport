@@ -14,4 +14,8 @@
 <field name='b' declared_type='GLfloat' type='f'/>
 <field name='a' declared_type='GLfloat' type='f'/>
 </struct>
+<enum name='NSCompositeCopy1' value='123'/>
+<enum value='456' var1='1' var2='2' var3='3' var4='4' name='NSCompositeCopy2' var5='5' />
+<constant name='NSToolbarPrintItemIdentifier1' type='@'/>
+<constant type='@' name='NSToolbarPrintItemIdentifier2'/>
 </signatures>

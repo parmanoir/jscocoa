@@ -6,6 +6,7 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
+
 #import "BridgeSupportController.h"
 
 
@@ -88,27 +89,41 @@
 			if ((c[1] == 'c' && (c[2] == 'o' || c[2] == 'l')) || c[1] == 'e' || (c[1] == 'f' && c[2] == 'u') || (c[1] == 's' && c[2] == 't'))
 			{
 				char*	tagStart;
-				char*	c0;
+				char*	cN;		// cN = char starting attribute's name, cV = char starting attribute's value
+				char*	cV;
+				BOOL hasName = NO;
+				id name = nil;
 
 				tagStart = c;
-parsename:
-				// Extract name
-				for (; *c && *c != '\''; c++);
+
+				// Skip XML tag name by skipping until the first space
+				for (; *c && *c != ' '; c++);
+				// Skip space
 				c++;
-				c0 = c;
-				for (; *c && *c != '\''; c++);
 				
-				// 10.8 : 'name' might not be the first attribute in structures. Go back up to find it.
-				if (*c0 == '{') {
-					// Skip '
+				// Scour attributes until we find the name
+				while (!hasName && *c) {
+					// Skip spaces to attribute name
+					for (; *c && *c == ' '; c++);
+					cN = c;
+					// Skip attribute name until '
+					for (; *c && *c != '\''; c++);
 					c++;
-					if (!*c)
-						return	NSLog(@"No name in bridgesupport"), NO;
-					goto parsename;
+					cV = c;
+					// Skip to the end of the attribute value
+					for (; *c && *c != '\''; c++);
+					
+					if (cN[0] == 'n' && cN[1] == 'a') {
+						hasName = YES;
+						name = [[NSString alloc] initWithBytes:cV length:c-cV encoding:NSUTF8StringEncoding];
+					}
+					else
+						// Skip attribute closing '
+						c++;
 				}
-				
-				id name = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
-				
+				if (!hasName)
+					return	NSLog(@"(loadBridgeSupport) Parsing failed to get name in file %@", path), NO;
+
 				// Move to tag end
 				BOOL foundEndTag = NO;
 				BOOL foundOpenTag = NO;
@@ -140,14 +155,14 @@ parsename:
 						if (strncmp(c, "variadic", 8) == 0)
 						{
 							// Skip back to tag start
-							c0 = c;
-							for (; *c0 != '<'; c0--);
+							cV = c;
+							for (; *cV != '<'; cV--);
 
 							// Tag name starts with 'm' : variadic method
 							// <method variadic='true' selector='alertWithMessageText:defaultButton:alternateButton:otherButton:informativeTextWithFormat:' class_method='true'>
-							if (c0[1] == 'm')
+							if (cV[1] == 'm')
 							{
-								c = c0;
+								c = cV;
 								id variadicMethodName = nil;
 								// Extract selector name
 								for (; *c != '>'; c++)
@@ -156,9 +171,9 @@ parsename:
 									{
 										for (; *c && *c != '\''; c++);
 										c++;
-										c0 = c;
+										cV = c;
 										for (; *c && *c != '\''; c++);
-										variadicMethodName = [[[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding] autorelease];
+										variadicMethodName = [[[NSString alloc] initWithBytes:cV length:c-cV encoding:NSUTF8StringEncoding] autorelease];
 									}
 								}
 								[variadicSelectors setValue:@"true" forKey:variadicMethodName];
@@ -175,8 +190,8 @@ parsename:
 					}
 				}
 				
-				c0 = tagStart;
-				id value = [[NSString alloc] initWithBytes:c0 length:c-c0 encoding:NSUTF8StringEncoding];
+				cV = tagStart;
+				id value = [[NSString alloc] initWithBytes:cV length:c-cV encoding:NSUTF8StringEncoding];
 	
 				[hash setValue:value forKey:name];
 				[value release];

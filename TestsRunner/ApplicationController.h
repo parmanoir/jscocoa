@@ -93,3 +93,11 @@ struct ccColor4F {
 typedef struct ccColor4F ccColor4F;
 
 __declspec(export) extern ccColor4F ccc4f(const GLfloat r, const GLfloat g, const GLfloat b, const GLfloat a);
+
+#define EXPORT __attribute__((visibility("default")))
+EXPORT NSString* NSToolbarPrintItemIdentifier1;
+EXPORT NSString* NSToolbarPrintItemIdentifier2;
+
+
+
+
