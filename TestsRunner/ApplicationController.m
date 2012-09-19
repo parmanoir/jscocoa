@@ -129,6 +129,9 @@ int runCount = 0;
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests/Resources/58 manual BridgeSupport.bridgesupport", [[NSBundle mainBundle] bundlePath]];
 	[[BridgeSupportController sharedController] loadBridgeSupport:path];
 
+	// (Test 59) Load CoreMIDI
+	[jsc loadFrameworkWithName:@"CoreMIDI"];
+
 	// Setup tests path
 	path = [[NSBundle mainBundle] bundlePath];
 	path = [NSString stringWithFormat:@"%@/Contents/Resources/Tests", path];
