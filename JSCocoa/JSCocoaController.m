@@ -1325,7 +1325,6 @@ static id JSCocoaSingleton = NULL;
 	id argumentEncodings = [NSMutableArray array];
 	id xmlDocument = [[NSXMLDocument alloc] initWithXMLString:xml options:0 error:nil];
 	[xmlDocument autorelease];
-
 	id rootElement = [xmlDocument rootElement];
 	*functionNamePlaceHolder = [[rootElement attributeForName:@"name"] stringValue];
 	
@@ -1347,6 +1346,8 @@ static id JSCocoaSingleton = NULL;
 			id typeEncoding = [[child attributeForName:@"type"] stringValue];
 #endif			
 			char typeEncodingChar = [typeEncoding UTF8String][0];
+			if (typeEncodingChar == _C_CONST)
+				typeEncodingChar = [typeEncoding UTF8String][1];
 		
 			id argumentEncoding = [[JSCocoaFFIArgument alloc] init];
 			// Set return value — NO, as return value might not be the first element. Use retval to decide.

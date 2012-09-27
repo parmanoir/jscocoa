@@ -1,13 +1,10 @@
 
-var getName = function(object) {
-	var name = new outArgument;
-	
-	MIDIObjectGetStringProperty(object, kMIDIPropertyName, name)
-	return name;
-};
-
-var device = MIDIGetDevice(0);
-//log("Device from js: " + getName(device));
+var device = MIDIGetDevice(0)
 
 if (!device)
 	throw 'No device'
+
+var buffer = new memoryBuffer('@')
+MIDIObjectGetStringProperty(device, kMIDIPropertyName, new outArgument(buffer, 0))
+
+//log('Device from js: ' + device + ' name=' + buffer[0])
