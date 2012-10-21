@@ -949,6 +949,9 @@ static id JSCocoaSingleton = NULL;
 		}
 		return jsDict;
 	}
+	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
+		return JSValueMakeNull(ctx);
+	}
 	NSLog(@"Don't know how to convert %@, boxing it", object);
 	return [self boxObject:object];
 }
