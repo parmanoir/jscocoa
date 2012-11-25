@@ -2116,7 +2116,7 @@ static id JSCocoaSingleton = NULL;
 			evaled	= nil;
 		}
 		if (!evaled) {
-			id error	= [NSString stringWithFormat:@"test %@ failed (Ran %d out of %d tests)", file, count+1, [files count]];
+			id error	= [NSString stringWithFormat:@"test %@ failed (Ran %d out of %ld tests)", file, count+1, (long)[files count]];
 			[JSCocoaController log:error];
 			return NO;
 		}
@@ -3577,7 +3577,7 @@ call:
 				// Make sure to not return hash value if it's native code (valueOf, toString)
 				if ([propertyName isEqualToString:@"valueOf"] || [propertyName isEqualToString:@"toString"])
 				{
-					id script = [NSString stringWithFormat:@"return arguments[0].toString().indexOf('[native code]') != -1", propertyName];
+					id script = [NSString stringWithFormat:@"return arguments[0].toString().indexOf('[native code]') != -1 (%@)", propertyName];
 					JSStringRef scriptJS = JSStringCreateWithUTF8CString([script UTF8String]);
 					JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
 					JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef*)&hashProperty, NULL);
@@ -4510,7 +4510,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		// Bail if not variadic
 		if (!isVariadic)
 		{
-			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
+			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %ld, got %ld", functionName ? functionName : methodName,	(long)callAddressArgumentCount, (long)argumentCount]), NULL;
 		}
 		// Sugar check : if last object is not NULL, account for it
 		if (isVariadic && callingObjC && argumentCount && !JSValueIsNull(ctx, arguments[argumentCount-1]))
@@ -4524,7 +4524,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	{
 		if (callAddressArgumentCount != argumentCount)
 		{
-			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %d, got %d", functionName ? functionName : methodName,	callAddressArgumentCount, argumentCount]), NULL;
+			return	throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count in %@ : expected %ld, got %ld", functionName ? functionName : methodName,	(long)callAddressArgumentCount, (long)argumentCount]), NULL;
 		}
 	}
 
@@ -4938,7 +4938,7 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 	{
 		if (convertedValueCount != argumentCount)
 		{
-			return throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count when calling constructor on a struct : expected %d, got %d", convertedValueCount, argumentCount]), NULL;
+			return throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count when calling constructor on a struct : expected %ld, got %ld", (long)convertedValueCount, (long)argumentCount]), NULL;
 		}
 	}
 	
@@ -5154,9 +5154,9 @@ void* malloc_autorelease(size_t size)
 
 - (id)description {
 	id boxedObject = [(JSCocoaPrivateObject*)JSObjectGetPrivate(jsObject) object];
-	id retainCount = [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+	id retainCount = [NSString stringWithFormat:@"%ld", (long)[boxedObject retainCount]];
 #if !TARGET_OS_IPHONE
-	retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%d", [boxedObject retainCount]];
+	retainCount = [NSGarbageCollector defaultCollector] ? @"Running GC" : [NSString stringWithFormat:@"%ld", (long)[boxedObject retainCount]];
 #endif
 	return [NSString stringWithFormat:@"<%@: %p holding %@ %@: %p (retainCount=%@)>",
 				[self class], 
