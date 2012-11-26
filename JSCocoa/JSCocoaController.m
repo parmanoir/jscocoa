@@ -27,7 +27,11 @@ static	bool		jsCocoaObject_deleteProperty(JSContextRef, JSObjectRef, JSStringRef
 static	void		jsCocoaObject_getPropertyNames(JSContextRef, JSObjectRef, JSPropertyNameAccumulatorRef);
 static	JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef, JSObjectRef, size_t, const JSValueRef [], JSValueRef*);
 static	JSValueRef	jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
+
+#undef REQ_jsCocoaObject_hasInstance
+#ifdef REQ_jsCocoaObject_hasInstance
 static	bool		jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception);
+#endif
 
 static	JSValueRef	jsCocoaInfo_getProperty(JSContextRef, JSObjectRef, JSStringRef, JSValueRef*);
 static	void		jsCocoaInfo_getPropertyNames(JSContextRef, JSObjectRef, JSPropertyNameAccumulatorRef);
@@ -3511,7 +3515,7 @@ call:
 			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
 			if (convertedToInt && [scan isAtEnd])
 			{
-				if (propertyIndex < 0 || propertyIndex >= [array count])	return	NULL;
+				if (propertyIndex < 0 || (NSUInteger)propertyIndex >= [array count])	return	NULL;
 				
 				id o = [array objectAtIndex:propertyIndex];
 				JSValueRef value = NULL;
@@ -3578,7 +3582,7 @@ call:
 			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
 			if (convertedToInt && [scan isAtEnd])
 			{
-				if (propertyIndex < 0 || propertyIndex >= [buffer typeCount])	return	NULL;
+				if (propertyIndex < 0 || (NSUInteger)propertyIndex >= [buffer typeCount])	return	NULL;
 				return	[buffer valueAtIndex:propertyIndex inContext:ctx];
 			}
 		}
@@ -4018,7 +4022,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
 			if (convertedToInt && [scan isAtEnd])
 			{
-				if (propertyIndex < 0 || propertyIndex >= [array count])	return	false;
+				if (propertyIndex < 0 || (NSUInteger)propertyIndex >= [array count])	return	false;
 
 				id property = NULL;
 				if ([JSCocoaFFIArgument unboxJSValueRef:jsValue toObject:&property inContext:ctx])
@@ -4059,7 +4063,7 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			BOOL convertedToInt =  ([scan scanInteger:&propertyIndex]);
 			if (convertedToInt && [scan isAtEnd])
 			{
-				if (propertyIndex < 0 || propertyIndex >= [buffer typeCount])	return	NULL;
+				if (propertyIndex < 0 || (NSUInteger)propertyIndex >= [buffer typeCount])	return	NULL;
 				return	[buffer setValue:jsValue atIndex:propertyIndex inContext:ctx];
 			}
 		}
@@ -4988,6 +4992,8 @@ static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef obje
 //	return	NULL;
 }
 
+#ifdef REQ_jsCocoaObject_hasInstance
+
 static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception)
 {
     #pragma unused(ctx)
@@ -4997,7 +5003,7 @@ static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
     
 	return NO;
 }
-
+#endif
 
 
 
