@@ -18,6 +18,8 @@
 //
 void closure_function(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
+#pragma unused(cif)
+    
 	[(id)userdata calledByClosureWithArgs:args returnValue:resp];
 }
 

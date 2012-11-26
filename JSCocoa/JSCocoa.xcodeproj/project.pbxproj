@@ -336,6 +336,10 @@
 				OTHER_LDFLAGS = "-lffi";
 				PREBINDING = NO;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+				);
 			};
 			name = Debug;
 		};
@@ -352,6 +356,10 @@
 				OTHER_LDFLAGS = "-lffi";
 				PREBINDING = NO;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wextra",
+				);
 			};
 			name = Release;
 		};

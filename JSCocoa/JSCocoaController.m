@@ -636,7 +636,7 @@ static id JSCocoaSingleton = NULL;
 	if (argumentCount)
 	{
 		jsArguments = malloc(sizeof(JSValueRef)*argumentCount);
-		for (int i=0; i<argumentCount; i++)
+		for (NSUInteger i=0; i<argumentCount; i++)
 		{
 			char typeEncoding = _C_ID;
 			id argument = [arguments objectAtIndex:i];
@@ -989,6 +989,8 @@ static id JSCocoaSingleton = NULL;
 }
 
 - (JSObjectRef)setObjectNoRetain:(id)object withName:(NSString*)name attributes:(JSPropertyAttributes)attributes {
+    #pragma unused(object)
+    
 	JSObjectRef o = [self setObject:self withName:name attributes:attributes];
 	if (!o)
 		return NULL;
@@ -1775,7 +1777,7 @@ static id JSCocoaSingleton = NULL;
 				{
 					s += l;
 					// Go through arguments and check if they're part of the string
-					NSInteger consumedLength = 0;
+					NSUInteger consumedLength = 0;
 					for (id n in sortedNames)
 					{
 						if (strstr(s, [n UTF8String]))	consumedLength += [n length];
@@ -1813,7 +1815,7 @@ static id JSCocoaSingleton = NULL;
 */
 + (BOOL)isMaybeSplitCall:(NSString*)_start forClass:(id)class
 {
-	int i;
+	unsigned int i;
 	id start = [_start lowercaseString];
 	// Search through every class level
 	while (class)
@@ -2265,7 +2267,7 @@ int	liveInstanceCount	= 0;
 	for (NSString* key in boxedObjects) {
 		BoxedJSObject* box = [boxedObjects valueForKey:key];
 		id o = [(JSCocoaPrivateObject*)JSObjectGetPrivate([box jsObject]) object];
-		if ([o retainCount] == -1) {
+		if ((NSInteger)[o retainCount] == -1) {
 			if ([o class] == o)
 				NSLog(@"%p (class) %@", o, o);
 			else
@@ -2358,6 +2360,9 @@ int	liveInstanceCount	= 0;
 //
 - (JSValueRef)JSCocoa:(JSCocoaController*)controller callMethod:(NSString*)methodName ofObject:(id)callee privateObject:(JSCocoaPrivateObject*)thisPrivateObject argumentCount:(size_t)argumentCount arguments:(JSValueRef*)arguments inContext:(JSContextRef)localCtx exception:(JSValueRef*)exception
 {
+    #pragma unused(controller)
+    #pragma unused(exception)
+    
     SEL selector = NSSelectorFromString(methodName);
 	if (class_getInstanceMethod([callee class], selector) || class_getClassMethod([callee class], selector)) {
         return nil;
@@ -2866,6 +2871,8 @@ static BOOL __warningSuppressorAsFinalizeIsCalledBy_objc_msgSendSuper = NO;
 //
 JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
+    #pragma unused(object)
+    
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 
@@ -3022,6 +3029,10 @@ JSValueRef OSXObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringR
 
 static void OSXObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
+    #pragma unused(ctx)
+    #pragma unused(object)
+    #pragma unused(propertyNames)
+    
 	// Move to a definition object
 /*
 	NSArray* keys = [[BridgeSupportController sharedController] keys];
@@ -3263,6 +3274,11 @@ JSValueRef boxedValueFromExternalContext(JSContextRef externalCtx, JSValueRef va
 //
 JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception)
 {
+    #pragma unused(function)
+    #pragma unused(argumentCount)
+    #pragma unused(arguments)
+    #pragma unused(exception)
+    
 	// Holding a native JS value ? Return it
 	JSCocoaPrivateObject* thisPrivateObject = JSObjectGetPrivate(thisObject);
 	if ([thisPrivateObject.type isEqualToString:@"jsValueRef"])	
@@ -3354,6 +3370,8 @@ JSValueRef valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef t
 //
 static void jsCocoaObject_initialize(JSContextRef ctx, JSObjectRef object)
 {
+    #pragma unused(ctx)
+    
 	id o = JSObjectGetPrivate(object);
 	[o retain];
 }
@@ -4218,6 +4236,8 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 //
 static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
+    #pragma unused(exception)
+    
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	
@@ -4239,6 +4259,8 @@ static bool jsCocoaObject_deleteProperty(JSContextRef ctx, JSObjectRef object, J
 //
 static void jsCocoaObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames)
 {
+    #pragma unused(ctx)
+    
 	JSCocoaPrivateObject* privateObject = JSObjectGetPrivate(object);
 
 	// If we have a dictionary, add keys from allKeys
@@ -4547,7 +4569,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		values = malloc(sizeof(void*)*effectiveArgumentCount);
 
 		// If calling ObjC, setup instance and selector
-		int		i, idx = 0;
+		size_t		i, idx = 0;
 		if (callingObjC)
 		{
 			selector	= (char*)NSSelectorFromString(methodName);
@@ -4757,7 +4779,7 @@ static JSValueRef jsCocoaObject_callAsFunction(JSContextRef ctx, JSObjectRef fun
 			// Convert arguments to WebView context
 			JSValueRef* convertedArguments = NULL;
 			if (argumentCount) convertedArguments = malloc(sizeof(JSValueRef)*argumentCount);
-			for (int i=0; i<argumentCount; i++)
+			for (size_t i=0; i<argumentCount; i++)
 				convertedArguments[i] = valueToExternalContext(ctx, arguments[i], externalCtx);
 
 			// Call
@@ -4936,7 +4958,7 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 	// If constructor is called with arguments, make sure they are the correct amount to fill all structure slots
 	if (argumentCount)
 	{
-		if (convertedValueCount != argumentCount)
+		if (convertedValueCount != (NSInteger)argumentCount)
 		{
 			return throwException(ctx, exception, [NSString stringWithFormat:@"Bad argument count when calling constructor on a struct : expected %ld, got %ld", (long)convertedValueCount, (long)argumentCount]), NULL;
 		}
@@ -4953,6 +4975,9 @@ static JSObjectRef jsCocoaObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 //
 static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception)
 {
+    #pragma unused(type)
+    #pragma unused(exception)
+    
 	// Only invoked when converting to strings and numbers.
 	// Would have been useful to be called on BOOLs too, to avoid false positives of ('varname' in object) when varname may start a split call.
 	
@@ -4965,6 +4990,11 @@ static JSValueRef jsCocoaObject_convertToType(JSContextRef ctx, JSObjectRef obje
 
 static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception)
 {
+    #pragma unused(ctx)
+    #pragma unused(constructor)
+    #pragma unused(possibleInstance)
+    #pragma unused(exception)
+    
 	return NO;
 }
 
@@ -4982,6 +5012,8 @@ static bool jsCocoaObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 //
 static JSValueRef jsCocoaInfo_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef* exception)
 {
+    #pragma unused(exception)
+    
 	NSString*	propertyName = (NSString*)JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS);
 	[NSMakeCollectable(propertyName) autorelease];
 	

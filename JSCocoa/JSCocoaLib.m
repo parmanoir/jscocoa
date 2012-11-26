@@ -140,7 +140,7 @@
 	const char* types = [typeString UTF8String];
 	NSUInteger l = [typeString length];
 	bufferSize = 0;
-	for (int i=0; i<l; i++)
+	for (NSUInteger i=0; i<l; i++)
 	{
 		int size = [JSCocoaFFIArgument sizeOfTypeEncoding:types[i]];
 		if (size == -1)	return	NSLog(@"JSCocoaMemoryBuffer initWithTypes : unknown type %c", types[i]), self;
@@ -180,7 +180,7 @@
 	const char* types = [typeString UTF8String];
 	if (idx >= [typeString length])	return NULL;
 	void* pointedValue = buffer;
-	for (int i=0; i<idx; i++)
+	for (NSUInteger i=0; i<idx; i++)
 	{
 //		NSLog(@"advancing %c", types[i]);
 		[JSCocoaFFIArgument advancePtr:&pointedValue accordingToEncoding:types[i]];
@@ -324,7 +324,7 @@
 	unsigned int imageCount;
 	const char** imageNames = objc_copyImageNames(&imageCount);
 
-	for (int i=0; i<imageCount; i++)
+	for (unsigned int i=0; i<imageCount; i++)
 	{
 		const char* cname	= imageNames[i];
 
@@ -332,7 +332,7 @@
 		id array2 = [NSMutableArray array];
 		unsigned int classCount;
 		const char** classNames = objc_copyClassNamesForImage(cname, &classCount);
-		for (int j=0; j<classCount; j++)
+		for (unsigned int j=0; j<classCount; j++)
 			[array2 addObject:[NSString stringWithUTF8String:classNames[j]]];
 
 		free(classNames);
@@ -360,7 +360,7 @@
 	unsigned int protocolCount;
 	Protocol** protocols = objc_copyProtocolList(&protocolCount);
 
-	for (int i=0; i<protocolCount; i++)
+	for (unsigned int i=0; i<protocolCount; i++)
 	{
 		// array2 is modified by the following block
 		__block id array2	= [NSMutableArray array];
@@ -370,7 +370,7 @@
 		void (^b)(BOOL, BOOL) = ^(BOOL isRequiredMethod, BOOL isInstanceMethod) {
 			unsigned int descriptionCount;
 			struct objc_method_description* methodDescriptions = protocol_copyMethodDescriptionList(p, isRequiredMethod, isInstanceMethod, &descriptionCount);
-			for (int j=0; j<descriptionCount; j++)
+			for (unsigned int j=0; j<descriptionCount; j++)
 			{
 				struct objc_method_description d = methodDescriptions[j];
 
@@ -566,7 +566,7 @@ static id copyMethods(Class class, NSMutableArray* array, NSString* type)
 	unsigned int methodCount;
 	Method* methods = class_copyMethodList(class, &methodCount);
 
-	for (int i=0; i<methodCount; i++)
+	for (unsigned int i=0; i<methodCount; i++)
 	{
 		Method m	= methods[i];
 		Dl_info info;
@@ -686,7 +686,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	for (id subclass in subclasses)
 	{
 		NSUInteger level = [subclass __derivationLevel];
-		for (int i=0; i<level; i++)
+		for (NSUInteger i=0; i<level; i++)
 			[str appendString:@" "];
 		[str appendString:[NSString stringWithUTF8String:class_getName(subclass)]];
 		[str appendString:@"\n"];
@@ -707,7 +707,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	Ivar* ivars = class_copyIvarList(self, &ivarCount);
 	
 	id array = [NSMutableArray array];
-	for (int i=0; i<ivarCount; i++)
+	for (NSUInteger i=0; i<ivarCount; i++)
 	{
 		Ivar ivar	= ivars[i];
 		
@@ -753,7 +753,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	objc_property_t* properties = class_copyPropertyList(self, &propertyCount);
 	
 	id array = [NSMutableArray array];
-	for (int i=0; i<propertyCount; i++)
+	for (unsigned int i=0; i<propertyCount; i++)
 	{
 		objc_property_t property	= properties[i];
 		
@@ -796,7 +796,7 @@ static void populateSubclasses(Class class, NSMutableArray* array, NSMutableDict
 	Protocol** protocols = class_copyProtocolList(self, &protocolCount);
 	
 	id array = [NSMutableArray array];
-	for (int i=0; i<protocolCount; i++)
+	for (unsigned int i=0; i<protocolCount; i++)
 	{
 		id name = [NSString stringWithUTF8String:protocol_getName(protocols[i])];
 		id hash = [NSDictionary dictionaryWithObjectsAndKeys:
