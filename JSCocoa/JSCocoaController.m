@@ -1343,7 +1343,7 @@ static id JSCocoaSingleton = NULL;
 	for (i=0; i<numChildren; i++)
 	{
 		id child = [rootElement childAtIndex:i];
-		if ([child kind] != NSXMLElementKind)	continue;
+		if ([(NSXMLNode *)child kind] != NSXMLElementKind)	continue;
 		
 		BOOL	isReturnValue = [[child name] isEqualToString:@"retval"];
 		if ([[child name] isEqualToString:@"arg"] || isReturnValue)
