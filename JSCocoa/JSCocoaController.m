@@ -3720,9 +3720,9 @@ call:
 				ffi_cif		cif;
 				ffi_type*	args[2];
 				void*		values[2];
-				char*		selector;
+				const char*		selector;
 	
-				selector	= (char*)NSSelectorFromString(propertyName);
+				selector	= sel_getName(NSSelectorFromString(propertyName));
 				args[0]		= &ffi_type_pointer;
 				args[1]		= &ffi_type_pointer;
 				values[0]	= (void*)&callee;
@@ -4149,9 +4149,9 @@ static bool jsCocoaObject_setProperty(JSContextRef ctx, JSObjectRef object, JSSt
 			ffi_cif		cif;
 			ffi_type*	args[3];
 			void*		values[3];
-			char*		selector;
+			const char*		selector;
 
-			selector	= (char*)NSSelectorFromString(setterName);
+			selector	= sel_getName(NSSelectorFromString(setterName));
 			args[0]		= &ffi_type_pointer;
 			args[1]		= &ffi_type_pointer;
 			values[0]	= (void*)&callee;
@@ -4560,7 +4560,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 	ffi_cif		cif;
 	ffi_type**	args	= NULL;
 	void**		values	= NULL;
-	char*		selector;
+	const char*		selector;
 	// super call
 	struct		objc_super _super;
 	void*		superPointer;
@@ -4576,7 +4576,7 @@ static JSValueRef jsCocoaObject_callAsFunction_ffi(JSContextRef ctx, JSObjectRef
 		size_t		i, idx = 0;
 		if (callingObjC)
 		{
-			selector	= (char*)NSSelectorFromString(methodName);
+			selector	= sel_getName(NSSelectorFromString(methodName));
 			args[0]		= &ffi_type_pointer;
 			args[1]		= &ffi_type_pointer;
 			values[0]	= (void*)&callee;
