@@ -735,6 +735,8 @@
 
 + (NSInteger)structureFromJSObjectRef:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue fromCString:(char*)c fromStorage:(void**)ptr
 {
+#pragma unused(parentValue)
+    
 	id structureName = [JSCocoaFFIArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
 	char* c0 = c;
 	// Skip '{'
@@ -962,6 +964,7 @@ static NSMutableDictionary* typeEncodings = nil;
 
 + (NSMutableArray*)encodingsFromStructureTypeEncoding:(NSString*)encoding
 {
+    #pragma unused(encoding)
 	return	nil;
 }
 
@@ -1310,7 +1313,7 @@ static NSMutableDictionary* typeEncodings = nil;
 	id array = [NSMutableArray array];
 	// Converted array property
 	id value;
-	int i;
+	NSUInteger i;
 	// Loop over all properties of the array and call our trusty unboxer. 
 	// He might reenter that function to convert arrays inside that array.
 	for (i=0; i<length; i++)
@@ -1340,7 +1343,7 @@ static NSMutableDictionary* typeEncodings = nil;
 	id value;
 
 	JSValueRef	exception = NULL;
-	int i;
+	NSUInteger i;
 	for (i=0; i<length; i++)
 	{
 		JSStringRef name	= JSPropertyNameArrayGetNameAtIndex(names, i);

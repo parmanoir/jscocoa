@@ -97,7 +97,7 @@
 //	if (object && retainObject)
 //		[object release];
 	object = o;
-	if (object && [object retainCount] == -1)	return;
+	if (object && (NSInteger)[object retainCount] == -1)	return;
 	[object retain];
 }
 
